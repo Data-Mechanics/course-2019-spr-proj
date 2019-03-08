@@ -42,7 +42,7 @@ class newBostonEthnicities(dml.Algorithm):
        				select1[x]['Total People'] = aggregate1[y]['Total People']
 
        	repo.dropCollection("newBostonEthnicities")
-        repo.createCollection("newBostonEthnicites")
+        repo.createCollection("newBostonEthnicities")
        	for x in range(len(select1)):
        		repo['dixyTW_veeyn.newBostonEthnicities'].insert_one(select1[x])
        	
