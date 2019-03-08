@@ -11,7 +11,7 @@ from collections import OrderedDict
 class getData (dml.Algorithm):
     contributor = 'dixyTW_veeyn'
     reads = []
-    writes = ['dixyTW_veeyn.bostonEthnicities','dixyTW_veeyn.bostonAges']
+    writes = ['dixyTW_veeyn.bostonEthnicities']
     
     @staticmethod
     def execute(trial = False):
@@ -35,15 +35,6 @@ class getData (dml.Algorithm):
   
         #print(repo['dixyTW_veeyn.bostonEthnicities'].metadata())
 
-        #for the data set bostonAges
-        url = 'http://datamechanics.io/data/dixyTW_veeyn/age.json'
-        r = json.loads(response)
-        s = json.dumps(r, sort_keys=True, indent=2)
-        repo.dropCollection("bostonAges")
-        repo.createCollection("bostonAges")
-        #repo['dixyTW_veeyn.bostonAges'].insert_one(r)
-        #repo['dixyTW_veeyn.bostonAges'].metadata({'complete':True})
-        #print(repo['dixyTW_veeyn.bostonAges'].metadata())
 
         repo.logout()
 
