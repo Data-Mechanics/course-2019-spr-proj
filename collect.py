@@ -14,10 +14,3 @@ print(l.keys())
 # property assessment data
 url1 = "https://data.boston.gov/datastore/odata3.0/fd351943-c2c6-4630-992d-3f895360febd?format=json"
 response = urllib.request.urlopen(url1).read()
-client = dml.pymongo.MongoClient()
-repo = client.repo
-repo.authenticate('tlux', 'tlux')
-repo.dropCollection("test")
-repo.createCollection("test")
-repo['tlux.test'].insert_many(l['features'])
-repo['tlux.test'].metadata({'complete': True})
