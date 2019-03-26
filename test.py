@@ -1,4 +1,3 @@
-import dml
 import prov.model
 import datetime
 import uuid
@@ -8,10 +7,6 @@ from shapely.geometry import Point, Polygon
 
 
 
-client = dml.pymongo.MongoClient()
-repo = client.repo
-repo.authenticate('tlux', 'tlux')
-cdc_data = list(repo['tlux.Raw_CDC_Health'].find())
 with open('C:/Users/tylux/Downloads/cb_2016_25_tract_500k (2).json') as json_file:
     d = json.load(json_file)
 
