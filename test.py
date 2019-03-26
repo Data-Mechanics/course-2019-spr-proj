@@ -1,5 +1,5 @@
-import dml
-import prov.model
+
+
 import datetime
 import uuid
 import json
@@ -8,10 +8,7 @@ from shapely.geometry import Point, Polygon
 
 
 
-client = dml.pymongo.MongoClient()
-repo = client.repo
-repo.authenticate('tlux', 'tlux')
-cdc_data = list(repo['tlux.Raw_CDC_Health'].find())
+
 with open('C:/Users/tylux/Downloads/cb_2016_25_tract_500k (2).json') as json_file:
     d = json.load(json_file)
 
@@ -21,7 +18,8 @@ datas = d['features']
 for data in datas:
     if data['properties']['COUNTYFP'] == '025':
         geom = data['geometry']
-        p.append(geom)
+        p.append({**geom, "Census Tract":data['properties']['GEOID']})
+print(p)
 g = json.dumps(p)
 with open('C:/Users/tylux/Downloads/boston_census_track.json', 'w') as f:
     f.write(g)
