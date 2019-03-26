@@ -1,8 +1,10 @@
-import prov.model
+
+
 import datetime
 import uuid
 import json
 from shapely.geometry import Point, Polygon
+
 
 
 
@@ -16,7 +18,8 @@ datas = d['features']
 for data in datas:
     if data['properties']['COUNTYFP'] == '025':
         geom = data['geometry']
-        p.append(geom)
+        p.append({**geom, "Census Tract":data['properties']['GEOID']})
+print(p)
 g = json.dumps(p)
 with open('C:/Users/tylux/Downloads/boston_census_track.json', 'w') as f:
     f.write(g)
