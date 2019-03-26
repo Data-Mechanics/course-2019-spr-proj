@@ -11,7 +11,7 @@ from shapely.geometry import Polygon
 #
 #
 # # property assessment data
-# url1 = "https://data.boston.gov/datastore/odata3.0/695a8596-5458-442b-a017-7cd72471aade?$format=json"
+# url1 = "https://data.boston.gov/datastore/odata3.0/fd351943-c2c6-4630-992d-3f895360febd?$format=json"
 # response = urllib.request.urlopen(url1).read()
 # g = json.loads(response)
 # g = g['value']
