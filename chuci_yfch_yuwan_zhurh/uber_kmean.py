@@ -67,13 +67,13 @@ class uber_kmean(dml.Algorithm):
                 while OLD != M:
                     num += 1
                     OLD = M
-                    MPD = [(m, p, dist(m, p)) for (m, p) in product(M, P)]  # 所有点与所有中心点的组合，以及距离
-                    PDs = [(p, dist(m, p)) for (m, p, d) in MPD]  # 所有点到中心的距离
-                    PD = aggregate(PDs, min)  # 所有点到最近中心的距离
-                    MP = [(m, p) for ((m, p, d), (p2, d2)) in product(MPD, PD) if p == p2 and d == d2]  # 保留中心与点的对应关系
-                    MT = aggregate(MP, plus)  # 同一个中心，其他点加合
+                    MPD = [(m, p, dist(m, p)) for (m, p) in product(M, P)]
+                    PDs = [(p, dist(m, p)) for (m, p, d) in MPD]
+                    PD = aggregate(PDs, min)
+                    MP = [(m, p) for ((m, p, d), (p2, d2)) in product(MPD, PD) if p == p2 and d == d2]
+                    MT = aggregate(MP, plus)
                     M1 = [(m, 1) for (m, _) in MP]
-                    MC = aggregate(M1, sum)  # 同一个中心，有多少个点对应
+                    MC = aggregate(M1, sum) 
                     M = [scale(t, c) for ((m, t), (m2, c)) in product(MT, MC) if m == m2]
                     if num == 20:
                         break
