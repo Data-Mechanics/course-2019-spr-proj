@@ -21,20 +21,6 @@ class uber_kmean(dml.Algorithm):
         repo = client.repo
         repo.authenticate('chuci_yfch_yuwan_zhurh', 'chuci_yfch_yuwan_zhurh')
         # Basic function
-        def union(R, S):
-            return R + S
-
-        def difference(R, S):
-            return [t for t in R if t not in S]
-
-        def intersect(R, S):
-            return [t for t in R if t in S]
-
-        def project(R, p):
-            return [p(t) for t in R]
-
-        def select(R, s):
-            return [t for t in R if s(t)]
 
         def product(R, S):
             return [(t, u) for t in R for u in S]
@@ -59,39 +45,52 @@ class uber_kmean(dml.Algorithm):
             (x, y) = p
             return (x / c, y / c)
 
-        def rep(x):
-            for each in MP:
-                if each[1][0] == x['latitude'] and each[1][1] == x['longitude']:
-                    return each[0]
-            else:
-                return 1
         k = 3
         json_data = list(repo['chuci_yfch_yuwan_zhurh.uber_loc'].find())
         data = pd.DataFrame(json_data)
-        P = []
-        OLD = []
-        for index, each in data.iterrows():
-            P.append((each['latitude'], each['longitude']))
-        M = P[:k]
-        num = 0
-        while OLD != M:
-            num += 1
-            OLD = M
-            MPD = [(m, p, dist(m, p)) for (m, p) in product(M, P)]  # 所有点与所有中心点的组合，以及距离
-            PDs = [(p, dist(m, p)) for (m, p, d) in MPD]  # 所有点到中心的距离
-            PD = aggregate(PDs, min)  # 所有点到最近中心的距离
-            MP = [(m, p) for ((m, p, d), (p2, d2)) in product(MPD, PD) if p == p2 and d == d2]  # 保留中心与点的对应关系
-            MT = aggregate(MP, plus)  # 同一个中心，其他点加合
-            M1 = [(m, 1) for (m, _) in MP]
-            MC = aggregate(M1, sum)  # 同一个中心，有多少个点对应
-            M = [scale(t, c) for ((m, t), (m2, c)) in product(MT, MC) if m == m2]
-            if num == 20:
-                break
-
-        data['mean'] = data.apply(rep, axis=1)
-        print(data)
-
-
+        data = data[(data['latitude']>42) & (data['longitude']>-80) ]
+        df = pd.DataFrame(columns=['x', 'y', 'k'])
+        def kmean(input):
+            def rep(x):
+                for each in MP:
+                    if each[1][0] == x['latitude'] and each[1][1] == x['longitude']:
+                        return each[0]
+                else:
+                    return 1
+            for k in range(1,input+1):
+                P = []
+                OLD = []
+                for index, each in data.iterrows():
+                    P.append((each['latitude'], each['longitude']))
+                M = P[:k]
+                num = 0
+                while OLD != M:
+                    num += 1
+                    OLD = M
+                    MPD = [(m, p, dist(m, p)) for (m, p) in product(M, P)]  # 所有点与所有中心点的组合，以及距离
+                    PDs = [(p, dist(m, p)) for (m, p, d) in MPD]  # 所有点到中心的距离
+                    PD = aggregate(PDs, min)  # 所有点到最近中心的距离
+                    MP = [(m, p) for ((m, p, d), (p2, d2)) in product(MPD, PD) if p == p2 and d == d2]  # 保留中心与点的对应关系
+                    MT = aggregate(MP, plus)  # 同一个中心，其他点加合
+                    M1 = [(m, 1) for (m, _) in MP]
+                    MC = aggregate(M1, sum)  # 同一个中心，有多少个点对应
+                    M = [scale(t, c) for ((m, t), (m2, c)) in product(MT, MC) if m == m2]
+                    if num == 20:
+                        break
+                data[str(k) + '_mean'] = data.apply(rep, axis=1)
+                print('----------')
+                print(M)
+                for each in range(k):
+                    df.loc[df.shape[0]] = [M[each][0], M[each][1], k]
+            ax = df.plot.scatter('x','y',c = 'k', colormap = 'tab10')
+            fig = ax.get_figure()
+            fig.savefig('fig.png')
+        kmean(10)
+        repo.dropCollection("kmean")
+        repo.createCollection("kmean")
+        repo['chuci_yfch_yuwan_zhurh.kmean'].insert_many(data.to_dict('records'))
+        repo['chuci_yfch_yuwan_zhurh.kmean'].metadata({'complete': True})
+        #print(list(repo['chuci_yfch_yuwan_zhurh.kmean'].find()))
         repo.logout()
 
         endTime = datetime.datetime.now()
@@ -109,31 +108,28 @@ class uber_kmean(dml.Algorithm):
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate('chuci_yfch_yuwan_zhurh', 'chuci_yfch_yuwan_zhurh')
-        '''doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')  # The scripts are in <folder>#<filename> format.
+
+        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')  # The scripts are in <folder>#<filename> format.
         doc.add_namespace('dat', 'http://datamechanics.io/data/')  # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont',
                           'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/')  # The event log.
-        agent = doc.agent('alg:chuci_yfch_yuwan_zhurh#health_uber_output',
+
+        agent = doc.agent('alg:chuci_yfch_yuwan_zhurh#kmean',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
-        entity_uber = doc.entity('dat:chuci_yfch_yuwan_zhurh#uber',
+        entity_uber = doc.entity('dat:chuci_yfch_yuwan_zhurh#uber_location',
                            {prov.model.PROV_LABEL: 'uber data', prov.model.PROV_TYPE: 'ont:DataSet'})
-        entity_health = doc.entity('dat:chuci_yfch_yuwan_zhurh#health',
+        entity_kmean = doc.entity('dat:chuci_yfch_yuwan_zhurh#uber_kmean',
                            {prov.model.PROV_LABEL: 'health data', prov.model.PROV_TYPE: 'ont:DataSet'})
-        entity_result = doc.entity('dat:chuci_yfch_yuwan_zhurh#result',
-                                   {prov.model.PROV_LABEL: 'result data', prov.model.PROV_TYPE: 'ont:DataSet'})
+
         activity = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(activity, agent)
         doc.usage(activity, entity_uber, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:aggregate'}
                   )
-        doc.usage(activity, entity_health, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:aggregate'}
-                  )
-        doc.wasAttributedTo(entity_result, agent)
-        doc.wasGeneratedBy(entity_result, activity, endTime)
-        doc.wasDerivedFrom(entity_health, entity_result, activity, activity, activity)
-        doc.wasDerivedFrom(entity_uber, entity_result, activity, activity, activity)'''
+        doc.wasAttributedTo(entity_kmean, agent)
+        doc.wasGeneratedBy(entity_kmean, activity, endTime)
+        doc.wasDerivedFrom(entity_uber, entity_kmean, activity, activity, activity)
 
         repo.logout()
 
