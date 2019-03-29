@@ -26,22 +26,21 @@ class merge_income(dml.Algorithm):
 		
 		# ----------------- Merge Census Tract incomes with NTA info, aggregate and average incomes for NTA -----------------
 		insert_many_arr = []
-		count_tracts = 0
-		total_income = 0
 		for neighborhood in neighborhoods.find():
+			count_tracts = 0
+			total_income = 0
 			for income in incomes.find():
 				if neighborhood['ntacode'] == income['nta']:
 					count_tracts += 1
 					total_income += float(income['income'])
-					if(income['income'] == 'None'):
-						print(income['nta'])
-			avg_income = total_income/count_tracts
+			if (neighborhood['ntaname'] != 'Airport' and 'park' not in neighborhood['ntaname'] and neighborhood['ntaname'] != 'Rikers Island'):
+				avg_income = total_income/count_tracts
 			insert_many_arr.append({
-				'ntacode': neighborhood['ntacode'], 
-				'ntaname': neighborhood['ntaname'],  
-				'stations': neighborhood['stations'], 
-				'population': neighborhood['population'],
-				'income': avg_income
+			'ntacode': neighborhood['ntacode'], 
+			'ntaname': neighborhood['ntaname'],  
+			'stations': neighborhood['stations'], 
+			'population': neighborhood['population'],
+			'income': avg_income
 			})
 
 		#----------------- Data insertion into Mongodb ------------------
