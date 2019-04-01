@@ -4,12 +4,11 @@ import prov.model
 import datetime
 import uuid
 
-class transformation4():
 
+class transformation4():
     contributor = 'kgrewal_shin2'
     reads = ['kgrewal_shin2.streets_without_schools', 'kgrewal_shin2.streets_without_landmarks']
     writes = ['kgrewal_shin2.unclaimed_streets']
-
 
     @staticmethod
     def execute(trial=False):
@@ -41,7 +40,7 @@ class transformation4():
             zip = x['zipcode']
             if not zip:
                 zip = '02111'
-            elif len(zip)>5:
+            elif len(zip) > 5:
                 zip = zip[:5]
             try:
                 info = zips[0][zip]
@@ -52,13 +51,11 @@ class transformation4():
             except KeyError:
                 continue
 
-
         repo.dropCollection("unclaimed_streets")
         repo.createCollection("unclaimed_streets")
         repo['kgrewal_shin2.unclaimed_streets'].insert_many(street_zip)
         repo['kgrewal_shin2.unclaimed_streets'].metadata({'complete': True})
         print(repo['kgrewal_shin2.unclaimed_streets'].metadata())
-
 
         repo.logout()
 
@@ -94,7 +91,7 @@ class transformation4():
                   )
 
         streets = doc.entity('dat:kgrewal_shin2#unclaimed_streets',
-                          {prov.model.PROV_LABEL: 'Unclaimed Streets', prov.model.PROV_TYPE: 'ont:DataSet'})
+                             {prov.model.PROV_LABEL: 'Unclaimed Streets', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(streets, this_script)
         doc.wasGeneratedBy(streets, get_streets, endTime)
         doc.wasDerivedFrom(streets, resource, get_streets, get_streets, get_streets)
