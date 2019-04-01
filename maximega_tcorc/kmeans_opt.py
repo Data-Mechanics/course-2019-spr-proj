@@ -26,15 +26,20 @@ class kmeans_opt(dml.Algorithm):
 		nta_objects = repo.maximega_tcorc.income_with_NTA_with_percentages.find()
 		
 		X = []
-		rev_per_NTA = 0
 		data_copy = []
+		sations_count = 0
 		for nta in nta_objects:
 			if('SI' not in nta['ntaname']):
 				if(len(nta['stations'])!= 0):
+					sations_count+=1
+					print("---------------------------------------------------------------------")
+					print(nta['ntaname'])
+					print()
+					print(nta['stations'])
 					income = nta['income']
 					X.append([1, income])
 					data_copy.append(nta)
-		print(len(data_copy))
+		print(sations_count)
 		#------------------ K Means
 		k = 5
 		kmeans = KMeans(n_clusters=k, verbose=0, n_init = 100).fit(X)
@@ -62,7 +67,7 @@ class kmeans_opt(dml.Algorithm):
 		plt.scatter(X[:, 0], X[:, 1], s=30, c=kmeans.labels_)
 		#plt.show()
 
-		hypothetical_percentages = [0.2, 0.2, 0.2, 0.2, 0.2] #ik its a shit name we'll figure it out
+		hypothetical_percentages = [0.22, 0.35, 0.18, 0.2, 0.05] #ik its a shit name we'll figure it out
 
 
 		# equation: (percentage income for each "zone") = (populaiton * public_transport_%) * X 
@@ -74,7 +79,7 @@ class kmeans_opt(dml.Algorithm):
 		
 		new_zone_fares = [0] * k
 		for i in range(len(new_zone_fares)):
-			new_zone_fares[i] = (hypothetical_percentages[i] / totals_projected[i])
+			new_zone_fares[i] = (hypothetical_percentages[i] * overall_total_real) / totals_projected[i]
 		
 		print(new_zone_fares)
 

@@ -5,6 +5,7 @@ import prov.model
 import datetime
 import uuid
 from maximega_tcorc.helper_functions.within_polygon import point_inside_polygon
+#from helper_functions.within_polygon import point_inside_polygon
 
 class merge_stations_nta(dml.Algorithm):
 	contributor = 'maximega_tcorc'
@@ -28,9 +29,10 @@ class merge_stations_nta(dml.Algorithm):
 		filtered_stations = []
 		# ----------------- Create a list of unique stations (stations data contains many duplicates) -----------------
 		for station in stations:
-			name = station['Station Name']
-			if name not in duplicates:
-				duplicates.append(name)
+			lat = station['Station Latitude']
+			lon = station['Station Longitude']
+			if (lat, lon) not in duplicates:
+				duplicates.append((lat, lon))
 				filtered_stations.append(station)
 
 		nta_objects = {}
@@ -44,7 +46,7 @@ class merge_stations_nta(dml.Algorithm):
 			for station in filtered_stations:
 				# ----------------- station coordinates come in form: (lat, long) as a string -----------------
 				# ----------------- retreive lat and long points, cast them to floats to be passed into point_inside_polygon function -----------------				
-				station_coordinates = station['Entrance Location']
+				station_coordinates = station['Station Location']
 				lat_coord = ''
 				long_coord = ''
 				i = 1
@@ -126,5 +128,4 @@ class merge_stations_nta(dml.Algorithm):
 		repo.logout()
 				
 		return doc
-
 
