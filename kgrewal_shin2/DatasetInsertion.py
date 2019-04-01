@@ -79,6 +79,7 @@ class DatasetInsertion(dml.Algorithm):
         repo['kgrewal_shin2.ubers'].metadata({'complete': True})
         print(repo['kgrewal_shin2.ubers'].metadata())
 
+<<<<<<< HEAD
 
         url = 'http://datamechanics.io/data/kgrewal_shin2/MA_zip_codes.json'
         response = urllib.request.urlopen(url).read().decode("utf-8")
@@ -91,8 +92,14 @@ class DatasetInsertion(dml.Algorithm):
 
         # # major roads
         # url = 'https://drive.google.com/file/d/10a3ZoJjx2kgCRWEwjjCoTHADFV-uYV3e/view?usp=sharing'
+=======
+        # major roads
+        # url = 'major_roads.json'
+>>>>>>> 42f09ba8888fb4369ae1e6bcde59f604ea8ba1eb
         # response = urllib.request.urlopen(url).read().decode("utf-8")
         # r = json.loads(response)
+        # with open('major_roads.json') as f:
+        #     r = json.load(f)
         # repo.dropCollection("major_roads")
         # repo.createCollection("major_roads")
         # repo['kgrewal_shin2.major_roads'].insert_many(r)
@@ -199,7 +206,6 @@ class DatasetInsertion(dml.Algorithm):
         doc.wasAttributedTo(ubers, this_script)
         doc.wasGeneratedBy(ubers, get_ubers, endTime)
         doc.wasDerivedFrom(ubers, resource, get_ubers, get_ubers, get_ubers)
-
 
         pub_schools = doc.entity('dat:kgrewal_shin2#pub_schools',
                            {prov.model.PROV_LABEL: 'Public Schools', prov.model.PROV_TYPE: 'ont:DataSet'})

@@ -8,7 +8,6 @@
 ##
 ##
 
-import sys
 import os
 import importlib
 import json
@@ -55,7 +54,6 @@ print(provenance.get_provn())
 
 # Render the provenance document as an interactive graph.
 prov_json = json.loads(provenance.serialize())
-
 
 agents = [[a] for a in prov_json['agent']]
 entities = [[e] for e in prov_json['entity']]
