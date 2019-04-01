@@ -12,7 +12,7 @@ class DatasetInsertion(dml.Algorithm):
     contributor = 'kgrewal_shin2'
     reads = []
     writes = ['kgrewal_shin2.street_names', 'kgrewal_shin2.landmarks', 'kgrewal_shin2.neighborhoods',
-              'kgrewal_shin2.ubers', 'kgrewal_shin2.pub_schools']
+              'kgrewal_shin2.ubers', 'kgrewal_shin2.pub_schools', 'kgrewal_shin2.ma_zip_loc']
 
     @staticmethod
     def execute(trial=False):
@@ -25,7 +25,7 @@ class DatasetInsertion(dml.Algorithm):
         repo.authenticate('kgrewal_shin2', 'kgrewal_shin2')
 
         # boston street names
-        url = 'http://datamechanics.io/data/boston_street_names.json'
+        url = 'http://datamechanics.io/data/kgrewal_shin2/boston_street_names.json'
         response = urllib.request.urlopen(url).read().decode("utf-8")
         r = json.loads(response)
         repo.dropCollection("street_names")
@@ -79,6 +79,16 @@ class DatasetInsertion(dml.Algorithm):
         repo['kgrewal_shin2.ubers'].metadata({'complete': True})
         print(repo['kgrewal_shin2.ubers'].metadata())
 
+
+        url = 'http://datamechanics.io/data/kgrewal_shin2/MA_zip_codes.json'
+        response = urllib.request.urlopen(url).read().decode("utf-8")
+        r = json.loads(response)
+        repo.dropCollection("ma_zip_loc")
+        repo.createCollection("ma_zip_loc")
+        repo['kgrewal_shin2.ma_zip_loc'].insert_many(r)
+        repo['kgrewal_shin2.ma_zip_loc'].metadata({'complete': True})
+        print(repo['kgrewal_shin2.ma_zip_loc'].metadata())
+
         # # major roads
         # url = 'https://drive.google.com/file/d/10a3ZoJjx2kgCRWEwjjCoTHADFV-uYV3e/view?usp=sharing'
         # response = urllib.request.urlopen(url).read().decode("utf-8")
@@ -124,6 +134,7 @@ class DatasetInsertion(dml.Algorithm):
         get_neighborhoods = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
         get_ubers = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
         get_pub_schools = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+        get_zip_codes = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
 
         doc.wasAssociatedWith(get_street_name, this_script)
         doc.usage(get_street_name, resource, startTime, None,
@@ -154,6 +165,12 @@ class DatasetInsertion(dml.Algorithm):
         doc.usage(get_pub_schools, resource, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:Retrieval',
                    'ont:Query': '?type=Public+School&$select=X,Y,BLDG_NAME,ADDRESS'
+                   }
+                  )
+
+        doc.usage(get_zip_codes, resource, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:Retrieval',
+                   'ont:Query': '?type=Zip+Codes$select=LAT,LNG,ZIP'
                    }
                   )
 
@@ -190,6 +207,11 @@ class DatasetInsertion(dml.Algorithm):
         doc.wasGeneratedBy(pub_schools, get_pub_schools, endTime)
         doc.wasDerivedFrom(pub_schools, resource, get_pub_schools, get_pub_schools, get_pub_schools)
 
+        zip_codes = doc.entity('dat:kgrewal_shin2#ma_zip_loc',
+                               {prov.model.PROV_LABEL: 'Zipcodes and Locations', prov.model.PROV_TYPE: 'ont:DataSet'})
+        doc.wasAttributedTo(zip_codes, this_script)
+        doc.wasGeneratedBy(zip_codes, get_pub_schools, endTime)
+        doc.wasDerivedFrom(zip_codes, resource, get_zip_codes, get_zip_codes, get_zip_codes)
 
         repo.logout()
 
