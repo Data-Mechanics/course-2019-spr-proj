@@ -34,7 +34,7 @@ class kmeans(dml.Algorithm):
             long = street['LNG']
             K.append((lat, long))
 
-        mean, labels = km(K, 5)
+        mean, labels = km(K, 7)
 
         means = []
         for m in mean:
@@ -44,17 +44,18 @@ class kmeans(dml.Algorithm):
         for m in mean:
             mean_counts.append({'lat': m[0], 'lon': m[1], 'count': 0})
 
+        street_info = repo.kgrewal_shin2.unclaimed_streets.find()
         for s in street_info:
             val = {'lat': s['LAT'], 'lon': s['LNG']}
-            m2 = closest(means, val)
-            print(m2)
+            m2 = kmeans.closest(means, val)
 
             for m in mean_counts:
-                if m['lat'] == mean[0] and m['lon'] == mean[1]:
+                if m['lat'] == m2['lat'] and m['lon'] == m2['lon']:
                     m['count'] += 1
 
-        # print(mean_counts)
+        print(mean_counts)
 
+        repo['kgrewal_shin2.street_kmeans'].insert_many(mean_counts)
         repo['kgrewal_shin2.street_kmeans'].metadata({'complete': True})
         print(repo['kgrewal_shin2.street_kmeans'].metadata())
 
@@ -87,7 +88,7 @@ class kmeans(dml.Algorithm):
         doc.wasAssociatedWith(get_streets, this_script)
         doc.usage(get_streets, resource, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:Retrieval',
-                   'ont:Query': '?type=Street+Kmeans&$select=mean,num_streets,lat,long'
+                   'ont:Query': '?type=Street+Kmeans&$select=lat,lon,count'
                    }
                   )
 
@@ -101,16 +102,16 @@ class kmeans(dml.Algorithm):
 
         return doc
 
+    # Taken from https://stackoverflow.com/questions/41336756/find-the-closest-latitude-and-longitude
+    @staticmethod
+    def distance(lat1, lon1, lat2, lon2):
+        p = 0.017453292519943295
+        a = 0.5 - cos((lat2 - lat1) * p) / 2 + cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2
+        return 12742 * asin(sqrt(a))
 
-# Taken from https://stackoverflow.com/questions/41336756/find-the-closest-latitude-and-longitude
-def distance(lat1, lon1, lat2, lon2):
-    p = 0.017453292519943295
-    a = 0.5 - cos((lat2 - lat1) * p) / 2 + cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2
-    return 12742 * asin(sqrt(a))
-
-
-def closest(data, v):
-    return min(data, key=lambda p: distance(v['lat'], v['lon'], p['lat'], p['lon']))
+    @staticmethod
+    def closest(data, v):
+        return min(data, key=lambda p: kmeans.distance(v['lat'], v['lon'], p['lat'], p['lon']))
 
 
 kmeans.execute()
