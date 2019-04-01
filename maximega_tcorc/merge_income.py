@@ -29,19 +29,20 @@ class merge_income(dml.Algorithm):
 		for neighborhood in neighborhoods.find():
 			count_tracts = 0
 			total_income = 0
-			for income in incomes.find():
-				if neighborhood['ntacode'] == income['nta']:
-					count_tracts += 1
-					total_income += float(income['income'])
+			# ----------------- Exclude all tracts that have 0 population (airports, parks, prisons, cemetaries...) -----------------
 			if (neighborhood['ntaname'] != 'Airport' and 'park' not in neighborhood['ntaname'] and neighborhood['ntaname'] != 'Rikers Island'):
+				for income in incomes.find():
+					if neighborhood['ntacode'] == income['nta']:
+						count_tracts += 1
+						total_income += float(income['income'])
 				avg_income = total_income/count_tracts
-			insert_many_arr.append({
-			'ntacode': neighborhood['ntacode'], 
-			'ntaname': neighborhood['ntaname'],  
-			'stations': neighborhood['stations'], 
-			'population': neighborhood['population'],
-			'income': avg_income
-			})
+				insert_many_arr.append({
+				'ntacode': neighborhood['ntacode'], 
+				'ntaname': neighborhood['ntaname'],  
+				'stations': neighborhood['stations'], 
+				'population': neighborhood['population'],
+				'income': avg_income
+				})
 
 		#----------------- Data insertion into Mongodb ------------------
 		repo.dropCollection('income_with_neighborhoods')

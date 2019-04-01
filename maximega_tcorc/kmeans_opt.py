@@ -17,7 +17,7 @@ class kmeans_opt(dml.Algorithm):
 	def execute(trial = False):
 		startTime = datetime.datetime.now()
 
-		# repo_name = merge_stations_nta.writes[0]
+		#repo_name = kmeans_opt.writes[0]
 		# ----------------- Set up the database connection -----------------
 		client = dml.pymongo.MongoClient()
 		repo = client.repo
@@ -26,22 +26,61 @@ class kmeans_opt(dml.Algorithm):
 		nta_objects = repo.maximega_tcorc.income_with_NTA_with_percentages.find()
 		
 		X = []
-		names = []
+		rev_per_NTA = 0
+		data_copy = []
 		for nta in nta_objects:
-			pop_times_perc = float(nta['population']) * (nta['trans_percent'] / 100)
-			income = nta['income']
-
-			X.append([income, pop_times_perc])
-			names.append(nta['ntaname'])
-
+			if('SI' not in nta['ntaname']):
+				if(len(nta['stations'])!= 0):
+					income = nta['income']
+					X.append([1, income])
+					data_copy.append(nta)
+		print(len(data_copy))
 		#------------------ K Means
-		# k = 6
-		# kmeans = KMeans(n_clusters=k).fit(X)
-		# kmeans.fit_predict(X)
+		k = 5
+		kmeans = KMeans(n_clusters=k, verbose=0, n_init = 100).fit(X)
+		kmeans.fit_predict(X)
+		X = np.array(X)
 
-		# X = np.array(X)
-		# plt.scatter(X[:, 0], X[:, 1], s=30, c=kmeans.labels_, edgecolors=['red', 'green', 'blue', 'red', 'green', 'blue'])
-		# plt.show()
+		k_groupings = kmeans.labels_
+
+		for i in range(len(data_copy)):
+			data_copy[i]['zone'] = k_groupings[i]
+
+		
+		totals_real = [0] * k
+		for item in data_copy:
+			totals_real[item['zone']] += (float(item['population']) * (item['trans_percent'] / 100)) * 2.75
+
+		overall_total_real = sum(totals_real)
+
+		avgs_real = [0] * k
+		for i in range(len(totals_real)):
+			avgs_real[i] = totals_real[i]/overall_total_real
+		print(avgs_real)
+		
+
+		plt.scatter(X[:, 0], X[:, 1], s=30, c=kmeans.labels_)
+		#plt.show()
+
+		hypothetical_percentages = [0.2, 0.2, 0.2, 0.2, 0.2] #ik its a shit name we'll figure it out
+
+
+		# equation: (percentage income for each "zone") = (populaiton * public_transport_%) * X 
+		# (percentage income for each "zone") / (populaiton * public_transport_%) = X
+		# it doesnt really work but this is what we had on paper
+		totals_projected = [0] * k
+		for item in data_copy:
+			totals_projected[item['zone']] += float(item['population']) * (item['trans_percent'] / 100)
+		
+		new_zone_fares = [0] * k
+		for i in range(len(new_zone_fares)):
+			new_zone_fares[i] = (hypothetical_percentages[i] / totals_projected[i])
+		
+		print(new_zone_fares)
+
+	
+
+
 
 
 
@@ -49,11 +88,11 @@ class kmeans_opt(dml.Algorithm):
 
 		# error = np.zeros(25)
 		# for k in range(1,25):
-		# 	kmeans = KMeans(init='k-means++', n_clusters=k, n_init=10)
+		# 	kmeans = KMeans(init='k-means++', n_clusters=k, n_init=100)
 		# 	kmeans.fit(X)
 		# 	error[k] = kmeans.inertia_
 
-		# plt.plot(range(1,len(error)),error[1:])
+		# plt.scatter(range(1,len(error)),error[1:])
 		# plt.xlabel('Number of clusters')
 		# dummy = plt.ylabel('Error')
 		# plt.show()
@@ -116,3 +155,5 @@ class kmeans_opt(dml.Algorithm):
 		repo.logout()
 				
 		return doc
+
+kmeans_opt.execute()
