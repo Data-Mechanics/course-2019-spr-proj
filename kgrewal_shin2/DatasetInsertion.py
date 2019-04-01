@@ -1,4 +1,3 @@
-
 import urllib.request
 import requests
 import json
@@ -34,8 +33,7 @@ class DatasetInsertion(dml.Algorithm):
         repo['kgrewal_shin2.street_names'].metadata({'complete': True})
         print(repo['kgrewal_shin2.street_names'].metadata())
 
-
-        #landmarks api
+        # landmarks api
         url = 'https://opendata.arcgis.com/datasets/7a7aca614ad740e99b060e0ee787a228_3.geojson'
         response = requests.get(url)
         responsetxt = '[' + response.text + ']'
@@ -45,7 +43,6 @@ class DatasetInsertion(dml.Algorithm):
         repo['kgrewal_shin2.landmarks'].insert_many(r)
         repo['kgrewal_shin2.landmarks'].metadata({'complete': True})
         print(repo['kgrewal_shin2.landmarks'].metadata())
-
 
         # neighborhoods
         url = "https://raw.githubusercontent.com/codeforamerica/click_that_hood/master/public/data/boston.geojson"
@@ -69,7 +66,7 @@ class DatasetInsertion(dml.Algorithm):
         repo['kgrewal_shin2.pub_schools'].metadata({'complete': True})
         print(repo['kgrewal_shin2.pub_schools'].metadata())
 
-        #uber data
+        # uber data
         url = 'http://datamechanics.io/data/boston_common_ubers.json'
         response = urllib.request.urlopen(url).read().decode("utf-8")
         r = json.loads(response)
@@ -78,8 +75,6 @@ class DatasetInsertion(dml.Algorithm):
         repo['kgrewal_shin2.ubers'].insert_many(r)
         repo['kgrewal_shin2.ubers'].metadata({'complete': True})
         print(repo['kgrewal_shin2.ubers'].metadata())
-
-<<<<<<< HEAD
 
         url = 'http://datamechanics.io/data/kgrewal_shin2/MA_zip_codes.json'
         response = urllib.request.urlopen(url).read().decode("utf-8")
@@ -92,10 +87,8 @@ class DatasetInsertion(dml.Algorithm):
 
         # # major roads
         # url = 'https://drive.google.com/file/d/10a3ZoJjx2kgCRWEwjjCoTHADFV-uYV3e/view?usp=sharing'
-=======
         # major roads
         # url = 'major_roads.json'
->>>>>>> 42f09ba8888fb4369ae1e6bcde59f604ea8ba1eb
         # response = urllib.request.urlopen(url).read().decode("utf-8")
         # r = json.loads(response)
         # with open('major_roads.json') as f:
@@ -151,22 +144,22 @@ class DatasetInsertion(dml.Algorithm):
                   )
 
         doc.usage(get_landmarks, resource, startTime, None,
-                  {prov.model.PROV_TYPE:'ont:Retrieval',
-                  'ont:Query':'?type=Landmark+Name&$select=WARD, Petition, Name_of_Pr, Address, Neighborho, '
-                              'ShapeSTArea, ShapeSTLength'
-                  }
+                  {prov.model.PROV_TYPE: 'ont:Retrieval',
+                   'ont:Query': '?type=Landmark+Name&$select=WARD, Petition, Name_of_Pr, Address, Neighborho, '
+                                'ShapeSTArea, ShapeSTLength'
+                   }
                   )
 
         doc.usage(get_neighborhoods, resource, startTime, None,
-                  {prov.model.PROV_TYPE:'ont:Retrieval',
-                  'ont:Query':'?type=Neighborhood+Location&$select=features'}
+                  {prov.model.PROV_TYPE: 'ont:Retrieval',
+                   'ont:Query': '?type=Neighborhood+Location&$select=features'}
                   )
 
         doc.usage(get_ubers, resource, startTime, None,
-                  {prov.model.PROV_TYPE:'ont:Retrieval',
-                  'ont:Query':'?type=Uber+Data&$select=Origin Display Name,Destination Display Name,Mean Travel Time '
-                              '(Seconds),Range - Lower Bound Travel Time (Seconds),Range - Upper Bound Travel Time (Seconds)'
-                  }
+                  {prov.model.PROV_TYPE: 'ont:Retrieval',
+                   'ont:Query': '?type=Uber+Data&$select=Origin Display Name,Destination Display Name,Mean Travel Time '
+                                '(Seconds),Range - Lower Bound Travel Time (Seconds),Range - Upper Bound Travel Time (Seconds)'
+                   }
                   )
 
         doc.usage(get_pub_schools, resource, startTime, None,
@@ -181,34 +174,32 @@ class DatasetInsertion(dml.Algorithm):
                    }
                   )
 
-
         streets = doc.entity('dat:kgrewal_shin2#street_name',
-                          {prov.model.PROV_LABEL: 'Boston Streets', prov.model.PROV_TYPE: 'ont:DataSet'})
+                             {prov.model.PROV_LABEL: 'Boston Streets', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(streets, this_script)
         doc.wasGeneratedBy(streets, get_street_name, endTime)
         doc.wasDerivedFrom(streets, resource, get_street_name, get_street_name, get_street_name)
 
         landmarks = doc.entity('dat:kgrewal_shin2#landmarks',
-                          {prov.model.PROV_LABEL: 'Boston Landmarks', prov.model.PROV_TYPE: 'ont:DataSet'})
+                               {prov.model.PROV_LABEL: 'Boston Landmarks', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(landmarks, this_script)
         doc.wasGeneratedBy(landmarks, get_landmarks, endTime)
         doc.wasDerivedFrom(landmarks, resource, get_landmarks, get_landmarks, get_landmarks)
 
-
         neighborhoods = doc.entity('dat:kgrewal_shin2#neighborhoods',
-                          {prov.model.PROV_LABEL: 'Boston Landmarks', prov.model.PROV_TYPE: 'ont:DataSet'})
+                                   {prov.model.PROV_LABEL: 'Boston Landmarks', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(neighborhoods, this_script)
         doc.wasGeneratedBy(neighborhoods, get_neighborhoods, endTime)
         doc.wasDerivedFrom(neighborhoods, resource, get_neighborhoods, get_neighborhoods, get_neighborhoods)
 
         ubers = doc.entity('dat:kgrewal_shin2#ubers',
-                          {prov.model.PROV_LABEL: 'Boston Common Ubers', prov.model.PROV_TYPE: 'ont:DataSet'})
+                           {prov.model.PROV_LABEL: 'Boston Common Ubers', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(ubers, this_script)
         doc.wasGeneratedBy(ubers, get_ubers, endTime)
         doc.wasDerivedFrom(ubers, resource, get_ubers, get_ubers, get_ubers)
 
         pub_schools = doc.entity('dat:kgrewal_shin2#pub_schools',
-                           {prov.model.PROV_LABEL: 'Public Schools', prov.model.PROV_TYPE: 'ont:DataSet'})
+                                 {prov.model.PROV_LABEL: 'Public Schools', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(pub_schools, this_script)
         doc.wasGeneratedBy(pub_schools, get_pub_schools, endTime)
         doc.wasDerivedFrom(pub_schools, resource, get_pub_schools, get_pub_schools, get_pub_schools)
