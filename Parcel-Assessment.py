@@ -27,5 +27,5 @@ for i in Parcels:
             i['PTYPE'] = j["PTYPE"]
             break
 
-#print(Parcels[0])
+print(Parcels[0])
 #print(json.dumps(Parcels, sort_keys=True, indent = 2))

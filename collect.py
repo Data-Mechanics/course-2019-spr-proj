@@ -30,7 +30,7 @@ for row in l_features:
             poly = Polygon(shape)
             polys.append(poly)
     parcels.append({"PID":row["properties"]["PID_LONG"], "Shape":polys})
-print(parcels)
+# print(parcels)
 #
 #
 # # property assessment data
@@ -85,16 +85,19 @@ for data in r:
             boston_cdc.append(combined)
             break
 combined = []
+
+print(boston_cdc)
+
 for parcel in parcels:
-    print(parcel["Shape"])
+    #print(parcel["Shape"])
     for tract in boston_cdc:
         for shape in tract["Shape"]:
             if shape.contains(parcel["Shape"][0]):
                 combined.append({**parcel, "Census Track":tract["Census Tract"]})
                 break
-print(combined)
-print(len(combined))
-print(len(parcels))
+#print(combined)
+#print(len(combined))
+#print(len(parcels))
 # shapes_tracts = []
 # boston_cdc_tracts = []
 # for i in shapes:
