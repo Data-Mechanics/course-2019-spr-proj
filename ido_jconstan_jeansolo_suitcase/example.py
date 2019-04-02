@@ -10,7 +10,7 @@ from bson.objectid import ObjectId
 class example(dml.Algorithm):
     contributor = 'ido_jconstan_jeansolo_suitcase'
     reads = []
-    writes = ['ido_jconstan_jeansolo_suitcase.bu_transportation_study',
+    writes = ['ido_jconstan_jeansolo_suitcase.registered_students',
               'ido_jconstan_jeansolo_suitcase.property_data',
               'ido_jconstan_jeansolo_suitcase.gas_emissions',
               'ido_jconstan_jeansolo_suitcase.zones',
@@ -20,26 +20,23 @@ class example(dml.Algorithm):
     def execute(trial = False):
         '''Retrieve some data sets (not using the API here for the sake of simplicity).'''
         startTime = datetime.datetime.now()
-
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate('ido_jconstan_jeansolo_suitcase', 'ido_jconstan_jeansolo_suitcase')
-       
-
         
-        # OBTAINING FIRST DATASET [Bu Transportation Study]
+        #FIRST DATASET [Bu Transportation Study]
         url = 'http://datamechanics.io/data/ido_jconstan_jeansolo_suitcase/bu_transportation_study.json'
         response = urllib.request.urlopen(url).read().decode("utf-8")
         r = json.loads(response)
         s = json.dumps(r, sort_keys=True, indent=2)
-        repo.dropCollection("bu_transportation_study")
-        repo.createCollection("bu_transportation_study")
-        repo['ido_jconstan_jeansolo_suitcase.bu_transportation_study'].insert_many(r)
-        repo['ido_jconstan_jeansolo_suitcase.bu_transportation_study'].metadata({'complete':True})
-        print(repo['ido_jconstan_jeansolo_suitcase.bu_transportation_study'].metadata())
+        repo.dropCollection("registered_students")
+        repo.createCollection("registered_students")
+        repo['ido_jconstan_jeansolo_suitcase.registered_students'].insert_many(r)
+        repo['ido_jconstan_jeansolo_suitcase.registered_students'].metadata({'complete':True})
+        print(repo['ido_jconstan_jeansolo_suitcase.registered_students'].metadata())
 
-        # OBTAINING SECOND DATA SET [Spark Property Data]
+        #SECOND DATA SET [Spark Property Data]
         url = 'http://datamechanics.io/data/ido_jconstan_jeansolo_suitcase/property_data.json'
         response = urllib.request.urlopen(url).read().decode("utf-8")
         r1 = json.loads(response)
@@ -50,7 +47,7 @@ class example(dml.Algorithm):
         repo['ido_jconstan_jeansolo_suitcase.property_data'].metadata({'complete':True})
         print(repo['ido_jconstan_jeansolo_suitcase.property_data'].metadata())
 		
-        # OBTAINING THIRD DATA SET [Greenhouse Emissions]
+        #THIRD DATA SET [Greenhouse Emissions]
         url = 'https://drive.google.com/uc?export=download&id=1OaOvImEZLgxcmg1FmcqP4gSsABOKQu7P'
         response = urllib.request.urlopen(url).read().decode("utf-8")
         r2 = json.loads(response)
@@ -60,10 +57,7 @@ class example(dml.Algorithm):
         repo['ido_jconstan_jeansolo_suitcase.greenhouse_emissions'].insert(r)
         repo['ido_jconstan_jeansolo_suitcase.greenhouse_emissions'].metadata({'complete':True})
         print(repo['ido_jconstan_jeansolo_suitcase.greenhouse_emissions'].metadata())   
-        
-
-
-        # OBTAINING FOURTH DATA SET [Boston work zones]
+        #FOURTH DATA SET [Boston work zones]
         url = 'https://drive.google.com/uc?export=download&id=1LhG0cxZgHCU2fqDNaGLdQeBZo9z7gJTj'
         response = urllib.request.urlopen(url).read().decode("utf-8")
         r3 = json.loads(response)
@@ -73,8 +67,7 @@ class example(dml.Algorithm):
         repo['ido_jconstan_jeansolo_suitcase.zones'].insert_many(r)
         repo['ido_jconstan_jeansolo_suitcase.zones'].metadata({'complete':True})
         print(repo['ido_jconstan_jeansolo_suitcase.zones'].metadata())
-
-        # OBTAINING FIFTH DATA SET [Traffic Count Locations]
+        #FIFTH DATA SET [Traffic Count Locations]
         url = 'https://opendata.arcgis.com/datasets/53cd17c661da464c807dfa6ae0563470_0.geojson'
         response = urllib.request.urlopen(url).read().decode("utf-8")
         r4 = json.loads(response)
@@ -118,7 +111,7 @@ class example(dml.Algorithm):
 		#new data set fields: price of house, takes bus?
         #print(r)
         #tr = repo.ido_jconstan_jeansolo_suitcase.traffic_count.find()
-        #tr1 = repo.ido_jconstan_jeansolo_suitcase.bu_transportation_study.find()
+        #tr1 = repo.ido_jconstan_jeansolo_suitcase.registered_students.find()
         
         #tr2 = repo.ido_jconstan_jeansolo_suitcase.property_data.find({'Address 1': {'$regex' : 'w'}},{'Address 1': True, '_id':False})
         #tr1 = repo.ido_jconstan_jeansolo_suitcase.property_data.find({}, {'Address 1': True, '_id':False})
@@ -162,7 +155,7 @@ class example(dml.Algorithm):
         
         
 
-        #result = repo.ido_jconstan_jeansolo_suitcase.property_data.aggregate([ {'$lookup' : {'from': repo.ido_jconstan_jeansolo_suitcase.bu_transportation_study,'localField': 'Address 1','foreignField': 'Address','as': 'results' }}])
+        #result = repo.ido_jconstan_jeansolo_suitcase.property_data.aggregate([ {'$lookup' : {'from': repo.ido_jconstan_jeansolo_suitcase.registered_students,'localField': 'Address 1','foreignField': 'Address','as': 'results' }}])
          
          
         """
@@ -181,20 +174,8 @@ class example(dml.Algorithm):
 for doc in (papers.aggregate(pipeline)):
    pprint (doc)
         """
-		#Transformation Two
-		
-		
-		#Transformation Three
-		
-		
-		
-		
-		
-		
         repo.logout()
-
         endTime = datetime.datetime.now()
-
         return {"start":startTime, "end":endTime}
     
     @staticmethod
@@ -221,32 +202,39 @@ for doc in (papers.aggregate(pipeline)):
 
         this_script = doc.agent('alg:ido_jconstan_jeansolo_suitcase#example', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
         
+        resource_registeredStudents = doc.entity('dat:registered_students', {'prov:label':'BU Transportation Study', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+       
 
 
-        resource_transportStudy = doc.entity('dat:bu_transportation_study', {'prov:label':'BU Transportation Study', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
         resource_propertyData = doc.entity('dat:property_data', {'prov:label':'Property Data', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
         resource_gasEmissions = doc.entity('dbg:bd8dd4bb-867e-4ca2-b6c7-6c3bd9e6c290', {'prov:label':'Gas Emissions', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
         resource_workZones = doc.entity('dbg2:36fcf981-e414-4891-93ea-f5905cec46fc', {'prov:label':'Work Zones', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
         resource_trafficCount = doc.entity('oda:53cd17c661da464c807dfa6ae0563470_0', {'prov:label':'Traffic Count', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
 
 
-        get_bu_transport_study = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        get_registered_students = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+
+
         get_property_data = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         get_gas_emissions = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         get_work_zones = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         get_traffic_count = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
 
 
-        doc.wasAssociatedWith(get_bu_transport_study, this_script)
+        doc.wasAssociatedWith(get_registered_students, this_script)
+
+
         doc.wasAssociatedWith(get_property_data, this_script)
         doc.wasAssociatedWith(get_gas_emissions, this_script)
         doc.wasAssociatedWith(get_work_zones, this_script)
         doc.wasAssociatedWith(get_traffic_count, this_script)
 
-        doc.usage(get_bu_transport_study, resource_transportStudy, startTime, None,
+        doc.usage(get_registered_students, resource_registeredStudents, startTime, None,
                   {prov.model.PROV_TYPE:'ont:Retrieval',
                   }
                   )
+
+
         doc.usage(get_property_data, resource_propertyData, startTime, None,
                   {prov.model.PROV_TYPE:'ont:Retrieval',
                   }
@@ -265,10 +253,14 @@ for doc in (papers.aggregate(pipeline)):
                   )
 
 
-        bu_transportation_study = doc.entity('dat:ido_jconstan_jeansolo_suitcase#bu_transportation_study', {prov.model.PROV_LABEL:'BU Transportation Study', prov.model.PROV_TYPE:'ont:DataSet'})
-        doc.wasAttributedTo(bu_transportation_study, this_script)
-        doc.wasGeneratedBy(bu_transportation_study, get_bu_transport_study, endTime)
-        doc.wasDerivedFrom(bu_transportation_study, resource_transportStudy, get_bu_transport_study, get_bu_transport_study, get_bu_transport_study)
+        registered_students = doc.entity('dat:ido_jconstan_jeansolo_suitcase#registered_students', {prov.model.PROV_LABEL:'BU Transportation Study', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(registered_students, this_script)
+        doc.wasGeneratedBy(registered_students, get_registered_students, endTime)
+        doc.wasDerivedFrom(registered_students, resource_registeredStudents, get_registered_students, get_registered_students, get_registered_students)
+
+
+
+
 
         property_data = doc.entity('dat:ido_jconstan_jeansolo_suitcase#property_data', {prov.model.PROV_LABEL:'Property Data', prov.model.PROV_TYPE:'ont:DataSet'})
         doc.wasAttributedTo(property_data, this_script)
