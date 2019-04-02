@@ -22,8 +22,8 @@ class filtered_famous_people_streets(dml.Algorithm):
         repo = client.repo
         repo.authenticate(contributor, contributor)
 
-        famous_people = repo[reads[0]].find()
-        street_book = repo[reads[1]].find()
+        famous_people = repo[reads[0]]
+        street_book = repo[reads[1]]
         fp = list(set(itertools.chain(*{(str(n['first_name'])+' ', str(n['last_name'])+' ') for n in famous_people.find()})))
         sb = list(street_book.find({'Street Name': {'$nin': fp}}))
         repo.dropCollection('filtered_famous_people_streets')
