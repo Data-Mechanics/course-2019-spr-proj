@@ -13,7 +13,7 @@ from tqdm import tqdm
 
 class UnionPopBike(dml.Algorithm):
 	contributor = 'charr_hu38_npearce'
-	reads = ['charr_hu38_npearce.aggbikedata', 'charr_hu38_npearce.census']
+	reads = ['charr_hu38_npearce.aggbikedata', 'charr_hu38_npearce.census', 'charr_hu38_npearce.boston_s', 'charr_hu38_npearce.washington_s', 'charr_hu38_npearce.newyork_s', 'charr_hu38_npearce.chicago_s', 'charr_hu38_npearce.sanfran_s']
 	writes = ['charr_hu38_npearce.unionpopbike']
 
 	@staticmethod
@@ -30,14 +30,24 @@ class UnionPopBike(dml.Algorithm):
 		repo.createCollection("unionpopbike")
 		
 		aggbikedata = list(repo.charr_hu38_npearce.aggbikedata.find())
-		census = list(repo.charr_hu38_npearce.census.find())
+        
+        switcher = {
+                "Boston, MA": (repo.charr_hu38_npearce.census.find({"location": "Boston, MA"})['population'],
+                               repo.charr_hu38_npearce.boston_s.find().count())
+                "Washington, DC": (repo.charr_hu38_npearce.census.find({"location": "Washington, DC"})['population'],
+                                   repo.charr_hu38_npearce.washington_s.find().count())
+                "New York, NY": (repo.charr_hu38_npearce.census.find({"location": "New York, NY"})['population'],
+                                 repo.charr_hu38_npearce.newyork_s.find().count())
+                "Chicago, IL": (repo.charr_hu38_npearce.census.find({"location": "Chicago, IL"})['population'],
+                                repo.charr_hu38_npearce.chicago_s.find().count())
+                "San Francisco, CA": (repo.charr_hu38_npearce.census.find({"location": "San Francisco, CA"})['population'],
+                                      repo.charr_hu38_npearce.sanfran_s.find().count())
+                }
 
 		data_arry=[]
-		for city1 in aggbikedata:																										#Product
-			for city2 in census:
-				if city1['city'] == city2['location']:																					#Selection
-					data_arry.append({"city":city1['city'],"tot_bike_time":city1['tot_bike_time'],"population":city2['population']})	#Projection
-					break
+		for city in aggbikedata:
+            population, stations = switcher.get(city['city'], (None, None))																		#Selection
+			data_arry.append({"city":city['city'],"tot_bike_time":city['tot_bike_time'],"population":population,"stations":stations})            #Projection
 		
 		
 		repo['charr_hu38_npearce.unionpopbike'].insert_many(data_arry)							#Join on two data sets (Non Trivial Transformation #3)
