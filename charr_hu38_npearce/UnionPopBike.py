@@ -31,8 +31,9 @@ class UnionPopBike(dml.Algorithm):
         
         aggbikedata = list(repo.charr_hu38_npearce.aggbikedata.find())
         repo['charr_hu38_npearce.census'].create_index([('population', dml.pymongo.ASCENDING)])
-		
-        switcher = {
+        
+        if(not trial):
+            switcher = {
                 "Boston, MA": (repo.charr_hu38_npearce.census.find({"location": "Boston, MA"})[0]['population'],
                                repo.charr_hu38_npearce.boston_s.find().count()),
                 "Washington, DC": (repo.charr_hu38_npearce.census.find({"location": "Washington, DC"})[0]['population'],
@@ -44,7 +45,11 @@ class UnionPopBike(dml.Algorithm):
                 "San Francisco, CA": (repo.charr_hu38_npearce.census.find({"location": "San Francisco, CA"})[0]['population'],
                                       repo.charr_hu38_npearce.sanfran_s.find().count())
                 }
-
+        else:
+            switcher = {
+                "Boston, MA": (repo.charr_hu38_npearce.census.find({"location": "Boston, MA"})[0]['population'],
+                               repo.charr_hu38_npearce.boston_s.find().count())
+                }
         data_arry=[]
         for city in aggbikedata:
             population, stations = switcher.get(city['city'], (None, None))                                                                     #Selection

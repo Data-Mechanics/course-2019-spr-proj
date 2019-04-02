@@ -36,29 +36,30 @@ class AggBikeData(dml.Algorithm):
 			total_duration+=int(entry['duration'])
 		data_arry.append({"city":"Boston, MA","tot_bike_time":total_duration})				#Aggsum (Non Trivial transformation #1)
 		
-		washington = list(repo.charr_hu38_npearce.washington.find())
-		total_duration=0
-		for entry in washington:
-			total_duration+=int(entry['duration'])
-		data_arry.append({"city":"Washington, DC","tot_bike_time":total_duration})			#Aggsum
+		if(not trial):		#Restric trial data to Boston data only
+			washington = list(repo.charr_hu38_npearce.washington.find())
+			total_duration=0
+			for entry in washington:
+				total_duration+=int(entry['duration'])
+			data_arry.append({"city":"Washington, DC","tot_bike_time":total_duration})			#Aggsum
 		
-		newyork = list(repo.charr_hu38_npearce.newyork.find())
-		total_duration=0
-		for entry in newyork:
-			total_duration+=int(entry['duration'])
-		data_arry.append({"city":"New York, NY","tot_bike_time":total_duration})			#Aggsum
+			newyork = list(repo.charr_hu38_npearce.newyork.find())
+			total_duration=0
+			for entry in newyork:
+				total_duration+=int(entry['duration'])
+			data_arry.append({"city":"New York, NY","tot_bike_time":total_duration})			#Aggsum
 		
-		chicago = list(repo.charr_hu38_npearce.chicago.find())
-		total_duration=0
-		for entry in chicago:
-			total_duration+=int(entry['duration'])
-		data_arry.append({"city":"Chicago, IL","tot_bike_time":total_duration})				#Aggsum
+			chicago = list(repo.charr_hu38_npearce.chicago.find())
+			total_duration=0
+			for entry in chicago:
+				total_duration+=int(entry['duration'])
+			data_arry.append({"city":"Chicago, IL","tot_bike_time":total_duration})				#Aggsum
 		
-		sanfran = list(repo.charr_hu38_npearce.sanfran.find())
-		total_duration=0
-		for entry in sanfran:
-			total_duration+=int(entry['duration'])
-		data_arry.append({"city":"San Francisco, CA","tot_bike_time":total_duration})		#Aggsum
+			sanfran = list(repo.charr_hu38_npearce.sanfran.find())
+			total_duration=0
+			for entry in sanfran:
+				total_duration+=int(entry['duration'])
+			data_arry.append({"city":"San Francisco, CA","tot_bike_time":total_duration})		#Aggsum
 		
 		repo['charr_hu38_npearce.aggbikedata'].insert_many(data_arry)						#Union of 5 aggregations (Non Trivial transformation #2)
 		repo['charr_hu38_npearce.aggbikedata'].metadata({'complete':True})

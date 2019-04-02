@@ -13,7 +13,7 @@ from tqdm import tqdm
 
 class StationDataCollection(dml.Algorithm):
 	contributor = 'charr_hu38_npearce'
-	reads = []
+	reads = ['charr_hu38_npearce.boston']
 	writes = ['charr_hu38_npearce.boston_s', 'charr_hu38_npearce.washington_s', 'charr_hu38_npearce.newyork_s', 'charr_hu38_npearce.chicago_s', 'charr_hu38_npearce.sanfran_s']
 
 	@staticmethod
@@ -25,7 +25,7 @@ class StationDataCollection(dml.Algorithm):
 		client = dml.pymongo.MongoClient()
 		repo = client.repo
 		repo.authenticate('charr_hu38_npearce', 'charr_hu38_npearce')
-
+			
 		url = 'https://gbfs.bluebikes.com/gbfs/en/station_information.json'													
 		response = urllib.request.urlopen(url).read().decode("utf-8")
 		r = json.loads(response)
@@ -39,6 +39,11 @@ class StationDataCollection(dml.Algorithm):
 		repo.createCollection("boston_s")
 		repo['charr_hu38_npearce.boston_s'].insert_many(data_arry)													#Data set 1: Boston
 		repo['charr_hu38_npearce.boston_s'].metadata({'complete':True})
+		
+		if(trial):					#Restrict trial data to a single data set
+			repo.logout()
+			endTime = datetime.datetime.now()
+			return {"start":startTime, "end":endTime}
 		
 		url = 'https://gbfs.capitalbikeshare.com/gbfs/en/station_information.json'													
 		response = urllib.request.urlopen(url).read().decode("utf-8")
@@ -185,7 +190,7 @@ class StationDataCollection(dml.Algorithm):
 
 # This is DataCollection code you might use for debugging this module.
 # Please remove all top-level function calls before submitting.
-StationDataCollection.execute()
+#StationDataCollection.execute()
 #doc = StationDataCollection.provenance()
 #print(doc.get_provn())
 #print(json.dumps(json.loads(doc.serialize()), indent=4))

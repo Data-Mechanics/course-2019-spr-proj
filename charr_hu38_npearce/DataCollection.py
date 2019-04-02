@@ -24,7 +24,25 @@ class DataCollection(dml.Algorithm):
 		# Set up the database connection.
 		client = dml.pymongo.MongoClient()
 		repo = client.repo
-		repo.authenticate('charr_hu38_npearce', 'charr_hu38_npearce')
+		repo.authenticate('charr_hu38_npearce', 'charr_hu38_npearce')\
+		
+		url = 'https://data.cdc.gov/api/views/dxpw-cm5u/rows.csv?accessType=DOWNLOAD'									
+		repo.dropCollection("census")
+		repo.createCollection("census")
+		data_arry=[]
+		r=requests.get(url)
+		lines = (line.decode('utf-8') for line in r.iter_lines())
+		heading=True
+		for row in csv.reader(lines):
+			if heading:
+				heading=False
+				continue
+			location = row[1] + ", " + row[0]
+			population = row[3]
+			data_arry.append({"location":location,"population":population})												#Trivial Projection
+				
+		repo['charr_hu38_npearce.census'].insert_many(data_arry)														#Data set 0: Census(population) data
+		repo['charr_hu38_npearce.census'].metadata({'complete':True})
 
 		resp = urlopen("https://s3.amazonaws.com/hubway-data/201809-bluebikes-tripdata.zip")			
 		zipfile = ZipFile(BytesIO(resp.read()))
@@ -43,6 +61,11 @@ class DataCollection(dml.Algorithm):
 
 		repo['charr_hu38_npearce.boston'].insert_many(data_arry)														#Data set 1: Boston Bike data
 		repo['charr_hu38_npearce.boston'].metadata({'complete':True})
+		
+		if(trial):					#Restrict trial data to a single data set (plus census data)
+			repo.logout()
+			endTime = datetime.datetime.now()
+			return {"start":startTime, "end":endTime}
 		
 		resp = urlopen("https://s3.amazonaws.com/capitalbikeshare-data/201809-capitalbikeshare-tripdata.zip")			
 		zipfile = ZipFile(BytesIO(resp.read()))
@@ -120,24 +143,6 @@ class DataCollection(dml.Algorithm):
 
 		repo['charr_hu38_npearce.sanfran'].insert_many(data_arry)														#Data set 5: San Francisco Bike data
 		repo['charr_hu38_npearce.sanfran'].metadata({'complete':True})
-
-		url = 'https://data.cdc.gov/api/views/dxpw-cm5u/rows.csv?accessType=DOWNLOAD'									
-		repo.dropCollection("census")
-		repo.createCollection("census")
-		data_arry=[]
-		r=requests.get(url)
-		lines = (line.decode('utf-8') for line in r.iter_lines())
-		heading=True
-		for row in csv.reader(lines):
-			if heading:
-				heading=False
-				continue
-			location = row[1] + ", " + row[0]
-			population = row[3]
-			data_arry.append({"location":location,"population":population})												#Trivial Projection
-				
-		repo['charr_hu38_npearce.census'].insert_many(data_arry)														#Data set 6: Census(population) data
-		repo['charr_hu38_npearce.census'].metadata({'complete':True})
 
 		repo.logout()
 
