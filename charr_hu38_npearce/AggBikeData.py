@@ -13,7 +13,7 @@ from tqdm import tqdm
 
 class AggBikeData(dml.Algorithm):
 	contributor = 'charr_hu38_npearce'
-	reads = ['charr_hu38_npearce.chattanooga', 'charr_hu38_npearce.washington', 'charr_hu38_npearce.newyork', 'charr_hu38_npearce.chicago']
+	reads = ['charr_hu38_npearce.boston', 'charr_hu38_npearce.washington', 'charr_hu38_npearce.newyork', 'charr_hu38_npearce.chicago', 'charr_hu38_npearce.sanfran']
 	writes = ['charr_hu38_npearce.aggbikedata']
 
 	@staticmethod
@@ -30,11 +30,11 @@ class AggBikeData(dml.Algorithm):
 		repo.createCollection("aggbikedata")
 		
 		data_arry=[]
-		chattanooga = list(repo.charr_hu38_npearce.chattanooga.find())
+		boston = list(repo.charr_hu38_npearce.boston.find())
 		total_duration=0
-		for entry in chattanooga:
+		for entry in boston:
 			total_duration+=int(entry['duration'])
-		data_arry.append({"city":"Chattanooga, TN","tot_bike_time":total_duration})			#Aggsum (Non Trivial transformation #1)
+		data_arry.append({"city":"Boston, MA","tot_bike_time":total_duration})				#Aggsum (Non Trivial transformation #1)
 		
 		washington = list(repo.charr_hu38_npearce.washington.find())
 		total_duration=0
@@ -54,10 +54,16 @@ class AggBikeData(dml.Algorithm):
 			total_duration+=int(entry['duration'])
 		data_arry.append({"city":"Chicago, IL","tot_bike_time":total_duration})				#Aggsum
 		
-		repo['charr_hu38_npearce.aggbikedata'].insert_many(data_arry)								#Union of 4 aggregations (Non Trivial transformation #2)
+		sanfran = list(repo.charr_hu38_npearce.sanfran.find())
+		total_duration=0
+		for entry in sanfran:
+			total_duration+=int(entry['duration'])
+		data_arry.append({"city":"San Francisco, CA","tot_bike_time":total_duration})		#Aggsum
+		
+		repo['charr_hu38_npearce.aggbikedata'].insert_many(data_arry)						#Union of 5 aggregations (Non Trivial transformation #2)
 		repo['charr_hu38_npearce.aggbikedata'].metadata({'complete':True})
 		
-		#We treat the 4 aggregations as 1 single non trivial transformation, and we treat the union operation as a second nontrivial transformation
+		#We treat the 5 aggregations as 1 single non trivial transformation, and we treat the union operation as a second nontrivial transformation
 
 		repo.logout()
 

@@ -14,7 +14,7 @@ from tqdm import tqdm
 class DataCollection(dml.Algorithm):
 	contributor = 'charr_hu38_npearce'
 	reads = []
-	writes = ['charr_hu38_npearce.chattanooga', 'charr_hu38_npearce.washington', 'charr_hu38_npearce.newyork', 'charr_hu38_npearce.chicago', 'charr_hu38_npearce.census']
+	writes = ['charr_hu38_npearce.boston', 'charr_hu38_npearce.washington', 'charr_hu38_npearce.newyork', 'charr_hu38_npearce.chicago', 'charr_hu38_npearce.sanfran', 'charr_hu38_npearce.census']
 
 	@staticmethod
 	def execute(trial = False):
@@ -26,21 +26,24 @@ class DataCollection(dml.Algorithm):
 		repo = client.repo
 		repo.authenticate('charr_hu38_npearce', 'charr_hu38_npearce')
 
-		"""url = 'https://data.chattlibrary.org/resource/sahz-tkbn.json'													
-		response = urllib.request.urlopen(url).read().decode("utf-8")
-		r = json.loads(response)
+		resp = urlopen("https://s3.amazonaws.com/hubway-data/201809-bluebikes-tripdata.zip")			
+		zipfile = ZipFile(BytesIO(resp.read()))
+		filename = zipfile.namelist()[0]
+		repo.dropCollection("boston")
+		repo.createCollection("boston")
 		data_arry=[]
-		for i in tqdm(list(range(len(r)))):
-			month = r[i]['startdate'][:7]
-			duration = str(int(float(r[i]['tripdurationmin'])))
-			print(month)
-			if month=='2018-09':																						#Trivial Selection
-				data_arry.append({"duration":duration,"month":month})													#Trivial Projection
-		repo.dropCollection("chattanooga")
-		repo.createCollection("chattanooga")
-		repo['charr_hu38_npearce.chattanooga'].insert_many(data_arry)															#Data set 1: Chattanooga Bike data
-		repo['charr_hu38_npearce.chattanooga'].metadata({'complete':True})"""
+		heading=True
+		for line in tqdm(zipfile.open(filename).readlines()):
+			if heading:
+				heading=False
+				continue
+			tmp = line.decode('utf-8').split(',')
+			month=tmp[1][1:-1].split(' ')[0][:-3]
+			data_arry.append({"duration":tmp[0],"month":month})															#Trivial Projection
 
+		repo['charr_hu38_npearce.boston'].insert_many(data_arry)														#Data set 1: Boston Bike data
+		repo['charr_hu38_npearce.boston'].metadata({'complete':True})
+		
 		resp = urlopen("https://s3.amazonaws.com/capitalbikeshare-data/201809-capitalbikeshare-tripdata.zip")			
 		zipfile = ZipFile(BytesIO(resp.read()))
 		filename = zipfile.namelist()[0]
@@ -56,7 +59,7 @@ class DataCollection(dml.Algorithm):
 			month=tmp[1][1:-1].split(' ')[0][:-3]
 			data_arry.append({"duration":tmp[0],"month":month})															#Trivial Projection
 
-		repo['charr_hu38_npearce.washington'].insert_many(data_arry)															#Data set 2: Washington Bike data
+		repo['charr_hu38_npearce.washington'].insert_many(data_arry)													#Data set 2: Washington Bike data
 		repo['charr_hu38_npearce.washington'].metadata({'complete':True})
 		
 		resp = urlopen("https://s3.amazonaws.com/tripdata/201809-citibike-tripdata.csv.zip")							
@@ -74,7 +77,7 @@ class DataCollection(dml.Algorithm):
 			month=tmp[1][1:-1].split(' ')[0][:-3]
 			data_arry.append({"duration":tmp[0],"month":month})															#Trivial Projection
 
-		repo['charr_hu38_npearce.newyork'].insert_many(data_arry)																#Data set 3: New York Bike data
+		repo['charr_hu38_npearce.newyork'].insert_many(data_arry)														#Data set 3: New York Bike data
 		repo['charr_hu38_npearce.newyork'].metadata({'complete':True})
 		
 		resp = urlopen("https://s3.amazonaws.com/divvy-data/tripdata/Divvy_Trips_2018_Q3.zip")						
@@ -97,8 +100,26 @@ class DataCollection(dml.Algorithm):
 			if month=="2018-09":																						#Trivial Selection
 				data_arry.append({"duration":duration,"month":month})													#Trivial Projection
 
-		repo['charr_hu38_npearce.chicago'].insert_many(data_arry)																#Data set 4: Chicago Bike data
+		repo['charr_hu38_npearce.chicago'].insert_many(data_arry)														#Data set 4: Chicago Bike data
 		repo['charr_hu38_npearce.chicago'].metadata({'complete':True})
+		
+		resp = urlopen("https://s3.amazonaws.com/fordgobike-data/201809-fordgobike-tripdata.csv.zip")			
+		zipfile = ZipFile(BytesIO(resp.read()))
+		filename = zipfile.namelist()[0]
+		repo.dropCollection("sanfran")
+		repo.createCollection("sanfran")
+		data_arry=[]
+		heading=True
+		for line in tqdm(zipfile.open(filename).readlines()):
+			if heading:
+				heading=False
+				continue
+			tmp = line.decode('utf-8').split(',')
+			month=tmp[1][1:-1].split(' ')[0][:-3]
+			data_arry.append({"duration":tmp[0],"month":month})															#Trivial Projection
+
+		repo['charr_hu38_npearce.sanfran'].insert_many(data_arry)														#Data set 5: San Francisco Bike data
+		repo['charr_hu38_npearce.sanfran'].metadata({'complete':True})
 
 		url = 'https://data.cdc.gov/api/views/dxpw-cm5u/rows.csv?accessType=DOWNLOAD'									
 		repo.dropCollection("census")
@@ -115,7 +136,7 @@ class DataCollection(dml.Algorithm):
 			population = row[3]
 			data_arry.append({"location":location,"population":population})												#Trivial Projection
 				
-		repo['charr_hu38_npearce.census'].insert_many(data_arry)																#Data set 5: Census(population) data
+		repo['charr_hu38_npearce.census'].insert_many(data_arry)														#Data set 6: Census(population) data
 		repo['charr_hu38_npearce.census'].metadata({'complete':True})
 
 		repo.logout()
@@ -144,17 +165,19 @@ class DataCollection(dml.Algorithm):
 
 		this_script = doc.agent('alg:charr_hu38_npearce#DataCollection', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
 		resource = doc.entity('bdp:wc8w-nujj', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
-		get_chattanooga = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+		get_boston = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
 		get_newyork = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
 		get_washington = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
 		get_chicago = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+		get_sanfran = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
 		get_census = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
-		doc.wasAssociatedWith(get_chattanooga, this_script)
+		doc.wasAssociatedWith(get_boston, this_script)
 		doc.wasAssociatedWith(get_newyork, this_script)
 		doc.wasAssociatedWith(get_washington, this_script)
 		doc.wasAssociatedWith(get_chicago, this_script)
+		doc.wasAssociatedWith(get_sanfran, this_script)
 		doc.wasAssociatedWith(get_census, this_script)
-		doc.usage(get_chattanooga, resource, startTime, None,
+		doc.usage(get_boston, resource, startTime, None,
 				  {prov.model.PROV_TYPE:'ont:Retrieval'
 				  }
 				  )
@@ -170,15 +193,19 @@ class DataCollection(dml.Algorithm):
 				  {prov.model.PROV_TYPE:'ont:Retrieval',
 				  }
 				  )
+		doc.usage(get_sanfran, resource, startTime, None,
+				  {prov.model.PROV_TYPE:'ont:Retrieval',
+				  }
+				  )
 		doc.usage(get_census, resource, startTime, None,
 				  {prov.model.PROV_TYPE:'ont:Retrieval',
 				  }
 				  )
 
-		chattanooga = doc.entity('dat:charr_hu38_npearce#chattanooga', {prov.model.PROV_LABEL:'Chattanooga Bike Data', prov.model.PROV_TYPE:'ont:DataSet'})
-		doc.wasAttributedTo(chattanooga, this_script)
-		doc.wasGeneratedBy(chattanooga, get_chattanooga, endTime)
-		doc.wasDerivedFrom(chattanooga, resource, get_chattanooga, get_chattanooga, get_chattanooga)
+		boston = doc.entity('dat:charr_hu38_npearce#boston', {prov.model.PROV_LABEL:'Boston Bike Data', prov.model.PROV_TYPE:'ont:DataSet'})
+		doc.wasAttributedTo(boston, this_script)
+		doc.wasGeneratedBy(boston, get_boston, endTime)
+		doc.wasDerivedFrom(boston, resource, get_boston, get_boston, get_boston)
 				  
 		newyork = doc.entity('dat:charr_hu38_npearce#newyork', {prov.model.PROV_LABEL:'New York Bike Data', prov.model.PROV_TYPE:'ont:DataSet'})
 		doc.wasAttributedTo(newyork, this_script)
@@ -194,6 +221,11 @@ class DataCollection(dml.Algorithm):
 		doc.wasAttributedTo(chicago, this_script)
 		doc.wasGeneratedBy(chicago, get_chicago, endTime)
 		doc.wasDerivedFrom(chicago, resource, get_chicago, get_chicago, get_chicago)
+		
+		sanfran = doc.entity('dat:charr_hu38_npearce#sanfran', {prov.model.PROV_LABEL:'San Francisco Bike Data', prov.model.PROV_TYPE:'ont:DataSet'})
+		doc.wasAttributedTo(sanfran, this_script)
+		doc.wasGeneratedBy(sanfran, get_sanfran, endTime)
+		doc.wasDerivedFrom(sanfran, resource, get_sanfran, get_sanfran, get_sanfran)
 		
 		census = doc.entity('dat:charr_hu38_npearce#census', {prov.model.PROV_LABEL:'Census data', prov.model.PROV_TYPE:'ont:DataSet'})
 		doc.wasAttributedTo(census, this_script)
