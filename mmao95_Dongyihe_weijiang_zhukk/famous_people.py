@@ -32,7 +32,7 @@ class famous_people(dml.Algorithm):
         # import MA big names
         doc = requests.get("https://www.50states.com/bio/mass.htm").text
         soup = bs(doc, features='lxml')
-        np.append(names, [e.text for e in soup.select("#content b")])
+        names = np.append(names, [e.text for e in soup.select("#content b")])
         list = []
         for name in names:
             parts = name.split()
