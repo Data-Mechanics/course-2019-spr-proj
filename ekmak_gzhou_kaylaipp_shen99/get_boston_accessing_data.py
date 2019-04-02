@@ -8,13 +8,18 @@ import zillow
 import requests
 import xmltodict
 import csv
+from geopy.geocoders import Nominatim
+from geopy.extra.rate_limiter import RateLimiter
+import time
 
+geolocator = Nominatim(user_agent='myapplication')
+geocode = RateLimiter(geolocator.geocode, min_delay_seconds=2)
 
 class get_boston_accessing_data(dml.Algorithm):
 
     contributor = 'ekmak_gzhou_kaylaipp_shen99'
     reads = []
-    writes = ['ekmak_gzhou_kaylaipp_shen99.accessing_data']
+    writes = ['ekmak_gzhou_kaylaipp_shen99.accessing_data', 'ekmak_gzhou_kaylaipp_shen99.south_boston_accessing_data']
 
     @staticmethod
     def execute(trial = False):
@@ -32,7 +37,37 @@ class get_boston_accessing_data(dml.Algorithm):
         r = r['result']['records']
         repo.dropCollection("accessing_data")
         repo.createCollection("accessing_data")
+        repo.dropCollection("south_boston_accessing_data")
+        repo.createCollection("south_boston_accessing_data")
+        count = 0
         for info in r: 
+            zipcode = info['ZIPCODE']
+            st_name = info['ST_NAME'].lower().replace(".", "")         #beacon
+            st_num = info['ST_NUM']                                    #362
+            st_suffix = info['ST_NAME_SUF'].lower().replace(".", "")   #st
+            st_full = st_num + ' '+ st_name + ' ' + st_suffix
+            addr_info = {'street': st_full, 'city':'Boston', 'state': 'MA'}
+            info['FULL_ADDR'] = addr_info
+
+
+            if zipcode == '02127':
+                if count % 2000 == 0 and count != 0 and count != 1: 
+                    print('sleeping for 1 min')
+                    time.sleep(60)
+                print('count: ', count)
+                # location_info = geolocator.geocode(addr_info, timeout=40)
+                location_info = geocode(addr_info)
+                # print('location info: ', location_info)
+                
+                try: 
+                    latitude, longitude = location_info.latitude, location_info.longitude
+                    info['COORDS'] = (latitude, longitude)
+                    print('coords: ', location_info.latitude)
+                except: 
+                    continue
+                count += 1
+
+            # print('info now: ', info )
             repo['ekmak_gzhou_kaylaipp_shen99.accessing_data'].insert_one(info)
         repo['ekmak_gzhou_kaylaipp_shen99.accessing_data'].metadata({'complete':True})
         print(repo['ekmak_gzhou_kaylaipp_shen99.accessing_data'].metadata())
@@ -87,7 +122,7 @@ doc = example.provenance()
 print(doc.get_provn())
 print(json.dumps(json.loads(doc.serialize()), indent=4))
 '''
-# get_boston_accessing_data.execute()
+get_boston_accessing_data.execute()
 # doc = get_boston_accessing_data.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))
