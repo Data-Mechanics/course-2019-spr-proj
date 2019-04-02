@@ -10,27 +10,13 @@ from urllib.request import urlopen
 import requests
 import csv
 from tqdm import tqdm
+import numpy as np
+from sklearn.cluster import KMeans
 
 class Kmeans(dml.Algorithm):
 	contributor = 'charr_hu38_npearce'
 	reads = ['charr_hu38_npearce.boston_s', 'charr_hu38_npearce.washington_s', 'charr_hu38_npearce.newyork_s', 'charr_hu38_npearce.chicago_s', 'charr_hu38_npearce.sanfran_s']
 	writes = ['charr_hu38_npearce.Kmeans']
-
-	def dist(p, q):
-		(x1,y1) = p
-		(x2,y2) = q
-		return (x1-x2)**2 + (y1-y2)**2
-
-	def plus(args):
-		p = [0,0]
-		for (x,y) in args:
-			p[0] += x
-			p[1] += y
-		return tuple(p)
-
-	def scale(p, c):
-		(x,y) = p
-		return (x/c, y/c)
 	
 	@staticmethod
 	def execute(trial = False):
@@ -45,43 +31,37 @@ class Kmeans(dml.Algorithm):
 		repo.dropCollection("Kmeans")
 		repo.createCollection("Kmeans")
 		
-		boston_s = list(repo.charr_hu38_npearce.census.find())
-		washington_s = list(repo.charr_hu38_npearce.census.find())
-		newyork_s = list(repo.charr_hu38_npearce.census.find())
-		chicago_s = list(repo.charr_hu38_npearce.census.find())
-		sanfran_s = list(repo.charr_hu38_npearce.census.find())
+		boston_s = list(repo.charr_hu38_npearce.boston_s.find())
+		
+		if(not trial):		#Restrict trial data to Boston Data only
+			washington_s = list(repo.charr_hu38_npearce.washington_s.find())
+			newyork_s = list(repo.charr_hu38_npearce.newyork_s.find())
+			chicago_s = list(repo.charr_hu38_npearce.chicago_s.find())
+			sanfran_s = list(repo.charr_hu38_npearce.sanfran_s.find())
 		
 		#K-means Code
-		M = [(13,1), (2,12)]
-		P = [(1,2),(4,5),(1,3),(10,12),(13,14),(13,9),(11,11)]
+		k=5
+		P=[]
+		P.append([(boston_s[i]['lat'],boston_s[i]['lon']) for i in range(len(boston_s))] )
+		
+		if(not trial):		#Restrict trial data to Boston Data only
+			P.append([(washington_s[i]['lat'],washington_s[i]['lon']) for i in range(len(washington_s))] )
+			P.append([(newyork_s[i]['lat'],newyork_s[i]['lon']) for i in range(len(newyork_s))])
+			P.append([(chicago_s[i]['lat'],chicago_s[i]['lon']) for i in range(len(chicago_s))])
+			P.append([(sanfran_s[i]['lat'],sanfran_s[i]['lon']) for i in range(len(sanfran_s))])
 
-		OLD = []
-		while OLD != M:
-			OLD = M
-
-			MPD = [(m, p, dist(m,p)) for (m, p) in product(M, P)]
-			PDs = [(p, dist(m,p)) for (m, p, d) in MPD]
-			PD = aggregate(PDs, min)
-			MP = [(m, p) for ((m,p,d), (p2,d2)) in product(MPD, PD) if p==p2 and d==d2]
-			MT = aggregate(MP, plus)
-	
-			M1 = [(m, 1) for (m, _) in MP]
-			MC = aggregate(M1, sum)
-
-			M = [scale(t,c) for ((m,t),(m2,c)) in product(MT, MC) if m == m2]
-
+		cities=["Boston", "Washington", "New York", "Chicago", "San Francisco"]
 		data_arry=[]
-		for city1 in aggbikedata:																										#Product
-			for city2 in census:
-				if city1['city'] == city2['location']:																					#Selection
-					data_arry.append({"city":city1['city'],"tot_bike_time":city1['tot_bike_time'],"population":city2['population']})	#Projection
-					break
+		x = 1 if trial else 5	#Restrict trial data to Boston Data only
+		for i in range(x):
+			kmeans = KMeans(n_clusters=k, random_state=0).fit(P[i])
+			temp=np.ndarray.tolist(kmeans.cluster_centers_)
+			data_arry.append({"city":cities[i],"locs":temp})	
+		#print(finalM[0])
 		
 		
-		repo['charr_hu38_npearce.Kmeans'].insert_many(data_arry)							#Join on two data sets (Non Trivial Transformation #3)
+		repo['charr_hu38_npearce.Kmeans'].insert_many(data_arry)							
 		repo['charr_hu38_npearce.Kmeans'].metadata({'complete':True})
-		
-		#We treat this as a single nontrivial transformation, as it is a join that involves a product, selection, and projection
 
 		repo.logout()
 
@@ -117,7 +97,7 @@ class Kmeans(dml.Algorithm):
 				  }
 				  )
 
-		Kmeans = doc.entity('dat:charr_hu38_npearce#Kmeans', {prov.model.PROV_LABEL:'Total time spent on bike and population data for 4 cities', prov.model.PROV_TYPE:'ont:DataSet'})
+		Kmeans = doc.entity('dat:charr_hu38_npearce#Kmeans', {prov.model.PROV_LABEL:'Optimal station locations for each city', prov.model.PROV_TYPE:'ont:DataSet'})
 		doc.wasAttributedTo(Kmeans, this_script)
 		doc.wasGeneratedBy(Kmeans, get_Kmeans, endTime)
 		doc.wasDerivedFrom(Kmeans, resource, get_Kmeans, get_Kmeans, get_Kmeans)
@@ -126,13 +106,12 @@ class Kmeans(dml.Algorithm):
 				  
 		return doc
 		
-'''
+
 # This is Kmeans code you might use for debugging this module.
 # Please remove all top-level function calls before submitting.
 Kmeans.execute()
-doc = Kmeans.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
-'''
+#doc = Kmeans.provenance()
+#print(doc.get_provn())
+#print(json.dumps(json.loads(doc.serialize()), indent=4))
 
 ## eof
