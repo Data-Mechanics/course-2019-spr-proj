@@ -1,5 +1,5 @@
 import sys, getopt, datetime, codecs
-import DBOperations as dbo
+from ojhamb_runtongy_sgullett_zybu import DBOperations as dbo
 import dml
 import prov.model
 import datetime
@@ -100,5 +100,5 @@ class TwitterDataMain(dml.Algorithm):
 
 
 TwitterDataMain.execute()
-doc = Tweets.provenance()
+doc = TwitterDataMain.provenance()
 
