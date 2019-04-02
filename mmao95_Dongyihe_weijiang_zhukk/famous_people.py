@@ -5,6 +5,8 @@ import prov.model
 import datetime
 import uuid
 from bs4 import BeautifulSoup as bs
+import pandas as pd
+import numpy as np
 
 class famous_people(dml.Algorithm):
     contributor = 'mmao95_Dongyihe_weijiang_zhukk'
@@ -22,9 +24,15 @@ class famous_people(dml.Algorithm):
         repo = client.repo
         repo.authenticate(contributor, contributor)
 
+        # import US big names
+        url = 'http://datamechanics.io/data/us_famous_people.csv'
+        usfp = pd.read_csv(url)
+        names = usfp['full_name'].values
+        
+        # import MA big names
         doc = requests.get("https://www.50states.com/bio/mass.htm").text
         soup = bs(doc, features='lxml')
-        names = [e.text for e in soup.select("#content b")]
+        np.append(names, [e.text for e in soup.select("#content b")])
         list = []
         for name in names:
             parts = name.split()
@@ -64,6 +72,7 @@ class famous_people(dml.Algorithm):
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
         doc.add_namespace('bdp', 'https://www.50states.com/bio/mass.htm')
+        doc.add_namespace('bdp', 'https://www.smithsonianmag.com/smithsonianmag/meet-100-most-significant-americans-all-time-180953341/')
 
         this_script = doc.agent('alg:'+contributor+'#famous_people', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
         resource = doc.entity('bdp:wc8w-nujj', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
@@ -75,10 +84,14 @@ class famous_people(dml.Algorithm):
             }
         )
 
-        fp = doc.entity('dat:'+contributor+'#famous_people', {prov.model.PROV_LABEL:'Famous People', prov.model.PROV_TYPE:'ont:DataSet'})
-        doc.wasAttributedTo(fp, this_script)
-        doc.wasGeneratedBy(fp, get_names, endTime)
-        doc.wasDerivedFrom(fp, resource, get_names, get_names, get_names)
+        mafp = doc.entity('dat:'+contributor+'#famous_people', {prov.model.PROV_LABEL:'MA Famous People', prov.model.PROV_TYPE:'ont:DataSet'})
+        usfp = doc.entity('dat:'+contributor+'#famous_people', {prov.model.PROV_LABEL:'US Famous People', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(mafp, this_script)
+        doc.wasAttributedTo(usfp, this_script)
+        doc.wasGeneratedBy(mafp, get_names, endTime)
+        doc.wasGeneratedBy(usfp, get_names, endTime)
+        doc.wasDerivedFrom(mafp, resource, get_names, get_names, get_names)
+        doc.wasDerivedFrom(usfp, resource, get_names, get_names, get_names)
 
         repo.logout()
                   
