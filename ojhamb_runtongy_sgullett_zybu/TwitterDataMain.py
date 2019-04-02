@@ -7,10 +7,7 @@ import uuid
 import math
 import sys
 
-if sys.version_info[0] < 3:
-    import got
-else:
-    import got3 as got
+from ojhamb_runtongy_sgullett_zybu import got3 as got
 
 
 class TwitterDataMain(dml.Algorithm):
