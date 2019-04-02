@@ -24,7 +24,7 @@ args = parser.parse_args()
 # subdirectory specified on the command line.
 path = args.contributor_folder
 algorithms = []
-for r,d,f in os.walk(path):
+for r, d, f in os.walk(path):
     for file in f:
         if r.find(os.sep) == -1 and file.split(".")[-1] == "py":
             name_module = ".".join(file.split(".")[0:-1])
