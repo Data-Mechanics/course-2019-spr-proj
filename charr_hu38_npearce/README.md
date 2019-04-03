@@ -2,22 +2,33 @@
 
 ## Summary
 
-We 
+We planned to study both the optimal location and amount for addition of new bike rental stations to maximize profits for rental
+bike companies in different cities.  To do this, we first used trip data for all 5 cities, as well as population, to determine a 
+ratio for how much each city used the system relative to its population.  This information gave us an idea of which city would be
+best to add new bike stations to.  To determine the amount of stations to add, we used a statistical model (max constraint of 10 
+stations that we could afford) using wach cities' station amount, total bike time, and population.  Knowing this number, we 
+inputted it into a K-means algorithm as k (once for each city), with the points being represented by the latitude/longitude pairs
+for each station.  This gave us k cluster centers, which we claim are the optimal locations to add k new stations for each city.  
+We chose the city with the highest ratio of bike time to population as the location to build our new stations.
 
 ## Data Sets
-- Chicago Bike Data
-- New York City Bike Data
-- Washington Bike Data
-- Chattanooga Bike Data
+- Boston Bike Data			- Boston Station Data
+- New York City Bike Data	- New York City Station Data
+- Washington Bike Data		- Washington Station Data
+- Chicago Bike Data			- Chicago Station Data
+- San Francisco Bike Data	- San Francisco Station Data
 - Census Data
 
-While the first 4 data sets contain similar information, they were made available in various methods including zipped CSV's
-and JSON.  They also had varying schemas, which necesitated different code to parse each.
+While the station and bike data are similar to that of each city, they had differences in syntax and download format.
 
 ## Transformations
 - Sum Aggregation for each City's Bike Data
-- Union of the 4 Sum Aggregations
-- Join of the bike data aggregation and census data for each city
+- Union of the 5 Sum Aggregations
+- Join of the bike data aggregation and census data for each cit
+
+## Algorithms
+- Optimization: Statistical Model
+- Statistical Analysis: K-means
 
 # Comparing Recreational Bike Use by Population for 4 Major Cities (Project 1)
 
