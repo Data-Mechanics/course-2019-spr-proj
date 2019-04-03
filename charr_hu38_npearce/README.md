@@ -1,15 +1,18 @@
-# Study on optimal location and amount of new bike rental stations in 5 major cities
+# Study on Optimal Location and Amount for Placement of New Bike Rental Stations in 5 Major US Cities (Project 2)
 
 ## Summary
 
 We planned to study both the optimal location and amount for addition of new bike rental stations to maximize profits for rental
 bike companies in different cities.  To do this, we first used trip data for all 5 cities, as well as population, to determine a 
 ratio for how much each city used the system relative to its population.  This information gave us an idea of which city would be
-best to add new bike stations to.  To determine the amount of stations to add, we used a statistical model (max constraint of 10 
-stations that we could afford) using wach cities' station amount, total bike time, and population.  Knowing this number, we 
-inputted it into a K-means algorithm as k (once for each city), with the points being represented by the latitude/longitude pairs
-for each station.  This gave us k cluster centers, which we claim are the optimal locations to add k new stations for each city.  
-We chose the city with the highest ratio of bike time to population as the location to build our new stations.
+best to add new bike stations to.  To determine the amount of stations to add, we used a linear regression (max constraint of 10 
+stations that we could afford) using each cities' station amount, total bike time, and population.  Viewing the data in scatter 
+plot form, it was clear that a linear fit was the best option, as opposed to quadratic, cubic, etc.  From this regression, it was 
+clear that adding additional stations could only increase profits.  Knowing k=max_constraint=10, we inputted it into a K-means 
+algorithm as k (once for each city), with the points being represented by the latitude/longitude pairs for each station.  This 
+gave us k cluster centers, which we claim are the optimal locations to add k new stations for each city.  We chose the city with
+the highest ratio of bike time to population as the location to build our new stations.  Note: as each city's data ranged in the 
+length of time it covered, we picked an arbitrary recent month to collect data for (09-2018)
 
 ## Data Sets
 - Boston Bike Data			- Boston Station Data
@@ -24,10 +27,10 @@ While the station and bike data are similar to that of each city, they had diffe
 ## Transformations
 - Sum Aggregation for each City's Bike Data
 - Union of the 5 Sum Aggregations
-- Join of the bike data aggregation and census data for each cit
+- Join of the bike data aggregation and census data for each city
 
 ## Algorithms
-- Optimization: Statistical Model
+- Optimization: Linear Regression
 - Statistical Analysis: K-means
 
 # Comparing Recreational Bike Use by Population for 4 Major Cities (Project 1)

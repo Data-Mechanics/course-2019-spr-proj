@@ -40,7 +40,7 @@ class Kmeans(dml.Algorithm):
 			sanfran_s = list(repo.charr_hu38_npearce.sanfran_s.find())
 		
 		#K-means Code
-		k=5
+		k=10		#As determined in OptimalStationNumber
 		P=[]
 		P.append([(boston_s[i]['lat'],boston_s[i]['lon']) for i in range(len(boston_s))] )
 		
