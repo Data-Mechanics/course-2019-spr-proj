@@ -6,7 +6,7 @@ import pandas as pd
 import pprint
 import uuid
 from urllib.request import urlopen
-
+import time
 
 class DataRetrieval(dml.Algorithm):
 
@@ -45,39 +45,88 @@ class DataRetrieval(dml.Algorithm):
         url_cvs = service+location+radius+type+keyword_cvs+key
         response_cvs = json.loads(urlopen(url_cvs).read().decode('utf-8'))
         res_dump_cvs = json.dumps(response_cvs, sort_keys=True, indent=2)
+
+        data_cvs = response_cvs['results']
+        for i in range(2):
+            next_page_token = "&pagetoken="+response_cvs['next_page_token']
+            url_next = service+location+radius+type+keyword_cvs+key+next_page_token
+            response_cvs = json.loads(urlopen(url_next).read().decode('utf-8'))
+            while (response_cvs['status'] == "INVALID_REQUEST"):
+                time.sleep(.300)
+                response_cvs = json.loads(urlopen(url_next).read().decode('utf-8'))
+            data_cvs = data_cvs + response_cvs['results']
+
         repo.dropCollection('cvs')
         repo.createCollection('cvs')
-        repo['henryhcy_jshen97_leochans_wangyp.cvs'].insert_one(response_cvs)
+        repo['henryhcy_jshen97_leochans_wangyp.cvs'].insert_many(data_cvs)
         repo['henryhcy_jshen97_leochans_wangyp.cvs'].metadata({'complete': True})
         repo['henryhcy_jshen97_leochans_wangyp.cvs'].delete_many({'status': 'INVALID_REQUEST'})
-        # debug
-        #pprint.pprint(repo['henryhcy_jshen97_leochans_wangyp.cvs'].find_one())
+
+        #debug
+        #count = 0;
+        #for doc in repo['henryhcy_jshen97_leochans_wangyp.cvs'].find():
+        #    pprint.pprint(doc)
+        #    count+=1
+        #print(count)
         print(repo['henryhcy_jshen97_leochans_wangyp.cvs'].metadata())
 
         # retrieve walgreen
         url_walgreen = service+location+radius+type+keyword_walgreen+key
         response_walgreen = json.loads(urlopen(url_walgreen).read().decode('utf-8'))
         res_dump_walgreen = json.dumps(response_walgreen, sort_keys=True, indent=2)
+
+        data_walgreen = response_walgreen['results']
+        for i in range(2):
+            next_page_token = "&pagetoken="+response_walgreen['next_page_token']
+            url_next = service+location+radius+type+keyword_walgreen+key+next_page_token
+            response_walgreen = json.loads(urlopen(url_next).read().decode('utf-8'))
+            while (response_walgreen['status'] == "INVALID_REQUEST"):
+                time.sleep(.300)
+                response_walgreen = json.loads(urlopen(url_next).read().decode('utf-8'))
+            data_walgreen = data_walgreen + response_walgreen['results']
+
         repo.dropCollection('walgreen')
         repo.createCollection('walgreen')
-        repo['henryhcy_jshen97_leochans_wangyp.walgreen'].insert_one(response_walgreen)
+        repo['henryhcy_jshen97_leochans_wangyp.walgreen'].insert_many(data_walgreen)
         repo['henryhcy_jshen97_leochans_wangyp.walgreen'].metadata({'complete': True})
         repo['henryhcy_jshen97_leochans_wangyp.walgreen'].delete_many({'status': 'INVALID_REQUEST'})
-        # debug
-        #pprint.pprint(repo['henryhcy_jshen97_leochans_wangyp.walgreen'].find_one())
+
+        #debug
+        #count = 0;
+        #for doc in repo['henryhcy_jshen97_leochans_wangyp.walgreen'].find():
+        #   pprint.pprint(doc)
+        #   count+=1
+        #print(count)
         print(repo['henryhcy_jshen97_leochans_wangyp.walgreen'].metadata())
+
 
         # retrieve 7-Eleven
         url_7eleven = service+location+radius+type+keyword_7eleven+key
         response_7eleven = json.loads(urlopen(url_7eleven).read().decode('utf-8'))
         res_dump_7eleven = json.dumps(response_7eleven, sort_keys=True, indent=2)
+
+        data_7eleven = response_7eleven['results']
+        for i in range(2):
+            next_page_token = "&pagetoken=" + response_7eleven['next_page_token']
+            url_next = service + location + radius + type + keyword_7eleven + key + next_page_token
+            response_7eleven = json.loads(urlopen(url_next).read().decode('utf-8'))
+            while (response_7eleven['status'] == "INVALID_REQUEST"):
+                time.sleep(.300)
+                response_7eleven = json.loads(urlopen(url_next).read().decode('utf-8'))
+            data_7eleven = data_7eleven + response_7eleven['results']
+
         repo.dropCollection('7eleven')
         repo.createCollection('7eleven')
-        repo['henryhcy_jshen97_leochans_wangyp.7eleven'].insert_one(response_7eleven)
+        repo['henryhcy_jshen97_leochans_wangyp.7eleven'].insert_many(data_7eleven)
         repo['henryhcy_jshen97_leochans_wangyp.7eleven'].metadata({'complete': True})
         repo['henryhcy_jshen97_leochans_wangyp.7eleven'].delete_many({'status': 'INVALID_REQUEST'})
-        # debug
-        #pprint.pprint(repo['henryhcy_jshen97_leochans_wangyp.7eleven'].find_one())
+
+        #debug
+        #count = 0;
+        #for doc in repo['henryhcy_jshen97_leochans_wangyp.7eleven'].find():
+        #  pprint.pprint(doc)
+        #  count+=1
+        #print(count)
         print(repo['henryhcy_jshen97_leochans_wangyp.7eleven'].metadata())
 
         # retrieve street light location
@@ -120,7 +169,6 @@ class DataRetrieval(dml.Algorithm):
         print(repo['henryhcy_jshen97_leochans_wangyp.crime'].metadata())
 
         #print(repo.list_collection_names())
-
         repo.logout()
 
         end_time = datetime.datetime.now()

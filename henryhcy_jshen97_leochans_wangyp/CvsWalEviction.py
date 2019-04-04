@@ -32,20 +32,7 @@ class CvsWalEviction(dml.Algorithm):
         repo.createCollection('cvsEviction')
         repo.createCollection('walgreenEviction')
 
-        # insert the geolocation, name, and google place_id
-        for document in repo.henryhcy_jshen97_leochans_wangyp.cvs.find():
-            if 'results' in document.keys():
-                for item in document['results']:
-                    d = {
-                        'name': 'CVS',
-                        'location': item['geometry']['location'],
-                        'place_id': item['place_id'],
-                    }
-                    repo['henryhcy_jshen97_leochans_wangyp.cvsEviction'].insert_one(d)
-            else:
-                continue
-
-        # pick those evictions that are within 15 km of Boston and insert
+        # pick those evictions that are within 15 km of Boston and insert = 136
         for document in repo.henryhcy_jshen97_leochans_wangyp.eviction.find():
             # R is the approximate radius of the earth in km
             # @see Haversine formula for latlng distance
@@ -64,6 +51,7 @@ class CvsWalEviction(dml.Algorithm):
             c = 2 * atan2(sqrt(a), sqrt(1 - a))
 
             distance = R * c
+
             if (distance < 15):
                 d = {
                     'evict_id': document['id'],
@@ -72,48 +60,43 @@ class CvsWalEviction(dml.Algorithm):
                 }
                 repo['henryhcy_jshen97_leochans_wangyp.cvsEviction'].insert_one(d)
                 repo['henryhcy_jshen97_leochans_wangyp.walgreenEviction'].insert_one(d)
-            else:
-                continue
 
         # insert cvs within 15 km of boston
-        for document in repo.henryhcy_jshen97_leochans_wangyp.cvs.find():
-            if 'results' in document.keys():
-                for item in document['results']:
-                    d = {
-                        'name': 'CVS',
-                        'location': item['geometry']['location'],
-                        'place_id': item['place_id'],
-                        'rating': item['rating'] if 'rating' in item.keys() else None,
-                        'rating_count': item['user_ratings_total'] if 'user_ratings_total' in item.keys() else None
-                    }
-                    repo['henryhcy_jshen97_leochans_wangyp.cvsEviction'].insert_one(d)
-            else:
-                continue
+        for item in repo.henryhcy_jshen97_leochans_wangyp.cvs.find():
+            d = {
+                'name': 'CVS',
+                'location': item['geometry']['location'],
+                'place_id': item['place_id'],
+                'rating': item['rating'] if 'rating' in item.keys() else None,
+                'rating_count': item['user_ratings_total'] if 'user_ratings_total' in item.keys() else None
+            }
+            repo['henryhcy_jshen97_leochans_wangyp.cvsEviction'].insert_one(d)
 
-        repo['henryhcy_jshen97_leochans_wangyp.cvsWalEviction'].metadata({'complete': True})
-        print(repo['henryhcy_jshen97_leochans_wangyp.cvsWalEviction'].metadata())
+        repo['henryhcy_jshen97_leochans_wangyp.cvsEviction'].metadata({'complete': True})
+        print(repo['henryhcy_jshen97_leochans_wangyp.cvsEviction'].metadata())
 
         # insert walgreen within 15 km of boston
-        for document in repo.henryhcy_jshen97_leochans_wangyp.walgreen.find():
-            if 'results' in document.keys():
-                for item in document['results']:
-                    d = {
-                        'name': 'Walgreen',
-                        'location': item['geometry']['location'],
-                        'place_id': item['place_id'],
-                        'rating': item['rating'] if 'rating' in item.keys() else None,
-                        'rating_count': item['user_ratings_total'] if 'user_ratings_total' in item.keys() else None
-                    }
-                    repo['henryhcy_jshen97_leochans_wangyp.walgreenEviction'].insert_one(d)
-            else:
-                continue
+        for item in repo.henryhcy_jshen97_leochans_wangyp.walgreen.find():
+            d = {
+                'name': 'Walgreen',
+                'location': item['geometry']['location'],
+                'place_id': item['place_id'],
+                'rating': item['rating'] if 'rating' in item.keys() else None,
+                'rating_count': item['user_ratings_total'] if 'user_ratings_total' in item.keys() else None
+            }
+            repo['henryhcy_jshen97_leochans_wangyp.walgreenEviction'].insert_one(d)
 
-        repo['henryhcy_jshen97_leochans_wangyp.cvsWalEviction'].metadata({'complete': True})
-        print(repo['henryhcy_jshen97_leochans_wangyp.cvsWalEviction'].metadata())
+        repo['henryhcy_jshen97_leochans_wangyp.WalgreenEviction'].metadata({'complete': True})
+        print(repo['henryhcy_jshen97_leochans_wangyp.WalgreenEviction'].metadata())
 
-        # check structure
+        # debug & check structure
         #for document in repo.henryhcy_jshen97_leochans_wangyp.walgreenEviction.find():
         #    pprint.pprint(document)
+        #print(repo.henryhcy_jshen97_leochans_wangyp.walgreenEviction.count())
+
+        #for document in repo.henryhcy_jshen97_leochans_wangyp.cvsEviction.find():
+        #    pprint.pprint(document)
+        #print(repo.henryhcy_jshen97_leochans_wangyp.cvsEviction.count())
 
         repo.logout()
 

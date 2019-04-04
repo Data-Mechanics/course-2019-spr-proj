@@ -79,9 +79,9 @@ class MbtaStops(dml.Algorithm):
         return doc
 
 # debug
-
+'''
 MbtaStops.execute()
 #doc = MbtaStops.provenance()
 #print(doc.get_provn())
 #print(json.dumps(json.loads(doc.serialize()), indent=4))
-
+'''
