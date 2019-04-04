@@ -17,7 +17,7 @@ class streetbook_filtered(dml.Algorithm):
     reads = [contributor + '.cau_landmark_merge', contributor + '.public_libraries',
              contributor + '.filtered_famous_people_streets', contributor + '.boston_traffic']
     writes = [contributor + '.streetbook_filtered',
-              contributor + 'streetbook_alternate']
+              contributor + '.streetbook_alternate']
 
     @staticmethod
     def execute(trial=False):
@@ -26,7 +26,7 @@ class streetbook_filtered(dml.Algorithm):
         reads = [contributor + '.cau_landmark_merge', contributor + '.public_libraries',
                  contributor + '.filtered_famous_people_streets', contributor + '.boston_traffic']
         writes = [contributor + '.streetbook_filtered',
-                  contributor + 'streetbook_alternate']
+                  contributor + '.streetbook_alternate']
 
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
