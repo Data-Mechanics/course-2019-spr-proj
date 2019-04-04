@@ -29,37 +29,33 @@ class CvsWalgreen(dml.Algorithm):
 
         # insert the geolocation, name, google place_id, rating, and rating_counts
         # name will be either cvs or walgreen
-        for document in repo.henryhcy_jshen97_leochans_wangyp.cvs.find():
-            if 'results' in document.keys():
-                for item in document['results']:
-                    d = {
-                        'name': 'CVS',
-                        'location': item['geometry']['location'],
-                        'place_id': item['place_id'],
-                        'rating': item['rating'] if 'rating' in item.keys() else None,
-                        'rating_count': item['user_ratings_total'] if 'user_ratings_total' in item.keys() else None
-                    }
-                    repo['henryhcy_jshen97_leochans_wangyp.cvsWalgreen'].insert_one(d)
-            else:
-                continue
+        for item in repo.henryhcy_jshen97_leochans_wangyp.cvs.find():
+            d = {
+                'name': 'CVS',
+                'location': item['geometry']['location'],
+                'place_id': item['place_id'],
+                'rating': item['rating'] if 'rating' in item.keys() else None,
+                'rating_count': item['user_ratings_total'] if 'user_ratings_total' in item.keys() else None
+            }
+            repo['henryhcy_jshen97_leochans_wangyp.cvsWalgreen'].insert_one(d)
 
-        for document in repo.henryhcy_jshen97_leochans_wangyp.walgreen.find():
-            if 'results' in document.keys():
-                for item in document['results']:
-                    d = {
-                        'name': 'Walgreen',
-                        'location': item['geometry']['location'],
-                        'place_id': item['place_id'],
-                        'rating': item['rating'] if 'rating' in item.keys() else None,
-                        'rating_count': item['user_ratings_total'] if 'user_ratings_total' in item.keys() else None
-                    }
-                    repo['henryhcy_jshen97_leochans_wangyp.cvsWalgreen'].insert_one(d)
+        for item in repo.henryhcy_jshen97_leochans_wangyp.walgreen.find():
+            d = {
+                'name': 'Walgreen',
+                'location': item['geometry']['location'],
+                'place_id': item['place_id'],
+                'rating': item['rating'] if 'rating' in item.keys() else None,
+                'rating_count': item['user_ratings_total'] if 'user_ratings_total' in item.keys() else None
+            }
+            repo['henryhcy_jshen97_leochans_wangyp.cvsWalgreen'].insert_one(d)
+
         repo['henryhcy_jshen97_leochans_wangyp.cvsWalgreen'].metadata({'complete': True})
         print(repo['henryhcy_jshen97_leochans_wangyp.cvsWalgreen'].metadata())
 
-        # check structure
+        # debug & check structure
         #for i in repo.henryhcy_jshen97_leochans_wangyp.cvsWalgreen.find():
         #   pprint.pprint(i)
+        #print(repo.henryhcy_jshen97_leochans_wangyp.cvsWalgreen.count())
 
         repo.logout()
 
