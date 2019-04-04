@@ -107,7 +107,7 @@ class UnionPopBike(dml.Algorithm):
 
 # This is UnionPopBike code you might use for debugging this module.
 # Please remove all top-level function calls before submitting.
-UnionPopBike.execute()
+#UnionPopBike.execute()
 #doc = UnionPopBike.provenance()
 #print(doc.get_provn())
 #print(json.dumps(json.loads(doc.serialize()), indent=4))

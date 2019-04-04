@@ -13,7 +13,7 @@ from tqdm import tqdm
 
 class StationDataCollection(dml.Algorithm):
 	contributor = 'charr_hu38_npearce'
-	reads = ['charr_hu38_npearce.boston']
+	reads = []
 	writes = ['charr_hu38_npearce.boston_s', 'charr_hu38_npearce.washington_s', 'charr_hu38_npearce.newyork_s', 'charr_hu38_npearce.chicago_s', 'charr_hu38_npearce.sanfran_s']
 
 	@staticmethod

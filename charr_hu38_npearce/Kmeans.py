@@ -109,7 +109,7 @@ class Kmeans(dml.Algorithm):
 
 # This is Kmeans code you might use for debugging this module.
 # Please remove all top-level function calls before submitting.
-Kmeans.execute()
+#Kmeans.execute()
 #doc = Kmeans.provenance()
 #print(doc.get_provn())
 #print(json.dumps(json.loads(doc.serialize()), indent=4))
