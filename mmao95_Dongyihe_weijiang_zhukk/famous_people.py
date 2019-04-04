@@ -86,11 +86,11 @@ class famous_people(dml.Algorithm):
 
         mafp = doc.entity('dat:'+contributor+'#famous_people', {prov.model.PROV_LABEL:'MA Famous People', prov.model.PROV_TYPE:'ont:DataSet'})
         usfp = doc.entity('dat:'+contributor+'#famous_people', {prov.model.PROV_LABEL:'US Famous People', prov.model.PROV_TYPE:'ont:DataSet'})
-        doc.wasAttributedTo(mafp, this_script)
+        # doc.wasAttributedTo(mafp, this_script)
         doc.wasAttributedTo(usfp, this_script)
-        doc.wasGeneratedBy(mafp, get_names, endTime)
+        # doc.wasGeneratedBy(mafp, get_names, endTime)
         doc.wasGeneratedBy(usfp, get_names, endTime)
-        doc.wasDerivedFrom(mafp, resource, get_names, get_names, get_names)
+        # doc.wasDerivedFrom(mafp, resource, get_names, get_names, get_names)
         doc.wasDerivedFrom(usfp, resource, get_names, get_names, get_names)
 
         repo.logout()
