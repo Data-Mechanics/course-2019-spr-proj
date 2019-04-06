@@ -3,12 +3,22 @@ import json
 
 
 #Property assessment data
-url1 = "https://data.boston.gov/datastore/odata3.0/fd351943-c2c6-4630-992d-3f895360febd?$format=json"
-response = urllib.request.urlopen(url1).read()
-Assessment = json.loads(response)
-Assessment = Assessment['value']
-
-
+All_Assessments = []
+for i in range(9):
+    print(i)
+    skip = 20000*(i)
+    url1 = "https://data.boston.gov/datastore/odata3.0/fd351943-c2c6-4630-992d-3f895360febd?$top=20000&$format=json&$skip=" + str(skip)
+    response = urllib.request.urlopen(url1).read()
+    Assessment = json.loads(response)
+    Assessment = Assessment['value']
+    All_Assessments += Assessment
+print(len(All_Assessments))
+dict_assessment = {}
+count = 0
+for assess in All_Assessments:
+    print(count)
+    count += 1
+    dict_assessment[assess["PID"]] = {"AV_TOTAL":assess["AV_TOTAL"], "PTYPE":assess["PTYPE"]}
 #Read parcel data
 with open("Parcels 2018.geojson") as file:
     P = file.read()
@@ -20,12 +30,15 @@ Parcels = [{'PID':x['properties']['PID_LONG'],'GEOMETRY':x['geometry']} for x in
 
 
 #Combine to get (PID, GEOMETRY, AV_TOTAL, PTYPE
-for i in Parcels:
-    for j in Assessment:
-        if j["PID"] == i["PID"]:
-            i['AV_TOTAL'] = j["AV_TOTAL"]
-            i['PTYPE'] = j["PTYPE"]
-            break
+parcels_combined = []
 
-print(Parcels[0])
+for i in Parcels:
+    try:
+        parcels_combined.append({**i, **dict_assessment[i["PID"]]})
+    except:
+        pass
+print(len(parcels_combined))
+print(parcels_combined)
 #print(json.dumps(Parcels, sort_keys=True, indent = 2))
+with open("parcels_with_assessments.json","w") as f:
+    f.write(str(parcels_combined))

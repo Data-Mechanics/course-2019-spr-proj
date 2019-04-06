@@ -116,29 +116,114 @@ class health:  # (dml.Algorithm):
         list_of_answer = {}
         total = len(list_of_tracks)
         success = 0
+        found_tracts = set()
         for neighborhood in list_of_neighborhoods:
             tracks = []
 
             for track in list_of_tracks:
+                found = False
                 for poly_neighborhood in neighborhood['Shape']:
 
                     for poly_track in track['Shape']:
 
-                        if poly_neighborhood.contains(poly_track.centroid):
+                        if poly_neighborhood.intersects(poly_track):
                             success += 1
                             tracks.append(track)
+                            found_tracts.add(track["Census Tract"])
+                            found = True
+                            break
+                    if (found):
+                        break
 
-                        list_of_answer[neighborhood['neighborhood']] = (tracks, len(tracks))
-
-        pprint.pprint(list_of_answer, indent=4)
+        list_of_answer[neighborhood['neighborhood']] = (tracks, len(tracks))
+        # pprint.pprint(list_of_answer, indent=4)
         print(len(list_of_answer))
         print("{}  out of {} census tracks where put in neighborhoods which is {:.2}% !".format(success, total,
                                                                                                 success / total))
 
+        # To find what tracts are missing
+        for neighborhood in list_of_answer.keys():
+            print(neighborhood)
+            for tract in list_of_answer[neighborhood][0]:
+                print(tract["Census Tract"])
+        print("Unfound Tracts")
+        for tract in list_of_tracks:
+            if tract["Census Tract"] not in found_tracts:
+                print(tract["Census Tract"])
         ################################################################################################################
         ################################################################################################################
         ################################################################################################################
         ################################################################################################################
+
+        # parcel geojson data
+        url = "http://bostonopendata-boston.opendata.arcgis.com/datasets/b7739e6673104c048f5e2f28bb9b2281_0.geojson"
+
+        response = urllib.request.urlopen(url).read()
+
+        l = json.loads(response.decode('utf-8'))
+        parcels = []
+        l_features = l["features"]
+        for row in l_features:
+            geom = row["geometry"]
+            polys = []
+            if geom['type'] == 'Polygon':
+                shape = []
+                coords = geom['coordinates']
+                for i in coords[0]:
+                    shape.append((i[0], i[1]))
+                polys.append(Polygon(shape))
+            if geom['type'] == 'MultiPolygon':
+                coords = geom['coordinates']
+                for i in coords:
+                    shape = []
+                    for j in i:
+                        for k in j:
+                            # need to change list type to tuple so that shapely can read it
+                            shape.append((k[0], k[1]))
+                    poly = Polygon(shape)
+                    polys.append(poly)
+            parcels.append({"PID": row["properties"]["PID_LONG"], "Shape": polys})
+        print("Number of Parcels: ", len(parcels))
+
+        # Property assessment data
+        url1 = "https://data.boston.gov/datastore/odata3.0/fd351943-c2c6-4630-992d-3f895360febd?$format=json"
+        response = urllib.request.urlopen(url1).read()
+        Assessment = json.loads(response)
+        Assessment = Assessment['value']
+        # Combine to get (PID, GEOMETRY, AV_TOTAL, PTYPE)
+        updated_parcels = []
+        for i in parcels:
+            for j in Assessment:
+                if j["PID"] == i["PID"]:
+                    i['AV_TOTAL'] = j["AV_TOTAL"]
+                    i['PTYPE'] = j["PTYPE"]
+                    updated_parcels.append(i)
+                    break
+        print(updated_parcels)
+        combined = []
+        for parcel in updated_parcels:
+            # print(parcel["Shape"])
+            for tract in boston_cdc:
+                for shape in tract["Shape"]:
+                    if shape.contains(parcel["Shape"][0]):
+                        combined.append({**parcel, "Census Track": tract["Census Tract"]})
+                        break
+
+        parcel_neighborhood_track = []
+
+        for parcel in combined:
+            for neighborhood in list_of_neighborhoods:
+                found = False
+                for shape in neighborhood["Shape"]:
+                    if shape.contains(parcel["Shape"][0]):
+                        parcel_neighborhood_track.append({**parcel, "Neighborhood":neighborhood["neighborhood"]})
+                        found = True
+                        break
+                if found:
+                    break
+        print(parcel_neighborhood_track)
+        print("Number after Combination: ", len(combined))
+        print("Number of Parcels after putting in Neighborhoods: ", len(parcel_neighborhood_track))
 
     #    _  __           __  __ ______          _   _  _____
     #   | |/ /          |  \/  |  ____|   /\   | \ | |/ ____|
@@ -149,63 +234,63 @@ class health:  # (dml.Algorithm):
     #
     #
 
-    def union(R, S):
-        return R + S
-
-    def difference(R, S):
-        return [t for t in R if t not in S]
-
-    def intersect(R, S):
-        return [t for t in R if t in S]
-
-    def project(R, p):
-        return [p(t) for t in R]
-
-    def select(R, s):
-        return [t for t in R if s(t)]
-
-    def product(R, S):
-        return [(t, u) for t in R for u in S]
-
-    def aggregate(R, f):
-        keys = {r[0] for r in R}
-        return [(key, f([v for (k, v) in R if k == key])) for key in keys]
-
-    def dist(p, q):
-        (x1, y1) = p
-        (x2, y2) = q
-        return (x1 - x2) ** 2 + (y1 - y2) ** 2
-
-    def plus(args):
-        p = [0, 0]
-        for (x, y) in args:
-            p[0] += x
-            p[1] += y
-        return tuple(p)
-
-    def scale(p, c):
-        (x, y) = p
-        return (x / c, y / c)
-
-    M = [(13, 1), (2, 12)]
-    P = [(1, 2), (4, 5), (1, 3), (10, 12), (13, 14), (13, 9), (11, 11)]
-
-    OLD = []
-    while OLD != M:
-        OLD = M
-
-        MPD = [(m, p, dist(m, p)) for (m, p) in product(M, P)]
-        PDs = [(p, dist(m, p)) for (m, p, d) in MPD]
-        PD = aggregate(PDs, min)
-        MP = [(m, p) for ((m, p, d), (p2, d2)) in product(MPD, PD) if p == p2 and d == d2]
-        MT = aggregate(MP, plus)
-
-        M1 = [(m, 1) for (m, _) in MP]
-        MC = aggregate(M1, sum)
-
-        M = [scale(t, c) for ((m, t), (m2, c)) in product(MT, MC) if m == m2]
-        print(sorted(M))
-
+    # def union(R, S):
+    #     return R + S
+    #
+    # def difference(R, S):
+    #     return [t for t in R if t not in S]
+    #
+    # def intersect(R, S):
+    #     return [t for t in R if t in S]
+    #
+    # def project(R, p):
+    #     return [p(t) for t in R]
+    #
+    # def select(R, s):
+    #     return [t for t in R if s(t)]
+    #
+    # def product(R, S):
+    #     return [(t, u) for t in R for u in S]
+    #
+    # def aggregate(R, f):
+    #     keys = {r[0] for r in R}
+    #     return [(key, f([v for (k, v) in R if k == key])) for key in keys]
+    #
+    # def dist(p, q):
+    #     (x1, y1) = p
+    #     (x2, y2) = q
+    #     return (x1 - x2) ** 2 + (y1 - y2) ** 2
+    #
+    # def plus(args):
+    #     p = [0, 0]
+    #     for (x, y) in args:
+    #         p[0] += x
+    #         p[1] += y
+    #     return tuple(p)
+    #
+    # def scale(p, c):
+    #     (x, y) = p
+    #     return (x / c, y / c)
+    #
+    # M = [(13, 1), (2, 12)]
+    # P = [(1, 2), (4, 5), (1, 3), (10, 12), (13, 14), (13, 9), (11, 11)]
+    #
+    # OLD = []
+    # while OLD != M:
+    #     OLD = M
+    #
+    #     MPD = [(m, p, dist(m, p)) for (m, p) in product(M, P)]
+    #     PDs = [(p, dist(m, p)) for (m, p, d) in MPD]
+    #     PD = aggregate(PDs, min)
+    #     MP = [(m, p) for ((m, p, d), (p2, d2)) in product(MPD, PD) if p == p2 and d == d2]
+    #     MT = aggregate(MP, plus)
+    #
+    #     M1 = [(m, 1) for (m, _) in MP]
+    #     MC = aggregate(M1, sum)
+    #
+    #     M = [scale(t, c) for ((m, t), (m2, c)) in product(MT, MC) if m == m2]
+    #     print(sorted(M))
+    #
 
 # for data in health.find({"CityName": "Boston"}):
 #     GeoLocation = Point(data["GeoLocation"][0], data["GeoLocation"][1])
