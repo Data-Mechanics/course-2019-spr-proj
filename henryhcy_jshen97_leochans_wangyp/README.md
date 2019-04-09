@@ -1,15 +1,33 @@
-###CS504 Project 2
+###cs504 Project 2 Modeling, Optimization, and Statistical Analysis
+Project Requirements & Important Date: (https://cs-people.bu.edu/lapets/504/s.php?#project2)
+####Team Formation
+- **JiaJia shen (jshen97@bu.edu)**
+- **Shiwei Chen (leochans@bu.edu)**
+- **Yuanpei Wang (wangyp@bu.edu)**
+    - Chengyang He (henryhcy@bu.edu) has dropped the course
 
-Requirement:
-
-1. choose a problem or family of problems that you wish to solve using some collection of relevant data sets.
-2. Write a short narrative and justification (at least 7-10 sentences) explaining how the data sets and techniques you hope to employ can address the problem you chose.
-3. Implement a non-trivial **constraint satisfaction or optimization technique**
-4. **Implement a non-trivial statistical analysis or inference algorithm**
-
-**Problem:**
-
-1. **判断cvs和walgreen，711是否存在竞争关系**
-
-2. 1. **方法：每一家cvs，找出最近位置的walgreen和711并计算距离**
-   2. **Apply a to walgreen and 711. 观察距离是否关系来判断之间的竞争**
+####Obtained Datasets and Sources
+- Cvs stores within 15 km boston area through querying Google Places API (Search Nearby) 
+    - (https://maps.googleapis.com/maps/api/place/nearbysearch/json?)
+- Walgreen stores within 15 km boston area through querying Google Places API (Search Nearby)
+    - (https://maps.googleapis.com/maps/api/place/nearbysearch/json?)
+- Streetlight Locations in boston area through querying Boston Data Portal (Analyze Boston)
+    - (https://data.boston.gov/api/3/action/datastore_search?resource_id=c2fcc1e3-c38f-44ad-a0cf-e5ea2a6585b5)
+- Eviction Incidents in boston area
+    - (http://datamechanics.io/data/evictions_boston.csv)
+- Crime Incidents in boston area
+    - (http://datamechanics.io/dadta/crime.csv)
+- MBTA stops in boston area
+    - (http://datamechanics.io/data/MBTA_Stops.json)
+    
+####General Description & Narrative
+The project is divided into two tasks:
+- (Yuanpei Wang) Find a way to quantify the competitive relationship between the two of most popular franchising convenience stores in boston area: **CVS** and **Walgreen**
+- (Shiwei Chen) Let's model the **Stability S** of a store **i** is defined by **S_i = 1/(|E||C|)** where **E** and **C** are the number of eviction cases and crimes cases that are assigned to store **i**:
+    1. Explore the correlation of store ratings and Evictions/Crimes cases, which one has more effect on ratings?
+        - Key Concepts: **Correlation Coefficient**, **permutation&p-values**
+    2. Use the results obtained from the previous stage to refine the model of **Stability S**.
+        - For example, if crime cases are more correlated with the ratings, then **S_i = 1/(|E|(|C|^2))**.
+    3. Constraints Satisfaction/Optimization question: **If we have the chance to send n (n<60) salesmen (1 per store), how can we get the maximum total stability and maximum accessibility? 
+        - Accessibility is defined as the sum of the distances between each pair of salesmen.
+        - Key Concepts: **Constraints Satisfaction/Optimization**
