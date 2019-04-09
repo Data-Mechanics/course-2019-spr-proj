@@ -38,6 +38,11 @@ class OptimalStationNumber(dml.Algorithm):
 		#Washington has the highest amount of bike time/person, so we use washington station number plus our constraint max
 		#It is clear from our data that adding stations only increases productivity, so we add the max we can build
 		#k-means k=10
+		k=10
+		data_arry=[]
+		data_arry.append({"opt_num":k})
+		repo['charr_hu38_npearce.optstationnum'].insert_many(data_arry)														#Data set 0: Optimal Station Number
+		repo['charr_hu38_npearce.optstationnum'].metadata({'complete':True})
 
 		repo.logout()
 

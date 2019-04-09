@@ -15,7 +15,7 @@ from sklearn.cluster import KMeans
 
 class Kmeans(dml.Algorithm):
 	contributor = 'charr_hu38_npearce'
-	reads = ['charr_hu38_npearce.boston_s', 'charr_hu38_npearce.washington_s', 'charr_hu38_npearce.newyork_s', 'charr_hu38_npearce.chicago_s', 'charr_hu38_npearce.sanfran_s']
+	reads = ['charr_hu38_npearce.boston_s', 'charr_hu38_npearce.washington_s', 'charr_hu38_npearce.newyork_s', 'charr_hu38_npearce.chicago_s', 'charr_hu38_npearce.sanfran_s', 'charr_hu38_npearce.optstationnum']
 	writes = ['charr_hu38_npearce.Kmeans']
 	
 	@staticmethod
@@ -40,7 +40,7 @@ class Kmeans(dml.Algorithm):
 			sanfran_s = list(repo.charr_hu38_npearce.sanfran_s.find())
 		
 		#K-means Code
-		k=10		#As determined in OptimalStationNumber
+		k=list(repo.charr_hu38_npearce.optstationnum.find())[0]['opt_num']		#As determined in OptimalStationNumber
 		P=[]
 		P.append([(boston_s[i]['lat'],boston_s[i]['lon']) for i in range(len(boston_s))] )
 		
