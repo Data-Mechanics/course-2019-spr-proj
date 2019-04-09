@@ -2,6 +2,9 @@ import urllib.request
 import json
 from shapely.geometry import Polygon
 import pprint
+import pickle
+import time
+from tqdm import tqdm
 
 
 # import dml
@@ -185,23 +188,10 @@ class health:  # (dml.Algorithm):
             parcels.append({"PID": row["properties"]["PID_LONG"], "Shape": polys})
         print("Number of Parcels: ", len(parcels))
 
-        # Property assessment data
-        url1 = "https://data.boston.gov/datastore/odata3.0/fd351943-c2c6-4630-992d-3f895360febd?$format=json"
-        response = urllib.request.urlopen(url1).read()
-        Assessment = json.loads(response)
-        Assessment = Assessment['value']
-        # Combine to get (PID, GEOMETRY, AV_TOTAL, PTYPE)
-        updated_parcels = []
-        for i in parcels:
-            for j in Assessment:
-                if j["PID"] == i["PID"]:
-                    i['AV_TOTAL'] = j["AV_TOTAL"]
-                    i['PTYPE'] = j["PTYPE"]
-                    updated_parcels.append(i)
-                    break
-        print(updated_parcels)
+        with open("dict_assessments.json",'r') as f:
+            dict_assessments = json.loads(f.read())
         combined = []
-        for parcel in updated_parcels:
+        for parcel in tqdm(parcels):
             # print(parcel["Shape"])
             for tract in boston_cdc:
                 for shape in tract["Shape"]:
@@ -210,6 +200,10 @@ class health:  # (dml.Algorithm):
                         break
 
         parcel_neighborhood_track = []
+        neighborhood_seperated_parcels = {}
+        for neighborhood in neighborhoods:
+            neighborhood_seperated_parcels[neighborhood['properties']['Name']] = []
+
 
         for parcel in combined:
             for neighborhood in list_of_neighborhoods:
@@ -221,9 +215,22 @@ class health:  # (dml.Algorithm):
                         break
                 if found:
                     break
-        print(parcel_neighborhood_track)
+        print(combined)
+        final = []
+        for parcel in parcel_neighborhood_track:
+            try:
+                final.append({**parcel, **dict_assessments[parcel["PID"]]})
+            except:
+                pass
+
         print("Number after Combination: ", len(combined))
-        print("Number of Parcels after putting in Neighborhoods: ", len(parcel_neighborhood_track))
+        print("Number of Parcels after putting in Neighborhoods: ", len(final))
+        for parcel in final:
+            nhood = parcel.pop("Neighborhood")
+            neighborhood_seperated_parcels[nhood].append(parcel)
+        print(final)
+        with open("combined.pickle", 'wb') as f:
+            f.write(pickle.dumps(final))
 
     #    _  __           __  __ ______          _   _  _____
     #   | |/ /          |  \/  |  ____|   /\   | \ | |/ ____|

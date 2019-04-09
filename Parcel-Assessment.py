@@ -20,6 +20,8 @@ for assess in All_Assessments:
     count += 1
     dict_assessment[assess["PID"]] = {"AV_TOTAL":assess["AV_TOTAL"], "PTYPE":assess["PTYPE"]}
 #Read parcel data
+with open("dict_assessments.json","w") as f:
+    f.write(json.dumps(dict_assessment))
 with open("Parcels 2018.geojson") as file:
     P = file.read()
 
@@ -40,5 +42,3 @@ for i in Parcels:
 print(len(parcels_combined))
 print(parcels_combined)
 #print(json.dumps(Parcels, sort_keys=True, indent = 2))
-with open("parcels_with_assessments.json","w") as f:
-    f.write(str(parcels_combined))
