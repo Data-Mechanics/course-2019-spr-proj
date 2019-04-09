@@ -11,15 +11,21 @@ plot form, it was clear that a linear fit was the best option, as opposed to qua
 clear that adding additional stations could only increase profits.  Knowing k=max_constraint=10, we inputted it into a K-means 
 algorithm as k (once for each city), with the points being represented by the latitude/longitude pairs for each station.  This 
 gave us k cluster centers, which we claim are the optimal locations to add k new stations for each city.  We chose the city with
-the highest ratio of bike time to population as the location to build our new stations.  Note: as each city's data ranged in the 
-length of time it covered, we picked an arbitrary recent month to collect data for (09-2018)
+the highest ratio of bike time to population as the location to build our new stations.  When run with the trial flag, our data 
+would only run with Boston Data, as opposed to data from all 5 cities.  Note: as each city's data ranged in the length of time 
+it covered, we picked an arbitrary recent month to collect data for (09-2018)
 
 ## Data Sets
-- Boston Bike Data			- Boston Station Data
-- New York City Bike Data	- New York City Station Data
-- Washington Bike Data		- Washington Station Data
-- Chicago Bike Data			- Chicago Station Data
-- San Francisco Bike Data	- San Francisco Station Data
+- Boston Bike Data			
+- Boston Station Data
+- New York City Bike Data	
+- New York City Station Data
+- Washington Bike Data		
+- Washington Station Data
+- Chicago Bike Data			
+- Chicago Station Data
+- San Francisco Bike Data	
+- San Francisco Station Data
 - Census Data
 
 While the station and bike data are similar to that of each city, they had differences in syntax and download format.
@@ -30,8 +36,8 @@ While the station and bike data are similar to that of each city, they had diffe
 - Join of the bike data aggregation and census data for each city
 
 ## Algorithms
-- Optimization: Linear Regression
-- Statistical Analysis: K-means
+- Statistical Analysis: Linear Regression
+- Optimization: K-means
 
 # Comparing Recreational Bike Use by Population for 4 Major Cities (Project 1)
 
