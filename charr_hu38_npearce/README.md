@@ -12,7 +12,8 @@ clear that adding additional stations could only increase profits.  Knowing k=ma
 algorithm as k (once for each city), with the points being represented by the latitude/longitude pairs for each station.  This 
 gave us k cluster centers, which we claim are the optimal locations to add k new stations for each city.  We chose the city with
 the highest ratio of bike time to population as the location to build our new stations.  When run with the trial flag, our data 
-would only run with Boston Data, as opposed to data from all 5 cities.  Note: as each city's data ranged in the length of time 
+would only run with Boston Data, as opposed to data from all 5 cities (we could not run on a portion of the data, as one of our 
+examined paramaters involves a summation across each data set).  Note: as each city's data ranged in the length of time 
 it covered, we picked an arbitrary recent month to collect data for (09-2018)
 
 ## Data Sets
