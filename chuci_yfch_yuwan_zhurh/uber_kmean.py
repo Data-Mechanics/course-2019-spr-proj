@@ -73,7 +73,7 @@ class uber_kmean(dml.Algorithm):
                     MP = [(m, p) for ((m, p, d), (p2, d2)) in product(MPD, PD) if p == p2 and d == d2]
                     MT = aggregate(MP, plus)
                     M1 = [(m, 1) for (m, _) in MP]
-                    MC = aggregate(M1, sum) 
+                    MC = aggregate(M1, sum)
                     M = [scale(t, c) for ((m, t), (m2, c)) in product(MT, MC) if m == m2]
                     if num == 20:
                         break
@@ -85,7 +85,7 @@ class uber_kmean(dml.Algorithm):
             ax = df.plot.scatter('x','y',c = 'k', colormap = 'tab10')
             fig = ax.get_figure()
             fig.savefig('fig.png')
-        kmean(10)
+        kmean(5)
         repo.dropCollection("kmean")
         repo.createCollection("kmean")
         repo['chuci_yfch_yuwan_zhurh.kmean'].insert_many(data.to_dict('records'))
