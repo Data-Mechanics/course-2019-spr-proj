@@ -230,7 +230,7 @@ class health:  # (dml.Algorithm):
             neighborhood_seperated_parcels[nhood].append(parcel)
         print(final)
         with open("combined.pickle", 'wb') as f:
-            f.write(pickle.dumps(final))
+            f.write(pickle.dumps(neighborhood_seperated_parcels))
 
     #    _  __           __  __ ______          _   _  _____
     #   | |/ /          |  \/  |  ____|   /\   | \ | |/ ____|
