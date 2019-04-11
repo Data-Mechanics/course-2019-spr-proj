@@ -12,6 +12,8 @@ class sort(dml.Algorithm):
     reads = ['a.nbhdtemp', 'a.comy', 'a.ps', 'a.nps']
     writes = ['a.cmpresort', 'a.cmsort', 'a.pspresort', 'a.pssort', 'a.npspresort', 'a.npssort']
     
+    # the following MongoDB mapreduce code is returning NaN values in the emit portion, resulting in false counts. To circumvent this problem, I made a new set in Python that performs the computations correctly, then inserted it into MongoDB. See the actual 'execute' method below this one.
+    '''
     @staticmethod
     def execute(trial = False):
         
@@ -166,6 +168,143 @@ class sort(dml.Algorithm):
         a.logout()
         endTime = datetime.datetime.now()
         return {"start":startTime, "end":endTime} 
+    '''
+    
+    @staticmethod
+    def execute(trial = False):
+        
+        startTime = datetime.datetime.now()
+        
+        client = dml.pymongo.MongoClient() 
+        a = client.a
+
+        ### sort community centers / ymcas into neighborhoods
+        cmpresort = []
+        for nb in a['nbhdtemp'].find():
+            n = nb['coordinates']
+            name = nb['Name']
+            
+            for pc in n: # for each neighborhood piece
+                if (len(n) > 1):
+                    if len(n[0]) > 1: # if not actually double nested
+                        p = pc
+                    else:
+                        p = pc[0]
+                else:
+                    p = pc
+                    
+                poly = Polygon(p) 
+                
+                for c in a['comy'].find(): # for each community center / ymca
+                    
+                    cname = c['name']
+                    
+                    coords = Point(tuple(c['coordinates']))
+                    b = poly.contains(coords)
+                    
+                    entry = {'nbhd':name, 'comm':cname, 'in':int(b)}
+                    cmpresort.append(entry)
+        a['cmpresort'].insert_many(cmpresort)
+        mapped1 = []
+        for e in cmpresort:
+            emit = (e['nbhd'], {'comm':e['comm'], 'in':e['in']})
+            mapped1.append(emit)
+        
+        keys = list({k for k, v in mapped1})
+        cmsort = []
+        for k in keys:
+            ins = [e[1]['in'] for e in mapped1 if e[0] == k and e[1]['in'] == 1]
+            insum = sum(ins)
+            t = ({'_id':k, 'value':{'comms':insum}}) 
+            cmsort.append(t)
+        a['cmsort'].insert_many(cmsort)
+            
+        ### sort public schools into neighborhoods
+        pspresort = []
+        for nb in a['nbhdtemp'].find():
+            n = nb['coordinates']
+            name = nb['Name']
+            
+            for pc in n: # for each neighborhood piece
+                if (len(n) > 1):
+                    if len(n[0]) > 1: # if not actually double nested
+                        p = pc
+                    else:
+                        p = pc[0]
+                else:
+                    p = pc
+                    
+                poly = Polygon(p) 
+                
+                for s in a['ps'].find(): # for each school
+                    
+                    sname = s['properties']['SCH_NAME']
+                    
+                    coords = Point(tuple(s['geometry']['coordinates']))
+                    b = poly.contains(coords)
+                    
+                    entry = {'nbhd':name, 'pschool':sname, 'in':int(b)}
+                    pspresort.append(entry)
+        a['pspresort'].insert_many(pspresort)
+        mapped2 = []
+        for e in pspresort:
+            emit = (e['nbhd'], {'pschool':e['pschool'], 'in':e['in']})
+            mapped2.append(emit)
+        
+        keys2 = list({k for k, v in mapped2})
+        pssort = []
+        for k in keys2:
+            ins = [e[1]['in'] for e in mapped2 if e[0] == k and e[1]['in'] == 1]
+            insum = sum(ins)
+            t = ({'_id':k, 'value':{'pss':insum}}) 
+            pssort.append(t)
+        a['pssort'].insert_many(pssort)
+        
+        ### sort non-public schools into neighborhoods
+        npspresort = []
+        for nb in a['nbhdtemp'].find():
+            n = nb['coordinates']
+            name = nb['Name']
+            
+            for pc in n: # for each neighborhood piece
+                if (len(n) > 1):
+                    if len(n[0]) > 1: # if not actually double nested
+                        p = pc
+                    else:
+                        p = pc[0]
+                else:
+                    p = pc
+                    
+                poly = Polygon(p) 
+                
+                for s in a['nps'].find(): # for each school
+                    
+                    sname = s['properties']['NAME']
+                    
+                    coords = Point(tuple(s['geometry']['coordinates']))
+                    b = poly.contains(coords)
+                    
+                    entry = {'nbhd':name, 'npschool':sname, 'in':int(b)}
+                    npspresort.append(entry)
+        a['npspresort'].insert_many(npspresort)
+        mapped3 = []
+        for e in npspresort:
+            emit = (e['nbhd'], {'npschool':e['npschool'], 'in':e['in']})
+            mapped3.append(emit)
+        
+        keys3 = list({k for k, v in mapped3})
+        npssort = []
+        for k in keys3:
+            ins = [e[1]['in'] for e in mapped3 if e[0] == k and e[1]['in'] == 1]
+            insum = sum(ins)
+            t = ({'_id':k, 'value':{'npss':insum}}) 
+            npssort.append(t)
+        a['npssort'].insert_many(npssort)
+        
+        a.logout()
+        endTime = datetime.datetime.now()
+        return {"start":startTime, "end":endTime} 
+            
     
     
     

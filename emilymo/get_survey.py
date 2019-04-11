@@ -7,6 +7,7 @@ import urllib.request
 import dbfread
 import copy
 import os
+import shutil
 
 class get_survey(dml.Algorithm):
     contributor = 'emilymo'
@@ -64,6 +65,9 @@ class get_survey(dml.Algorithm):
             if e['NBHDS38_'] == 'Chinatown':
                 e['NBHDS38_'] = 'Downtown/Chinatown'
         a['survtemp'].insert_many(survtemp)
+        
+        # delete temp folder
+        shutil.rmtree('temp')
         
         a.logout()
         endTime = datetime.datetime.now()
