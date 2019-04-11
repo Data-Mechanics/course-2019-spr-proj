@@ -52,8 +52,9 @@ class CvsWalEviction(dml.Algorithm):
 
             distance = R * c
 
-            if (distance < 30):
+            if (distance < 60):
                 d = {
+                    'document_type': "eviction",
                     'evict_id': document['id'],
                     'location': [document['latitude'], document['longitude']],
                     'zip_code': "0"+document['zip'] if document['zip'] != None else '00000'
@@ -64,7 +65,7 @@ class CvsWalEviction(dml.Algorithm):
         # insert cvs within 15 km of boston
         for item in repo.henryhcy_jshen97_leochans_wangyp.cvs.find():
             d = {
-                'name': 'CVS',
+                'document_type': 'cvs',
                 'location': item['geometry']['location'],
                 'place_id': item['place_id'],
                 'rating': item['rating'] if 'rating' in item.keys() else None,
@@ -78,7 +79,7 @@ class CvsWalEviction(dml.Algorithm):
         # insert walgreen within 15 km of boston
         for item in repo.henryhcy_jshen97_leochans_wangyp.walgreen.find():
             d = {
-                'name': 'Walgreen',
+                'document_type': 'walgreen',
                 'location': item['geometry']['location'],
                 'place_id': item['place_id'],
                 'rating': item['rating'] if 'rating' in item.keys() else None,
@@ -155,7 +156,8 @@ class CvsWalEviction(dml.Algorithm):
 # debug
 
 CvsWalEviction.execute()
+'''
 doc = CvsWalEviction.provenance()
 print(doc.get_provn())
 print(json.dumps(json.loads(doc.serialize()), indent=4))
-
+'''
