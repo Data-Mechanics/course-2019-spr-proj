@@ -34,7 +34,7 @@ class kmeans_opt(dml.Algorithm):
 			if(len(nta['stations'])!= 0):
 				income = nta['income']
 				pop = float(nta['population'])
-				X.append([nta['position'][0], nta['position'][1], income, pop])
+				X.append([nta['position'][0], nta['position'][1], income])
 				data_copy.append(nta)
 		
 		#------------------ K Means
@@ -48,6 +48,8 @@ class kmeans_opt(dml.Algorithm):
 		for i in range(len(data_copy)):
 			data_copy[i]['zone'] = k_groupings[i]
 
+
+		print(k_groupings)
 		
 		totals_real = [0] * k
 		for item in data_copy:
@@ -58,18 +60,18 @@ class kmeans_opt(dml.Algorithm):
 		avgs_real = [0] * k
 		for i in range(len(totals_real)):
 			avgs_real[i] = totals_real[i]/overall_total_real
-		#print(avgs_real)
+		print(avgs_real)
 		
 
-		#plt.scatter(X[:, 0], X[:, 1], s=30, c=kmeans.labels_)
-		#plt.show()
+		# plt.scatter(X[:, 0], X[:, 1], s=30, c=kmeans.labels_)
+		# plt.show()
 
-		data = []
-		for i in range(len(X)):
-			s = str(k_groupings[i])
-			data.append({'Latitude': X[i][0], 'Longitute': X[i][1], 'Income': X[i][2], 'Population': X[i][3], 'Zone' : s})
+		# data = []
+		# for i in range(len(X)):
+		# 	s = str(k_groupings[i])
+		# 	data.append({'Latitude': X[i][0], 'Longitute': X[i][1], 'Income': X[i][2], 'Population': X[i][3], 'Zone' : s})
 		
-		parallel_coordinates(data, 'Zone')
+		#parallel_coordinates(data, 'Zone')
 		plt.show()
 
 		hypothetical_percentages = [0.14, 0.42, 0.08, 0.18, 0.18] #ik its a shit name we'll figure it out
