@@ -33,7 +33,6 @@ Our main goal is to identify buildings that may not even be on the market yet an
 
 
 ### K-Means Statistics
-![Figure 1: Determining optimal K for K means](https://github.com/kaylaipp/course-2019-spr-proj/blob/master/ekmak_gzhou_kaylaipp_shen99/figure_1.png)
 	
 |*Cluster*|Mean|STD|Varience|Range|
 |---|---|---|---|---|
