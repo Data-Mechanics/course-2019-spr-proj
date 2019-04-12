@@ -8,12 +8,14 @@ import zillow
 import requests
 import xmltodict
 import csv
+
 import statistics
+
 
 class avgPrice_stdevPrice(dml.Algorithm):
     contributor = 'ekmak_gzhou_kaylaipp_shen99'
     reads = ['ekmak_gzhou_kaylaipp_shen99.zillow_getsearchresults_data']
-    writes = ['ekmak_gzhou_kaylaipp_shen99.avg_price_stdev_price']
+    writes = ['ekmak_gzhou_kaylaipp_shen99.avgPrice_stdevPrice']
 
     @staticmethod
     def execute(trial=False):
@@ -26,6 +28,8 @@ class avgPrice_stdevPrice(dml.Algorithm):
 
         # read in zillow search result data 
         zillow_data = repo.ekmak_gzhou_kaylaipp_shen99.zillow_getsearchresults_data.find()
+
+        #empty list for storing valuations respectively for calculating average and standard deviation
         priceAvg = []
         priceStdev = []
 
@@ -54,7 +58,17 @@ class avgPrice_stdevPrice(dml.Algorithm):
         #calculate standard deviation
         stdevPrice = statistics.stdev(priceStdev)
 
-        
+        # create a table to display avg and stdev of the entire South Boston
+        data_titles = ["Location", "Average", "Standard Deviation"]
+        raw_table = [data_titles] + list("South Boston", avgPrice, stdevPrice)
+
+        for i, d in enumerate(raw_table):
+            line = '|'.join(str(x).ljust(4) for x in d)
+            print(line)
+            if i == 0:
+                print ('-' * len(line))
+
+    
         # Store information in db
         repo.logout()
         endTime = datetime.now()
@@ -93,11 +107,11 @@ class avgPrice_stdevPrice(dml.Algorithm):
 
         doc.usage(get_zillow_data, zillow_data, startTime, None, {prov.model.PROV_TYPE: 'ont:Retrieval'})
 
-        doc.wasAttributedTo(price_clusters, this_script)
+        doc.wasAttributedTo(this_entity, this_agent)
         
-        doc.wasGeneratedBy(price_clusters, get_cluster_medians, endTime)
+        doc.wasGeneratedBy(this_entity, get_zillow_search_data, endTime)
         
-        doc.wasDerivedFrom(price_clusters, zillow_data, get_cluster_medians, get_cluster_medians, get_cluster_medians)
+        doc.wasDerivedFrom(this_entity, zillow_data, get_zillow_data, get_zillow_search_data)
 
         repo.logout()
                   
