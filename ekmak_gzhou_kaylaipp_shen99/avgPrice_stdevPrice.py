@@ -1,26 +1,14 @@
-from gmplot import gmplot
-from sklearn.cluster import KMeans
+import urllib.request
 import json
 import dml
-import uuid
 import prov.model
-from datetime import datetime
-from pyproj import Proj, transform
-from numpy.random import uniform
-from numpy import array
-import numpy as np
-import pandas as pd
-from sklearn.cluster import KMeans
-import math
+import datetime
+import uuid
+import zillow
+import requests
+import xmltodict
+import csv
 import statistics
-
-import folium
-from folium import plugins
-import pymongo
-from geopy.distance import vincenty
-import random
-import matplotlib.pyplot as plt
-
 
 class avgPrice_stdevPrice(dml.Algorithm):
     contributor = 'ekmak_gzhou_kaylaipp_shen99'
