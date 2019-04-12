@@ -7,6 +7,9 @@ import uuid
 from sklearn.cluster import KMeans
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas
+from pandas.plotting import parallel_coordinates
+
 
 class kmeans_opt(dml.Algorithm):
 	contributor = 'maximega_tcorc'
@@ -27,24 +30,18 @@ class kmeans_opt(dml.Algorithm):
 		
 		X = []
 		data_copy = []
-		sations_count = 0
 		for nta in nta_objects:
-			if('SI' not in nta['ntaname']):
-				if(len(nta['stations'])!= 0):
-					sations_count+=1
-					print("---------------------------------------------------------------------")
-					print(nta['ntaname'])
-					print()
-					print(nta['stations'])
-					income = nta['income']
-					X.append([1, income])
-					data_copy.append(nta)
-		print(sations_count)
+			if(len(nta['stations'])!= 0):
+				income = nta['income']
+				pop = float(nta['population'])
+				X.append([nta['position'][0], nta['position'][1], income, pop])
+				data_copy.append(nta)
+		
 		#------------------ K Means
 		k = 5
 		kmeans = KMeans(n_clusters=k, verbose=0, n_init = 100).fit(X)
 		kmeans.fit_predict(X)
-		X = np.array(X)
+		#X = np.array(X)
 
 		k_groupings = kmeans.labels_
 
@@ -61,13 +58,21 @@ class kmeans_opt(dml.Algorithm):
 		avgs_real = [0] * k
 		for i in range(len(totals_real)):
 			avgs_real[i] = totals_real[i]/overall_total_real
-		print(avgs_real)
+		#print(avgs_real)
 		
 
-		plt.scatter(X[:, 0], X[:, 1], s=30, c=kmeans.labels_)
+		#plt.scatter(X[:, 0], X[:, 1], s=30, c=kmeans.labels_)
 		#plt.show()
 
-		hypothetical_percentages = [0.22, 0.35, 0.18, 0.2, 0.05] #ik its a shit name we'll figure it out
+		data = []
+		for i in range(len(X)):
+			s = str(k_groupings[i])
+			data.append({'Latitude': X[i][0], 'Longitute': X[i][1], 'Income': X[i][2], 'Population': X[i][3], 'Zone' : s})
+		
+		parallel_coordinates(data, 'Zone')
+		plt.show()
+
+		hypothetical_percentages = [0.14, 0.42, 0.08, 0.18, 0.18] #ik its a shit name we'll figure it out
 
 
 		# equation: (percentage income for each "zone") = (populaiton * public_transport_%) * X 
@@ -81,13 +86,7 @@ class kmeans_opt(dml.Algorithm):
 		for i in range(len(new_zone_fares)):
 			new_zone_fares[i] = (hypothetical_percentages[i] * overall_total_real) / totals_projected[i]
 		
-		print(new_zone_fares)
-
-	
-
-
-
-
+		#print(new_zone_fares)
 
 		# ----------------- Error
 

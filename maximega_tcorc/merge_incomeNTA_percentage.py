@@ -40,6 +40,7 @@ class merge_incomeNTA_percentage(dml.Algorithm):
                 'stations': nta['stations'], 
                 'population': nta['population'],
                 'income': nta['income'],
+                'position': nta['position'],
                 'trans_percent': pub_trans_percent
             })
 
