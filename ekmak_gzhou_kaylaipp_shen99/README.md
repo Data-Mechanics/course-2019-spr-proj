@@ -24,6 +24,12 @@
 
 With these three new datasets, we can gain a better understanding of the status of South Boston and it’s streets and potential properties to keep an eye on. With this information we can see which streets are most populated and which streets are more family friendly by figuring out which units are more cost efficient and newly renovated. This is particularly beneficial for the South Boston Neighborhood Development because this gives them an idea of which streets contain more individual houses vs apartments and offers them the ability to keep an eye on up and coming streets.  
 
+## Project 2 
+Our main goal is to identify buildings that may not even be on the market yet and then finding and contacting the property owners. To solve our problem, we utilized constraint satisfaction to filter and narrow down the properties in South Boston in order to figure out which properties to target. We filtered based on property valuation, property type, overall property condition and the number of rooms/bedrooms and returned all properties that fit those constraints. Additionally, we used a greedy algorithm approach to optimize a user’s specified budget to maximize or minimize the number of properties to buy.  Moving forward, these constraint and optimization techniques that we formed in project two can be reused in project three to build an interactive ui. For example, a user can input a price range/budget and type of property they’re looking for and the site outputs a map or list of properties that fit the given constraints. 
+
+
+
+
 ## Auth.json
 The auth.json file should contain a key to acess the Zillow api. You can retrieve a key [here](https://www.zillow.com/howto/api/APIOverview.htm) 
 ```
