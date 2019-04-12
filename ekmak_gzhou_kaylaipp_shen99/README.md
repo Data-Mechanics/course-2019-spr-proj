@@ -30,7 +30,7 @@ Our main goal is to identify buildings that may not even be on the market yet an
 ### South Boston Property Price Statistics
 * Mean: $860,603.44
 * STD: $405,760.96
-* # Properties: 11,478
+* Number of Properties: 11,478
 
 
 
