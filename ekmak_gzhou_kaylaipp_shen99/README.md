@@ -33,22 +33,14 @@ Our main goal is to identify buildings that may not even be on the market yet an
 
 
 ### K-Means Statistics
-* Cluster 1: 
-	* Mean: 1952818.2970760234
-	* STD: 484121.76655354927
-	* Varience: 234373884850.92923
-	* Range: 1489121.0 - 10808461.0
+![Figure 1: Determining optimal K for K means](https://github.com/kaylaipp/course-2019-spr-proj/blob/master/ekmak_gzhou_kaylaipp_shen99/figure_1.png)
 	
-* Cluster 2: 
-	* Mean: 625496.5462159737
-	* STD: 118993.41617880405
-	* Varience: 14159433093.902067
-	* Range: 313645.0 - 823940.0
-* Cluster 3: 
-	* Mean: 1022676.347980696
-	* STD: 160637.71771463653
-	* Varience: 25804476352.56725
-	* Range: 824021.0 - 1486690.0
+|*Cluster*|Mean|STD|Varience|Range|
+|---|---|---|---|---|
+|0|1952818.2970760234|484121.76655354927|234373884850.92923|1489121.0 - 10808461.0|
+|1|625496.5462159737|118993.41617880405|14159433093.902067|313645.0 - 823940.0|
+|2|1022676.347980696|160637.71771463653|25804476352.56725|824021.0 - 1486690.0|
+
 
 
 ## Auth.json
