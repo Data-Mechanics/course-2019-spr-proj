@@ -26,8 +26,29 @@ With these three new datasets, we can gain a better understanding of the status 
 
 ## Project 2 
 Our main goal is to identify buildings that may not even be on the market yet and then finding and contacting the property owners. To solve our problem, we utilized constraint satisfaction to filter and narrow down the properties in South Boston in order to figure out which properties to target. We filtered based on property valuation, property type, overall property condition and the number of rooms/bedrooms and returned all properties that fit those constraints. Additionally, we used a greedy algorithm approach to optimize a user’s specified budget to maximize or minimize the number of properties to buy.  Moving forward, these constraint and optimization techniques that we formed in project two can be reused in project three to build an interactive ui. For example, a user can input a price range/budget and type of property they’re looking for and the site outputs a map or list of properties that fit the given constraints. 
+ 
+### South Boston Property Statistics
+* STD: 
+* Mean: 
 
 
+### K-Means Statistics
+* Cluster 1: 
+	* Mean: 1952818.2970760234
+	* STD: 484121.76655354927
+	* Varience: 234373884850.92923
+	* Range: 1489121.0 - 10808461.0
+	
+* Cluster 2: 
+	* Mean: 625496.5462159737
+	* STD: 118993.41617880405
+	* Varience: 14159433093.902067
+	* Range: 313645.0 - 823940.0
+* Cluster 3: 
+	* Mean: 1022676.347980696
+	* STD: 160637.71771463653
+	* Varience: 25804476352.56725
+	* Range: 824021.0 - 1486690.0
 
 
 ## Auth.json
