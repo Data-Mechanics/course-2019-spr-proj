@@ -104,105 +104,78 @@ class example(dml.Algorithm):
         repo['ido_jconstan_jeansolo_suitcase.student_address'].insert_many(r)
         repo['ido_jconstan_jeansolo_suitcase.student_address'].metadata({'complete':True})
         print(repo['ido_jconstan_jeansolo_suitcase.student_address'].metadata())
-        '''
-        # Transform 1
-		# Get the students who do NOT ride the bus
-        notBusRiders = []
-        tempFlag = False
-        for x in r1:
-            for y in r:
-                # if the student does ride the bus
-                if x['Address 1'] in y['Address']:
-                    tempFlag = True
-            if (tempFlag == False):
-                notBusRiders.append(x)
-            else:
-                tempFlag = False
 
-        # Get the house price of students who do NOT ride the bus
-        nbrHouseValue = []
-        for x in notBusRiders:
-            nbrHouseValue.append({"Address 1": x['Address 1'], "Assessed Total":x['Assessed Total']})
+        ################################################################################################
+        # Data manipulation 
+        ################################################################################################
+        
+        # DATA SET 1 [Bu Transportation Study]
+        # Students who take the bus in Natick
+        # r1 = {'Last Name', 'School', 'Grade', 'Address', 'Bus Number', 'Pickup Stop', 'Pay for Bus'}
+        url = 'http://datamechanics.io/data/ido_jconstan_jeansolo_suitcase/bu_transportation_study.json'
+        response = urllib.request.urlopen(url).read().decode("utf-8")
+        r1 = json.loads(response)
+        r1Addy = 'Address'
+        r1 = addressNormalizer(r1Addy, r1)
 
-        repo.dropCollection("PropertyValueNonRiders")
-        repo.createCollection("PropertyValueNonRiders")
-        repo['ido_jconstan_jeansolo_suitcase.PropertyValueNonRiders'].insert_many(nbrHouseValue)
-        '''
-		
-		
-		#Transformation One
-        #Goal: Find correlation between house price and people who take the bus
-        #Select Home House # - Street from BU Transportation Study (REGISTERED STUDENT INFO) == ADDR1 from Property Assessment
-		#new data set fields: price of house, takes bus?
-        #print(r)
-        #tr = repo.ido_jconstan_jeansolo_suitcase.traffic_count.find()
-        #tr1 = repo.ido_jconstan_jeansolo_suitcase.registered_students.find()
-        
-        #tr2 = repo.ido_jconstan_jeansolo_suitcase.property_data.find({'Address 1': {'$regex' : 'w'}},{'Address 1': True, '_id':False})
-        #tr1 = repo.ido_jconstan_jeansolo_suitcase.property_data.find({}, {'Address 1': True, '_id':False})
-        #tr2 = repo.ido_jconstan_jeansolo_suitcase.property_data.find()
-        #for s in tr:
-        #    print(s)
-        #for s in tr1:
-        #    print(s)
-        
-        #repo.ido_jconstan_jeansolo_suitcase.property_data.update_many({},{
-        #{$set: {Address1: newval}}
-        #}, upsert=False)         
+        # DATA SET 2 [Spark Property Data]
+        # Property values of ALL the homes in Natick
+        # r2 = {'Parent ID', 'Address Number', 'Address Street', 'CLS Code', 'Assessed Land', 'Assessed BLDG', 'Assessed Total', 
+        #       'Owner 1', 'Owner 2', 'Address 1', 'Address 2', 'City', 'State', 'Zip1', 'Zip2'}
+        url = 'http://datamechanics.io/data/ido_jconstan_jeansolo_suitcase/property_data.json'
+        response = urllib.request.urlopen(url).read().decode("utf-8")
+        r2 = json.loads(response)
+        r2Addy = 'Address 1'
+        r2TotalValue = 'Assessed Total'
+        r2 = addressNormalizer(r2Addy, r2)
 
-        
-         
-            #v.rsplit(' ',1)[0];
-            #v = v.rpartition('/')[0]
-        #   print("k:",k[1])
-        #for s in tr2:
-        #    print(s)
-        #repo.ido_jconstan_jeansolo_suitcase.property_data.update_one({}, {"$set": d}, upsert=False)
-        #repo.ido_jconstan_jeansolo_suitcase.property_data.find({}).forEach(function(i){
-        #    i.Address=i.Address.rsplit(' ',1)[0];
-        #    repo.ido_jconstan_jeansolo_suitcase.property_data.save(i);
-        #    });
-        
-        #pdata = repo.ido_jconstan_jeansolo_suitcase.property_data.find()
-        #plist = []
-        #for item in pdata:
-        #    for addr in item['Address 1']:
-        #        new_dict = {}
-        #            new_dict['City'] = addr['properties']['CITY']
-        #            new_dict['Station Name'] = addr['properties']['STATION_NA']
-        #            new_dict['Address'] = addr['properties']['ADDRESS']
-        #            new_dict['Longitude'] = addr['properties']['LONGITUDE']
-        #            new_dict['Address'] = addr['properties']['LATITDE'].rsplit('',1)[0]
-        #            plist.append(new_dict)
-        #print(charging_list)
-        #repo.ido_jconstan_jeansolo_suitcase.property_data.insert_many(plist)
-        
-        
-        
+        # DATA SET 6 [ASAP Student Address]
+        # Students who do not take the bus
+        # r6 = {'Site Name', 'Street Address', 'Apt. No', 'City', 'State', 'Zip'}
+        url = 'http://datamechanics.io/data/ido_jconstan_jeansolo_suitcase/ASAP_Student_Addresses.json'
+        response = urllib.request.urlopen(url).read().decode("utf-8")
+        r6 = json.loads(response)
+        r6Addy = 'Street Address'
+        r6 = addressNormalizer(r6Addy, r6)
 
-        #result = repo.ido_jconstan_jeansolo_suitcase.property_data.aggregate([ {'$lookup' : {'from': repo.ido_jconstan_jeansolo_suitcase.registered_students,'localField': 'Address 1','foreignField': 'Address','as': 'results' }}])
-         
-         
-        """
-	    pipeline = [{'$lookup':
-                {'from' : 'models',
-                 'localField' : '_id',
-                 'foreignField' : 'references',
-                 'as' : 'cellmodels'}},
-            {'$unwind': '$cellmodels'},
-             {'$match':
-                 {'authors' : 'Migliore M', 'cellmodels.celltypes' : 'Hippocampus CA3 pyramidal cell'}},
-            {'$project': 
-                {'authors':1, 'cellmodels.celltypes':1}} 
-             ]
+        # DATA SET 7 [Student Address]
+        # ALL students and the schools that they go to
+        # r7 = {'Street Number + Address 1 + Address 2 + Apt', 'School Name'}
+        url = 'http://datamechanics.io/data/ido_jconstan_jeansolo_suitcase/Enrolled_Student_Addresses_Assigned_Schools.json'
+        response = urllib.request.urlopen(url).read().decode("utf-8")
+        r7 = json.loads(response)
+        r7Addy = 'Street Number + Address 1 + Address 2 + Apt'
+        r7SchoolName = 'School Name'
+        r7 = addressNormalizer(r7Addy, r7)
 
-for doc in (papers.aggregate(pipeline)):
-   pprint (doc)
-        """
+        # ('Address', 'NumChildren') ; number of children at each house 
+        t1 = project(r7, lambda t: (t[r7Addy], 1) ) # list of addresses
+        t2 = aggregate(t1, sum) # final
+
+        # ('Address', 'School Name', 'Assessed Total')
+        t3 = project(r2, lambda t: (t[r2Addy], t[r2TotalValue]) ) # ('Address', 'Assessed Total')
+        t4 = project(r7, lambda t: (t[r7Addy], t[r7SchoolName]) ) # ('Address', 'School Name')
+        t5 = project(select(product(t3, t4), lambda t: t[0][0] == t[1][0]), lambda t: (t[0][0], t[1][1], t[0][1]) ) 
+        
+        # ('Address') ; students who do not take the bus
+        t6 = project(r6, lambda t: (t[r6Addy]) )
+
+        # ('Address', 'School Name', 'Assessed Total', 'Y') ; students who take the bus
+        t7 = project(t5, lambda t: (t[0], t[1], t[2], 'Y') )
+        t8 = select(t7, lambda t: (t[0] not in t6) )
+
+        # ('Address', 'School Name', 'Assessed Total', 'N') ; students who do not take the bus
+        t9 = project(t5, lambda t: (t[0], t[1], t[2], 'N') )
+        t10 = select(t9, lambda t: (t[0] in t6) )
+
+         # final: ('Address', 'School Name', 'Assessed Total', 'Y/N do they take the bus')
+        t11 = union(t8, t10)
+
         repo.logout()
         endTime = datetime.datetime.now()
         return {"start":startTime, "end":endTime}
     
+
     @staticmethod
     def provenance(doc = prov.model.ProvDocument(), startTime = None, endTime = None):
         '''
@@ -333,6 +306,53 @@ for doc in (papers.aggregate(pipeline)):
                   
         return doc
 
+def addressNormalizer(key, rx):
+    for i in rx:
+        if(type(i[key]) == str):
+            i[key] = i[key].upper()
+
+            if "STREET" in i[key]:
+                i[key] = i[key].replace("STREET", "ST")
+            if "PLACE" in i[key]:
+                i[key] = i[key].replace("PLACE", "PL")
+            if "TERRACE" in i[key]:
+                i[key] = i[key].replace("TERRACE", "TER")
+            if "AVENUE" in i[key]:
+                i[key] = i[key].replace("AVENUE", "AVE")
+            if "CIRCLE" in i[key]:
+                i[key] = i[key].replace("CIRCLE", "CIR")
+            if "COURT" in i[key]:
+                i[key] = i[key].replace("COURT", "CT")
+            if "LANE" in i[key]:
+                i[key] = i[key].replace("LANE", "LN")
+            if "ROAD" in i[key]:
+                i[key] = i[key].replace("ROAD", "RD")
+            if "PARK" in i[key]:
+                i[key] = i[key].replace("PARK", "PK")
+
+    return rx
+
+def union(R, S):
+    return R + S
+
+def difference(R, S):
+    return [t for t in R if t not in S]
+
+def intersect(R, S):
+    return [t for t in R if t in S]
+
+def project(R, p):
+    return [p(t) for t in R]
+
+def select(R, s):
+    return [t for t in R if s(t)]
+ 
+def product(R, S):
+    return [(t,u) for t in R for u in S]
+
+def aggregate(R, f):
+    keys = {r[0] for r in R}
+    return [(key, f([v for (k,v) in R if k == key])) for key in keys]
 '''
 # This is example code you might use for debugging this module.
 # Please remove all top-level function calls before submitting.
