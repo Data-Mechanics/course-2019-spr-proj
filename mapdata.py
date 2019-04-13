@@ -11,15 +11,14 @@ from datetime import datetime
 
 # home = '418 Beachview Drive, North Vancouver, BC'
 # work = '138 East 7th Avenue, Vancouver, BC'
-#gmaps = googlemaps.Client(key='AIzaSyBknqIxQcdcDMT-po3pNYat7dj0yH7fLeE')
 #time = datetime.now()
 
 # PUT IN API KEY HERE
-api_key = ''
+my_key = ''
 
 
 def time(home_addr, work_addr):
-    gmaps = googlemaps.Client(key=api_key)
+    gmaps = googlemaps.Client(key=my_key)
     time = datetime.now()
     commute_json = gmaps.distance_matrix(origins=home_addr, destinations=work_addr)
     commute_time = commute_json['rows'][0]['elements'][0]['duration']['text']
@@ -27,7 +26,7 @@ def time(home_addr, work_addr):
 
 
 def distance(home_addr, work_addr):
-    gmaps = googlemaps.Client(key=api_key)
+    gmaps = googlemaps.Client(key=my_key)
     time = datetime.now()
     commute_json = gmaps.distance_matrix(origins=home_addr, destinations=work_addr)
     commute_distance = commute_json['rows'][0]['elements'][0]['distance']['text']
