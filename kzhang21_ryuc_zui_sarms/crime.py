@@ -8,9 +8,9 @@ import pandas as pd
 from ast import literal_eval as make_tuple
 
 class crime(dml.Algorithm):
-    contributor = 'kzhang21_ryuc'
+    contributor = 'kzhang21_ryuc_zui_sarms'
     reads = []
-    writes = ['kzhang21_ryuc.crime']
+    writes = ['kzhang21_ryuc_zui_sarms.crime']
 
     @staticmethod
     def execute(trial = False):
@@ -20,7 +20,7 @@ class crime(dml.Algorithm):
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('kzhang21_ryuc', 'kzhang21_ryuc')
+        repo.authenticate('kzhang21_ryuc_zui_sarms', 'kzhang21_ryuc_zui_sarms')
 
         url = 'https://data.boston.gov/dataset/6220d948-eae2-4e4b-8723-2dc8e67722a3/resource/12cb3883-56f5-47de-afa5-3b1cf61b257b/download/tmpxjqz5gin.csv'
         response = pd.read_csv(url, header=0)
@@ -41,9 +41,9 @@ class crime(dml.Algorithm):
 
         repo.dropCollection("crime")
         repo.createCollection("crime")
-        repo['kzhang21_ryuc.crime'].insert_many(r)
-        repo['kzhang21_ryuc.crime'].metadata({'complete':True})
-        print(repo['kzhang21_ryuc.crime'].metadata())
+        repo['kzhang21_ryuc_zui_sarms.crime'].insert_many(r)
+        repo['kzhang21_ryuc_zui_sarms.crime'].metadata({'complete':True})
+        print(repo['kzhang21_ryuc_zui_sarms.crime'].metadata())
 
         repo.logout()
 
@@ -62,7 +62,7 @@ class crime(dml.Algorithm):
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('kzhang21_ryuc', 'kzhang21_ryuc')
+        repo.authenticate('kzhang21_ryuc_zui_sarms', 'kzhang21_ryuc')
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/') # The scripts are in <folder>#<filename> format.
         doc.add_namespace('dat', 'http://datamechanics.io/data/') # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
@@ -71,7 +71,7 @@ class crime(dml.Algorithm):
         # additional resource
         doc.add_namespace('crime', 'https://data.boston.gov/dataset/')
 
-        this_script = doc.agent('alg:kzhang21_ryuc#crime', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        this_script = doc.agent('alg:kzhang21_ryuc_zui_sarms#crime', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
         resource = doc.entity('crime:6220d948-eae2-4e4b-8723-2dc8e67722a3/resource/12cb3883-56f5-47de-afa5-3b1cf61b257b/download/tmpxjqz5gin.csv', {'prov:label':'Crime, Crime Records', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
         #get_found = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         #get_lost = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
@@ -84,7 +84,7 @@ class crime(dml.Algorithm):
                   }
                   )
 
-        crime = doc.entity('dat:kzhang21_ryuc#crime', {prov.model.PROV_LABEL:'Crime District', prov.model.PROV_TYPE:'ont:DataSet'})
+        crime = doc.entity('dat:kzhang21_ryuc_zui_sarms#crime', {prov.model.PROV_LABEL:'Crime District', prov.model.PROV_TYPE:'ont:DataSet'})
         doc.wasAttributedTo(crime, this_script)
         doc.wasGeneratedBy(crime, get_district, endTime)
         doc.wasDerivedFrom(crime, resource, get_district, get_district, get_district)

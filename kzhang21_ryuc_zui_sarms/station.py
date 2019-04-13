@@ -9,9 +9,9 @@ from ast import literal_eval as make_tuple
 
 
 class station(dml.Algorithm):
-    contributor = 'kzhang21_ryuc'
+    contributor = 'kzhang21_ryuc_zui_sarms'
     reads = []
-    writes = ['kzhang21_ryuc.station']
+    writes = ['kzhang21_ryuc_zui_sarms.station']
 
     @staticmethod
     def execute(trial=False):
@@ -21,7 +21,7 @@ class station(dml.Algorithm):
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('kzhang21_ryuc', 'kzhang21_ryuc')
+        repo.authenticate('kzhang21_ryuc_zui_sarms', 'kzhang21_ryuc_zui_sarms')
 
         url = 'http://bostonopendata-boston.opendata.arcgis.com/datasets/e5a0066d38ac4e2abbc7918197a4f6af_6.csv'
         response = pd.read_csv(url, header=0)
@@ -42,9 +42,9 @@ class station(dml.Algorithm):
 
         repo.dropCollection("station")
         repo.createCollection("station")
-        repo['kzhang21_ryuc.station'].insert_many(r)
-        repo['kzhang21_ryuc.station'].metadata({'complete': True})
-        print(repo['kzhang21_ryuc.station'].metadata())
+        repo['kzhang21_ryuc_zui_sarms.station'].insert_many(r)
+        repo['kzhang21_ryuc_zui_sarms.station'].metadata({'complete': True})
+        print(repo['kzhang21_ryuc_zui_sarms.station'].metadata())
 
         repo.logout()
 
@@ -63,7 +63,7 @@ class station(dml.Algorithm):
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('kzhang21_ryuc', 'kzhang21_ryuc')
+        repo.authenticate('kzhang21_ryuc_zui_sarms', 'kzhang21_ryuc_zui_sarms')
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')  # The scripts are in <folder>#<filename> format.
         doc.add_namespace('dat', 'http://datamechanics.io/data/')  # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont',
@@ -74,7 +74,7 @@ class station(dml.Algorithm):
         doc.add_namespace('station',
                           'http://bostonopendata-boston.opendata.arcgis.com/datasets/e5a0066d38ac4e2abbc7918197a4f6af_6.csv')
 
-        this_script = doc.agent('alg:kzhang21_ryuc#station',
+        this_script = doc.agent('alg:kzhang21_ryuc_zui_sarms#station',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
         resource = doc.entity('dat:station',
                               {'prov:label': 'Station, Station List', prov.model.PROV_TYPE: 'ont:DataResource',
@@ -87,7 +87,7 @@ class station(dml.Algorithm):
                   }
                   )
 
-        station = doc.entity('dat:kzhang21_ryuc#station', {prov.model.PROV_LABEL:'Station District', prov.model.PROV_TYPE:'ont:DataSet'})
+        station = doc.entity('dat:kzhang21_ryuc_zui_sarms#station', {prov.model.PROV_LABEL:'Station District', prov.model.PROV_TYPE:'ont:DataSet'})
         doc.wasAttributedTo(station, this_script)
         doc.wasGeneratedBy(station, get_station, endTime)
         doc.wasDerivedFrom(station, resource, get_station, get_station, get_station)

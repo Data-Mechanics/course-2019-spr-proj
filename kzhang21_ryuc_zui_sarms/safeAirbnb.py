@@ -8,9 +8,9 @@ import uuid
 import pandas as pd 
 
 class safeAirbnb(dml.Algorithm):
-    contributor = 'kzhang21_ryuc'
-    reads = ['kzhang21_ryuc.airbnb', 'kzhang21_ryuc.crimeLoc']
-    writes = ['kzhang21_ryuc.safeAirbnb']
+    contributor = 'kzhang21_ryuc_zui_sarms'
+    reads = ['kzhang21_ryuc_zui_sarms.airbnb', 'kzhang21_ryuc_zui_sarms.crimeLoc']
+    writes = ['kzhang21_ryuc_zui_sarms.safeAirbnb']
 
     @staticmethod
     def execute(trial = False):
@@ -20,7 +20,7 @@ class safeAirbnb(dml.Algorithm):
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('kzhang21_ryuc', 'kzhang21_ryuc')
+        repo.authenticate('kzhang21_ryuc_zui_sarms', 'kzhang21_ryuc_zui_sarms')
 
         #retrieve data sets
         airbnbData = pd.DataFrame(repo.kzhang21_ryuc.airbnb.find())
@@ -56,9 +56,9 @@ class safeAirbnb(dml.Algorithm):
         
         repo.dropCollection("safeAirbnb")
         repo.createCollection("safeAirbnb")
-        repo['kzhang21_ryuc.safeAirbnb'].insert_many(r)
-        repo['kzhang21_ryuc.safeAirbnb'].metadata({'complete':True})
-        print(repo['kzhang21_ryuc.safeAirbnb'].metadata())
+        repo['kzhang21_ryuc_zui_sarms.safeAirbnb'].insert_many(r)
+        repo['kzhang21_ryuc_zui_sarms.safeAirbnb'].metadata({'complete':True})
+        print(repo['kzhang21_ryuc_zui_sarms.safeAirbnb'].metadata())
 
         repo.logout()
 
@@ -77,7 +77,7 @@ class safeAirbnb(dml.Algorithm):
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('kzhang21_ryuc', 'kzhang21_ryuc')
+        repo.authenticate('kzhang21_ryuc_zui_sarms', 'kzhang21_ryuc_zui_sarms')
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/') # The scripts are in <folder>#<filename> format.
         doc.add_namespace('dat', 'http://datamechanics.io/data/') # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
@@ -90,8 +90,8 @@ class safeAirbnb(dml.Algorithm):
         doc.add_namespace('station',
                           'http://bostonopendata-boston.opendata.arcgis.com/datasets/e5a0066d38ac4e2abbc7918197a4f6af_6.csv')
 
-        this_script = doc.agent('alg:kzhang21_ryuc#safeairbnb', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        resource = doc.entity('dat:kzhang21_ryuc#airbnb', {'prov:label':'Airbnb, Location Search', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        this_script = doc.agent('alg:kzhang21_ryuc_zui_sarms#safeairbnb', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        resource = doc.entity('dat:kzhang21_ryuc_zui_sarms#airbnb', {'prov:label':'Airbnb, Location Search', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
         get_place = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(get_place, this_script)
         doc.usage(get_place, resource, startTime, None,
@@ -99,7 +99,7 @@ class safeAirbnb(dml.Algorithm):
                   }
                   )
 
-        safeairbnb = doc.entity('dat:kzhang21_ryuc#safeairbnb', {prov.model.PROV_LABEL:'Place Found', prov.model.PROV_TYPE:'ont:DataSet'})
+        safeairbnb = doc.entity('dat:kzhang21_ryuc_zui_sarms#safeairbnb', {prov.model.PROV_LABEL:'Place Found', prov.model.PROV_TYPE:'ont:DataSet'})
         doc.wasAttributedTo(safeairbnb, this_script)
         doc.wasGeneratedBy(safeairbnb, get_place, endTime)
         doc.wasDerivedFrom(safeairbnb, resource, get_place, get_place, get_place)

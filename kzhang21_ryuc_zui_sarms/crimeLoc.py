@@ -29,9 +29,9 @@ def aggregate(R, f):
 
 # transformation
 class crimeLoc(dml.Algorithm):
-    contributor = 'kzhang21_ryuc'
-    reads = ['kzhang21_ryuc.crime', 'kzhang21_ryuc.station']
-    writes = ['kzhang21_ryuc.crimeLoc']
+    contributor = 'kzhang21_ryuc_zui_sarms'
+    reads = ['kzhang21_ryuc_zui_sarms.crime', 'kzhang21_ryuc_zui_sarms.station']
+    writes = ['kzhang21_ryuc_zui_sarms.crimeLoc']
 
     @staticmethod
     def execute(trial=False):
@@ -41,7 +41,7 @@ class crimeLoc(dml.Algorithm):
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('kzhang21_ryuc', 'kzhang21_ryuc')
+        repo.authenticate('kzhang21_ryuc_zui_sarms', 'kzhang21_ryuc_zui_sarms')
 
         # retrieve data sets
         crimeData = pd.DataFrame(repo.kzhang21_ryuc.crime.find())
@@ -92,9 +92,9 @@ class crimeLoc(dml.Algorithm):
 
         repo.dropCollection("crimeLoc")
         repo.createCollection("crimeLoc")
-        repo['kzhang21_ryuc.crimeLoc'].insert_many(r)
-        repo['kzhang21_ryuc.crimeLoc'].metadata({'complete': True})
-        print(repo['kzhang21_ryuc.crimeLoc'].metadata())
+        repo['kzhang21_ryuc_zui_sarms.crimeLoc'].insert_many(r)
+        repo['kzhang21_ryuc_zui_sarms.crimeLoc'].metadata({'complete': True})
+        print(repo['kzhang21_ryuc_zui_sarms.crimeLoc'].metadata())
 
         repo.logout()
 
@@ -113,7 +113,7 @@ class crimeLoc(dml.Algorithm):
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('kzhang21_ryuc', 'kzhang21_ryuc')
+        repo.authenticate('kzhang21_ryuc_zui_sarms', 'kzhang21_ryuc_zui_sarms')
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')  # The scripts are in <folder>#<filename> format.
         doc.add_namespace('dat', 'http://datamechanics.io/data/')  # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont',
@@ -126,9 +126,9 @@ class crimeLoc(dml.Algorithm):
         doc.add_namespace('station',
                           'http://bostonopendata-boston.opendata.arcgis.com/datasets/e5a0066d38ac4e2abbc7918197a4f6af_6.csv')
 
-        this_script = doc.agent('alg:kzhang21_ryuc#crimeLoc',
+        this_script = doc.agent('alg:kzhang21_ryuc_zui_sarms#crimeLoc',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
-        resource = doc.entity('dat:kzhang21_ryuc#crime',
+        resource = doc.entity('dat:kzhang21_ryuc_zui_sarms#crime',
                               {'prov:label': 'Crime and Station Search', prov.model.PROV_TYPE: 'ont:DataResource',
                                'ont:Extension': 'json'})
         get_lit = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
@@ -138,7 +138,7 @@ class crimeLoc(dml.Algorithm):
                    }
                   )
 
-        crimeLoc = doc.entity('dat:kzhang21_ryuc#crimeLoc',
+        crimeLoc = doc.entity('dat:kzhang21_ryuc_zui_sarms#crimeLoc',
                               {prov.model.PROV_LABEL: 'Crime and Station Matching',
                                prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(crimeLoc, this_script)

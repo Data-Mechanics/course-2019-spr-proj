@@ -12,9 +12,9 @@ log = logging.getLogger(__name__)
 
 
 class interesting_spaces(dml.Algorithm):
-    contributor = 'zui_sarms'
-    reads = ['zui_sarms.landmarks', 'zui_sarms.parks']
-    writes = ['zui_sarms.interesting_spaces']
+    contributor = 'kzhang21_ryuc_zui_sarms'
+    reads = ['kzhang21_ryuc_zui_sarms.landmarks', 'kzhang21_ryuc_zui_sarms.parks']
+    writes = ['kzhang21_ryuc_zui_sarms.interesting_spaces']
 
     @staticmethod
     def execute(trial=False):
@@ -23,10 +23,10 @@ class interesting_spaces(dml.Algorithm):
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('zui_sarms', 'zui_sarms')
+        repo.authenticate('kzhang21_ryuc_zui_sarms', 'kzhang21_ryuc_zui_sarms')
 
-        parks = repo['zui_sarms.parks']
-        landmarks = repo['zui_sarms.landmarks']
+        parks = repo['kzhang21_ryuc_zui_sarms.parks']
+        landmarks = repo['kzhang21_ryuc_zui_sarms.landmarks']
 
         df_parks = pd.DataFrame(list(parks.find()))
 
@@ -56,9 +56,9 @@ class interesting_spaces(dml.Algorithm):
 
         repo.dropCollection("interesting_spaces")
         repo.createCollection("interesting_spaces")
-        repo['zui_sarms.interesting_spaces'].insert_many(final_df.to_dict(orient='records'))
-        repo['zui_sarms.interesting_spaces'].metadata({'complete': True})
-        print(repo['zui_sarms.interesting_spaces'].metadata())
+        repo['kzhang21_ryuc_zui_sarms.interesting_spaces'].insert_many(final_df.to_dict(orient='records'))
+        repo['kzhang21_ryuc_zui_sarms.interesting_spaces'].metadata({'complete': True})
+        print(repo['kzhang21_ryuc_zui_sarms.interesting_spaces'].metadata())
 
         repo.logout()
 
@@ -75,12 +75,12 @@ class interesting_spaces(dml.Algorithm):
         doc.add_namespace('log', 'http://datamechanics.io/log/')  # The event log.
         doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
 
-        this_script = doc.agent('alg:zui_sarms#interesting_spaces',
+        this_script = doc.agent('alg:kzhang21_ryuc_zui_sarms#interesting_spaces',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
-        landmarks = doc.entity('dat:zui_sarms#landmarks',
+        landmarks = doc.entity('dat:kzhang21_ryuc_zui_sarms#landmarks',
                                {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource',
                                 'ont:Extension': 'json'})
-        parks = doc.entity('dat:zui_sarms#parks',
+        parks = doc.entity('dat:kzhang21_ryuc_zui_sarms#parks',
                            {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource',
                             'ont:Extension': 'json'})
         merge = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
@@ -88,7 +88,7 @@ class interesting_spaces(dml.Algorithm):
         doc.usage(merge, parks, startTime, None, {prov.model.PROV_TYPE: 'ont:Retrieval'})
         doc.usage(merge, landmarks, startTime, None, {prov.model.PROV_TYPE: 'ont:Retrieval'})
 
-        interesting_spaces = doc.entity('dat:zui_sarms#interesting_spaces',
+        interesting_spaces = doc.entity('dat:kzhang21_ryuc_zui_sarms#interesting_spaces',
                                         {prov.model.PROV_LABEL: 'Interesting Spaces',
                                          prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(interesting_spaces, this_script)

@@ -8,9 +8,9 @@ import pandas as pd
 from ast import literal_eval as make_tuple
 
 class food(dml.Algorithm):
-    contributor = 'kzhang21_ryuc'
+    contributor = 'kzhang21_ryuc_zui_sarms'
     reads = []
-    writes = ['kzhang21_ryuc.food']
+    writes = ['kzhang21_ryuc_zui_sarms.food']
 
     @staticmethod
     def execute(trial = False):
@@ -20,7 +20,7 @@ class food(dml.Algorithm):
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('kzhang21_ryuc', 'kzhang21_ryuc')
+        repo.authenticate('kzhang21_ryuc_zui_sarms', 'kzhang21_ryuc_zui_sarms')
 
         #analyze boston food businesses data set
         #read in csv file
@@ -48,9 +48,9 @@ class food(dml.Algorithm):
 
         repo.dropCollection("food")
         repo.createCollection("food")
-        repo['kzhang21_ryuc.food'].insert_many(r)
-        repo['kzhang21_ryuc.food'].metadata({'complete':True})
-        print(repo['kzhang21_ryuc.food'].metadata())
+        repo['kzhang21_ryuc_zui_sarms.food'].insert_many(r)
+        repo['kzhang21_ryuc_zui_sarms.food'].metadata({'complete':True})
+        print(repo['kzhang21_ryuc_zui_sarms.food'].metadata())
         repo.logout()
 
         endTime = datetime.datetime.now()
@@ -68,7 +68,7 @@ class food(dml.Algorithm):
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('kzhang21_ryuc', 'kzhang21_ryuc')
+        repo.authenticate('kzhang21_ryuc_zui_sarms', 'kzhang21_ryuc_zui_sarms')
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/') # The scripts are in <folder>#<filename> format.
         doc.add_namespace('dat', 'http://datamechanics.io/data/') # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
@@ -77,13 +77,13 @@ class food(dml.Algorithm):
         #additional resource
         doc.add_namespace('food', 'https://data.boston.gov/dataset/')
 
-        this_script = doc.agent('alg:kzhang21_ryuc#food', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        this_script = doc.agent('alg:kzhang21_ryuc_zui_sarms#food', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
         resource = doc.entity('food:03693648-2c62-4a2c-a4ec-48de2ee14e18/resource/4582bec6-2b4f-4f9e-bc55-cbaa73117f4c/download/tmper3diw4s.csv', {'prov:label':'Food, Food Search', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
         get_place = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(get_place, this_script)
         doc.usage(get_place, resource, startTime, None,{prov.model.PROV_TYPE:'ont:Retrieval'})
 
-        food = doc.entity('dat:kzhang21_ryuc#food', {prov.model.PROV_LABEL:'Food Found', prov.model.PROV_TYPE:'ont:DataSet'})
+        food = doc.entity('dat:kzhang21_ryuc_zui_sarms#food', {prov.model.PROV_LABEL:'Food Found', prov.model.PROV_TYPE:'ont:DataSet'})
         doc.wasAttributedTo(food, this_script)
         doc.wasGeneratedBy(food, get_place, endTime)
         doc.wasDerivedFrom(food, resource, get_place, get_place, get_place)

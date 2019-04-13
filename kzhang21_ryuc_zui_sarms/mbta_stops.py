@@ -7,9 +7,9 @@ import uuid
 import requests
 
 class mbta_stops(dml.Algorithm):
-    contributor = 'zui_sarms'
+    contributor = 'kzhang21_ryuc_zui_sarms'
     reads = []
-    writes = ['zui_sarms.mbta_stops']
+    writes = ['kzhang21_ryuc_zui_sarms.mbta_stops']
 
     @staticmethod
     def execute(trial=False):
@@ -18,7 +18,7 @@ class mbta_stops(dml.Algorithm):
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('zui_sarms', 'zui_sarms')
+        repo.authenticate('kzhang21_ryuc_zui_sarms', 'kzhang21_ryuc_zui_sarms')
 
         url = 'https://api-v3.mbta.com/stops'
         response = requests.request('GET', url)
@@ -26,9 +26,9 @@ class mbta_stops(dml.Algorithm):
         s = json.dumps(r, sort_keys=True, indent=2)
         repo.dropCollection("mbta_stops")
         repo.createCollection("mbta_stops")
-        repo['zui_sarms.mbta_stops'].insert_many(r["data"])
-        repo['zui_sarms.mbta_stops'].metadata({'complete':True})
-        print(repo['zui_sarms.mbta_stops'].metadata())
+        repo['kzhang21_ryuc_zui_sarms.mbta_stops'].insert_many(r["data"])
+        repo['kzhang21_ryuc_zui_sarms.mbta_stops'].metadata({'complete':True})
+        print(repo['kzhang21_ryuc_zui_sarms.mbta_stops'].metadata())
 
         repo.logout()
 
@@ -41,14 +41,14 @@ class mbta_stops(dml.Algorithm):
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('zui_sarms', 'zui_sarms')
+        repo.authenticate('kzhang21_ryuc_zui_sarms', 'kzhang21_ryuc_zui_sarms')
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')  # The scripts are in <folder>#<filename> format.
         doc.add_namespace('dat', 'http://datamechanics.io/data/')  # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/')  # The event log.
         doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
 
-        this_script = doc.agent('alg:zui_sarms#mbta_stops', {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
+        this_script = doc.agent('alg:kzhang21_ryuc_zui_sarms#mbta_stops', {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
         resource = doc.entity('bdp:MBTA BOSTON', {'prov:label': '200, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource',
                                'ont:Extension': 'json'})
         get_stops = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
@@ -58,7 +58,7 @@ class mbta_stops(dml.Algorithm):
                    }
                   )
 
-        mbta_stops = doc.entity('dat:zui_sarms#mbta_stops', {prov.model.PROV_LABEL: 'MBTA Stops', prov.model.PROV_TYPE: 'ont:DataSet'})
+        mbta_stops = doc.entity('dat:kzhang21_ryuc_zui_sarms#mbta_stops', {prov.model.PROV_LABEL: 'MBTA Stops', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(mbta_stops, this_script)
         doc.wasGeneratedBy(mbta_stops, get_stops, endTime)
         doc.wasDerivedFrom(mbta_stops, resource, get_stops, get_stops, get_stops)
