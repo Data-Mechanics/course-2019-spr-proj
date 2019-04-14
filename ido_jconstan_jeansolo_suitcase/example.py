@@ -189,10 +189,13 @@ class example(dml.Algorithm):
         #print(t13school[0])
         t13 = project(t14, lambda t: (t[0][0], t[1][1], t[1][2], t[0][1]))
 
+        t15 = []
         for i in range(0, len(t13)-1):
-            t13[i] = t13[i][0] + ", " + t13[i+1][1] + ", " + t13[i+1][2]
+            #t15[i][0] = t13[i][0] + ", " + t13[i+1][1] + ", " + t13[i+1][2]
+            t15.append(((t13[i][0] + ", " + t13[i+1][1] + ", " + t13[i+1][2]), (t13[i][3])))
+            #t13[i][1] = t13[
         
-        #t13[0] = t13[0][0] + ", " + t13[1][1] + ", " + t13[1][2]
+        #t13[0] = t13[0][0] + ", " + t13[1][1] + ", " + t13[    1][2]
         #print(t13[0])
         tg = "15 West Street, Natick, MA"
         #print(tg)
@@ -204,7 +207,9 @@ class example(dml.Algorithm):
         #wilson middle school
         #
         
-        tWL = select(t13, lambda t: (t[0][0][1] == "Wilson Middle School"))
+        print("t15[0]:",t15[0])
+        print(t15[0][1] == 'Wilson Middle School')
+        tWL = select(t15, lambda t: t[1] == 'Wilson Middle School')
         print("tWL[0]", tWL) 
         #tNHS = select(t13, lambda t: (t[0][1] == "Natick High School"))
         
