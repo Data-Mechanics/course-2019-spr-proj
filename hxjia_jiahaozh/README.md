@@ -44,9 +44,9 @@ Generated from Boston Airbnb Calendar and US_Holidays
 <br />Combination: Product + Project to get the mean price for each date and whether the date is a holiday, in the form of (date, avg_price, holiday)
 ### Prices_Landmarks_Listings
 Generated from Boston Airbnb Listings and Boston Landmarks
-<br />Boston Airbnb Listing: Select, Project  Aggregate to get (neighbourhood, the number of houses in that neighbourhood), Select, Project and Aggregate to get (neighbourhood, the mean price of houses in that neighbourhood)
+<br />Boston Airbnb Listing: Select, Project  Aggregate to get (neighbourhood, the number of houses in that neighbourhood), Select, Project and Aggregate to get (neighbourhood, the mean price of houses in that neighbourhood).
 <br />Boston Landmarks: Select, Project and Aggregate to get (neighbourhood, the number of landmarks in that neighbourhood)
-<br />Combiantion: Project to get (id, mean price, review scores, review numbers, longitude, latitude)
+<br />Combiantion: project to get  (neighbourhood, the number of landmarks,  the number of houses, the mean prices of houses in that neighbourhood)
 ## Tools and Libraries
 Pandas
 <br />dml
@@ -60,11 +60,7 @@ Pandas
 ## Narrative
 The idea of this project is to find the best way to categorize the airbnb houses based on reviews and prices. Then by ploting them in different colors on googlemap, we tries to find the relationship of geolocation and each category. In the project, we first calculated the correlation coefficient of price and review scores to find if these two are independent enough to do k-means. Then by analysing the Within-Cluster-Sum-of-Squares(WCSS) graph we finds out the best k value for clustering. Finally, we plotted each cluster on googlemap using different colors to discover the relation between the prices and geolocation. 
 ## Data Transformation
-Generated from Boston Airbnb Listings and Boston Airbnb Calendar
-<br />Boston Airbnb Calendar: Select, Project and Aggregate to get (id, mean price of all dates of the year)
-<br />Boston Airbnb Listing: Select, Project to get (id, review scores, review numbers, longitude, latitude)
-<br />Combiantion: Select, Project to get  (neighbourhood, the number of landmarks,  the number of houses, the mean prices of houses in that neighbourhood)
-
+We generated a new dataset of (id, mean price, review score, review numbers, longitude, latitude) from Boston Airbnb Calendar and Boston Airbnb Listings dataset.
 ## Statistical Analysis
 This part is implemented in KMEANS.py
 <br />We calculated the correlation coefficient of price and review score and the correlation coefficient of price and review number to find out which two is more independent.
@@ -72,4 +68,10 @@ This part is implemented in KMEANS.py
 ## Optimization
 This part is also implemented in KMEANS.py
 <br />We calculated the Within-Cluster-Sum-of-Squares(WCSS) for k-means, finding the best k value is 4, so we did a 4-means and plotted each cluster onto googlemap to reveal the relationship between each cluster and their geolocation.
+
+
+
+
+
+![image](http://github.com/jiahaozh/course-2019-spr-proj/hxjia_jiahaozh/Experimental_Results/Classified_Map.png)
 
