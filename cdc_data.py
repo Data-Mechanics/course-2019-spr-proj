@@ -9,9 +9,33 @@ from tqdm import tqdm
 
 # import dml
 # import pymongo
+def geojson_to_polygon(geom):
+    """
 
+    :return: list of shapely polygons corresponding to the geojson object
+    """
+    polys = []
+    if geom['type'] == 'Polygon':
+        shape = []
+        coords = geom['coordinates']
+        for i in coords[0]:
+            shape.append((i[0], i[1]))
+        polys.append(Polygon(shape))
+    if geom['type'] == 'MultiPolygon':
+        coords = geom['coordinates']
+        for i in coords:
+            shape = []
+            for j in i:
+                for k in j:
+                    # need to change list type to tuple so that shapely can read it
+                    shape.append((k[0], k[1]))
+            poly = Polygon(shape)
+            polys.append(poly)
+    return polys
 
 class health:  # (dml.Algorithm):
+
+
 
     @staticmethod
     def execute(trial=False):
@@ -32,24 +56,7 @@ class health:  # (dml.Algorithm):
         list_of_tracks = []
         census_tracks = r  # repo.gasparde_ljmcgann.health
         for geom in census_tracks:
-            polys = []
-            if geom['type'] == 'Polygon':
-                shape = []
-                coords = geom['coordinates']
-                for i in coords[0]:
-                    shape.append((i[0], i[1]))
-                polys.append(Polygon(shape))
-            if geom['type'] == 'MultiPolygon':
-                coords = geom['coordinates']
-                for i in coords:
-                    shape = []
-                    for j in i:
-                        for k in j:
-                            # need to change list type to tuple so that shapely can read it
-                            shape.append((k[0], k[1]))
-                    poly = Polygon(shape)
-                    polys.append(poly)
-
+            polys = geojson_to_polygon(geom)
             list_of_tracks.append({"Shape": polys, "Census Tract": geom["Census Tract"]})
         # print(list_of_tracks)
 
@@ -90,26 +97,9 @@ class health:  # (dml.Algorithm):
         list_of_neighborhoods = []
         for neighborhood in neighborhoods:
             geom = neighborhood['geometry']
-            polys = []
-            if geom['type'] == 'Polygon':
-                shape = []
-                coords = geom['coordinates']
-                for i in coords[0]:
-                    shape.append((i[0], i[1]))
-                polys.append(Polygon(shape))
-            if geom['type'] == 'MultiPolygon':
-                coords = geom['coordinates']
-                for i in coords:
-                    shape = []
-                    for j in i:
-                        for k in j:
-                            # need to change list type to tuple so that shapely can read it
-                            shape.append((k[0], k[1]))
-                    poly = Polygon(shape)
-                    polys.append(poly)
-
+            polys = geojson_to_polygon(geom)
             list_of_neighborhoods.append({'neighborhood': neighborhood['properties']['Name'], "Shape": polys})
-        # print(list_of_neighborhoods)
+        print(list_of_neighborhoods)
 
         ################################################################################################################
         ################################################################################################################
@@ -143,16 +133,6 @@ class health:  # (dml.Algorithm):
         print(len(list_of_answer))
         print("{}  out of {} census tracks where put in neighborhoods which is {:.2}% !".format(success, total,
                                                                                                 success / total))
-
-        # To find what tracts are missing
-        for neighborhood in list_of_answer.keys():
-            print(neighborhood)
-            for tract in list_of_answer[neighborhood][0]:
-                print(tract["Census Tract"])
-        print("Unfound Tracts")
-        for tract in list_of_tracks:
-            if tract["Census Tract"] not in found_tracts:
-                print(tract["Census Tract"])
         ################################################################################################################
         ################################################################################################################
         ################################################################################################################
@@ -166,33 +146,26 @@ class health:  # (dml.Algorithm):
         l = json.loads(response.decode('utf-8'))
         parcels = []
         l_features = l["features"]
+        # parcel becomes list of parcels where each data entry is a dictionary
+        # where the first key is the PID of the parcel and the second is the shapely
+        # object
         for row in l_features:
             geom = row["geometry"]
-            polys = []
-            if geom['type'] == 'Polygon':
-                shape = []
-                coords = geom['coordinates']
-                for i in coords[0]:
-                    shape.append((i[0], i[1]))
-                polys.append(Polygon(shape))
-            if geom['type'] == 'MultiPolygon':
-                coords = geom['coordinates']
-                for i in coords:
-                    shape = []
-                    for j in i:
-                        for k in j:
-                            # need to change list type to tuple so that shapely can read it
-                            shape.append((k[0], k[1]))
-                    poly = Polygon(shape)
-                    polys.append(poly)
+            polys = geojson_to_polygon(geom)
             parcels.append({"PID": row["properties"]["PID_LONG"], "Shape": polys})
+
         print("Number of Parcels: ", len(parcels))
 
+        # dict assessments is a dictionary where each key is the PID of a parcel
+        # and the value is a dictionary with keys AV_Total which is the value
+        # of the parcel and PID Type which is the type of the parcel
         with open("dict_assessments.json",'r') as f:
             dict_assessments = json.loads(f.read())
         combined = []
+        # combined is now a list of dictionaries where we append to
+        # each dictionary in parcel which census tract these parcels
+        # are in
         for parcel in tqdm(parcels):
-            # print(parcel["Shape"])
             for tract in boston_cdc:
                 for shape in tract["Shape"]:
                     if shape.contains(parcel["Shape"][0]):
@@ -200,10 +173,6 @@ class health:  # (dml.Algorithm):
                         break
 
         parcel_neighborhood_track = []
-        neighborhood_seperated_parcels = {}
-        for neighborhood in neighborhoods:
-            neighborhood_seperated_parcels[neighborhood['properties']['Name']] = []
-
 
         for parcel in combined:
             for neighborhood in list_of_neighborhoods:
@@ -215,7 +184,9 @@ class health:  # (dml.Algorithm):
                         break
                 if found:
                     break
-        print(combined)
+        #print(combined)
+        # final combines the parcels now lying in a neighborhood with the parcel's
+        # assessment value as well as its type found in dict assessments
         final = []
         for parcel in parcel_neighborhood_track:
             try:
@@ -225,10 +196,22 @@ class health:  # (dml.Algorithm):
 
         print("Number after Combination: ", len(combined))
         print("Number of Parcels after putting in Neighborhoods: ", len(final))
-        for parcel in final:
+        neighborhood_seperated_parcels = {}
+        # create dictionary where each key is neighborhood
+        # and each value is a list of the parcels that
+        # lie in each neighborhood
+        for neighborhood in neighborhoods:
+            neighborhood_seperated_parcels[neighborhood['properties']['Name']] = []
+
+        # remove property with 0 value
+        final_clean = [i for i in final if i["AV_TOTAL"] != "0"]
+        print(final_clean)
+        for parcel in final_clean:
             nhood = parcel.pop("Neighborhood")
             neighborhood_seperated_parcels[nhood].append(parcel)
-        print(final)
+        print(neighborhood_seperated_parcels)
+
+        # dump into pickle file as haven't put this into database yet
         with open("combined.pickle", 'wb') as f:
             f.write(pickle.dumps(neighborhood_seperated_parcels))
 

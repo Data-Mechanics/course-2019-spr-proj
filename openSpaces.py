@@ -2,8 +2,39 @@ import urllib.request
 import json
 from shapely.geometry import Point, Polygon
 import pickle
+from math import *
 from tqdm import tqdm
+from rtree import index
 
+
+def haversine(point1, point2):
+    lon1 = point1[1]
+    lon2 = point2[1]
+    lat1 = point1[0]
+    lat2 = point2[0]
+
+    # convert decimal degrees to radians
+    lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
+    # haversine formula
+    dlon = lon2 - lon1
+
+    dlat = lat2 - lat1
+    a = sin(dlat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dlon / 2) ** 2
+    c = 2 * asin(min(1,sqrt(a)))
+    r = 6371  # Radius of earth in kilometers. Use 3956 for miles
+
+    return c * r
+def geo_distance(point, poly2):
+    min_distance = 1000
+    for other_point in list(poly2.exterior.coords):
+        min_distance = min(min_distance, haversine((point.x,point.y), other_point))
+    return min_distance
+
+def score(neighborhood):
+    score = 0
+    for i in neighborhood:
+        score += i["min_distance"]
+    return score
 # open spaces in boston
 url = "http://bostonopendata-boston.opendata.arcgis.com/datasets/2868d370c55d4d458d4ae2224ef8cddd_7.geojson"
 response = json.loads(urllib.request.urlopen(url).read())
@@ -90,12 +121,50 @@ with open("combined.pickle", "rb") as f:
 print(len(parcels["Allston"]))
 print(len(open_spaces_by_neighborhoods["Allston"]))
 parcels_with_min = {}
+largest_distance = 0
 for neighborhood in list_of_neighborhoods:
     parcels_with_min[neighborhood['neighborhood']] =[]
 for parcel in tqdm(parcels["Allston"]):
     min_distance = 100
+    min_object = None
+    space_name = None
     for open_space in open_spaces_by_neighborhoods["Allston"]:
         for shape in open_space["Shape"]:
-            min_distance = min(min_distance, parcel["Shape"][0].distance(shape))
-    parcels_with_min["Allston"].append({**parcel, "min_distance" : min_distance})
+            dis = parcel["Shape"][0].distance(shape)
+            if (min_distance > dis):
+                min_distance = dis
+                min_object = shape
+                space_name = open_space["OBJECTID"]
+    min_distance_km = geo_distance(parcel["Shape"][0].centroid, min_object)
+    largest_distance = max(largest_distance, min_distance)
+    parcels_with_min["Allston"].append({**parcel, "min_distance" : min_distance,"nearest_open_space": space_name,"min_distance_km":min_distance_km})
 print(parcels_with_min["Allston"])
+score = score(parcels_with_min["Allston"])
+
+index = index.Index()
+for i in range(len(parcels["Allston"])):
+    index.insert(i, parcels["Allston"][i]["Shape"][0].bounds)
+def improvement_scores(input, index):
+    parcels_with_improvement_scores = []
+    for parcel in tqdm(input):
+        score_improvement = 0
+        new_park = parcel["Shape"][0].bounds
+        for other_parcel in [j for j in index.nearest(new_park, 1000)]:
+            shapely_distance = input[other_parcel]["Shape"][0].distance(parcel["Shape"][0])
+            if shapely_distance < input[other_parcel]["min_distance"]:
+                new_dist = geo_distance(input[other_parcel]["Shape"][0].centroid, parcel["Shape"][0])
+                if (input[other_parcel]["min_distance_km"] - new_dist) > 0:
+                    score_improvement += input[other_parcel]["min_distance_km"] - new_dist
+            else:
+                print("no improvement")
+        parcels_with_improvement_scores.append({**parcel, "improvement":score_improvement})
+
+    return parcels_with_improvement_scores
+
+parcels_with_improvement_scores = improvement_scores(parcels_with_min["Allston"], index)
+
+print(parcels_with_improvement_scores)
+sum_improvement_scores = 0
+for parcel in parcels_with_improvement_scores:
+    sum_improvement_scores += parcel["improvement"]
+print(sum_improvement_scores)

@@ -2,117 +2,113 @@ import urllib.request
 import json
 from shapely.geometry import Polygon
 
-# parcel geojson data
-url = "http://bostonopendata-boston.opendata.arcgis.com/datasets/b7739e6673104c048f5e2f28bb9b2281_0.geojson"
+import urllib.request
+import json
+import dml
+import prov.model
+import datetime
+import csv
+import codecs
+import uuid
 
-response = urllib.request.urlopen(url).read()
+class getData(dml.Algorithm):
+    contributor = 'gasparde_ljmcgann_tlux'
+    reads = []
+    writes = [contributor + ".CensusTractShape"]
 
-l = json.loads(response.decode('utf-8'))
-parcels = []
-l_features = l["features"]
-for row in l_features:
-    geom = row["geometry"]
-    polys = []
-    if geom['type'] == 'Polygon':
-        shape = []
-        coords = geom['coordinates']
-        for i in coords[0]:
-            shape.append((i[0], i[1]))
-        polys.append(Polygon(shape))
-    if geom['type'] == 'MultiPolygon':
-        coords = geom['coordinates']
-        for i in coords:
-            shape = []
-            for j in i:
-                for k in j:
-                    # need to change list type to tuple so that shapely can read it
-                    shape.append((k[0], k[1]))
-            poly = Polygon(shape)
-            polys.append(poly)
-    parcels.append({"PID":row["properties"]["PID_LONG"], "Shape":polys})
-# print(parcels)
-#
-#
-# # property assessment data
-# url1 = "https://data.boston.gov/datastore/odata3.0/fd351943-c2c6-4630-992d-3f895360febd?$format=json"
-# response = urllib.request.urlopen(url1).read()
-# g = json.loads(response)
-# g = g['value']
+    @staticmethod
+    def execute(trial=False):
+        '''Retrieve some data sets '''
+        startTime = datetime.datetime.now()
 
-# census track data
-url2 = "http://datamechanics.io/data/gasparde_ljmcgann_tlux/boston_census_track.json"
-response = urllib.request.urlopen(url2).read()
-d = json.loads(response)
+        # Set up the database connection.
+        name = "gasparde_ljmcgann_tlux"
+        client = dml.pymongo.MongoClient()
+        repo = client.repo
+        repo.authenticate(getData.contributor, getData.contributor)
 
-shapes = []
-p = []
+        ######################################################
 
+        # census tract ids with their associated geojson shape
+        url = 'http://datamechanics.io/data/gasparde_ljmcgann_tlux/boston_census_track.json'
+        response = urllib.request.urlopen(url).read().decode("utf-8")
+        censusTract = json.loads(response)
+        repo.dropCollection(getData.contributor + ".CensusTractShape")
+        repo.createCollection(getData.contributor + ".CensusTractShape")
+        repo[getData.contributor + ".CensusTractShape"].insert_many(censusTract)
+        repo[getData.contributor + ".CensusTractShape"].metadata({'complete':True})
 
-for geom in d:
-    polys = []
-    if geom['type'] == 'Polygon':
-        shape = []
-        coords = geom['coordinates']
-        for i in coords[0]:
-            shape.append((i[0], i[1]))
-        polys.append(Polygon(shape))
-    if geom['type'] == 'MultiPolygon':
-        coords = geom['coordinates']
-        for i in coords:
-            shape = []
-            for j in i:
-                for k in j:
-                    # need to change list type to tuple so that shapely can read it
-                    shape.append((k[0], k[1]))
-            poly = Polygon(shape)
-            polys.append(poly)
+        #######################################################
 
-    shapes.append({"Shape":polys, "Census Tract":geom["Census Tract"]})
-print(len(shapes))
-url = 'https://chronicdata.cdc.gov/resource/47z2-4wuh.json?placename=Boston'
-response = urllib.request.urlopen(url).read().decode("utf-8")
-r = json.loads(response)
-s = json.dumps(r, sort_keys=True, indent=2)
-boston_cdc = []
-for data in r:
-    for tract in shapes:
+        # CDC data of various health metrics within each census tract
+        url = 'https://chronicdata.cdc.gov/resource/47z2-4wuh.json?placename=Boston'
+        response = urllib.request.urlopen(url).read().decode("utf-8")
+        cdcData = json.loads(response)
+        # only want to keep these three statistics
+        for i in range(len(cdcData)):
+            d = {"obesity": cdcData[i]["obesity_crudeprev"],
+                 "low_phys": cdcData[i]["lpa_crudeprev"],
+                 "asthma": cdcData[i]["casthma_crudeprev"]}
+            cdcData[i] = d
+        repo.dropCollection(getData.contributor + ".CensusTractHealth")
+        repo.createCollection(getData.contributor + ".CensusTractHealth")
+        repo[getData.contributor + ".CensusTractHealth"].insert_many(cdcData)
+        repo[getData.contributor + ".CensusTractHealth"].metadata({'complete': True})
 
-        if data["tractfips"] == tract["Census Tract"]:
-            d = {"obesity":data["obesity_crudeprev"], "low_phys":data["lpa_crudeprev"],
-                 "asthma":data["casthma_crudeprev"]}
-            combined = {**tract, **d}
+        #########################################################
 
-            boston_cdc.append(combined)
-            break
-combined = []
+        # Boston neighborhoods and there associated geojson shapes
+        url = 'http://bostonopendata-boston.opendata.arcgis.com/datasets/3525b0ee6e6b427f9aab5d0a1d0a1a28_0.geojson'
+        response = urllib.request.urlopen(url).read().decode("utf-8")
+        neighborhoods = json.loads(response)
+        repo.dropCollection(getData.contributor + ".Neighborhoods")
+        repo.createCollection(getData.contributor + ".Neighborhoods")
+        repo[getData.contributor + ".Neighborhoods"].insert_many(neighborhoods["features"])
+        repo[getData.contributor + ".Neighborhoods"].metadata({'complete': True})
 
-print(boston_cdc)
+        ##########################################################
 
-for parcel in parcels:
-    #print(parcel["Shape"])
-    for tract in boston_cdc:
-        for shape in tract["Shape"]:
-            if shape.contains(parcel["Shape"][0]):
-                combined.append({**parcel, "Census Track":tract["Census Tract"]})
-                break
-#print(combined)
-#print(len(combined))
-#print(len(parcels))
-# shapes_tracts = []
-# boston_cdc_tracts = []
-# for i in shapes:
-#     shapes_tracts.append(i["Census Tract"])
-# for i in boston_cdc:
-#     boston_cdc_tracts.append(i["Census Tract"])
-# for i in shapes_tracts:
-#     if i not in boston_cdc_tracts:
-#         print(i)
+        # Parcels with their assessment value and type
+        # All_Assessments = []
+        # for i in range(9):
+        #     # need to iterate because we api request only brings max 20000 parcels
+        #     skip = 20000 * (i)
+        #     url1 = "https://data.boston.gov/datastore/odata3.0/fd351943-c2c6-4630-992d-3f895360febd?$top=20000&$format=json&$skip=" + str(
+        #         skip)
+        #     response = urllib.request.urlopen(url1).read()
+        #     Assessment = json.loads(response)
+        #     Assessment = Assessment['value']
+        #     All_Assessments += Assessment
+        # ids = set()
+        # unique_pid =[]
+        # # this loop is to remove duplicates that allow for us to insert into mongo
+        # for assess in All_Assessments:
+        #     if assess["PID"] not in ids:
+        #         ids.add(assess["PID"])
+        #         unique_pid.append({"_id":assess["PID"], "AV_TOTAL": assess["AV_TOTAL"], "PTYPE": assess["PTYPE"]})
+        #
+        # print(unique_pid)
+        # repo.dropCollection(getData.contributor + ".ParcelAssessments")
+        # repo.createCollection(getData.contributor + ".ParcelAssessments")
+        # # need to do this because dataset was too large to do
+        # repo[getData.contributor + ".ParcelAssessments"].insert_many(unique_pid)
+        #
+        # repo[getData.contributor + ".ParcelAssessments"].metadata({'complete': True})
 
+        ##########################################################
 
-# client = dml.pymongo.MongoClient()
-# repo = client.repo
-# repo.authenticate('tlux', 'tlux')
-# repo.dropCollection("test")
-# repo.createCollection("test")
-# repo['tlux.test'].insert_many(l['features'])
-# repo['tlux.test'].metadata({'complete': True})
+        # parcel geojson data
+        url = "http://bostonopendata-boston.opendata.arcgis.com/datasets/b7739e6673104c048f5e2f28bb9b2281_0.geojson"
+
+        response = urllib.request.urlopen(url).read()
+
+        parcelGeo = json.loads(response.decode('utf-8'))["features"]
+        repo.dropCollection(getData.contributor + ".ParcelGeo")
+        repo.createCollection(getData.contributor + ".ParcelGeo")
+        repo[getData.contributor + ".ParcelGeo"].insert_many(parcelGeo)
+        repo[getData.contributor + ".ParcelGeo"].metadata({'complete': True})
+
+    @staticmethod
+    def provenance():
+        return 0
+getData.execute()
