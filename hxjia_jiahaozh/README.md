@@ -58,11 +58,11 @@ Pandas
 
 # CS504 Data-Mechanics Project 2
 ## Narrative
-The idea of this project is to find the best way to categorize the airbnb houses based on reviews and prices. Then by ploting them in different colors on googlemap, we tries to find the relationship of geolocation and each category. In the project, we first calculated the correlation coefficient of price and review scores to find if these two are independent enough to do k-means. Then by analysing the Within-Cluster-Sum-of-Squares(WCSS) graph we finds out the best k value for clustering. Finally, we plotted each cluster on googlemap using different colors to discover the relation between the prices and geolocation. 
+The idea of this project was to find the best way to categorize the airbnb houses based on reviews and prices. Figure 1 and Figure 2 show the basic housing distribution on Google map and the corresponding heatmap to show the housing density in areas. In the project, we first calculated the correlation coefficient of price and review scores to find if they two are independent enough to do k-means. Then by analysing the Within-Cluster-Sum-of-Squares(WCSS) graph we found out the best k value for clustering. Finally, we plotted each cluster on googlemap using different colors to discover the relation between the prices and geolocation. 
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Housing_Scatter_Map.png" />
+<center>Figure 1</center>
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Housing_Heap_Map.png" />
 ## Data Transformation
-This part was implemented in id_month_price_score_lat_long.py
 Generated from Boston Airbnb Listings and Boston Airbnb Calendar 
 <br />Boston Airbnb Calendar: Select, Project and Aggregate to get (id, mean price of all dates of the year) 
 <br />Boston Airbnb Listing: Select, Project to get (id, review scores, the number of reviews, longitude, latitude) 
@@ -73,8 +73,6 @@ This part was implemented in KMEANS.py
 
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Review_Score_Distribution.png" />
 <br />We calculated the correlation coefficient of price and review score and the correlation coefficient of price and review number to find out which two is more independent.
-<br />Price and Review Score: 0.1172
-<br />Price and Review Number: -0.1565
 <br />The result shows that review number is slightly more correlated with price than review score, thus we used price and review score as variables in the next step.
 
 ## Optimization
