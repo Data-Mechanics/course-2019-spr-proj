@@ -59,21 +59,29 @@ Pandas
 # CS504 Data-Mechanics Project 2
 ## Narrative
 The idea of this project is to find the best way to categorize the airbnb houses based on reviews and prices. Then by ploting them in different colors on googlemap, we tries to find the relationship of geolocation and each category. In the project, we first calculated the correlation coefficient of price and review scores to find if these two are independent enough to do k-means. Then by analysing the Within-Cluster-Sum-of-Squares(WCSS) graph we finds out the best k value for clustering. Finally, we plotted each cluster on googlemap using different colors to discover the relation between the prices and geolocation. 
+<img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Housing_Scatter_Map.png" />
+<img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Housing_Heat_Map.png" />
 ## Data Transformation
 Generated from Boston Airbnb Listings and Boston Airbnb Calendar 
 <br />Boston Airbnb Calendar: Select, Project and Aggregate to get (id, mean price of all dates of the year) 
 <br />Boston Airbnb Listing: Select, Project to get (id, review scores, the number of reviews, longitude, latitude) 
 <br />Combination: Select, Project to get (id, mean price, review scores, the number of reviews, longitude, latitude)
 ## Statistical Analysis
-This part is implemented in KMEANS.py
+This part was implemented in KMEANS.py
+<img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Price_Distribution.png" />
+
+<img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Review_Score_Distribution.png" />
 <br />We calculated the correlation coefficient of price and review score and the correlation coefficient of price and review number to find out which two is more independent.
 <br />The result shows that review number is slightly more correlated with price than review score, thus we used price and review score as variables in the next step.
 ## Optimization
-This part is also implemented in KMEANS.py
+This part was also implemented in KMEANS.py
 <br />We calculated the Within-Cluster-Sum-of-Squares(WCSS) for k-means, finding the best k value is 4, so we did a 4-means and plotted each cluster onto googlemap to reveal the relationship between each cluster and their geolocation.
 
+<img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/K_WCSS.png" />
 
-
-
+<img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Kmeans_Result.png" />
 
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Classified_Map.png" />
+
+
+
