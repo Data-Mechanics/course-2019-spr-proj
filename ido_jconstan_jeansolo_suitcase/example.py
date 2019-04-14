@@ -128,6 +128,7 @@ class example(dml.Algorithm):
         r2 = json.loads(response)
         r2Addy = 'Address 1'
         r2TotalValue = 'Assessed Total'
+        r2City = 'City'
         r2 = addressNormalizer(r2Addy, r2)
 
         # DATA SET 6 [ASAP Student Address]
@@ -169,10 +170,17 @@ class example(dml.Algorithm):
         t9 = project(t5, lambda t: (t[0], t[1], t[2], 'N') )
         t10 = select(t9, lambda t: (t[0] in t6) )
 
-         # final: ('Address', 'School Name', 'Assessed Total', 'Y/N do they take the bus')
+        # ('Address', 'School Name', 'Assessed Total', 'Y/N do they take the bus')
         t11 = union(t8, t10)
 
-        
+        # ('Address', 'City') of all addresses
+        t12 = project(r2, lambda t: (t[r2Addy], t[r2City]))
+
+        # ('Address', 'City', 'School Name', 'Assessed Total', 'Y/N do they take the bus')
+        t13 = project(select(product(t12,t11), lambda t: t[0][0] == [1][0]), lambda t: (t[0][0], [1][1], [0][1], [0][2], [0][3], [0][4]) )
+
+        print(t13[0])
+
 
         repo.logout()
         endTime = datetime.datetime.now()
