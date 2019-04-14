@@ -73,6 +73,7 @@ This part was implemented in KMEANS.py
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Review_Score_Distribution.png" />
 <br />We calculated the correlation coefficient of price and review score and the correlation coefficient of price and review number to find out which two is more independent.
 <br />The result shows that review number is slightly more correlated with price than review score, thus we used price and review score as variables in the next step.
+
 ## Optimization
 This part was also implemented in KMEANS.py
 <br />We calculated the Within-Cluster-Sum-of-Squares(WCSS) for k-means, finding the best k value is 4, so we did a 4-means and plotted each cluster onto googlemap to reveal the relationship between each cluster and their geolocation.
