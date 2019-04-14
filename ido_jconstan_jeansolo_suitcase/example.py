@@ -180,7 +180,7 @@ class example(dml.Algorithm):
         t12 = project(r2, lambda t: (t[r2Addy], t[r2City]))
 
         # ('Address', 'City', 'School Name', 'Assessed Total', 'Y/N do they take the bus')
-        t13 = project(select(product(t12,t11), lambda t: t[0][0] == [1][0]), lambda t: (t[0][0], [1][1], [0][1], [0][2], [0][3], [0][4]) )
+        t13 = project(select(product(t11,t12), lambda t: t[0][0] == [1][0]), lambda t: (t[0][0], [1][1], [0][1], [0][2], [0][3], [0][4]))
 
         print(t13[0])
 
