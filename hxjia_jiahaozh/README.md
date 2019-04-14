@@ -60,7 +60,10 @@ Pandas
 ## Narrative
 The idea of this project is to find the best way to categorize the airbnb houses based on reviews and prices. Then by ploting them in different colors on googlemap, we tries to find the relationship of geolocation and each category. In the project, we first calculated the correlation coefficient of price and review scores to find if these two are independent enough to do k-means. Then by analysing the Within-Cluster-Sum-of-Squares(WCSS) graph we finds out the best k value for clustering. Finally, we plotted each cluster on googlemap using different colors to discover the relation between the prices and geolocation. 
 ## Data Transformation
-We generated a new dataset of (id, mean price, review score, review numbers, longitude, latitude) from Boston Airbnb Calendar and Boston Airbnb Listings dataset.
+Generated from Boston Airbnb Listings and Boston Airbnb Calendar 
+<br />Boston Airbnb Calendar: Select, Project and Aggregate to get (id, mean price of all dates of the year) 
+<br />Boston Airbnb Listing: Select, Project to get (id, review scores, review numbers, longitude, latitude) 
+<br />Combiantion: Select, Project to get (neighbourhood, the number of landmarks, the number of houses, the mean prices of houses in that neighbourhood).
 ## Statistical Analysis
 This part is implemented in KMEANS.py
 <br />We calculated the correlation coefficient of price and review score and the correlation coefficient of price and review number to find out which two is more independent.
