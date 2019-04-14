@@ -6,7 +6,7 @@ import datetime
 import uuid
 import pymongo
 from bson.objectid import ObjectId
-#import mapdata as md
+import mapdata as md
 
 class example(dml.Algorithm):
     contributor = 'ido_jconstan_jeansolo_suitcase'
@@ -173,6 +173,9 @@ class example(dml.Algorithm):
         # ('Address', 'School Name', 'Assessed Total', 'Y/N do they take the bus')
         t11 = union(t8, t10)
 
+        
+        print(md.time("418 Beachview Drive, North Vancouver, BC", "410 Beachview Drive, North Vancouver, BC"))
+
         # ('Address', 'City') of all addresses
         t12 = project(r2, lambda t: (t[r2Addy], t[r2City]))
 
@@ -184,7 +187,6 @@ class example(dml.Algorithm):
         t13 = project(t14, lambda t: (t[0][0], [1][1], [0][1], [0][2], [0][3], [0][4]) )
 
         print(t13[0])
-
 
         repo.logout()
         endTime = datetime.datetime.now()
