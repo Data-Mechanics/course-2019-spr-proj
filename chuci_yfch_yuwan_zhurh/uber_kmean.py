@@ -85,7 +85,7 @@ class uber_kmean(dml.Algorithm):
             ax = df.plot.scatter('x','y',c = 'k', colormap = 'tab10')
             fig = ax.get_figure()
             fig.savefig('fig.png')
-        kmean(5)
+        kmean(10)
         repo.dropCollection("kmean")
         repo.createCollection("kmean")
         repo['chuci_yfch_yuwan_zhurh.kmean'].insert_many(data.to_dict('records'))
