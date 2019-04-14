@@ -62,8 +62,8 @@ The idea of this project is to find the best way to categorize the airbnb houses
 ## Data Transformation
 Generated from Boston Airbnb Listings and Boston Airbnb Calendar 
 <br />Boston Airbnb Calendar: Select, Project and Aggregate to get (id, mean price of all dates of the year) 
-<br />Boston Airbnb Listing: Select, Project to get (id, review scores, the humber of reviews, longitude, latitude) 
-<br />Combination: Select, Project to get (neighbourhood, the number of landmarks, the number of houses, the mean prices of houses in that neighbourhood).
+<br />Boston Airbnb Listing: Select, Project to get (id, review scores, the number of reviews, longitude, latitude) 
+<br />Combination: Select, Project to get (id, mean price, review scores, the number of reviews, longitude, latitude)
 ## Statistical Analysis
 This part is implemented in KMEANS.py
 <br />We calculated the correlation coefficient of price and review score and the correlation coefficient of price and review number to find out which two is more independent.
