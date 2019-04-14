@@ -6,6 +6,7 @@ import datetime
 import uuid
 import pymongo
 from bson.objectid import ObjectId
+#import mapdata as md
 
 class example(dml.Algorithm):
     contributor = 'ido_jconstan_jeansolo_suitcase'
@@ -170,6 +171,8 @@ class example(dml.Algorithm):
 
          # final: ('Address', 'School Name', 'Assessed Total', 'Y/N do they take the bus')
         t11 = union(t8, t10)
+
+        
 
         repo.logout()
         endTime = datetime.datetime.now()
