@@ -189,8 +189,16 @@ class example(dml.Algorithm):
 
         t13 = project(t14, lambda t: (t[0][0], t[1][1], t[1][2]))
 
+        # ('Bus Stop')
+        t15 = select(r1, lambda t: t[r1BusStop])
+        # append city state to bus stops
+        t16 = project(t15, lambda t: (t[0] + 'Natick, MA'))
+
+
         for i in range(0, len(t13)-1):
             t13[i] = t13[i][0] + ", " + t13[i+1][1] + ", " + t13[i+1][2]
+
+        
         
         #t13[0] = t13[0][0] + ", " + t13[1][1] + ", " + t13[1][2]
         print(t13[0])
