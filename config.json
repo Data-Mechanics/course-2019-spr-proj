@@ -1,0 +1,10 @@
+{
+  "_comment": "Configuration for a Data Mechanics Repository instance within MongoDB.",
+  "repo": {
+    "name": "repo"
+  },
+  "admin": {
+    "name": "gasparde_ljmcgann_tlux",
+    "pwd": "gasparde_ljmcgann_tlux"
+  }
+}
