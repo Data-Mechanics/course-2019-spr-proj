@@ -1,8 +1,6 @@
 import urllib.request
 import json
 from shapely.geometry import Polygon
-
-import urllib.request
 import json
 import dml
 import prov.model
@@ -14,7 +12,9 @@ import uuid
 class getData(dml.Algorithm):
     contributor = 'gasparde_ljmcgann_tlux'
     reads = []
-    writes = [contributor + ".CensusTractShape"]
+    writes = [contributor + ".CensusTractShape", contributor + ".CensusTractHealth",
+              contributor + ".Neighborhoods", contributor + ".ParcelAssessments",
+              contributor + ".ParcelGeo", contributor + ".OpenSpaces"]
 
     @staticmethod
     def execute(trial=False):
@@ -68,32 +68,34 @@ class getData(dml.Algorithm):
 
         ##########################################################
 
-        # Parcels with their assessment value and type
-        # All_Assessments = []
-        # for i in range(9):
-        #     # need to iterate because we api request only brings max 20000 parcels
-        #     skip = 20000 * (i)
-        #     url1 = "https://data.boston.gov/datastore/odata3.0/fd351943-c2c6-4630-992d-3f895360febd?$top=20000&$format=json&$skip=" + str(
-        #         skip)
-        #     response = urllib.request.urlopen(url1).read()
-        #     Assessment = json.loads(response)
-        #     Assessment = Assessment['value']
-        #     All_Assessments += Assessment
-        # ids = set()
-        # unique_pid =[]
-        # # this loop is to remove duplicates that allow for us to insert into mongo
-        # for assess in All_Assessments:
-        #     if assess["PID"] not in ids:
-        #         ids.add(assess["PID"])
-        #         unique_pid.append({"_id":assess["PID"], "AV_TOTAL": assess["AV_TOTAL"], "PTYPE": assess["PTYPE"]})
-        #
-        # print(unique_pid)
-        # repo.dropCollection(getData.contributor + ".ParcelAssessments")
-        # repo.createCollection(getData.contributor + ".ParcelAssessments")
-        # # need to do this because dataset was too large to do
-        # repo[getData.contributor + ".ParcelAssessments"].insert_many(unique_pid)
-        #
-        # repo[getData.contributor + ".ParcelAssessments"].metadata({'complete': True})
+        #Parcels with their assessment value and type
+        All_Assessments = []
+        for i in range(9):
+            # need to iterate because we api request only brings max 20000 parcels
+            skip = 20000 * (i)
+            url1 = "https://data.boston.gov/datastore/odata3.0/fd351943-c2c6-4630-992d-3f895360febd?$top=20000&$format=json&$skip=" + str(
+                skip)
+            response = urllib.request.urlopen(url1).read()
+            Assessment = json.loads(response)
+            Assessment = Assessment['value']
+            All_Assessments += Assessment
+        ids = set()
+        #print(All_Assessments)
+        unique_pid =[]
+        # this loop is to remove duplicates that allow for us to insert into mongo
+        for assess in All_Assessments:
+            if assess["PID"] not in ids:
+                ids.add(assess["PID"])
+                unique_pid.append({"_id":assess["PID"], "AV_TOTAL": assess["AV_TOTAL"], "PTYPE": assess["PTYPE"],
+                                   "LAND_SF":assess["LAND_SF"]})
+
+        #print(unique_pid)
+        repo.dropCollection(getData.contributor + ".ParcelAssessments")
+        repo.createCollection(getData.contributor + ".ParcelAssessments")
+        # need to do this because dataset was too large to do
+        repo[getData.contributor + ".ParcelAssessments"].insert_many(unique_pid)
+
+        repo[getData.contributor + ".ParcelAssessments"].metadata({'complete': True})
 
         ##########################################################
 
@@ -107,6 +109,20 @@ class getData(dml.Algorithm):
         repo.createCollection(getData.contributor + ".ParcelGeo")
         repo[getData.contributor + ".ParcelGeo"].insert_many(parcelGeo)
         repo[getData.contributor + ".ParcelGeo"].metadata({'complete': True})
+
+        ###########################################################
+
+        # open spaces in boston
+        url = "http://bostonopendata-boston.opendata.arcgis.com/datasets/2868d370c55d4d458d4ae2224ef8cddd_7.geojson"
+        wanted_types = ["Parkways, Reservations & Beaches", "Parks, Playgrounds & Athletic Fields",
+                        "Urban Wilds & Natural Areas", "Community Gardens"]
+        open_spaces = json.loads(urllib.request.urlopen(url).read())["features"]
+        #print(open_spaces)
+        open_spaces = [i for i in open_spaces if i['properties']['TypeLong'] in wanted_types]
+        repo.dropCollection(getData.contributor + ".OpenSpaces")
+        repo.createCollection(getData.contributor + ".OpenSpaces")
+        repo[getData.contributor + ".OpenSpaces"].insert_many(open_spaces)
+        repo[getData.contributor + ".OpenSpaces"].metadata({'complete': True})
 
     @staticmethod
     def provenance():
