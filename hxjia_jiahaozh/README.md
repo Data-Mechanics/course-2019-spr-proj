@@ -55,3 +55,9 @@ Pandas
 <br />json
 <br />uuid
 <br />urllib.request
+
+# CS504 Data-Mechanics Project 2
+## Narrative
+The idea of this project is to find the best way to categorize the airbnb houses based on reviews and prices.Then by ploting them in different colors on googlemap, we tries to find the relationship of geolocation and each category. In the project, we first calculated the correlation coefficient of price and review scores to find if these two are independent enough to do k-means. Then by analysing the Within-Cluster-Sum-of-Squares(WCSS) graph we finds out the best k value for clustering. Finally, we plotted the each cluster on googlemap using different colors to discover the relation between the prices and geolocation. 
+## Statistical Analysis
+## Optimization
