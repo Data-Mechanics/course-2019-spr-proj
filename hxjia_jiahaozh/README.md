@@ -58,7 +58,7 @@ Pandas
 
 # CS504 Data-Mechanics Project 2
 ## Narrative
-The idea of this project was to find the best way to categorize the airbnb houses based on reviews and prices. Figure 1 and Figure 2 show the basic housing distribution on Google map and the corresponding heatmap to show the housing density in areas. In the project, we first calculated the correlation coefficient between price and review scores to find if they two are independent enough to do k-means. Then we calculated Within-Cluster-Sum-of-Squares(WCSS) under different K values to choose best K for clustering. Finally, we plotted each cluster according to latitudes and longtitudes on googlemap using different colors.
+The idea of this project was to find the best way to categorize the airbnb houses based on reviews and prices. Figure 1 and Figure 2 show the basic housing distribution on Google map and the corresponding heatmap to show the housing density in areas. In the project, we first calculated the correlation coefficient between prices and review scores to find if they two are independent enough to do k-means. Then we calculated Within-Cluster-Sum-of-Squares(WCSS) under different K values to choose best K for clustering. Finally, we plotted each cluster according to latitudes and longtitudes on googlemap using different colors.
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Housing_Scatter_Map.png" />
 <p align="center">Figure 1</p>
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Housing_Heap_Map.png" />
@@ -73,12 +73,13 @@ This part was implemented in id_month_price_score_lat_long.py
 ## Statistical Analysis
 This part was implemented in KMEANS.py
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Price_Distribution.png" />
-
+<p align="center">Figure 3</p>
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Review_Score_Distribution.png" />
-<br />We calculated the correlation coefficient of price and review score and the correlation coefficient of price and review number to find out which two is more independent.
-<br />Price and Review Score: 0.1172
-<br />Price and Review Number: -0.1565 
-<br />The result shows that review number is slightly more correlated with price than review score, thus we used price and review score as variables in the next step.
+<p align="center">Figure 4</p>
+<br />We calculated the correlation coefficient between prices and review scores and the correlation coefficient between prices and the numbers of reviews. The results are as follows.
+<br />Prices and Review Scores: 0.1172
+<br />Prices and the numbers of Reviews: -0.1565 
+<br />The results show that the two pairs are both independent enough to do Kmeans, in the project we used price and review score in the next step.
 
 ## Optimization
 This part was also implemented in KMEANS.py
