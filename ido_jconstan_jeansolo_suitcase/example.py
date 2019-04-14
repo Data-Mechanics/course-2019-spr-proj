@@ -117,6 +117,7 @@ class example(dml.Algorithm):
         response = urllib.request.urlopen(url).read().decode("utf-8")
         r1 = json.loads(response)
         r1Addy = 'Address'
+        r1BusStop = 'Pickup Stop'
         r1 = addressNormalizer(r1Addy, r1)
 
         # DATA SET 2 [Spark Property Data]
@@ -186,10 +187,20 @@ class example(dml.Algorithm):
         t14 = select(t13, lambda t: t[0][0] == t[1][0])
         print(t14[0])
 
-        t13 = project(t14, lambda t: (t[0][0], [1][1], [1][2], [0][1], [0][2], [0][3], [0][4]) )
+        t13 = project(t14, lambda t: (t[0][0], t[1][1], t[1][2]))
 
+        for i in range(0, len(t13)-1):
+            t13[i] = t13[i][0] + ", " + t13[i+1][1] + ", " + t13[i+1][2]
+        
+        #t13[0] = t13[0][0] + ", " + t13[1][1] + ", " + t13[1][2]
         print(t13[0])
-
+        tg = "15 West Street, Natick, MA"
+        print(tg)
+        print("-----GOOGLE-----")
+        print(md.time(t13[0], tg))
+        
+        
+        
         repo.logout()
         endTime = datetime.datetime.now()
         return {"start":startTime, "end":endTime}
