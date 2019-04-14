@@ -1,7 +1,5 @@
 import urllib.request
 import json
-from shapely.geometry import Polygon
-
 
 
 #Property assessment data
