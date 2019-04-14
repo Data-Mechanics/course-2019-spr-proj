@@ -76,5 +76,4 @@ This part is also implemented in KMEANS.py
 
 
 
-![image](http://github.com/jiahaozh/course-2019-spr-proj/hxjia_jiahaozh/Experimental_Results/Classified_Map.png)
-
+<img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Classified_Map.png" />
