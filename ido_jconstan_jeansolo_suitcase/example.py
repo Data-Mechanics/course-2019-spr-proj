@@ -129,6 +129,7 @@ class example(dml.Algorithm):
         r2Addy = 'Address 1'
         r2TotalValue = 'Assessed Total'
         r2City = 'City'
+        r2State = 'State'
         r2 = addressNormalizer(r2Addy, r2)
 
         # DATA SET 6 [ASAP Student Address]
@@ -176,15 +177,15 @@ class example(dml.Algorithm):
         
         print(md.time("418 Beachview Drive, North Vancouver, BC", "410 Beachview Drive, North Vancouver, BC"))
 
-        # ('Address', 'City') of all addresses
-        t12 = project(r2, lambda t: (t[r2Addy], t[r2City]))
+        # ('Address', 'City', 'State') of all addresses
+        t12 = project(r2, lambda t: (t[r2Addy], t[r2City], t[r2State]))
 
-        # ('Address', 'City', 'School Name', 'Assessed Total', 'Y/N do they take the bus')
+        # ('Address', 'City', 'State', 'School Name', 'Assessed Total', 'Y/N do they take the bus')
         t13 = product(t11,t12)
         print(t13[0])
         t14 = select(t13, lambda t: t[0][0] == [1][0])
         print(t14[0])
-        t13 = project(t14, lambda t: (t[0][0], [1][1], [0][1], [0][2], [0][3], [0][4]) )
+        t13 = project(t14, lambda t: (t[0][0], [1][1], [1][2], [0][1], [0][2], [0][3], [0][4]) )
 
         print(t13[0])
 
