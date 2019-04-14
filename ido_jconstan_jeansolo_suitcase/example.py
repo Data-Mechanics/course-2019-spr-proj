@@ -182,9 +182,9 @@ class example(dml.Algorithm):
         # ('Address', 'City', 'School Name', 'Assessed Total', 'Y/N do they take the bus')
         t13 = product(t11,t12)
         print(t13[0])
-        t14 = select(t13, lambda t: t[0][0] == [1][0])
+        t14 = select(t13, lambda t: t[0][0] == t[1][0])
         print(t14[0])
-        t13 = project(t14, lambda t: (t[0][0], [1][1], [0][1], [0][2], [0][3], [0][4]) )
+        t13 = project(t14, lambda t: (t[0][0], t[1][1], t[0][1], t[0][2], t[0][3]))
 
         print(t13[0])
 
