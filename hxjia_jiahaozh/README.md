@@ -72,6 +72,8 @@ This part was implemented in KMEANS.py
 
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Review_Score_Distribution.png" />
 <br />We calculated the correlation coefficient of price and review score and the correlation coefficient of price and review number to find out which two is more independent.
+<br />Price and Review Score: 0.1172
+<br />Price and Review Number: -0.1565
 <br />The result shows that review number is slightly more correlated with price than review score, thus we used price and review score as variables in the next step.
 
 ## Optimization
