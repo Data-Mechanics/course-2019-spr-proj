@@ -60,7 +60,9 @@ Pandas
 ## Narrative
 The idea of this project was to find the best way to categorize the airbnb houses based on reviews and prices. Figure 1 and Figure 2 show the basic housing distribution on Google map and the corresponding heatmap to show the housing density in areas. In the project, we first calculated the correlation coefficient of price and review scores to find if they two are independent enough to do k-means. Then by analysing the Within-Cluster-Sum-of-Squares(WCSS) graph we found out the best k value for clustering. Finally, we plotted each cluster on googlemap using different colors to discover the relation between the prices and geolocation. 
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Housing_Scatter_Map.png" />
+
 <center>Figure 1</center>
+
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Housing_Heap_Map.png" />
 ## Data Transformation
 Generated from Boston Airbnb Listings and Boston Airbnb Calendar 
