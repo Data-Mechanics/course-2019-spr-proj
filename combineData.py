@@ -129,7 +129,9 @@ class combineData(dml.Algorithm):
                             break
         print(open_spaces_by_neighborhood["Allston"][0])
         parcels_by_neighborhood = combineData.create_neighborhood_dict(neighborhoods)
-
+        parcel_geo = list(repo[combineData.contributor + ".ParcelGeo"])
+        parcel_assessments = list(repo[combineData.contributor + ".ParcelAssessments"])
+        censu
 
 
     @staticmethod

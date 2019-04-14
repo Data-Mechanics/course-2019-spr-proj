@@ -44,9 +44,11 @@ class getData(dml.Algorithm):
         url = 'https://chronicdata.cdc.gov/resource/47z2-4wuh.json?placename=Boston'
         response = urllib.request.urlopen(url).read().decode("utf-8")
         cdcData = json.loads(response)
+        # print(cdcData)
         # only want to keep these three statistics
         for i in range(len(cdcData)):
-            d = {"obesity": cdcData[i]["obesity_crudeprev"],
+            d = {"_id": cdcData[i]["tractfips"],
+                 "obesity": cdcData[i]["obesity_crudeprev"],
                  "low_phys": cdcData[i]["lpa_crudeprev"],
                  "asthma": cdcData[i]["casthma_crudeprev"]}
             cdcData[i] = d
