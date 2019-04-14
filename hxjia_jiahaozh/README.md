@@ -58,13 +58,12 @@ Pandas
 
 # CS504 Data-Mechanics Project 2
 ## Narrative
-The idea of this project was to find the best way to categorize the airbnb houses based on reviews and prices. Figure 1 and Figure 2 show the basic housing distribution on Google map and the corresponding heatmap to show the housing density in areas. In the project, we first calculated the correlation coefficient of price and review scores to find if they two are independent enough to do k-means. Then by analysing the Within-Cluster-Sum-of-Squares(WCSS) graph we found out the best k value for clustering. Finally, we plotted each cluster on googlemap using different colors to discover the relation between the prices and geolocation. 
+The idea of this project was to find the best way to categorize the airbnb houses based on reviews and prices. Figure 1 and Figure 2 show the basic housing distribution on Google map and the corresponding heatmap to show the housing density in areas. In the project, we first calculated the correlation coefficient between price and review scores to find if they two are independent enough to do k-means. Then we calculated Within-Cluster-Sum-of-Squares(WCSS) under different K value to choose best K for clustering. Finally, we plotted each cluster according to latitude and longtitude on googlemap using different colors.
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Housing_Scatter_Map.png" />
-
-<p align="center">HelloWorld</p>
-
-
+<p align="center">Figure 1</p>
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Housing_Heap_Map.png" />
+<p align="center">Figure 2</p>
+
 ## Data Transformation
 Generated from Boston Airbnb Listings and Boston Airbnb Calendar 
 <br />Boston Airbnb Calendar: Select, Project and Aggregate to get (id, mean price of all dates of the year) 
