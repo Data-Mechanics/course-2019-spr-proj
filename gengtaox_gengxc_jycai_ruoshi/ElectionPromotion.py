@@ -41,11 +41,19 @@ class ElectionPromotion(dml.Algorithm):
 
         r = linprog(c, A_ub, B_ub, A_eq, B_eq,
                     bounds=((0, 1), (0, 1), (0, 1), (0, 1), (0, 1), (0, 1), (0, 1), (0, 1), (0, 1)))
+        selected = []
+        for i in range(0,len(r['x'])):
+            selected.append({
+                'Congress District %d selected'%(i+1): r['x'][i],
+            })
+        selected.append({
+            'Covered population': -1*r['fun']
+        })
 
         repo.dropCollection("ElectionPromotion")
         repo.createCollection("ElectionPromotion")
 
-        repo['gengtaox_gengxc_jycai_ruoshi.ElectionPromotion'].insert_many(r)
+        repo['gengtaox_gengxc_jycai_ruoshi.ElectionPromotion'].insert_many(selected)
         repo['gengtaox_gengxc_jycai_ruoshi.ElectionPromotion'].metadata({'complete': True})
         print(repo['gengtaox_gengxc_jycai_ruoshi.ElectionPromotion'].metadata())
 
