@@ -60,12 +60,13 @@ Pandas
 ## Narrative
 The idea of this project was to find the best way to categorize the airbnb houses based on reviews and prices. Figure 1 and Figure 2 show the basic housing distribution on Google map and the corresponding heatmap to show the housing density in areas. In the project, we first calculated the correlation coefficient between price and review scores to find if they two are independent enough to do k-means. Then we calculated Within-Cluster-Sum-of-Squares(WCSS) under different K values to choose best K for clustering. Finally, we plotted each cluster according to latitudes and longtitudes on googlemap using different colors.
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Housing_Scatter_Map.png" />
-<p align="center">Figure 1</p>
+<p align="center">**Figure 1**</p>
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Housing_Heap_Map.png" />
-<p align="center">Figure 2</p>
+<p align="center">**Figure 2**</p>
 
 ## Data Transformation
-Generated from Boston Airbnb Listings and Boston Airbnb Calendar 
+This part was implemented in id_month_price_score_lat_long.py
+<br />Generated from Boston Airbnb Listings and Boston Airbnb Calendar 
 <br />Boston Airbnb Calendar: Select, Project and Aggregate to get (id, mean price of all dates of the year) 
 <br />Boston Airbnb Listing: Select, Project to get (id, review scores, the number of reviews, longitude, latitude) 
 <br />Combination: Select, Project to get (id, mean price, review scores, the number of reviews, longitude, latitude)
@@ -75,6 +76,8 @@ This part was implemented in KMEANS.py
 
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Review_Score_Distribution.png" />
 <br />We calculated the correlation coefficient of price and review score and the correlation coefficient of price and review number to find out which two is more independent.
+<br />**Price and Review Score: 0.1172** 
+<br />**Price and Review Number: -0.1565** 
 <br />The result shows that review number is slightly more correlated with price than review score, thus we used price and review score as variables in the next step.
 
 ## Optimization
