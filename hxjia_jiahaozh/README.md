@@ -62,6 +62,7 @@ The idea of this project is to find the best way to categorize the airbnb houses
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Housing_Scatter_Map.png" />
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Housing_Heap_Map.png" />
 ## Data Transformation
+This part was implemented in id_month_price_score_lat_long.py
 Generated from Boston Airbnb Listings and Boston Airbnb Calendar 
 <br />Boston Airbnb Calendar: Select, Project and Aggregate to get (id, mean price of all dates of the year) 
 <br />Boston Airbnb Listing: Select, Project to get (id, review scores, the number of reviews, longitude, latitude) 
