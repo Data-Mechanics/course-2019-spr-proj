@@ -50,7 +50,11 @@ _transformOpenSpace_: This gets all of the centroids for all of the open spaces 
 
 _linearRegression_: I decided to use gradient descent and linear regression to determine whether there was a relationship between the datasets that I already collected. I first used gradient descent to see if I could find a solution that minimized the mean squared error more than linear regression. However, after running the algorithm using hundreds of iterations and a very small step size, the gradient descent algorithm had a very high error. I found that gradient descent is computationally less expensive but doesn't yield the most accurate results. So, instead, I used the statsmodel in python which yielded more robust results. In addition to finding the coefficient, it allows me to find the p-values, t-values, and standard errors. I am also able to 
 
+_WasteOptimization_: I also thought it would be useful to find the centroids of these waste sites and find the centroids that minimize these 
 
+#### Statistical Analysis
+
+_Correlation_:
 
 Limitations:
 Because the small area model cannot detect effects due to local interventions, users are cautioned against using these estimates for program or policy evaluations. 
