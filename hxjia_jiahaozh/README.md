@@ -58,7 +58,7 @@ Pandas
 
 # CS504 Data-Mechanics Project 2
 ## Narrative
-The idea of this project was to find the best way to categorize the airbnb houses based on reviews and prices. Figure 1 and Figure 2 show the basic housing distribution on Google map and the corresponding heatmap to show the housing density in areas. In the project, we first calculated the correlation coefficient between prices and review scores to find if they two are independent enough to do k-means. Then we calculated Within-Cluster-Sum-of-Squares(WCSS) under different K values to choose best K for clustering. Finally, we plotted each cluster according to latitudes and longtitudes on googlemap using different colors.
+The idea of this project was to find the best way to categorize the airbnb houses based on reviews and prices. We dicided the best way as choosing houses with lower prices and higher review scores. Figure 1 and Figure 2 show the basic housing distribution on Google map and the corresponding heatmap to show the housing density in areas. In the project, we first calculated the correlation coefficient between prices and review scores to find if they two are independent enough to do k-means. Then we calculated Within-Cluster-Sum-of-Squares(WCSS) under different K values to choose best K for clustering. Finally, we plotted each cluster according to latitudes and longtitudes on googlemap using different colors.
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Housing_Scatter_Map.png" />
 <p align="center">Figure 1</p>
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Housing_Heap_Map.png" />
@@ -88,19 +88,19 @@ This part was also implemented in KMEANS.py
 
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/K_WCSS.png" />
 <p align="center">Figure 5</p>
-The x-axis of Figure 5 is the range of k we ran
-<br />The y-axis within-cluster sum of squares is the sum of the squared deviations from each observation and the cluster center
-<br />The method we used to get the best value of k is the elbow method. This method plots a line chart of WCSS for each value of k, the "elbow": most significant change point of the line chart is the best k
+The x-axis of Figure 5 is the range of k we ran.
+<br />The y-axis within-cluster sum of squares is the sum of the squared deviations between each observation and the cluster center.
+<br />The method we used to get the best value of k is the elbow method. This method plots a line chart of WCSS for each value of k. The "elbow": most significant change point of the line chart is the best k.
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Kmeans_Result.png" />
 <p align="center">Figure 6</p>
-This is the Kmeans result we got using the best k value(4), in the figure we can see that the houses are divided into four clusters and the cluster with the best value of money is the one in red
+This is the Kmeans result we got using the best k value(4), in the figure we can see that the houses are divided into four clusters and the cluster with the best value of money is the one in red.
 
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Classified_Map.png" />
 <p align="center">Figure 7</p>
-From Figure 6 we can see that the houses basicly are divided by price, in Figure 7 the houses with the smallest price is in red and has the most number, most of them are distributed in Allston, East Boston and Mission Hill area
-<br />The houses with the second smallest price is in yellow and has the second largest number, most of them are distributed in Back Bay and Downtown area
-<br />The houses with the second largest price is in blue and is mostly distributed in north-east corner of Boston
-<br />The houses with the largest price is in green and has the smallest number
+From Figure 6 we can see that the houses are basicly divided by price. In Figure 7 the houses with the smallest price is in red and has the most number, most of which are distributed in Allston, East Boston and Mission Hill area.
+<br />The houses with the second smallest price is in yellow and has the second largest number, most of which are distributed in Back Bay and Downtown area.
+<br />The houses with the second largest price is in blue and is mostly distributed in north-east corner of Boston.
+<br />The houses with the largest price is in green and has the smallest number.
 
 ## Improvements
 We did 2 improvements on K-Means.
