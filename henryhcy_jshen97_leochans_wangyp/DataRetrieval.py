@@ -290,8 +290,10 @@ class DataRetrieval(dml.Algorithm):
         return doc
 
 # debug
-'''
+
+
 DataRetrieval.execute()
+'''
 doc = DataRetrieval.provenance()
 print(doc.get_provn())
 print(json.dumps(json.loads(doc.serialize()), indent=4))

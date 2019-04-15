@@ -1,10 +1,10 @@
 import dml
 import datetime
+import geopy.distance
 import json
 import prov.model
 import pprint
 import uuid
-from math import sin, cos, sqrt, atan2, radians
 
 
 class CvsWalEviction(dml.Algorithm):
@@ -32,27 +32,19 @@ class CvsWalEviction(dml.Algorithm):
         repo.createCollection('cvsEviction')
         repo.createCollection('walgreenEviction')
 
+        # geo-location of boston
+        lat_bos = 42.361145
+        lng_bos = -71.057083
+        coord_bos = (lat_bos, lng_bos)
+
         # pick those evictions that are within 15 km of Boston and insert = 136
         for document in repo.henryhcy_jshen97_leochans_wangyp.eviction.find():
-            # R is the approximate radius of the earth in km
-            # @see Haversine formula for latlng distance
-            # All trig function in python use radian
-            R = 6373.0
+            lat_evi = document['latitude']
+            lng_evi = document['longitude']
+            coord_evi = (lat_evi, lng_evi)
 
-            lat_bos = 42.361145
-            lng_bos = -71.057083
-
-            lat = document['latitude']
-            lng = document['longitude']
-
-            dlon = lng_bos - lng
-            dlat = lat_bos - lat
-            a = sin(dlat / 2) ** 2 + cos(lat) * cos(lat_bos) * sin(dlon / 2) ** 2
-            c = 2 * atan2(sqrt(a), sqrt(1 - a))
-
-            distance = R * c
-
-            if (distance < 60):
+            distance = geopy.distance.distance(coord_bos, coord_evi)
+            if (distance < 5.5):
                 d = {
                     'document_type': "eviction",
                     'evict_id': document['id'],
@@ -62,30 +54,42 @@ class CvsWalEviction(dml.Algorithm):
                 repo['henryhcy_jshen97_leochans_wangyp.cvsEviction'].insert_one(d)
                 repo['henryhcy_jshen97_leochans_wangyp.walgreenEviction'].insert_one(d)
 
-        # insert cvs within 15 km of boston
+        # insert cvs within 5 km of boston
         for item in repo.henryhcy_jshen97_leochans_wangyp.cvs.find():
-            d = {
-                'document_type': 'cvs',
-                'location': item['geometry']['location'],
-                'place_id': item['place_id'],
-                'rating': item['rating'] if 'rating' in item.keys() else None,
-                'rating_count': item['user_ratings_total'] if 'user_ratings_total' in item.keys() else None
-            }
-            repo['henryhcy_jshen97_leochans_wangyp.cvsEviction'].insert_one(d)
+            lat_cvs = item['geometry']['location']['lat']
+            lng_cvs = item['geometry']['location']['lng']
+            coord_cvs = (lat_cvs, lng_cvs)
+
+            distance = geopy.distance.distance(coord_bos, coord_cvs)
+            if (distance <= 5):
+                d = {
+                    'document_type': 'cvs',
+                    'location': item['geometry']['location'],
+                    'place_id': item['place_id'],
+                    'rating': item['rating'] if 'rating' in item.keys() else None,
+                    'rating_count': item['user_ratings_total'] if 'user_ratings_total' in item.keys() else None
+                }
+                repo['henryhcy_jshen97_leochans_wangyp.cvsEviction'].insert_one(d)
 
         repo['henryhcy_jshen97_leochans_wangyp.cvsEviction'].metadata({'complete': True})
         print(repo['henryhcy_jshen97_leochans_wangyp.cvsEviction'].metadata())
 
-        # insert walgreen within 15 km of boston
+        # insert walgreen within 5 km of boston
         for item in repo.henryhcy_jshen97_leochans_wangyp.walgreen.find():
-            d = {
-                'document_type': 'walgreen',
-                'location': item['geometry']['location'],
-                'place_id': item['place_id'],
-                'rating': item['rating'] if 'rating' in item.keys() else None,
-                'rating_count': item['user_ratings_total'] if 'user_ratings_total' in item.keys() else None
-            }
-            repo['henryhcy_jshen97_leochans_wangyp.walgreenEviction'].insert_one(d)
+            lat_wal = item['geometry']['location']['lat']
+            lng_wal = item['geometry']['location']['lng']
+            coord_wal = (lat_wal, lng_wal)
+
+            distance = geopy.distance.distance(coord_bos, coord_wal)
+            if (distance <= 5):
+                d = {
+                    'document_type': 'walgreen',
+                    'location': item['geometry']['location'],
+                    'place_id': item['place_id'],
+                    'rating': item['rating'] if 'rating' in item.keys() else None,
+                    'rating_count': item['user_ratings_total'] if 'user_ratings_total' in item.keys() else None
+                }
+                repo['henryhcy_jshen97_leochans_wangyp.walgreenEviction'].insert_one(d)
 
         repo['henryhcy_jshen97_leochans_wangyp.WalgreenEviction'].metadata({'complete': True})
         print(repo['henryhcy_jshen97_leochans_wangyp.WalgreenEviction'].metadata())
@@ -154,6 +158,7 @@ class CvsWalEviction(dml.Algorithm):
         return doc
 
 # debug
+
 
 CvsWalEviction.execute()
 '''
