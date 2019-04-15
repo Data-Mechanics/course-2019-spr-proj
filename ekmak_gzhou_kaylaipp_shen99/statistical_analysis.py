@@ -48,7 +48,9 @@ class statistical_analysis(dml.Algorithm):
             mean = prices.mean()
             std = prices.std()
             varience = prices.var()
-            repo['ekmak_gzhou_kaylaipp_shen99.statistical_analysis'].insert_one({'cluster_num':cluster, 'mean':mean, 'std':std, 'varience': varience})
+            min_price = prices.min()
+            max_price = prices.max()
+            repo['ekmak_gzhou_kaylaipp_shen99.statistical_analysis'].insert_one({'cluster_num':cluster, 'mean':mean, 'std':std, 'varience': varience, 'min_price':min_price, 'max_price':max_price})
 
         repo.logout()
         endTime = datetime.datetime.now()
