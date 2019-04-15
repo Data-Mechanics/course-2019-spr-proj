@@ -118,6 +118,7 @@ class example(dml.Algorithm):
         r1 = json.loads(response)
         r1Addy = 'Address'
         r1BusStop = 'Pickup Stop'
+        r1School = 'School'
         r1 = addressNormalizer(r1Addy, r1)
 
         # DATA SET 2 [Spark Property Data]
@@ -181,9 +182,7 @@ class example(dml.Algorithm):
 
         # ('Address', 'City', 'State', 'School Name', 'Assessed Total', 'Y/N do they take the bus')
         t13 = product(t11,t12)
-        print("t13[0]", t13[0])
         t14 = select(t13, lambda t: t[0][0] == t[1][0])
-        print("t14[0]", t14[0])
         
         #t13school = project(t14, lambda t: (t[0][0], t[1][1], t[1][2], t[0][3]))
         #print(t13school[0])
@@ -194,30 +193,43 @@ class example(dml.Algorithm):
         for i in range(0, len(t13)-1):
             #t15[i][0] = t13[i][0] + ", " + t13[i+1][1] + ", " + t13[i+1][2]
             t15.append(((t13[i][0] + ", " + t13[i+1][1] + ", " + t13[i+1][2]), (t13[i][3])))
-            #t13[i][1] = t13[
 
-        # ('Bus Stop')
-        t16 = select(r1, lambda t: t[r1BusStop])
-        # append city state to bus stops
-        t17 = project(t16, lambda t: (t[0] + 'Natick, MA'))
+        # ('Bus Stop'), append city state to bus stops
+        t16 = project(r1, lambda t: (t[r1School], t[r1BusStop] + ', Natick, MA'))
+        #print(t16[0], t16[1])
       
-        #t13[0] = t13[0][0] + ", " + t13[1][1] + ", " + t13[    1][2]
-        #print(t13[0])
-        tg = "15 West Street, Natick, MA"
-        #print(tg)
+        #t13[0] = t13[0][0] + ", " + t13[1][1] + ", " + t13[1][2]
         print("-----GOOGLE-----")
-        #print(md.time(t13[0], tg))
         
-        #schools
-        #nhs
-        #wilson middle school
-        #
         
-        print("t15[0]:",t15[0])
-        print(t15[0][1] == 'Wilson Middle School')
-        tWL = select(t15, lambda t: t[1] == 'Wilson Middle School')
-        print("tWL[0]", tWL) 
-        #tNHS = select(t13, lambda t: (t[0][1] == "Natick High School"))
+        #separate student addresses by school attended - these will be the points in k-means
+        tWMS = select(t15, lambda t: t[1] == 'Wilson Middle School')
+        tNHS = select(t15, lambda t: t[1] == 'Natick High School')
+        tBHES = select(t15, lambda t: t[1] == 'Bennett-Hemenway Elementary School')
+        tNPS = select(t15, lambda t: t[1] == 'Natick Preschool')
+        tMES = select(t15, lambda t: t[1] == 'Memorial Elementary School')
+        tBES = select(t15, lambda t: t[1] == 'Brown Elementary School')
+        tJFKMS = select(t15, lambda t: t[1] == 'J. F. Kennedy Middle School') 
+        tJES = select(t15, lambda t: t[1] == 'Johnson Elementary School')
+        
+        #the stops are the means for k-means
+        tNHSStops = select(t16, lambda t: t[0] == 'NHS')
+        
+        #print("tNHSStops[0]: ", tNHSStops[0])
+        '''
+        print("tWMS[0]", tWMS[0]) 
+        print("tNHS[0]", tNHS[0])
+        print("tBHES[0]", tBHES[0])
+        print("tNPS[0]", tNPS[0])
+        print("tMES[0]", tMES[0])
+        print("tBES[0]", tBES[0])
+        print("tJFKMS[0]", tJFKMS[0])
+        print("tJES[0]", tJES[0])
+        
+        '''
+        
+        
+        
         
         
         repo.logout()
