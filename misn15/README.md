@@ -22,18 +22,19 @@ In order to tackle these questions, I decided to retrieve five datasets, which a
   
 You can find these datasets in the files: _getWaste_, _getCrime_, _getOil_, _getZipcodes_, and _getHealth_.
 
-### Transformations:
+#### Transformations:
 
-After retrieving this data, I tried to match up Boston zip codes with the number of hazardous sites, median income, crime rate, and health issues to see whether there was a correlation between these factors. By looking at the proximity of areas with high crime, poverty and health issues to these waste sites, we can possibly determine whether this is contributing to some of these areas problems. It is well known that there are higher crime rates in lower income areas but perhaps these areas are also located in undesirable parts of town and the environmental effects of the surrounding area are unknowingly making it unhealthier for its inhabitants and therefore, making it harder to live.
+After retrieving this data, I tried to match up Boston zip codes with the number of hazardous sites, median income, crime rate, and health issues to see whether there was a correlation between these factors. I wanted to determine whether certain zip codes within Boston contained more hazardous waste sites and if these sites were located in areas with more poverty and more health problems.By looking at the proximity of areas with high crime, poverty and health issues to these waste sites, we can possibly determine whether this is contributing to some of these areas problems. 
 
-I combined these data sets to determine whether certain zip codes within Boston contained more hazardous waste sites and if these sites were located in areas with more poverty and more health problems. Additionally, I thought it would be interesting to see whether these areas also had higher crime rates. 
  _transformDem_: This algorithm combined average income for every census tract with the waste site dataset. I counted the number of waste sites for every zip code and matched these zipcodes up with the average income from the census bureau tracts so the final dataset had the total number of waste sites and average income for every zip code within Boston.
  
-_transformHealth_:
+_transformHealth_: I combined the chronic health dataset with the waste site dataset to create a new dataset that had a list of chronic diseases that were found in the same zip code where that waste site was located. 
 
-transformWaste_
+_transformWaste_: This algorithm gets the coordinates and census bureau tract for each waste site and oil/hazardous material site so that it is easy to match each site with data collected on zip codes. I then combine the oil and waste site data into one dataset. 
 
+## Project 2
 
+#### Optimization
 
 Limitations:
 Because the small area model cannot detect effects due to local interventions, users are cautioned against using these estimates for program or policy evaluations. 
