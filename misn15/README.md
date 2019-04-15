@@ -1,5 +1,6 @@
 # CS 504 Project
 Author: Nicole Mis
+
 Email:  misn15@bu.edu
 
 ## Project #1
