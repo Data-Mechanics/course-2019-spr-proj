@@ -95,9 +95,9 @@ This part was also implemented in KMEANS.py
 We did 2 improvements on KMeans.
 ### 1. K-means++
 Although given enough time KMeans will always converge, this may lead to a local minimum. It is highly dependent on the 
-<br />initialization of the centoids. To overcome this issue, we used k-means++ initialization scheme. Just set init = 'k-
-<br />means++' to make it. This helped initializing the centroids to be (generally) distant from each other. And it helped 
-<br />speed up converging.
+initialization of the centoids. To overcome this issue, we used k-means++ initialization scheme. Just set init = 'k-
+means++' to make it. This helped initializing the centroids to be (generally) distant from each other. And it helped 
+speed up converging.
 
 ###
 
