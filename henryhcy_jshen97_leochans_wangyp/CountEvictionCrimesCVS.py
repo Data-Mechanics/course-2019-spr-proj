@@ -8,10 +8,10 @@ import random
 import uuid
 
 
-class CountEvictionCrimeCVS(dml.Algorithm):
+class CountEvictionCrimesCVS(dml.Algorithm):
     contributor = "henryhcy_jshen97_leochans_wangyp"
     reads = ['henryhcy_jshen97_leochans_wangyp.cvsEviction',
-             'henryhcy_jshen97_leochans_wangyp.counted']
+             'henryhcy_jshen97_leochans_wangyp.cvsCrime']
     writes = ['henryhcy_jshen97_leochans_wangyp.countEvictionCrimeCVS',
               'henryhcy_jshen97_leochans_wangyp.ratingEviction',
               'henryhcy_jshen97_leochans_wangyp.ratingCrime']
@@ -62,10 +62,10 @@ class CountEvictionCrimeCVS(dml.Algorithm):
                     master_cvs_id = document_cvs['place_id']
             repo['henryhcy_jshen97_leochans_wangyp.countEvictionCrimeCVS'].update_one({'place_id': master_cvs_id}, {'$inc': {'eviction_case' : 1}})
 
-        for document_crime in repo.henryhcy_jshen97_leochans_wangyp.counted.find({'document_type': 'crime'}):
+        for document_crime in repo.henryhcy_jshen97_leochans_wangyp.cvsCrime.find({'document_type': 'crime'}):
             master_cvs_id = ''
             min_distance = float('inf')
-            for document_cvs in repo.henryhcy_jshen97_leochans_wangyp.counted.find({'document_type': 'cvs'}):
+            for document_cvs in repo.henryhcy_jshen97_leochans_wangyp.cvsCrime.find({'document_type': 'cvs'}):
                 lat_cvs = document_cvs['location']['lat']
                 lng_cvs = document_cvs['location']['lng']
                 coord_cvs = (lat_cvs, lng_cvs)
@@ -168,10 +168,9 @@ class CountEvictionCrimeCVS(dml.Algorithm):
 
 # debug
 
-
-CountEvictionCrimeCVS.execute()
 '''
-doc = CountEvictionCrimeCVS.provenance()
+CountEvictionCrimesCVS.execute()
+doc = CountEvictionCrimesCVS.provenance()
 print(doc.get_provn())
 print(json.dumps(json.loads(doc.serialize()), indent=4))
 '''

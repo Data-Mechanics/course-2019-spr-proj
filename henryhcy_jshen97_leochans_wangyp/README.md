@@ -32,15 +32,23 @@ The project is divided into two tasks:
         - **Key Library**: geopy.distance.distance(coord1, coord2) to compute distance.
         - **Key Concepts**: Data clustering and relational operations.
         - **Problems Encountered**: At the beginning, I was ambitious. I wanted to include all cvs stores(**60**), eviction cases(**25k**), and crime cases(**270k**) within **15km** of central boston. That resulted in many of useless data point where there is **0** crime/eviction cases. Worse than that, the size of data and the relatively slow computation of geo distance required a fairly long time(**7+ hrs**) to run. The run ended when the mongodb cursor was exhausted/timeout-ed. So now I focused on a more small and concentrated area: **5km** from the center of boston.
-    3. In this step, the data of ratings and E&C are refined and put together for computation. The result shows that rating and eviction cases have a pearson coefficient of **0.47156** with a **0.20003** p-value; the rating and Larceny cases have a pearson coefficient of **-0.15246** with a **0.55909** p-value. Neither of them have enough evidence to reject the null hypothesis (no correlation). However, I think we are able to conceive an explaination that Eviction implies financially instability can affect rating disproportionately. Larceny instead improves the security level of the store can slightly affect rating proportionally. Now the model of **S** can be changed to: **S_i = (|L_i|^(c))/(|E_i|)**, where **c = |rho(rating, larceny)|/|rho(rating, eviction)|**.
+    3. In this step, the data of ratings and E&C are refined and put together for computation. The result shows that rating and eviction cases have a pearson coefficient of **0.39326** with a **0.26090** p-value; the rating and Larceny cases have a pearson coefficient of **-0.20018** with a **0.44109** p-value. Neither of them have enough evidence to reject the null hypothesis (no correlation). However, I think we are able to conceive an explaination that Eviction implies financially instability can affect rating disproportionately. Larceny instead improves the security level of the store can slightly affect rating proportionally. Now the model of **S** can be changed to: **S_i = ( (|L_i|^(c))/(|E_i|) ) times 1000**, where **c = |rho(rating, larceny)|/|rho(rating, eviction)|**.
         - **Note**: This step is not necessary the prerequisite of the following steps.
         - **Related Files**: CorrelationCVS.py
         - **Key Library**: scipy.stats.pearsonr(x_list, y_list) to compute rho and p-value.
         - **Key Concepts**: Statistical Analysis. Correlation and P-values.
         - **Problems Encountered**: Some outlier (i.e. with less than 100 cases) makes the p-value too high to be useful. Now the outliers are excluded and ratings are converted to 100 score based. 
-    4. Constraints Satisfaction: 
+    4. Constraints Satisfaction/Optimization: 
         - **Related Files**: Salesmen.py
-        - **Key Library**: z3-solver
-        - **Question**: If we have the chance to send **5** salesmen (**1** per store), how can we get the maximum total stability and maximum accessibility?
-        - **Definition**: Accessibility is defined as the sum of the distances between each pair of salesmen, or each pair of stores that are assigned a salesman.
-        - **Conclusion**: 
+        - **Question**: If we have the chance to send **3** salesmen (**1** per store), obtained the model that has the maximum (total stability **S**, total accessibility **A**) pair?
+        - **Definition**: 
+            - Accessibility is defined as the sum of the distances between each pair of salesmen, or each pair of stores that are assigned a salesman.
+            - (S1, A1) > (S2, A2) if S1>S2 and A1>A2
+        - **Results**: 
+            - the 3 CVS are located at 
+                - **210 Border St, East Boston**
+                - **101 Canal St suite A, Boston**
+                - **1249 Boylston St, Boston**
+            - with a total stability **S =  0.4886**
+            - with a total accessibility **A = 11.2147 km**
+            - ![Google Maps result](Project2%20result.JPG)
