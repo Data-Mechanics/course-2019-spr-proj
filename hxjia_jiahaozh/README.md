@@ -57,6 +57,9 @@ The idea of this project was to find the best way to categorize the airbnb house
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Housing_Heap_Map.png" />
 <p align="center">Figure 2</p>
 
+## Authentication
+We used Google Map API in KMEANS.py to plot on googlemap and the api key is required.
+
 ## Data Transformation
 This part was implemented in id_month_price_score_lat_long.py
 <br />Generated from Boston Airbnb Listings and Boston Airbnb Calendar 
