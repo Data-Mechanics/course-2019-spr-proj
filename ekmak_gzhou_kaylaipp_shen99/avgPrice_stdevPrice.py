@@ -2,20 +2,18 @@ import urllib.request
 import json
 import dml
 import prov.model
-import datetime
+from datetime import datetime
 import uuid
 import zillow
 import requests
 import xmltodict
 import csv
-
 import statistics
-
 
 class avgPrice_stdevPrice(dml.Algorithm):
     contributor = 'ekmak_gzhou_kaylaipp_shen99'
     reads = ['ekmak_gzhou_kaylaipp_shen99.zillow_getsearchresults_data']
-    writes = ['ekmak_gzhou_kaylaipp_shen99.avgPrice_stdevPrice']
+    writes = ['ekmak_gzhou_kaylaipp_shen99.avg_price_stdev_price']
 
     @staticmethod
     def execute(trial=False):
@@ -28,8 +26,6 @@ class avgPrice_stdevPrice(dml.Algorithm):
 
         # read in zillow search result data 
         zillow_data = repo.ekmak_gzhou_kaylaipp_shen99.zillow_getsearchresults_data.find()
-
-        #empty list for storing valuations respectively for calculating average and standard deviation
         priceAvg = []
         priceStdev = []
 
@@ -41,7 +37,7 @@ class avgPrice_stdevPrice(dml.Algorithm):
 
                 # ensure values are not NaN 
                 if valuation: 
-                    priceAvg.append(['price', valuation])
+                    priceAvg.append(valuation)
                     # results.append(['zpid'], zpid)
                     priceStdev.append(valuation)
             except: 
@@ -51,24 +47,13 @@ class avgPrice_stdevPrice(dml.Algorithm):
         totalPrice = 0
         count = 0
         for row in priceAvg:
-            totalPrice += row['price']
+            totalPrice += row
             count += 1
         avgPrice = totalPrice / count
 
         #calculate standard deviation
         stdevPrice = statistics.stdev(priceStdev)
 
-        # create a table to display avg and stdev of the entire South Boston
-        data_titles = ["Location", "Average", "Standard Deviation"]
-        raw_table = [data_titles] + list("South Boston", avgPrice, stdevPrice)
-
-        for i, d in enumerate(raw_table):
-            line = '|'.join(str(x).ljust(4) for x in d)
-            print(line)
-            if i == 0:
-                print ('-' * len(line))
-
-    
         # Store information in db
         repo.logout()
         endTime = datetime.now()
@@ -77,11 +62,6 @@ class avgPrice_stdevPrice(dml.Algorithm):
 
     @staticmethod
     def provenance(doc = prov.model.ProvDocument(), startTime = None, endTime = None):
-        '''
-            Create the provenance document describing everything happening
-            in this script. Each run of the script will generate a new
-            document describing that invocation event.
-            '''
 
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
@@ -93,26 +73,27 @@ class avgPrice_stdevPrice(dml.Algorithm):
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
         doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
 
-        this_agent = doc.agent('alg:ekmak_gzhou_kaylaipp_shen99#avgPrice_stdevPrice',
+        this_script = doc.agent('alg:ekmak_gzhou_kaylaipp_shen99#avgPrice_stdevPrice',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
 
-        this_entity = doc.entity('dat:ekmak_gzhou_kaylaipp_shen99#avgPrice_stdevPrice',
+        zillow_data = doc.entity('dat:ekmak_gzhou_kaylaipp_shen99#avgPrice_stdevPrice',
                             {prov.model.PROV_LABEL: 'average and standard deviation of housing prices', prov.model.PROV_TYPE: 'ont:DataSet'})
 
         zillow_data = doc.entity('dat:ekmak_gzhou_kaylaipp_shen99#zillow_getsearchresults_data', {prov.model.PROV_LABEL: 'Zillow Search Data', prov.model.PROV_TYPE: 'ont:DataSet'})
 
         get_zillow_data = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
-        
         doc.wasAssociatedWith(zillow_data, this_script)
 
         doc.usage(get_zillow_data, zillow_data, startTime, None, {prov.model.PROV_TYPE: 'ont:Retrieval'})
 
-        doc.wasAttributedTo(this_entity, this_agent)
-        
-        doc.wasGeneratedBy(this_entity, get_zillow_search_data, endTime)
-        
-        doc.wasDerivedFrom(this_entity, zillow_data, get_zillow_data, get_zillow_search_data)
+        get_mean_std = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+        mean_std = doc.entity('dat:ekmak_gzhou_kaylaipp_shen99#avg_price_stdev_price',
+                                     {prov.model.PROV_LABEL: 'Average Property prices and std', prov.model.PROV_TYPE: 'ont:DataSet'})
+
+        doc.wasAttributedTo(mean_std, this_script)
+        doc.wasGeneratedBy(mean_std, get_mean_std, endTime)
+        doc.wasDerivedFrom(mean_std, zillow_data, get_mean_std, get_mean_std, get_mean_std)
 
         repo.logout()
-                  
+
         return doc

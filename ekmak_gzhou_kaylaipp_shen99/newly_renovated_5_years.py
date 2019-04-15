@@ -9,6 +9,7 @@ import requests
 import xmltodict
 import csv
 import re
+from tqdm import tqdm
 
 #number of buildings per street in south boston 
 class newly_renovated_5_years(dml.Algorithm):
@@ -23,6 +24,8 @@ class newly_renovated_5_years(dml.Algorithm):
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate('ekmak_gzhou_kaylaipp_shen99','ekmak_gzhou_kaylaipp_shen99')
+        print('')
+        print('inserting newly renovated 5 years data...')
 
         #list of tuples in format (street name, street num, 1) aka (beacon st  , 362, 1)                  
         #contains all street names and recent date of rennovation for zillow & permit data = union 
@@ -43,13 +46,16 @@ class newly_renovated_5_years(dml.Algorithm):
         #retreieve permit data
         permit_data = repo.ekmak_gzhou_kaylaipp_shen99.permit_data.find()
         for info in permit_data:
-            zipcode = info['ZIP']                       #02127
-            full_address = info['ADDRESS'].lower().replace(".", "")  #175  w boundary rd
-            full_address = re.sub(' +', ' ', full_address)
-            pemit_year = info['ISSUED_DATE'][:4]     #2014
-            #get all addresses and year of recent construction in south boston
-            if zipcode == '02127':
-                all_construction.append((full_address, pemit_year))
+            try: 
+                zipcode = info['ZIP']                       #02127
+                full_address = info['ADDRESS'].lower().replace(".", "")  #175  w boundary rd
+                full_address = re.sub(' +', ' ', full_address)
+                pemit_year = info['ISSUED_DATE'][:4]     #2014
+                #get all addresses and year of recent construction in south boston
+                if zipcode == '02127':
+                    all_construction.append((full_address, pemit_year))
+            except: 
+                continue
 
          
         #combine two data sets
@@ -80,19 +86,15 @@ class newly_renovated_5_years(dml.Algorithm):
         #get those are constructed within 5 years (after 2014)
         recons_5 = map(lambda k,vs: [(k,vs)] if int(vs[1]) >= 2014 else [], combined) 
 
-        # print('')
-        # print('')
-        # print(recons_5)
-
         #create new database 
         repo.dropCollection("newly_renovated_5_years")
         repo.createCollection("newly_renovated_5_years")
 
         #add to database in {street: count} form 
-        for t in combined: 
+        for t in tqdm(combined): 
             repo['ekmak_gzhou_kaylaipp_shen99.newly_renovated_5_years'].insert_one({t[0]:t[1]})
 
-        print('inserted newly renovated within 5 years data')
+        # print('inserted newly renovated within 5 years data')
         repo.logout()
         endTime = datetime.datetime.now()
         return {"start":startTime, "end":endTime}
@@ -169,7 +171,5 @@ print(json.dumps(json.loads(doc.serialize()), indent=4))
 '''
 
 # newly_renovated_5_years.execute()
-# print('generating newly renovated house provenance...')
-# doc = newly_renovated_5_years.provenance()
-# print(doc.get_provn())
-# print(json.dumps(json.loads(doc.serialize()), indent=4))
+# newly_renovated_5_years.provenance()
+# print('prov done! ')
