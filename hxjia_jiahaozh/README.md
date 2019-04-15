@@ -91,15 +91,18 @@ This part was also implemented in KMEANS.py
 
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Classified_Map.png" />
 
+
+
 ## Improvements
-We did 2 improvements on KMeans.
-### 1. K-means++
+We did 2 improvements on K-Means.
+### 1. K-Means++
 Although given enough time KMeans will always converge, this may lead to a local minimum. It is highly dependent on the 
 initialization of the centoids. To overcome this issue, we used k-means++ initialization scheme. Just set init = 'k-
-means++' to make it. This helped initializing the centroids to be (generally) distant from each other. And it helped 
+means++' parameter in Sklearn. This helped initializing the centroids to be (generally) distant from each other. And it helped 
 speed up converging.
 
-###
-
+### 2. Mini Batch K-Means
+The Mini Batch K-Means is a variant of K-Meanns, which uses mini-batches to shorten computation time. In contrast to other algorithms that reduce the convergence time of k-Means, mini-batch k-Means produces results that are generally only slightly worse than the standard algorithm.
+As a result, the computation was shortened to its half while the WCSSs differed slightly.
 
 
