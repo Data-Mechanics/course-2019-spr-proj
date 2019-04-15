@@ -1,4 +1,5 @@
 # Project 1
+
 ##### Ellen Mak, Xiaoyi Gabby Zhou, Kayla Ippongi, Ziyu Shen (ekmak_gzhou_kaylaipp_shen99)
 
 ## Data Portals and Datasets
@@ -25,22 +26,26 @@
 With these three new datasets, we can gain a better understanding of the status of South Boston and it’s streets and potential properties to keep an eye on. With this information we can see which streets are most populated and which streets are more family friendly by figuring out which units are more cost efficient and newly renovated. This is particularly beneficial for the South Boston Neighborhood Development because this gives them an idea of which streets contain more individual houses vs apartments and offers them the ability to keep an eye on up and coming streets.  
 
 ## Project 2 
-Our main goal is to identify buildings that may not even be on the market yet and then finding and contacting the property owners. To solve our problem, we utilized constraint satisfaction to filter and narrow down the properties in South Boston in order to figure out which properties to target. We filtered based on property valuation, property type, overall property condition and the number of rooms/bedrooms and returned all properties that fit those constraints. Additionally, we used a greedy algorithm approach to optimize a user’s specified budget to maximize or minimize the number of properties to buy.  Moving forward, these constraint and optimization techniques that we formed in project two can be reused in project three to build an interactive ui. For example, a user can input a price range/budget and type of property they’re looking for and the site outputs a map or list of properties that fit the given constraints. 
+
+Our main goal is to identify buildings that may not even be on the market yet and then finding and contacting the property owners. To solve our problem, we utilized constraint satisfaction to filter and narrow down the properties in South Boston in order to figure out which properties to target. We filtered based on property valuation, property type, overall property condition and the number of rooms/bedrooms and returned all properties that fit those constraints. Additionally, we used a greedy algorithm approach to optimize a user’s specified budget to maximize or minimize the number of properties to buy, and all of the above can be found in `filter_constraints.py`.  Moving forward, these constraint and optimization techniques that we formed in project two can be reused in project three to build an interactive ui. For example, a user can input a price range/budget and type of property they’re looking for and the site outputs a map or list of properties that fit their given constraints. 
+
+Our team was also interested in determinging if there was a correlation between property price and location in South Boston. Rather than using correlation coefficient, we used k-means on the price and scaled longitidue and latitude coordinates in order to cluster the properties, then compared the std and mean for each cluster to the overall mean and std of the dataset. The optimal k = 4 was determined via the elbow method which is in `k_means_price.py` along with the rest of the k-means code and graphed in `figure_1.png`. 
  
 ### South Boston Property Price Statistics
 * Mean: $860,603.44
 * STD: $405,760.96
 * Number of Properties: 11,478
 
-
-
 ### K-Means Statistics
+![Figure 1: Cluster Result](https://github.com/kaylaipp/course-2019-spr-proj/blob/master/ekmak_gzhou_kaylaipp_shen99/k_means.png)
+
 	
 |*Cluster*|Mean|STD|Varience|Range|
 |---|---|---|---|---|
-|0|1,952,818.29|484,121.76|234373884850.92|1,489,121 - 10,808,461|
-|1|625,496.54|118,993.41|14159433093.90|313,645 - 823,940|
-|2|1,022,676.34|160,637.71|25804476352.56|824,021 - 1,486,690|
+|0|777,963.67|255,664.67|65364426342.38|318,167 - 2,015,608|
+|1|728,779.33|220,385.26|48569666667.76|313,645 - 1,614,889|
+|2|796,221.34|225,201.55|50715741323.79|348,639 - 1,414,535|
+|3|1,908,919.74|493,819.63|243857832656.78|1,309,041 - 10,808,461|
 
 
 
