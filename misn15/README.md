@@ -1,4 +1,4 @@
-### CS 504 Project
+# CS 504 Project
 
 ## Project #1
 
