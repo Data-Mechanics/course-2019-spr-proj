@@ -7,7 +7,7 @@ import uuid
 import pandas as pd
 
 
-class Id_month_price_score_lat_long(dml.Algorithm):
+class id_month_price_score_lat_long(dml.Algorithm):
     contributor = 'hxjia_jiahaozh'
     reads = ['hxjia_jiahaozh.listings', 'hxjia_jiahaozh.calendar']
     writes = ['hxjia_jiahaozh.id_month_price_score_lat_long']
