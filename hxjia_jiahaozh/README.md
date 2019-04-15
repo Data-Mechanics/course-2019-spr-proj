@@ -47,14 +47,7 @@ Generated from Boston Airbnb Listings and Boston Landmarks
 <br />Boston Airbnb Listing: Select, Project  Aggregate to get (neighbourhood, the number of houses in that neighbourhood), Select, Project and Aggregate to get (neighbourhood, the mean price of houses in that neighbourhood).
 <br />Boston Landmarks: Select, Project and Aggregate to get (neighbourhood, the number of landmarks in that neighbourhood)
 <br />Combiantion: project to get  (neighbourhood, the number of landmarks,  the number of houses, the mean prices of houses in that neighbourhood)
-## Tools and Libraries
-Pandas
-<br />dml
-<br />prov
-<br />protoql
-<br />json
-<br />uuid
-<br />urllib.request
+
 
 # CS504 Data-Mechanics Project 2
 ## Narrative
@@ -114,4 +107,15 @@ speed up converging.
 The Mini Batch K-Means is a variant of K-Meanns, which uses mini-batches to shorten computation time. In contrast to other algorithms that reduce the convergence time of k-Means, mini-batch k-Means produces results that are generally only slightly worse than the standard algorithm.
 As a result, the computation was shortened to its half while the WCSSs differed slightly.
 
-
+# Tools and Libraries
+Pandas
+<br />dml
+<br />prov
+<br />protoql
+<br />json
+<br />uuid
+<br />urllib.request
+<br />scipy
+<br />sklearn
+<br />gmplot
+<br />matplotlib
