@@ -51,7 +51,7 @@ Generated from Boston Airbnb Listings and Boston Landmarks
 
 # CS504 Data-Mechanics Project 2
 ## Narrative
-The idea of this project was to find the best way to categorize the airbnb houses based on reviews and prices. We dicided the best way as choosing houses with lower prices and higher review scores. Figure 1 and Figure 2 show the basic housing distribution on Google map and the corresponding heatmap to show the housing density in areas. In the project, we first calculated the correlation coefficient between prices and review scores to find if they two are independent enough to do k-means. Then we calculated Within-Cluster-Sum-of-Squares(WCSS) under different K values to choose best K for clustering. Finally, we plotted each cluster according to latitudes and longtitudes on googlemap using different colors.
+The idea of this project was to categorize the airbnb houses based on reviews and prices. We decided the best way as choosing houses with lower prices and higher review scores. Figure 1 and Figure 2 show the basic housing distribution scatter plot on Google map and the corresponding heatmap to show the housing density in areas. At first, for statistical analysis part, we used seaborn library to plot prices distribution and review scores distribution. And we calculated the correlation coefficient between prices and review scores and the the correlation coefficient between prices and the number of reviews. For optimization and constraint satisfaction part, we need only those houses, the number of reviews of which is larger than 10 because small number of reviews is not representative. Then we calculated Within-Cluster-Sum-of-Squares(WCSS) under different K values to choose best K to do perform kmeans based on prices and review scores. Next we did kmeans to cluster houses.  Finally, we plotted each cluster according to latitudes and longtitudes on googlemap using different colors.
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Housing_Scatter_Map.png" />
 <p align="center">Figure 1</p>
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Housing_Heap_Map.png" />
@@ -122,3 +122,4 @@ Pandas
 <br />sklearn
 <br />gmplot
 <br />matplotlib
+<br />seaborn
