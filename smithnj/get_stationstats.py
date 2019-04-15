@@ -1,4 +1,3 @@
-import urllib.request
 import json
 import dml
 import prov.model
@@ -7,11 +6,11 @@ import uuid
 import pandas as pd
 
 ############################################
-# grab_ctastations.py
-# Script for collecting CTA Stations data
+# get_stationsttats.py
+# Script for collecting CTA Station Ridership data
 ############################################
 
-class grab_ctastations(dml.Algorithm):
+class get_stationstats(dml.Algorithm):
     contributor = 'smithnj'
     reads = []
     writes = ['smithnj.ctastats']
@@ -24,10 +23,10 @@ class grab_ctastations(dml.Algorithm):
         # ---[ Connect to Database ]---------------------------------
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('smithnj', 'smithnj')
+        repo.authenticate('admin', 'example')
         repo_name = 'smithnj.ctastats'
         # ---[ Grab Data ]-------------------------------------------
-        df = pd.read_csv('http://datamechanics.io/data/smithnj/smithnj/CTA_Ridership_Totals.csv').to_json(orient='records')
+        df = pd.read_csv('https://data.cityofchicago.org/api/views/t2rn-p8d7/rows.csv?accessType=DOWNLOAD').to_json(orient='records')
         loaded = json.loads(df)
         # ---[ MongoDB Insertion ]-------------------------------------------
         repo.dropCollection('ctastats')
@@ -44,7 +43,7 @@ class grab_ctastations(dml.Algorithm):
     def provenance(doc=prov.model.ProvDocument(), startTime=None, endTime=None):
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('smithnj', 'smithnj')
+        repo.authenticate('admin', 'example')
         doc.add_namespace('alg',
                           'http://datamechanics.io/algorithm/')  # The scripts are in <folder>#<filename> format.
         doc.add_namespace('dat',
@@ -52,7 +51,7 @@ class grab_ctastations(dml.Algorithm):
         doc.add_namespace('ont',
                           'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/')  # The event log.
-        doc.add_namespace('bdp', 'https://data.cityofchicago.org/api/views/t2qc-9pjd/rows.csv?accessType=DOWNLOAD')
+        doc.add_namespace('bdp', 'https://data.cityofchicago.org/api/views/t2rn-p8d7/rows.csv?accessType=DOWNLOAD')
 
         this_script = doc.agent('alg:smithnj#ctastats',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
