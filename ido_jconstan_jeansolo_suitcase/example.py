@@ -203,31 +203,63 @@ class example(dml.Algorithm):
         
         
         #separate student addresses by school attended - these will be the points in k-means
-        tWMS = select(t15, lambda t: t[1] == 'Wilson Middle School')
+        POINTS = []
         tNHS = select(t15, lambda t: t[1] == 'Natick High School')
-        tBHES = select(t15, lambda t: t[1] == 'Bennett-Hemenway Elementary School')
-        tNPS = select(t15, lambda t: t[1] == 'Natick Preschool')
         tMES = select(t15, lambda t: t[1] == 'Memorial Elementary School')
+        tJFKMS = select(t15, lambda t: t[1] == 'J. F. Kennedy Middle School')
+        tWMS = select(t15, lambda t: t[1] == 'Wilson Middle School')
         tBES = select(t15, lambda t: t[1] == 'Brown Elementary School')
-        tJFKMS = select(t15, lambda t: t[1] == 'J. F. Kennedy Middle School') 
-        tJES = select(t15, lambda t: t[1] == 'Johnson Elementary School')
+        tBHES = select(t15, lambda t: t[1] == 'Bennett-Hemenway Elementary School')
+         
+        POINTS.append(tNHS)
+        POINTS.append(tMES)
+        POINTS.append(tJFKMS)
+        POINTS.append(tWMS)
+        POINTS.append(tBES)
+        POINTS.append(tBHES)
         
-        #the stops are the means for k-means
-        tNHSStops = select(t16, lambda t: t[0] == 'NHS')
+        #tNPS = select(t15, lambda t: t[1] == 'Natick Preschool')
+        #tJES = select(t15, lambda t: t[1] == 'Johnson Elementary School')
         
-        #print("tNHSStops[0]: ", tNHSStops[0])
-        '''
-        print("tWMS[0]", tWMS[0]) 
-        print("tNHS[0]", tNHS[0])
-        print("tBHES[0]", tBHES[0])
-        print("tNPS[0]", tNPS[0])
-        print("tMES[0]", tMES[0])
-        print("tBES[0]", tBES[0])
-        print("tJFKMS[0]", tJFKMS[0])
-        print("tJES[0]", tJES[0])
+        #the stops are the means for k-means - converted to sets and back to remove duplicates
+        STOPS = []
+        tNHSStops = list(set(select(t16, lambda t: t[0] == 'NHS')))
+        tMESStops = list(set(select(t16, lambda t: t[0] == 'MM')))
+        tJFKMSStops = list(set(select(t16, lambda t: t[0] == 'KN')))
+        tWMSStops = list(set(select(t16, lambda t: t[0] == 'WL')))
+        tBESStops = list(set(select(t16, lambda t: t[0] == 'BR')))
+        tBHESStops = list(set(select(t16, lambda t: t[0] == 'BH')))
         
-        '''
+        STOPS.append(tNHSStops)
+        STOPS.append(tMESStops)
+        STOPS.append(tJFKMSStops)
+        STOPS.append(tWMSStops)
+        STOPS.append(tBESStops)
+        STOPS.append(tBHESStops)
         
+        #print(STOPS)
+        
+        #implementation of k-means, with md.time as the distance function
+        #todo: set a departure time in md.time
+        
+        #done for every school separately
+        for x in range(len(STOPS)):
+            MEANS = STOPS[x]
+            OLD = []
+            
+            while OLD != MEANS:
+                OLD = MEANS
+                MPD = [(m, p, md.time(m,p)) for (m, p) in product(MEANS, POINTS)]
+                PDs = [(p, md.time(m,p)) for (m, p, d) in MPD]
+                PD = aggregate(PDs, min)
+                MP = [(m, p) for ((m,p,d), (p2,d2)) in product(MPD, PD) if p==p2 and d==d2]
+                MT = aggregate(MP, plus)
+
+                M1 = [(m, 1) for (m, _) in MP]
+                MC = aggregate(M1, sum)
+
+                MEANS = [scale(t,c) for ((m,t),(m2,c)) in product(MT, MC) if m == m2]
+                print(sorted(MEANS))
         
         
         
@@ -414,6 +446,18 @@ def product(R, S):
 def aggregate(R, f):
     keys = {r[0] for r in R}
     return [(key, f([v for (k,v) in R if k == key])) for key in keys]
+    
+def plus(args):
+    p = [0,0]
+    for (x,y) in args:
+        p[0] += x
+        p[1] += y
+    return tuple(p)
+    
+def scale(p,c):
+    (x,y) = p
+    return (x/c, y/c)
+            
 '''
 # This is example code you might use for debugging this module.
 # Please remove all top-level function calls before submitting.

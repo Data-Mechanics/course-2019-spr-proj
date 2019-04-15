@@ -14,7 +14,7 @@ from datetime import datetime
 #time = datetime.now()
 
 # PUT IN API KEY HERE
-my_key = 'AIzaSyAePvzBOkxdh5YYcgTQjhY9bHWlNEn3Sog'
+my_key = ''
 
 
 def time(home_addr, work_addr):
