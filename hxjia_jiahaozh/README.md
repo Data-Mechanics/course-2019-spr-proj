@@ -51,14 +51,14 @@ Generated from Boston Airbnb Listings and Boston Landmarks
 
 # CS504 Data-Mechanics Project 2
 ## Narrative
-The idea of this project was to categorize the airbnb houses based on reviews and prices. We decided the best way as choosing houses with lower prices and higher review scores. Figure 1 and Figure 2 show the basic housing distribution scatter plot on Google map and the corresponding heatmap to show the housing density in areas. At first, for statistical analysis part, we used seaborn library to plot prices distribution and review scores distribution. And we calculated the correlation coefficient between prices and review scores and the the correlation coefficient between prices and the number of reviews. For optimization and constraint satisfaction part, we need only those houses, the number of reviews of which is larger than 10 because small number of reviews is not representative. Then we calculated Within-Cluster-Sum-of-Squares(WCSS) under different K values to choose best K to do perform kmeans based on prices and review scores. Next we did kmeans to cluster houses.  Finally, we plotted each cluster according to latitudes and longtitudes on googlemap using different colors.
+The idea of this project was to categorize the airbnb houses based on reviews and prices. We decided the best way as choosing houses with lower prices and higher review scores. Figure 1 and Figure 2 show the basic housing distribution scatter plot on Google map and the corresponding heatmap to show the housing density in areas. At first, for statistical analysis part, we used seaborn library to plot prices distribution and review scores distribution. And we calculated the correlation coefficient between prices and review scores and the the correlation coefficient between prices and the number of reviews. For optimization and constraint satisfaction part, we needed only those houses, the number of reviews of which is larger than 10 because small number of reviews is not representative. Then we calculated Within-Cluster-Sum-of-Squares(WCSS) under different K values to choose best K to do kmeans based on prices and review scores. Next we did kmeans to cluster houses.  Finally, we plotted each cluster according to latitudes and longtitudes on googlemap using different colors.
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Housing_Scatter_Map.png" />
 <p align="center">Figure 1</p>
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Housing_Heap_Map.png" />
 <p align="center">Figure 2</p>
 
 ## Authentication
-We used Google Map API in KMEANS.py to plot on googlemap and the api key is required.
+We used Google Map API in KMEANS.py to plot googlemap and the api key is required.
 
 ## Data Transformation
 This part was implemented in id_month_price_score_lat_long.py
@@ -75,21 +75,21 @@ This part was implemented in KMEANS.py
 <br />We calculated the correlation coefficient between prices and review scores and the correlation coefficient between prices and the numbers of reviews. The results are as follows.
 <br />Prices and Review Scores: 0.1172
 <br />Prices and the numbers of Reviews: -0.1565 
-<br />The results show that the two pairs are both independent enough to do Kmeans, in the project we used price and review score in the next step.
+<br />In the project we used price and review score to do kmeans in the next step.
 
 ## Optimization
 This part was also implemented in KMEANS.py
-<br />We calculated the Within-Cluster-Sum-of-Squares(WCSS) for k-means, finding the best k value is 4, so we did a 4-means and plotted each cluster onto googlemap to reveal the relationship between each cluster and their geolocation.
+<br />We calculated the Within-Cluster-Sum-of-Squares(WCSS) for k-means and found the best k value is 4, so we did a 4-means and plotted each cluster onto googlemap to reveal the relationship between each cluster and their geolocation.
 
 
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/K_WCSS.png" />
 <p align="center">Figure 5</p>
 The x-axis of Figure 5 is the range of k we ran.
 <br />The y-axis within-cluster sum of squares is the sum of the squared deviations between each observation and the cluster center.
-<br />The method we used to get the best value of k is the elbow method. This method plots a line chart of WCSS for each value of k. The "elbow": most significant change point of the line chart is the best k.
+<br />The method we used to get the best value of k is the elbow method. This method plots a line chart of WCSS for each value of k. The "elbow" which is the most significant change point of the line chart, is the best k.
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Kmeans_Result.png" />
 <p align="center">Figure 6</p>
-This is the Kmeans result we got using the best k value(4), in the figure we can see that the houses are divided into four clusters and the cluster with the best value of money is the one in red.
+This is the Kmeans result we got using the best k value(4). In the figure we can see that the houses are divided into four clusters and the cluster with the best value of money and review scores is the one in red.
 
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Classified_Map.png" />
 <p align="center">Figure 7</p>
