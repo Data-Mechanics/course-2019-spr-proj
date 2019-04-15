@@ -38,22 +38,19 @@ _transformWaste_: This algorithm gets the coordinates and census bureau tract fo
 
 For the optimization portion of the project, I first had to collect additional datasets. 
 
-  _getWasteAll_: I found several datasets on oil/hazardous waste sites within Massachusetts from the Massachusetts government and I     decided to merge them all into one complete dataset. This dataset ultimately adds to the oil and waste datasets that I retrieved in project one. The three datasets used are: [Oil/Hazardous Waste](https://docs.digital.mass.gov/dataset/massgis-data-massdep-tier-classified-oil-andor-hazardous-material-sites-mgl-c-21e), [Hazardous Waste Generators](https://docs.digital.mass.gov/dataset/list-massachusetts-hazardous-waste-generators-january-23-2018), and [Oil/Waste with Activity and Use Limitations](https://docs.digital.mass.gov/dataset/massgis-data-massdep-oil-andor-hazardous-material-sites-activity-and-use-limitations-aul).
+  1)_getWasteAll_: I found several datasets on oil/hazardous waste sites within Massachusetts from the Massachusetts government and I     decided to merge them all into one complete dataset. This dataset ultimately adds to the oil and waste datasets that I retrieved in project one. The three datasets used are: [Oil/Hazardous Waste](https://docs.digital.mass.gov/dataset/massgis-data-massdep-tier-classified-oil-andor-hazardous-material-sites-mgl-c-21e), [Hazardous Waste Generators](https://docs.digital.mass.gov/dataset/list-massachusetts-hazardous-waste-generators-january-23-2018), and [Oil/Waste with Activity and Use Limitations](https://docs.digital.mass.gov/dataset/massgis-data-massdep-oil-andor-hazardous-material-sites-activity-and-use-limitations-aul).
 
-_getOpenSpace_: I retrieved data from 
+  2)_getOpenSpace_: I retrieved data on all the green spaces in Boston from BostonMaps open data portal which is a website that contains geospatial data for Boston. You can find the data source [here](http://bostonopendata-boston.opendata.arcgis.com/datasets/open-space).
 
-
-_getSchools_:
-
-
-
+  3)_getSchools_: I retrieved data on all the public and non-public schools in Boston from Boston Maps open data portal. You can find the data source [here](http://bostonopendata-boston.opendata.arcgis.com/datasets/public-schools) and [here](http://bostonopendata-boston.opendata.arcgis.com/datasets/non-public-schools).
 
 _transformWasteAll_: This combines all of the datasets that were retrieved using the getWasteAll algorithm and makes sure that every waste site has its corresponding coordinates and census tract. This dataset is then stored in MongoDB and is used for the waste dataset for project 2. 
 
-_
+_linearRegression_: 
+
 I decided to use gradient descent and linear regression to determine whether there was a relationship between the datasets that I already collected. 
 
-_linearRegression_: 
+
 
 Limitations:
 Because the small area model cannot detect effects due to local interventions, users are cautioned against using these estimates for program or policy evaluations. 
