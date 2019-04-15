@@ -9,10 +9,10 @@ import os
 def aggregate(R, f):
 	keys = {r[0] for r in R}
 	return [(key, f([v for (k,v) in R if k == key])) for key in keys]
-class z_total(dml.Algorithm):
+class total(dml.Algorithm):
 
 	contributor = 'ruipang_zhou482'
-	reads = ["ruipang_zhou482.facilities", "ruipang_zhou482.TotalSchool", "ruipang_zhou482.PropertyAssessment"]
+	reads = ["ruipang_zhou482.facilities", "ruipang_zhou482.totalSchool", "ruipang_zhou482.propertyAssessment"]
 	writes = ['ruipang_zhou482.total']
 
 
@@ -27,7 +27,7 @@ class z_total(dml.Algorithm):
 		repo.authenticate('ruipang_zhou482', 'ruipang_zhou482')
 
 		school = []
-		for i in repo['ruipang_zhou482.TotalSchool'].find():
+		for i in repo['ruipang_zhou482.totalSchool'].find():
 			school.append({"zipcode": i["zipcode"], "count": i["total_school"]})
 		facilities = []
 		for i in repo['ruipang_zhou482.facilities'].find():

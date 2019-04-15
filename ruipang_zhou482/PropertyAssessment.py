@@ -7,10 +7,10 @@ import uuid
 import csv
 import io
 
-class PropertyAssessment(dml.Algorithm):
+class propertyAssessment(dml.Algorithm):
     contributor = 'ruipang_zhou482'
     reads = []
-    writes = ['ruipang_zhou482.PropertyAssessment']
+    writes = ['ruipang_zhou482.propertyAssessment']
 
     @staticmethod
     def execute(trial = False):
@@ -53,12 +53,12 @@ class PropertyAssessment(dml.Algorithm):
             c['avg_value']=dic[i][0]/dic[i][1]
             ps.append(c)
         
-        repo.dropCollection("PropertyAssessment")
-        repo.createCollection("PropertyAssessment")
+        repo.dropCollection("propertyAssessment")
+        repo.createCollection("propertyAssessment")
         
         
-        repo['ruipang_zhou482.PropertyAssessment'].insert_many(ps)
-        repo['ruipang_zhou482.PropertyAssessment'].metadata({'complete':True})
+        repo['ruipang_zhou482.propertyAssessment'].insert_many(ps)
+        repo['ruipang_zhou482.propertyAssessment'].metadata({'complete':True})
         # # print(repo['ruipang_zhou482.PropertyAssessment'].metadata())
         
         repo.logout()
@@ -86,9 +86,9 @@ class PropertyAssessment(dml.Algorithm):
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
         doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
 
-        this_script = doc.agent('alg:ruipang_zhou482#PropertyAssessment', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        resource = doc.entity('dat:Boston Property Values',
-                              {'prov:label': 'Boston Property Values Data', prov.model.PROV_TYPE: 'ont:DataResource',
+        this_script = doc.agent('alg:ruipang_zhou482#propertyAssessment', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        resource = doc.entity('dat:Boston property Values',
+                              {'prov:label': 'Boston property Values Data', prov.model.PROV_TYPE: 'ont:DataResource',
                                'ont:Extension': 'csv'})
         get_propvalue = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(get_propvalue, this_script)
@@ -97,7 +97,7 @@ class PropertyAssessment(dml.Algorithm):
                   }
                   )
 
-        propvalue = doc.entity('dat:ruipang_zhou482#propertyvalue', {prov.model.PROV_LABEL:'Boston Property Values ', prov.model.PROV_TYPE:'ont:DataSet'})
+        propvalue = doc.entity('dat:ruipang_zhou482#propertyvalue', {prov.model.PROV_LABEL:'Boston property Values ', prov.model.PROV_TYPE:'ont:DataSet'})
         doc.wasAttributedTo(propvalue, this_script)
         doc.wasGeneratedBy(propvalue, get_propvalue, endTime)
         doc.wasDerivedFrom(propvalue, resource, get_propvalue, get_propvalue, get_propvalue)
@@ -106,8 +106,8 @@ class PropertyAssessment(dml.Algorithm):
 
         return doc
 
-PropertyAssessment.execute()
-doc = PropertyAssessment.provenance()
+propertyAssessment.execute()
+doc = propertyAssessment.provenance()
 print(doc.get_provn())
 print(json.dumps(json.loads(doc.serialize()), indent=4))
 

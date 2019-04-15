@@ -7,11 +7,11 @@ import uuid
 import csv
 import io
 
-class TotalSchool(dml.Algorithm):
+class totalSchool(dml.Algorithm):
     
     contributor = 'ruipang_zhou482'
-    reads = ['ruipang_zhou482.PublicSchool', 'ruipang_zhou482.PrivateSchool']
-    writes = ['ruipang_zhou482.TotalSchool']
+    reads = ['ruipang_zhou482.publicSchool', 'ruipang_zhou482.privateSchool']
+    writes = ['ruipang_zhou482.totalSchool']
 
     @staticmethod
     def execute(trial = False):
@@ -51,10 +51,10 @@ class TotalSchool(dml.Algorithm):
 
         # Create the table called allSchool and save the data in the database
         #repo.authenticate('debhe_wangdayu', 'debhe_wangdayu')
-        repo.dropCollection('ruipang_zhou482.TotalSchool')
-        repo.createCollection('ruipang_zhou482.TotalSchool')
-        repo['ruipang_zhou482.TotalSchool'].insert_many(s)
-        repo['ruipang_zhou482.TotalSchool'].metadata({'complete':True})
+        repo.dropCollection('ruipang_zhou482.totalSchool')
+        repo.createCollection('ruipang_zhou482.totalSchool')
+        repo['ruipang_zhou482.totalSchool'].insert_many(s)
+        repo['ruipang_zhou482.totalSchool'].metadata({'complete':True})
         # print(repo['debhe_wangdayu.allSchool'].metadata())
 
 
@@ -82,9 +82,9 @@ class TotalSchool(dml.Algorithm):
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
         doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
 
-        this_script = doc.agent('alg:ruipang_zhou482#TotalSchool', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        this_script = doc.agent('alg:ruipang_zhou482#totalSchool', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
         resource = doc.entity('dat:Boston school',
-                              {'prov:label': 'Boston Total School', prov.model.PROV_TYPE: 'ont:DataResource',
+                              {'prov:label': 'Boston total School', prov.model.PROV_TYPE: 'ont:DataResource',
                                'ont:Extension': 'csv'})
         get_total = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(get_total, this_script)
@@ -93,7 +93,7 @@ class TotalSchool(dml.Algorithm):
                   }
                   )
 
-        total = doc.entity('dat:ruipang_zhou482#TotalSchool', {prov.model.PROV_LABEL:'Boston TotalSchool ', prov.model.PROV_TYPE:'ont:DataSet'})
+        total = doc.entity('dat:ruipang_zhou482#totalSchool', {prov.model.PROV_LABEL:'Boston totalSchool ', prov.model.PROV_TYPE:'ont:DataSet'})
         doc.wasAttributedTo(total, this_script)
         doc.wasGeneratedBy(total, get_total, endTime)
         doc.wasDerivedFrom(total, resource, get_total, get_total, get_total)
@@ -103,7 +103,7 @@ class TotalSchool(dml.Algorithm):
         return doc
 
 
-TotalSchool.execute()
+totalSchool.execute()
 
 
 

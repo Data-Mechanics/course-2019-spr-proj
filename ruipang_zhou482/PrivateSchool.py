@@ -6,10 +6,10 @@ import datetime
 import uuid
 import csv
 import io
-class PrivateSchool(dml.Algorithm):
+class privateSchool(dml.Algorithm):
     contributor = 'ruipang_zhou482'
     reads = []
-    writes = ['ruipang_zhou482.PrivateSchool']
+    writes = ['ruipang_zhou482.privateSchool']
 
     @staticmethod
     def execute(trial = False):
@@ -40,12 +40,12 @@ class PrivateSchool(dml.Algorithm):
             c['num_school']=dic[i]
             ps.append(c)
         
-        repo.dropCollection("PrivateSchool")
-        repo.createCollection("PrivateSchool")
+        repo.dropCollection("privateSchool")
+        repo.createCollection("privateSchool")
         
         
-        repo['ruipang_zhou482.PrivateSchool'].insert_many(ps)
-        repo['ruipang_zhou482.PrivateSchool'].metadata({'complete':True})
+        repo['ruipang_zhou482.privateSchool'].insert_many(ps)
+        repo['ruipang_zhou482.privateSchool'].metadata({'complete':True})
         # # print(repo['ruipang_zhou482.PropertyAssessment'].metadata())
         
         repo.logout()
@@ -73,27 +73,27 @@ class PrivateSchool(dml.Algorithm):
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
         doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
 
-        this_script = doc.agent('alg:ruipang_zhou482#PrivateSchool', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        this_script = doc.agent('alg:ruipang_zhou482#privateSchool', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
         resource = doc.entity('dat:Boston Property Values',
-                              {'prov:label': 'BostonPrivateSchool', prov.model.PROV_TYPE: 'ont:DataResource',
+                              {'prov:label': 'BostonprivateSchool', prov.model.PROV_TYPE: 'ont:DataResource',
                                'ont:Extension': 'csv'})
-        get_PrivateSchool = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(get_PrivateSchool, this_script)
-        doc.usage(get_PrivateSchool, resource, startTime, None,
+        get_privateSchool = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(get_privateSchool, this_script)
+        doc.usage(get_privateSchool, resource, startTime, None,
                   {prov.model.PROV_TYPE:'ont:Retrieval',
                   }
                   )
 
-        PrivateSchool = doc.entity('dat:ruipang_zhou482#PrivateSchool', {prov.model.PROV_LABEL:'Boston PrivateSchool ', prov.model.PROV_TYPE:'ont:DataSet'})
-        doc.wasAttributedTo(PrivateSchool, this_script)
-        doc.wasGeneratedBy(PrivateSchool, get_PrivateSchool, endTime)
-        doc.wasDerivedFrom(PrivateSchool, resource, get_PrivateSchool, get_PrivateSchool, get_PrivateSchool)
+        privateSchool = doc.entity('dat:ruipang_zhou482#privateSchool', {prov.model.PROV_LABEL:'Boston privateSchool ', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(privateSchool, this_script)
+        doc.wasGeneratedBy(privateSchool, get_privateSchool, endTime)
+        doc.wasDerivedFrom(privateSchool, resource, get_privateSchool, get_privateSchool, get_privateSchool)
 
         repo.logout()
 
         return doc
 
-PrivateSchool.execute()
-doc = PrivateSchool.provenance()
+privateSchool.execute()
+doc = privateSchool.provenance()
 print(doc.get_provn())
 print(json.dumps(json.loads(doc.serialize()), indent=4))
