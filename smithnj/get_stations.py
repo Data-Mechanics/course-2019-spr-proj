@@ -7,7 +7,7 @@ import pandas as pd
 import uuid
 
 ############################################
-# grab_stations.py
+# get_stations.py
 # Script for collecting CTA L station location
 ############################################
 
