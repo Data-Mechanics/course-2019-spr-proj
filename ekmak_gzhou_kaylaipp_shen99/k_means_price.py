@@ -118,7 +118,7 @@ class k_means_price(dml.Algorithm):
         # plt.plot(K, Sum_of_squared_distances, 'bx-')
         # plt.xlabel('k')
         # plt.ylabel('Sum of Squared Distances')
-        # plt.title('Elbow Method For Determining Optimal k in kmeans price clustering')
+        # plt.title('Determining Optimal K in K-means price clustering')
         # plt.show()
 
         # k means 
@@ -130,8 +130,7 @@ class k_means_price(dml.Algorithm):
         map_ = folium.Map(location = [42.3381569,-71.0547323], zoom_start =14)
 
         # initialize colors for clusters 
-        colors = {0: '#8CDBFC', 1: '#BCF777', 2: '#D158B9', 3: '#FF69B4', 
-        4: '#4169E1', 5: '#00FFFF', 6: '#00CED1'}
+        colors = {0: '#8CDBFC', 1: '#BCF777', 2: '#D158B9', 3: '#FA9638'}
 
 
         '''
@@ -196,26 +195,28 @@ class k_means_price(dml.Algorithm):
             ).add_child(folium.Popup(s)).add_to(map_)
 
         cluster_captions = ['Cluster 1: $1,952,818.29', 'Cluster 2: 625,496.54', 'Cluster 3: 1,022,676.34']
-        folium_colors = ['lightblue', 'lightgreen', 'purple']
+        folium_colors = ['lightblue', 'lightgreen', 'purple', 'orange']
+
+        
+        # calculate unscaled cluster centers from scaled long,lat point 
+        # X_original = (X_scale * std_of_array) + mean_of_array
+        unscaled_cluster_centers = []
+        for c in cluster_centers:  
+            lat_scaled = c[1]
+            lon_scaled = c[2]
+            lat_unscaled = (lat_scaled * lat_list_orig.std()) + lat_list_orig.mean()
+            lon_unscaled = (lon_scaled * long_list_orig.std()) + long_list_orig.mean()
+            unscaled_cluster_centers.append([lat_unscaled, lon_unscaled])
 
         # plot clusters centers from k - means 
-        # for idx,clusters in enumerate(cluster_centers): 
-        #     price = clusters[0]
-        #     lat = float(clusters[1])
-        #     lon = float(clusters[2])
-        #     # print('lat, long: ', lon, lat)
-        #     # folium.CircleMarker(
-        #     #     location=[lon,lat],
-        #     #     radius=cluster_radi[idx],
-        #     #     color=colors[idx],
-        #     #     fill=True,
-        #     #     fill_color=colors[idx]
-        #     # ).add_to(map_)
-        #     folium.Marker(
-        #     location=[lon,lat],
-        #     popup=cluster_captions[idx],
-        #     icon=folium.Icon(color=folium_colors[idx], icon='info-sign')
-        # ).add_to(map_)
+        for idx,clusters in enumerate(cluster_centers): 
+            price = clusters[0]
+            lat = float(unscaled_cluster_centers[idx][0])
+            lon = float(unscaled_cluster_centers[idx][1])
+            folium.Marker(
+            location=[lon,lat],
+            icon=folium.Icon(color=folium_colors[idx], icon='info-sign')
+        ).add_to(map_)
 
         # --------------------------------------------
         # save interative map to k_means_clustering_scaled.html 
@@ -273,6 +274,6 @@ def euclidean(v1, v2):
     return sum((p-q)**2 for p, q in zip(v1, v2)) ** .5
 
 
-# k_means_price.execute(True)
-# k_means_price.provenance()
-# print('prov done! ')
+k_means_price.execute(False)
+k_means_price.provenance()
+print('prov done! ')
