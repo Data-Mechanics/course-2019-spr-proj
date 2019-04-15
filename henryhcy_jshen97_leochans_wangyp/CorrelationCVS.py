@@ -60,6 +60,8 @@ class CorrelationCVS(dml.Algorithm):
         }
         repo.henryhcy_jshen97_leochans_wangyp.correlationCVS.insert_one(d_cri)
 
+        repo['henryhcy_jshen97_leochans_wangyp.correlationCVS'].metadata({'complete': True})
+        print(repo['henryhcy_jshen97_leochans_wangyp.correlationCVS'].metadata())
 
         repo.logout()
 
@@ -110,9 +112,8 @@ class CorrelationCVS(dml.Algorithm):
 
 # debug
 
-
-CorrelationCVS.execute()
 '''
+CorrelationCVS.execute()
 doc = CorrelationCVS.provenance()
 print(doc.get_provn())
 print(json.dumps(json.loads(doc.serialize()), indent=4))
