@@ -32,7 +32,7 @@ _transformHealth_: I combined the chronic health dataset with the waste site dat
 
 _transformWaste_: This algorithm gets the coordinates and census bureau tract for each waste site and oil/hazardous material site so that it is easy to match each site with data collected on zip codes. I then combine the oil and waste site data into one dataset. 
 
-## Project 2
+## Project #2
 
 #### Optimization
 
