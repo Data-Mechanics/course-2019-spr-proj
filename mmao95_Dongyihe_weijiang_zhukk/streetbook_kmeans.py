@@ -134,6 +134,3 @@ class streetbook_kmeans(dml.Algorithm):
 
         return doc
     
-dict = streetbook_kmeans.execute()
-#print(type(dict['start']))
-doc = streetbook_kmeans.provenance(prov.model.ProvDocument(), dict['start'], dict['end'])
