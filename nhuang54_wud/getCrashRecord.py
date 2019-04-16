@@ -35,7 +35,7 @@ class getCrashRecord(dml.Algorithm):
         repo.authenticate('nhuang54_wud', 'nhuang54_wud')
 
         # get the csv file from website and turn into json object
-        url = 'https://data.boston.gov/dataset/7b29c1b2-7ec2-4023-8292-c24f5d8f0905/resource/e4bfe397-6bfc-49c5-9367-c879fac7401d/download/crash_open_data.csv'
+        url = 'http://datamechanics.io/data/crash_open_data.csv'
         json_file = csv_to_json(url)
 
         # Store in DB
@@ -70,7 +70,7 @@ class getCrashRecord(dml.Algorithm):
         doc.add_namespace('bdp', 'https://data.boston.gov/dataset/')
 
         this_script = doc.agent('alg:nhuang54_wud#getCrashSignal', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        resource = doc.entity('bdp:7b29c1b2-7ec2-4023-8292-c24f5d8f0905/resource/e4bfe397-6bfc-49c5-9367-c879fac7401d/download/crash_open_data', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'csv'})
+        resource = doc.entity('dat:crash_open_data', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'csv'})
         get_crashRecord = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(get_crashRecord, this_script)
 

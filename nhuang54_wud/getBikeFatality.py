@@ -36,7 +36,7 @@ class getBikeFatality(dml.Algorithm):
         repo = client.repo
         repo.authenticate('nhuang54_wud', 'nhuang54_wud')
 
-        url = 'https://data.boston.gov/dataset/d326a4e3-75f2-42ac-9b32-e2920566d04c/resource/92f18923-d4ec-4c17-9405-4e0da63e1d6c/download/fatality_open_data.csv'
+        url = 'http://datamechanics.io/data/fatality_open_data.csv'
         json_file = csv_to_json(url)
         
         repo.dropCollection("bikeFatality")
@@ -71,7 +71,7 @@ class getBikeFatality(dml.Algorithm):
 
         # https://data.boston.gov/dataset/d326a4e3-75f2-42ac-9b32-e2920566d04c/resource/92f18923-d4ec-4c17-9405-4e0da63e1d6c/download/fatality_open_data.csv
         this_script = doc.agent('alg:nhuang54_wud#getBikeFatality', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        resource = doc.entity('bdp:d326a4e3-75f2-42ac-9b32-e2920566d04c/resource/92f18923-d4ec-4c17-9405-4e0da63e1d6c/download/fatality_open_data', {'prov:label':'Vision Zero Fatality Records', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'csv'})
+        resource = doc.entity('dat:fatality_open_data', {'prov:label':'Vision Zero Fatality Records', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'csv'})
         get_bikeFatality = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(get_bikeFatality, this_script)
         doc.usage(get_bikeFatality, resource, startTime, None,
