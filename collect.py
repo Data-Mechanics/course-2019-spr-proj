@@ -175,11 +175,20 @@ class getData(dml.Algorithm):
         doc.usage(getCensusTractHealth, cth_resource, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:Retrieval','ont:Query':'?placename=Boston'})
 
-
+        CensusTractHealth = doc.entity('dat:gasparde_ljmcgann_tlux#CensusTractHealth',
+                                      {prov.model.PROV_LABEL: 'Boston Census Tract Health Statistics',
+                                       prov.model.PROV_TYPE: 'ont:DataSet'})
         get_Neighborhoods = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
         get_ParcelAssessments = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
         get_ParcelGeo = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
         get_OpenSpaces = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+
+        doc.wasAttributedTo(CensusTractHealth, this_script)
+        doc.wasGeneratedBy(CensusTractHealth, getCensusTractHealth, endTime)
+        doc.wasDerivedFrom(CensusTractHealth, cth_resource, getCensusTractHealth, getCensusTractHealth,
+                           getCensusTractHealth)
+
+
 
 
 
@@ -203,9 +212,7 @@ class getData(dml.Algorithm):
 
 
 
-        doc.wasAttributedTo(CensusTractHealth, this_script)
-        doc.wasGeneratedBy(CensusTractHealth, get_CensusTractHealth, endTime)
-        doc.wasDerivedFrom(CensusTractHealth, resource, get_CensusTractHealth, get_CensusTractHealth, get_CensusTractHealth)
+
 
         OpenSpaces = doc.entity('dat:alice_bob#lost',
                           {prov.model.PROV_LABEL: 'Animals Lost', prov.model.PROV_TYPE: 'ont:DataSet'})
