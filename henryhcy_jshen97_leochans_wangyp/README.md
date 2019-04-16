@@ -38,7 +38,7 @@ The project is divided into two tasks:
         - **Key Library**: scipy.stats.pearsonr(x_list, y_list) to compute rho and p-value.
         - **Key Concepts**: Statistical Analysis. Correlation and P-values.
         - **Problems Encountered**: Some outlier (i.e. with less than 100 cases) makes the p-value too high to be useful. Now the outliers are excluded and ratings are converted to 100 score based. 
-    4. Constraints Satisfaction/Optimization: 
+    4. Optimization: 
         - **Related Files**: Salesmen.py
         - **Question**: If we have the chance to send **3** salesmen (**1** per store), obtained the model that has the maximum (total stability **S**, total accessibility **A**) pair?
         - **Definition**: 
@@ -52,3 +52,17 @@ The project is divided into two tasks:
             - with a total stability **S =  0.4886**
             - with a total accessibility **A = 11.2147 km**
             - ![Google Maps result](Project2%20result.JPG)
+    5. Constraints Satisfaction:
+        - **Related Files**: Salesmen.py
+        - **Question**: If we have the chance to send **3** salesmen (**1** per store), obtained the model that has the total stability >= **S**, total accessibility >= **A**?
+        - **Definition**: 
+            - Accessibility is defined as the sum of the distances between each pair of salesmen, or each pair of stores that are assigned a salesman.
+        - **Results**:
+            - With S := 0.6; A := 6.0, a possible set of 3 CVS are:
+                - **101 Canal St suite A, Boston**
+                - **1249 Boylston St, Boston**
+                - **"631 Washington St, Boston"**
+            - total **S = 0.63646**
+            - total **A = 7.91282**
+            - ![Google Maps result](Project2%20resultz3.JPG)
+            - Note that: with total S >= 0.6, the results has covered the busiest and most commerce-heavy zone of boston! Interesting.
