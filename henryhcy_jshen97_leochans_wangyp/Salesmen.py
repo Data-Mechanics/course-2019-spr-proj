@@ -7,6 +7,7 @@ import prov.model
 import pprint
 import uuid
 import math
+import z3
 
 
 class Salesmen(dml.Algorithm):
@@ -29,6 +30,10 @@ class Salesmen(dml.Algorithm):
         repo.dropCollection('solution')
         repo.createCollection('solution')
 
+        # define stability threshold and accessibility threshold
+        S = 0.6
+        A = 6.0
+
         corr_evi = repo.henryhcy_jshen97_leochans_wangyp.correlationCVS.find_one({"document_type": "rating_eviction_correlation"})['corr']
         corr_lar = repo.henryhcy_jshen97_leochans_wangyp.correlationCVS.find_one({"document_type": "rating_crime_correlation"})['corr']
         c = corr_lar/corr_evi
@@ -40,7 +45,7 @@ class Salesmen(dml.Algorithm):
             stability = (math.pow(document['crime_case'], c)/document['eviction_case'])*1000
             dataset.append((place_id, location_coordinate, stability))
 
-        all_possible_index = list(itertools.combinations((0, 1, 2, 3, 4, 5, 6, 7), 3))
+        all_possible_index = list(itertools.combinations([i for i in range(len(dataset))], 3))
 
         place_id_list = []
         max_stability = 0.0;
@@ -59,12 +64,65 @@ class Salesmen(dml.Algorithm):
             vicinity_list.append(repo.henryhcy_jshen97_leochans_wangyp.cvs.find_one({'place_id': i})['vicinity'])
 
         d = {
+            'solution_type': 'optimization',
             'solution': place_id_list,
             'vicinity_list': vicinity_list,
             'max_sta': max_stability,
             'max_acc': max_accessibility.km
         }
         repo.henryhcy_jshen97_leochans_wangyp.solution.insert_one(d)
+
+        point_list = []
+        stability_list = []
+        for item in dataset:
+            point_list.append(item[1])
+            stability_list.append(item[2])
+
+        solver = z3.Solver()
+        X = [z3.Real('x{}'.format(i)) for i in range(len(dataset))]
+
+        # constraints
+        # choose exactly 3
+        for i in X:
+            solver.add(z3.Or(i == 0.0, i == 1.0))
+        solver.add(sum(X) == 3.0)
+        # stability greater than or equal to S
+        solver.add(sum([X[i]*stability_list[i] for i in range(len(dataset))]) >= S)
+
+        # accessiblity greater than or equal to A
+        two_subset = list(itertools.combinations([i for i in range(len(dataset))], 2))
+        solver.add(sum([ X[i[0]]*X[i[1]]*(gd.distance(point_list[i[0]], point_list[i[1]]).km) for i in two_subset]) >= A)
+
+        # get the solution
+        place_id_list_z3 = []
+        point_list_z3 = []
+        total_stability_z3 = 0.0
+        total_accessibility_z3 = 0.0
+        if (solver.check() == z3.sat):
+            m = solver.model()
+        for i in range(len(dataset)):
+            name = 'x{}'.format(i)
+            if (m[z3.Real(name)] == 1):
+                place_id_list_z3.append(dataset[i][0])
+                point_list_z3.append(dataset[i][1])
+                total_stability_z3 += dataset[i][2]
+
+        total_accessibility_z3 += gd.distance(point_list_z3[0], point_list_z3[1]).km
+        total_accessibility_z3 += gd.distance(point_list_z3[0], point_list_z3[2]).km
+        total_accessibility_z3 += gd.distance(point_list_z3[1], point_list_z3[2]).km
+
+        vicinity_list_z3 = []
+        for i in place_id_list_z3:
+            vicinity_list_z3.append(repo.henryhcy_jshen97_leochans_wangyp.cvs.find_one({'place_id': i})['vicinity'])
+
+        d_z3 = {
+            'solution_type': 'constraint satisfaction',
+            'solution': place_id_list_z3,
+            'vicinity_list': vicinity_list_z3,
+            'max_sta': total_stability_z3,
+            'max_acc': total_accessibility_z3
+        }
+        repo.henryhcy_jshen97_leochans_wangyp.solution.insert_one(d_z3)
 
         repo['henryhcy_jshen97_leochans_wangyp.solution'].metadata({'complete': True})
         print(repo['henryhcy_jshen97_leochans_wangyp.solution'].metadata())
@@ -123,8 +181,9 @@ class Salesmen(dml.Algorithm):
         return doc
 
 # debug
-'''
+
 Salesmen.execute()
+'''
 doc = Salesmen.provenance()
 print(doc.get_provn())
 print(json.dumps(json.loads(doc.serialize()), indent=4))
