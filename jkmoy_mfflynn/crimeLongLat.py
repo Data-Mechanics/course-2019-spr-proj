@@ -42,14 +42,13 @@ class crimeLongLat(dml.Algorithm):
         data1 = [(doc['Lat'], doc['Long'], doc['OFFENSE_CODE_GROUP']) for doc in collection]
         data2 = select(data1, not_null)
         
+        if (trial):
+            data2 = data2[0:100]
 
         #data = data[0:20]
         
         types = [i[2] for i in data2]
         data = [(i[0],i[1]) for i in data2]
-
-        
-
         
         cluster_number = 10 #number of offical neighborhoods in boston
         kmeans = KMeans(n_clusters=cluster_number)
