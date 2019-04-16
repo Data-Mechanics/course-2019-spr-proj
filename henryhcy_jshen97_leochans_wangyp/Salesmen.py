@@ -189,9 +189,8 @@ class Salesmen(dml.Algorithm):
         return doc
 
 # debug
-
-Salesmen.execute()
 '''
+Salesmen.execute()
 doc = Salesmen.provenance()
 print(doc.get_provn())
 print(json.dumps(json.loads(doc.serialize()), indent=4))
