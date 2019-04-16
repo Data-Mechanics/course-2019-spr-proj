@@ -196,68 +196,72 @@ class example(dml.Algorithm):
 
         # ('Bus Stop'), append city state to bus stops
         t16 = project(r1, lambda t: (t[r1School], t[r1BusStop] + ', Natick, MA'))
-        #print(t16[0], t16[1])
-      
-        #t13[0] = t13[0][0] + ", " + t13[1][1] + ", " + t13[1][2]
-        print("-----GOOGLE-----")
-        
+       
         
         #separate student addresses by school attended - these will be the points in k-means
-        POINTS = []
-        tNHS = select(t15, lambda t: t[1] == 'Natick High School')
-        tMES = select(t15, lambda t: t[1] == 'Memorial Elementary School')
-        tJFKMS = select(t15, lambda t: t[1] == 'J. F. Kennedy Middle School')
-        tWMS = select(t15, lambda t: t[1] == 'Wilson Middle School')
-        tBES = select(t15, lambda t: t[1] == 'Brown Elementary School')
-        tBHES = select(t15, lambda t: t[1] == 'Bennett-Hemenway Elementary School')
-         
-        POINTS.append(tNHS)
-        POINTS.append(tMES)
-        POINTS.append(tJFKMS)
-        POINTS.append(tWMS)
-        POINTS.append(tBES)
-        POINTS.append(tBHES)
+        POINTS_OG = []
+        tNHS = project(select(t15, lambda t: t[1] == 'Natick High School'), lambda t: t[0])
+        tMES = project(select(t15, lambda t: t[1] == 'Memorial Elementary School'), lambda t: t[0])
+        tJFKMS = project(select(t15, lambda t: t[1] == 'J. F. Kennedy Middle School'), lambda t: t[0])
+        tWMS = project(select(t15, lambda t: t[1] == 'Wilson Middle School'), lambda t: t[0])
+        tBES = project(select(t15, lambda t: t[1] == 'Brown Elementary School'), lambda t: t[0])
+        tBHES = project(select(t15, lambda t: t[1] == 'Bennett-Hemenway Elementary School'), lambda t: t[0])
+
         
-        #tNPS = select(t15, lambda t: t[1] == 'Natick Preschool')
-        #tJES = select(t15, lambda t: t[1] == 'Johnson Elementary School')
+        POINTS_OG.append(tNHS)
+        POINTS_OG.append(tMES)
+        POINTS_OG.append(tJFKMS)
+        POINTS_OG.append(tWMS)
+        POINTS_OG.append(tBES)
+        POINTS_OG.append(tBHES)
+        
+        # Convert to lang/long for k-means        
+        POINTS_NEW = POINTS_OG      
+        for i in range(len(POINTS_OG)):
+            for j in range(5):
+                print("point ", i, " ", j)
+                POINTS_NEW[i][j] = json.loads(str(md.toLatLong(POINTS_OG[i][j])))
+                print("POINTS_NEW[",i,"][",j,"] = ", POINTS_NEW[i][j])
+                
         
         #the stops are the means for k-means - converted to sets and back to remove duplicates
-        STOPS = []
+        STOPS_OG = []
         tNHSStops = list(set(project(select(t16, lambda t: t[0] == 'NHS'), lambda t: t[1])))
-        tMESStops = list(set(select(t16, lambda t: t[0] == 'MM')))
-        tJFKMSStops = list(set(select(t16, lambda t: t[0] == 'KN')))
-        tWMSStops = list(set(select(t16, lambda t: t[0] == 'WL')))
-        tBESStops = list(set(select(t16, lambda t: t[0] == 'BR')))
-        tBHESStops = list(set(select(t16, lambda t: t[0] == 'BH')))
+        tMESStops = list(set(project(select(t16, lambda t: t[0] == 'MM'), lambda t: t[1])))
+        tJFKMSStops = list(set(project(select(t16, lambda t: t[0] == 'KN'), lambda t: t[1])))
+        tWMSStops = list(set(project(select(t16, lambda t: t[0] == 'WL'), lambda t: t[1])))
+        tBESStops = list(set(project(select(t16, lambda t: t[0] == 'BR'), lambda t: t[1])))
+        tBHESStops = list(set(project(select(t16, lambda t: t[0] == 'BH'), lambda t: t[1])))
         
-        STOPS.append(tNHSStops)
-        print("TNHSSTOPSSS***********")
-        print(tNHSStops)
-        STOPS.append(tMESStops)
-        STOPS.append(tJFKMSStops)
-        STOPS.append(tWMSStops)
-        STOPS.append(tBESStops)
-        STOPS.append(tBHESStops)
+        STOPS_OG.append(tNHSStops)
+        STOPS_OG.append(tMESStops)
+        STOPS_OG.append(tJFKMSStops)
+        STOPS_OG.append(tWMSStops)
+        STOPS_OG.append(tBESStops)
+        STOPS_OG.append(tBHESStops)
         
-        #convert the STOPS to lat x long
-        #x = md.toLatLong("washington street @ jewett street")
-        print("LATLONG***********88")
-        #print(x)
-        
-        #print(STOPS)
+        STOPS_NEW = STOPS_OG      
+        for i in range(len(STOPS_OG)):
+            for j in range(5):
+                print("stop ", i, " ", j)
+                STOPS_NEW[i][j] = md.toLatLong(STOPS_OG[i][j])
+                STOPS_NEW[i][j]
         
         #implementation of k-means, with md.time as the distance function
         #todo: set a departure time in md.time
         
         #done for every school separately
-        for x in range(len(STOPS)):
-            MEANS = STOPS[x]
+        for x in range(len(STOPS_NEW)):
+            MEANS = STOPS_NEW[x]
+            print("MEANS[0]: ", MEANS[0])
+            POINTSC = POINTS_NEW[x]
             OLD = []
             
             while OLD != MEANS:
                 OLD = MEANS
-                MPD = [(m, p, md.walk_time(m,p)) for (m, p) in product(MEANS, POINTS)]
-                PDs = [(p, md.walk_time(m,p)) for (m, p, d) in MPD]
+
+                MPD = [(m, p, md.walk_time_url(m,p)) for (m, p) in product(MEANS, POINTSC)]
+                PDs = [(p, md.walk_time_url(m,p)) for (m, p, d) in MPD]
                 PD = aggregate(PDs, min)
                 MP = [(m, p) for ((m,p,d), (p2,d2)) in product(MPD, PD) if p==p2 and d==d2]
                 MT = aggregate(MP, plus)
@@ -265,11 +269,9 @@ class example(dml.Algorithm):
                 M1 = [(m, 1) for (m, _) in MP]
                 MC = aggregate(M1, sum)
 
-
+                
                 MEANS = [scale(t,c) for ((m,t),(m2,c)) in product(MT, MC) if m == m2]
-                print(sorted(MEANS))
-        
-        
+                #print(sorted(MEANS))
         
         
         repo.logout()

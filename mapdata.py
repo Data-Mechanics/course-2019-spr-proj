@@ -3,7 +3,8 @@
 # Both are strings.  For example, '418 Beachview Drive, North Vancouver, BC'
 # This func uses googlemaps distance_matrix API to calculate travel time
 # The return is a string.  for example, 26 mins.
-
+import requests
+import json
 import googlemaps
 from datetime import datetime
 # import json
@@ -21,10 +22,18 @@ def walk_time(home_addr, work_addr):
     gmaps = googlemaps.Client(key=my_key)
     time = datetime.now()
     # WALKING TIME
-    commute_json = gmaps.distance_matrix(origins=home_addr, destinations=work_addr, mode='walking')
+    commute_json = gmaps.distance_matrix(origins=home_addr, destinations=work_addr, key=my_key, mode='walking')
     print(commute_json)
     commute_time = commute_json['rows'][0]['elements'][0]['duration']['text']
     return commute_time
+
+def walk_time_url(home_addr, work_addr): 
+    url ='https://maps.googleapis.com/maps/api/distancematrix/json?'
+    r = requests.get(url + 'origins = ' + home_addr +
+        '&destinations = ' + work_addr +
+        '&key = ' + my_key) 
+                     
+
 
 def drive_time(home_addr, work_addr):
     gmaps = googlemaps.Client(key=my_key)
@@ -34,10 +43,10 @@ def drive_time(home_addr, work_addr):
     commute_time = commute_json['rows'][0]['elements'][0]['duration']['text']
     return commute_time
     
-#def toLatLong(stop_addr):
-    #gmaps = googlemaps.Client(key=my_key)
-    #latlong = gmaps.geocode(stop_addr)
-    #return latlong
+def toLatLong(stop_addr):
+    gmaps = googlemaps.Client(key=my_key)
+    latlong = gmaps.geocode(stop_addr)
+    return latlong
 
 
 def distance(home_addr, work_addr):
