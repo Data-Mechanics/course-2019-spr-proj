@@ -37,7 +37,7 @@ class CvsWalEviction(dml.Algorithm):
             # R is the approximate radius of the earth in km
             # @see Haversine formula for latlng distance
             # All trig function in python use radian
-            R = 6373.0
+            R = 6373000.0
 
             lat_bos = 42.361145
             lng_bos = -71.057083
@@ -63,6 +63,7 @@ class CvsWalEviction(dml.Algorithm):
 
         # insert cvs within 15 km of boston
         for item in repo.henryhcy_jshen97_leochans_wangyp.cvs.find():
+            
             d = {
                 'name': 'CVS',
                 'location': item['geometry']['location'],

@@ -23,6 +23,15 @@ Project Requirements & Important Date: (https://cs-people.bu.edu/lapets/504/s.ph
 ####General Description & Narrative
 The project is divided into two tasks:
 - (Yuanpei Wang) Find a way to quantify the competitive relationship between the two of most popular franchising convenience stores in boston area: **CVS** and **Walgreen**
+
+    1. Explore the location selection of CVS and Walgreen
+        1. For each CVS store and Walgreen store, find its closest CVS and Walgreen and record the distance
+        2. Using statistical analysis to explore the competitive relationship between Walgreen and CVS
+    2. Optimization problem: If we want to locate n new CVS stores or Walgreen stores, how can we maximize its influence.
+        1. CVS: we want the location of the new CVS stores to minimzie its distance between other Walgreen stores in order to increase its competitiveness against its opponent. Do the same for Walgreen stores
+
+    
+
 - (Shiwei Chen) Let's model the **Stability S** of a store **i** is defined by **S_i = 1/(|E||C|)** where **E** and **C** are the number of eviction cases and crimes cases that are assigned to store **i**:
     1. Explore the correlation of store ratings and Evictions/Crimes cases, which one has more effect on ratings?
         - Key Concepts: **Correlation Coefficient**, **permutation&p-values**
