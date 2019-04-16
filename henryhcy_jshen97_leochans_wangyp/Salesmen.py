@@ -30,10 +30,11 @@ class Salesmen(dml.Algorithm):
         repo.dropCollection('solution')
         repo.createCollection('solution')
 
-        # define stability threshold and accessibility threshold
+        # define stability threshold and accessibility threshold for constraint satisfaction problem
         S = 0.6
-        A = 6.0
+        A = 0.0
 
+        # solve the optimization problem
         corr_evi = repo.henryhcy_jshen97_leochans_wangyp.correlationCVS.find_one({"document_type": "rating_eviction_correlation"})['corr']
         corr_lar = repo.henryhcy_jshen97_leochans_wangyp.correlationCVS.find_one({"document_type": "rating_crime_correlation"})['corr']
         c = corr_lar/corr_evi
@@ -72,6 +73,7 @@ class Salesmen(dml.Algorithm):
         }
         repo.henryhcy_jshen97_leochans_wangyp.solution.insert_one(d)
 
+        # solve this constraint satisfaction problem
         point_list = []
         stability_list = []
         for item in dataset:
