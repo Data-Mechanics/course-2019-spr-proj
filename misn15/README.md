@@ -20,41 +20,46 @@ In order to tackle these questions, I decided to retrieve five datasets, which a
   
   5) [Crime](https://data.boston.gov/dataset/crime-incident-reports-august-2015-to-date-source-new-system): This dataset is retrieved from Boston's data portal, Analyze Boston. It provides data from August 2015 to the present day about all crime incident reports filed with the Boston Police Department. 
   
-You can find these datasets in the files: _getWaste_, _getCrime_, _getOil_, _getZipcodes_, and _getHealth_.
+  6) [Zip Codes](https://www.huduser.gov/portal/datasets/usps_crosswalk.html) I used the U.S. Housing and Urban Development website to retrieve a data set that mapped census FIPS codes to zip codes because some of my data may only contain a FIPS code or a zip code so having this data set allows me to easily switch between the two. 
+
+You can find these datasets in the files: _getIncome_, _getWaste_, _getCrime_, _getOil_, _getZipcodes_, and _getHealth_.
 
 #### Transformations:
 
 After retrieving this data, I tried to match up Boston zip codes with the number of hazardous sites, median income, crime rate, and health issues to see whether there was a correlation between these factors. I wanted to determine whether certain zip codes within Boston contained more hazardous waste sites and if these sites were located in areas with more poverty and more health problems.By looking at the proximity of areas with high crime, poverty and health issues to these waste sites, we can possibly determine whether this is contributing to some of these areas problems. 
 
- _transformDem_: This algorithm combined average income for every census tract with the waste site dataset. I counted the number of waste sites for every zip code and matched these zipcodes up with the average income from the census bureau tracts so the final dataset had the total number of waste sites and average income for every zip code within Boston.
+  1) _transformDem_: This algorithm combined average income for every census tract with the waste site dataset. I counted the number of waste sites for every zip code and matched these zipcodes up with the average income from the census bureau tracts so the final dataset had the total number of waste sites and average income for every zip code within Boston.
  
-_transformHealth_: I combined the chronic health dataset with the waste site dataset to create a new dataset that had a list of chronic diseases that were found in the same zip code where that waste site was located. 
+  2) _transformHealth_: I combined the chronic health dataset with the waste site dataset to create a new dataset that had a list of chronic diseases that were found in the same zip code where that waste site was located. 
 
-_transformWaste_: This algorithm gets the coordinates and census bureau tract for each waste site and oil/hazardous material site so that it is easy to match each site with data collected on zip codes. I then combine the oil and waste site data into one dataset. 
+  3) _transformWaste_: This algorithm gets the coordinates and census bureau tract for each waste site and oil/hazardous material site so that it is easy to match each site with data collected on zip codes. I then combine the oil and waste site data into one dataset. 
 
 ## Project #2
 
 #### Optimization
 
-For the optimization portion of the project, I first had to collect additional datasets. 
+For the optimization portion of the project, I first had to collect additional data sets. 
 
-  1) _getWasteAll_: I found several datasets on oil/hazardous waste sites within Massachusetts from the Massachusetts government and I     decided to merge them all into one complete dataset. This dataset ultimately adds to the oil and waste datasets that I retrieved in project one. The three datasets used are: [Oil/Hazardous Waste](https://docs.digital.mass.gov/dataset/massgis-data-massdep-tier-classified-oil-andor-hazardous-material-sites-mgl-c-21e), [Hazardous Waste Generators](https://docs.digital.mass.gov/dataset/list-massachusetts-hazardous-waste-generators-january-23-2018), and [Oil/Waste with Activity and Use Limitations](https://docs.digital.mass.gov/dataset/massgis-data-massdep-oil-andor-hazardous-material-sites-activity-and-use-limitations-aul).
+   1) _getWasteAll_: I found several data sets on oil/hazardous waste sites within Massachusetts from the Massachusetts government and I     decided to merge them all into one complete data set. This data set ultimately adds to the oil and waste data sets that I retrieved in project one. The three data sets used are: [Oil/Hazardous Waste](https://docs.digital.mass.gov/dataset/massgis-data-massdep-tier-classified-oil-andor-hazardous-material-sites-mgl-c-21e), [Hazardous Waste Generators](https://docs.digital.mass.gov/dataset/list-massachusetts-hazardous-waste-generators-january-23-2018), and [Oil/Waste with Activity and Use Limitations](https://docs.digital.mass.gov/dataset/massgis-data-massdep-oil-andor-hazardous-material-sites-activity-and-use-limitations-aul).
 
-  2) _getOpenSpace_: I retrieved data on all the green spaces in Boston from BostonMaps open data portal which is a website that contains geospatial data for Boston. You can find the data source [here](http://bostonopendata-boston.opendata.arcgis.com/datasets/open-space).
+   2) _getOpenSpace_: I retrieved data on all the green spaces in Boston from BostonMaps open data portal which is a website that contains geospatial data for Boston. You can find the data source [here](http://bostonopendata-boston.opendata.arcgis.com/datasets/open-space).
 
-  3) _getSchools_: I retrieved data on all the public and non-public schools in Boston from Boston Maps open data portal. You can find the data source [here](http://bostonopendata-boston.opendata.arcgis.com/datasets/public-schools) and [here](http://bostonopendata-boston.opendata.arcgis.com/datasets/non-public-schools).
+   3) _getSchools_: I retrieved data on all the public and non-public schools in Boston from Boston Maps open data portal. You can find the data source [here](http://bostonopendata-boston.opendata.arcgis.com/datasets/public-schools) and [here](http://bostonopendata-boston.opendata.arcgis.com/datasets/non-public-schools).
 
-_transformWasteAll_: This combines all of the datasets that were retrieved using the getWasteAll algorithm and makes sure that every waste site has its corresponding coordinates and census tract. This dataset is then stored in MongoDB and is used for the waste dataset for project 2. 
+_transformWasteAll_: This combines all of the data sets that were retrieved using the getWasteAll algorithm and makes sure that every waste site has its corresponding coordinates and census tract. This data set is then stored in MongoDB and is used for the waste data set for project 2. 
 
 _transformOpenSpace_: This gets all of the centroids for all of the open spaces and classifies them into their respective census tract so that the centroids and census tracts can be used in other computations.
 
-_linearRegression_: I decided to use gradient descent and linear regression to determine whether there was a relationship between the datasets that I already collected. I first used gradient descent to see if I could find a solution that minimized the mean squared error more than linear regression. However, after running the algorithm using hundreds of iterations and a very small step size, the gradient descent algorithm had a very high error. I found that gradient descent is computationally less expensive but doesn't yield the most accurate results. So, instead, I used the statsmodel in python which yielded more robust results. In addition to finding the coefficient, it allows me to find the p-values, t-values, and standard errors. I am also able to 
+_cleanHealth_: This transforms the health data set from having every row represent a different disease to every column representing a different disease so that for every census tract I could have the prevalence rate for all the diseases.
 
-_WasteOptimization_: I also thought it would be useful to find the centroids of these waste sites and find the centroids that minimize these 
+_crime_health_waste_space_: This algorithm sums up all of the crime, health issues, open spaces, and schools in a census FIPS tract and combines it with the population and average income of that area.
+
+_linearRegression_: I decided to use gradient descent and linear regression to determine whether there was a relationship between the data sets that I already collected. I first used gradient descent to see if I could find a solution that minimized the mean squared error more than linear regression. However, after running the algorithm using hundreds of iterations and a very small step size, the gradient descent algorithm had a very high mean squared error. I found that gradient descent is computationally less expensive but doesn't yield the most accurate results. So, instead, I used the statsmodel api in python which yielded more robust results. In addition to finding the coefficient, it allows me to find the p-values, t-values, and standard errors. I am also able to use robust standard errors with the stasmodel api linear regression which allows me to control for heteroskedasticity.
+
+_WasteOptimization_: I also thought it would be useful to find the centroids of these waste sites and find the centroids that maximize the distance to schools and green spaces and are located in the least densely populated areas. I wanted to find these clusters so that in the future, waste sites could be situated in these areas so as to minimize the impact hazardous waste has on people's lives.
 
 #### Statistical Analysis
 
-_Correlation_:
+_Correlation_: I computed the correlation coefficients between health and crime, waste, open spaces, and income so as to see whether there was a relationship between any of these factors.
 
-Limitations:
-Because the small area model cannot detect effects due to local interventions, users are cautioned against using these estimates for program or policy evaluations. 
+_Justification_:
