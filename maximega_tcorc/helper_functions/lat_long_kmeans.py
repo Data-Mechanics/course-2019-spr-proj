@@ -20,10 +20,10 @@ def createScatter(df):
 def vectorizeAndCluster(data, labels):
     v = DictVectorizer(sparse=False)
     X = v.fit_transform(data)
-    clusters = KMeans(n_clusters=5)
-    pred = clusters.fit_predict(X)
+    kmeans = KMeans(n_clusters=5)
+    pred = kmeans.fit_predict(X)
     # printLabels(pred, labels)
-    return [clusters, X]
+    return [kmeans, X]
 
 def getLabels(cats, kmeans):
     asc_order_centroids = kmeans.cluster_centers_.argsort()
@@ -86,6 +86,21 @@ def plotRealAndClustered(df, clusters):
     matplot.scatter(x=df['latitude'], y=df['longitude'], c=colors[clusters.labels_], s=10)
     matplot.title('Clusters')
     matplot.show()
+
+
+def plotErrors():
+    print("plotting errors")
+    # ----------------- Error
+    # error = np.zeros(25)
+    # for k in range(1,25):
+    #   kmeans = KMeans(init='k-means++', n_clusters=k, n_init=100)
+    #   kmeans.fit(X)
+    #   error[k] = kmeans.inertia_
+
+    # plt.scatter(range(1,len(error)),error[1:])
+    # plt.xlabel('Number of clusters')
+    # dummy = plt.ylabel('Error')
+    # plt.show()
     
 def detectOutliers(df, labels, centroids, X):
     count = 0
@@ -107,7 +122,9 @@ def run_lat_long_kmeans(data):
 
     # print(data_scaled.tail())
 
-    clusters = formatIntoVectors(data_scaled)[0]
+    return formatIntoVectors(data_scaled)[0]
+
+    # clusters = formatIntoVectors(data_scaled)[0]
 
     # plotRealAndClustered(data_scaled, clusters)
 
