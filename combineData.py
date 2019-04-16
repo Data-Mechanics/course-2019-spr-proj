@@ -1,11 +1,9 @@
-import urllib.request
 import json
 from shapely.geometry import Polygon, Point
 import json
 import dml
 import prov.model
 import datetime
-import csv
 import codecs
 import uuid
 from math import *
@@ -18,7 +16,7 @@ class combineData(dml.Algorithm):
     reads = [ contributor + ".CensusTractShape", contributor + ".CensusTractHealth",
               contributor + ".Neighborhoods", contributor + ".ParcelAssessments",
               contributor + ".ParcelGeo"]
-    writes = []
+    writes = [contributor + ".ParcelsCombined"]
 
     @staticmethod
     def haversine(point1, point2):
@@ -127,7 +125,6 @@ class combineData(dml.Algorithm):
         startTime = datetime.datetime.now()
 
         # Set up the database connection.
-        name = "gasparde_ljmcgann_tlux"
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate(combineData.contributor, combineData.contributor)
@@ -241,8 +238,6 @@ class combineData(dml.Algorithm):
                 if found:
                     break
 
-        print(parcels_by_neighborhood["Allston"])
-
         ##############################################################
 
         # add distance to closest park and improvement scores to each parcel
@@ -280,11 +275,8 @@ class combineData(dml.Algorithm):
         parcels_by_neighborhood = json.loads(r)
         for neighborhood in list(parcels_by_neighborhood.keys()):
             print(neighborhood)
-            # name = neighborhood.replace(" ","")
             input = parcels_by_neighborhood[neighborhood]
             parcels_by_neighborhood[neighborhood] = combineData.improvement_scores(input)
-            # print(parcels_by_neighborhood[neighborhood])
-            # repo.dropCollection(combineData.contributor + "." + name + "Parcels")
             repo.createCollection(combineData.contributor + ".ParcelsCombined")
             for i in range(len(parcels_by_neighborhood[neighborhood])):
                 parcels_by_neighborhood[neighborhood][i]["Neighborhood"] = neighborhood
@@ -294,7 +286,9 @@ class combineData(dml.Algorithm):
                     print(e)
             repo[combineData.contributor + ".ParcelsCombined"].metadata({'complete': True})
 
+        endTime = datetime.datetime.now()
 
+        return {"start": startTime, "end": endTime}
 
 
     @staticmethod

@@ -59,24 +59,24 @@ class optimize(dml.Algorithm):
         y = []
         for i in range(len(neighborhood)):
             shape = optimize.geojson_to_polygon(neighborhood[i]["geometry"])[0]
-            row = [tuple(shape.centroid.coords)[0][1], tuple(shape.centroid.coords)[0][0]]
-            weight = max(int(neighborhood[i]["score_improvement"] // 2),1)
+            row = [shape.centroid.coords[0][1], shape.centroid.coords[0][0]]
+            weight = max(int(neighborhood[i]["score_improvement"]),1)
             print(weight)
             for i in range(weight):
                 rand = random.random() / 10000
                 x.append(row[0]+ rand)
                 y.append(row[1] + rand)
                 M.append([row[0]+ rand, row[1] + rand])
-        # pyplt.scatter(x,y, s = .5)
+        pyplt.scatter(x,y, s = .5)
         output = kmeans(M, 5)
-        # means = list(output)[0]
-        # mean_x = []
-        # mean_y = []
+        means = list(output)[0]
+        mean_x = []
+        mean_y = []
 
-        # for i in means:
-        #     mean_x.append(i[0])
-        #     mean_y.append(i[1])
-        # pyplt.scatter(mean_x, mean_y)
+        for i in means:
+            mean_x.append(i[0])
+            mean_y.append(i[1])
+        pyplt.scatter(mean_x, mean_y)
         pyplt.show()
 
 
