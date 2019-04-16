@@ -33,6 +33,11 @@ def drive_time(home_addr, work_addr):
     print(commute_json)
     commute_time = commute_json['rows'][0]['elements'][0]['duration']['text']
     return commute_time
+    
+#def toLatLong(stop_addr):
+    #gmaps = googlemaps.Client(key=my_key)
+    #latlong = gmaps.geocode(stop_addr)
+    #return latlong
 
 
 def distance(home_addr, work_addr):

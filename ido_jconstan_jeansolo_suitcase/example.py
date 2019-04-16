@@ -223,7 +223,7 @@ class example(dml.Algorithm):
         
         #the stops are the means for k-means - converted to sets and back to remove duplicates
         STOPS = []
-        tNHSStops = list(set(select(t16, lambda t: t[0] == 'NHS')))
+        tNHSStops = list(set(project(select(t16, lambda t: t[0] == 'NHS'), lambda t: t[1])))
         tMESStops = list(set(select(t16, lambda t: t[0] == 'MM')))
         tJFKMSStops = list(set(select(t16, lambda t: t[0] == 'KN')))
         tWMSStops = list(set(select(t16, lambda t: t[0] == 'WL')))
@@ -231,11 +231,18 @@ class example(dml.Algorithm):
         tBHESStops = list(set(select(t16, lambda t: t[0] == 'BH')))
         
         STOPS.append(tNHSStops)
+        print("TNHSSTOPSSS***********")
+        print(tNHSStops)
         STOPS.append(tMESStops)
         STOPS.append(tJFKMSStops)
         STOPS.append(tWMSStops)
         STOPS.append(tBESStops)
         STOPS.append(tBHESStops)
+        
+        #convert the STOPS to lat x long
+        #x = md.toLatLong("washington street @ jewett street")
+        print("LATLONG***********88")
+        #print(x)
         
         #print(STOPS)
         
@@ -257,6 +264,7 @@ class example(dml.Algorithm):
 
                 M1 = [(m, 1) for (m, _) in MP]
                 MC = aggregate(M1, sum)
+
 
                 MEANS = [scale(t,c) for ((m,t),(m2,c)) in product(MT, MC) if m == m2]
                 print(sorted(MEANS))
@@ -412,8 +420,8 @@ def addressNormalizer(key, rx):
                 i[key] = i[key].replace("TERRACE", "TER")
             if "AVENUE" in i[key]:
                 i[key] = i[key].replace("AVENUE", "AVE")
-            if "CIRCLE" in i[key]:
-                i[key] = i[key].replace("CIRCLE", "CIR")
+            if "CIR" in i[key] and "CIRCLE" not in i[key]:
+                i[key] = i[key].replace("CIR", "CIRCLE")
             if "COURT" in i[key]:
                 i[key] = i[key].replace("COURT", "CT")
             if "LANE" in i[key]:
