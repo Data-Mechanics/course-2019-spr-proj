@@ -140,9 +140,6 @@ class cau_kmeans(dml.Algorithm):
 
         return doc
 
-    
-dict = cau_kmeans.execute()
-#print(type(dict['start']))
-#doc = cau_kmeans.provenance(prov.model.ProvDocument(), dict['start'], dict['end'])
+   
 
 
