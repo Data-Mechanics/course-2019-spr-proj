@@ -127,6 +127,113 @@ class getData(dml.Algorithm):
         repo[getData.contributor + ".OpenSpaces"].metadata({'complete': True})
 
     @staticmethod
-    def provenance():
-        return 0
+    def provenance(doc=prov.model.ProvDocument(), startTime=None, endTime=None):
+        client = dml.pymongo.MongoClient()
+        repo = client.repo
+        repo.authenticate('gasparde_ljmcgann_tlux', 'gasparde_ljmcgann_tlux')
+        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')  # The scripts are in <folder>#<filename> format.
+        doc.add_namespace('dat', 'http://datamechanics.io/data/')  # The data sets are in <user>#<collection> format.
+        doc.add_namespace('ont', 'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
+        doc.add_namespace('log', 'http://datamechanics.io/log/')  # The event log.
+        doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
+
+        this_script = doc.agent('alg:gasparde_ljmcgann_tlux#collect', {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
+
+        resource = doc.entity('bdp:wc8w-nujj',
+                              {'prov:label': 'Collect Data', prov.model.PROV_TYPE: 'ont:DataResource',
+                               'ont:Extension': 'json'})
+
+
+
+        get_CensusTractShape = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+        get_CensusTractHealth = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+        get_Neighborhoods = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+        get_ParcelAssessments = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+        get_ParcelGeo = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+        get_OpenSpaces = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+
+
+        doc.wasAssociatedWith(get_CensusTractHealth, this_script)
+        doc.wasAssociatedWith(get_CensusTractShape, this_script)
+        doc.wasAssociatedWith(get_Neighborhoods, this_script)
+        doc.wasAssociatedWith(get_ParcelGeo, this_script)
+        doc.wasAssociatedWith(get_ParcelAssessments, this_script)
+        doc.wasAssociatedWith(get_OpenSpaces, this_script)
+
+
+        doc.usage(get_CensusTractShape, resource, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:Retrieval',
+                   'ont:Query': '?type=Animal+Found&$select=type,latitude,longitude,OPEN_DT'
+                   }
+                  )
+        doc.usage(get_CensusTractHealth, resource, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:Retrieval',
+                   'ont:Query': '?type=Animal+Lost&$select=type,latitude,longitude,OPEN_DT'
+                   }
+                  )
+        doc.usage(get_OpenSpaces, resource, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:Retrieval',
+                   'ont:Query': '?type=Animal+Found&$select=type,latitude,longitude,OPEN_DT'
+                   }
+                  )
+        doc.usage(get_ParcelGeo, resource, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:Retrieval',
+                   'ont:Query': '?type=Animal+Found&$select=type,latitude,longitude,OPEN_DT'
+                   }
+                  )
+        doc.usage(get_Neighborhoods, resource, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:Retrieval',
+                   'ont:Query': '?type=Animal+Lost&$select=type,latitude,longitude,OPEN_DT'
+                   }
+                  )
+        doc.usage(get_ParcelAssessments, resource, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:Retrieval',
+                   'ont:Query': '?type=Animal+Found&$select=type,latitude,longitude,OPEN_DT'
+                   }
+                  )
+
+
+        CensusTractShape = doc.entity('dat:alice_bob#lost',
+                          {prov.model.PROV_LABEL: 'Animals Lost', prov.model.PROV_TYPE: 'ont:DataSet'})
+        doc.wasAttributedTo(CensusTractShape, this_script)
+        doc.wasGeneratedBy(CensusTractShape, get_CensusTractShape, endTime)
+        doc.wasDerivedFrom(CensusTractShape, resource, get_CensusTractShape, get_CensusTractShape, get_CensusTractShape)
+
+        CensusTractHealth = doc.entity('dat:alice_bob#found',
+                           {prov.model.PROV_LABEL: 'Animals Found', prov.model.PROV_TYPE: 'ont:DataSet'})
+        doc.wasAttributedTo(CensusTractHealth, this_script)
+        doc.wasGeneratedBy(CensusTractHealth, get_CensusTractHealth, endTime)
+        doc.wasDerivedFrom(CensusTractHealth, resource, get_CensusTractHealth, get_CensusTractHealth, get_CensusTractHealth)
+
+        OpenSpaces = doc.entity('dat:alice_bob#lost',
+                          {prov.model.PROV_LABEL: 'Animals Lost', prov.model.PROV_TYPE: 'ont:DataSet'})
+        doc.wasAttributedTo(OpenSpaces, this_script)
+        doc.wasGeneratedBy(OpenSpaces, get_OpenSpaces, endTime)
+        doc.wasDerivedFrom(OpenSpaces, resource, get_OpenSpaces, get_OpenSpaces, get_OpenSpaces)
+
+        ParcelGeo = doc.entity('dat:alice_bob#found',
+                           {prov.model.PROV_LABEL: 'Animals Found', prov.model.PROV_TYPE: 'ont:DataSet'})
+        doc.wasAttributedTo(ParcelGeo, this_script)
+        doc.wasGeneratedBy(ParcelGeo, get_ParcelGeo, endTime)
+        doc.wasDerivedFrom(ParcelGeo, resource, get_ParcelGeo, get_ParcelGeo, get_ParcelGeo)
+
+        Neighborhoods = doc.entity('dat:alice_bob#lost',
+                          {prov.model.PROV_LABEL: 'Animals Lost', prov.model.PROV_TYPE: 'ont:DataSet'})
+        doc.wasAttributedTo(Neighborhoods, this_script)
+        doc.wasGeneratedBy(Neighborhoods, get_Neighborhoods, endTime)
+        doc.wasDerivedFrom(Neighborhoods, resource, get_Neighborhoods, get_Neighborhoods, get_Neighborhoods)
+
+        ParcelAssessments = doc.entity('dat:alice_bob#found',
+                           {prov.model.PROV_LABEL: 'Animals Found', prov.model.PROV_TYPE: 'ont:DataSet'})
+        doc.wasAttributedTo(ParcelAssessments, this_script)
+        doc.wasGeneratedBy(ParcelAssessments, get_ParcelAssessments, endTime)
+        doc.wasDerivedFrom(ParcelAssessments, resource, get_ParcelAssessments, get_ParcelAssessments, get_ParcelAssessments)
+
+        repo.logout()
+
+        return doc
+
+
+
 getData.execute()
+
