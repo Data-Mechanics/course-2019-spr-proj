@@ -249,6 +249,8 @@ class example(dml.Algorithm):
         #implementation of k-means, with md.time as the distance function
         #todo: set a departure time in md.time
         
+        temp = md.walk_time()
+
         #done for every school separately
         for x in range(len(STOPS)):
             MEANS = STOPS[x]
