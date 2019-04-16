@@ -9,7 +9,6 @@ import csv
 import codecs
 import uuid
 from scipy.stats import pearsonr
-from tqdm import tqdm
 
 class statistics(dml.Algorithm):
     contributor = 'gasparde_ljmcgann_tlux'
@@ -25,15 +24,27 @@ class statistics(dml.Algorithm):
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate(statistics.contributor, statistics.contributor)
-        data = list(repo[statistics.contributor + ".ParcelsCombined"].find())
-        x = []
-        y = []
-        for i in tqdm(range(len(data))):
-            if "obesity" in data[i].keys():
-                y.append(float(data[i]["asthma"]))
-                x.append(float(data[i]["min_distance_km"]))
-        print(pearsonr(y,x))
-        return 0
+        parcels = repo[statistics.contributor + ".ParcelsCombined"]
+        neighborhoods = list(repo[statistics.contributor + ".Neighborhoods"].find())
+
+        repo.dropCollection(statistics.contributor + ".Statistics")
+        repo.createCollection(statistics.contributor + ".Statistics")
+        for i in range(len(neighborhoods)):
+            name = neighborhoods[i]["properties"]["Name"]
+            print(name)
+            data = list(parcels.find({"Neighborhood":name}))
+
+            for category in ["obesity", "asthma", "low_phys"]:
+                x = []
+                y = []
+                for i in range(len(data)):
+                    print(data[i])
+                    y.append(float(data[i][category]))
+                    x.append(float(data[i]["min_distance_km"]))
+
+                corr = pearsonr(x,y)
+            repo[statistics.contributor + ".Statistics"].insert_one({"Neighborhood": name , "health_category": category,
+                                                                     "pearsonr": corr})
 
     @staticmethod
     def provenance():

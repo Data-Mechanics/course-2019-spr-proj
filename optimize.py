@@ -1,22 +1,17 @@
-import urllib.request
-import json
 from shapely.geometry import Polygon, Point
-import json
 import dml
 import prov.model
 import datetime
-import csv
 import codecs
 import uuid
-
 import random
 from scipy.cluster.vq import kmeans
-import matplotlib.pyplot as pyplt
+# import matplotlib.pyplot as pyplt
 
 class optimize(dml.Algorithm):
     contributor = 'gasparde_ljmcgann_tlux'
-    reads = []
-    writes = []
+    reads = [contributor + ".Neighborhoods", contributor + ".ParcelsCombined"]
+    writes = [contributor + ".KMeans"]
 
     @staticmethod
     def geojson_to_polygon(geom):
@@ -52,32 +47,51 @@ class optimize(dml.Algorithm):
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate(optimize.contributor, optimize.contributor)
-        neighborhood = list(repo[optimize.contributor + ".JamaicaPlainParcels"].find())
-        print(neighborhood[0])
-        M = []
-        x = []
-        y = []
-        for i in range(len(neighborhood)):
-            shape = optimize.geojson_to_polygon(neighborhood[i]["geometry"])[0]
-            row = [shape.centroid.coords[0][1], shape.centroid.coords[0][0]]
-            weight = max(int(neighborhood[i]["score_improvement"]),1)
-            print(weight)
-            for i in range(weight):
-                rand = random.random() / 10000
-                x.append(row[0]+ rand)
-                y.append(row[1] + rand)
-                M.append([row[0]+ rand, row[1] + rand])
-        pyplt.scatter(x,y, s = .5)
-        output = kmeans(M, 5)
-        means = list(output)[0]
-        mean_x = []
-        mean_y = []
+        # read in neighborhoods to get the list of their names
+        neighborhoods = list(repo[optimize.contributor + ".Neighborhoods"].find())
+        # load in parcels as we will iterate kmeans from this data
+        parcels = repo[optimize.contributor + ".ParcelsCombined"]
 
-        for i in means:
-            mean_x.append(i[0])
-            mean_y.append(i[1])
-        pyplt.scatter(mean_x, mean_y)
-        pyplt.show()
+        repo.dropCollection(optimize.contributor + ".KMeans")
+        repo.createCollection(optimize.contributor + ".KMeans")
+        for i in range(len(neighborhoods)):
+            name = neighborhoods[i]["properties"]["Name"]
+            neighborhood = list(parcels.find({"Neighborhood":name}))
+            M = []
+            # x = []
+            # y = []
+            for j in range(len(neighborhood)):
+
+                shape = optimize.geojson_to_polygon(neighborhood[j]["geometry"])[0]
+
+                row = [shape.centroid.coords[0][1], shape.centroid.coords[0][0]]
+                # do weighted kmeans by adding additional points
+                weight = max(int(neighborhood[j]["score_improvement"]),1)
+                for _ in range(weight):
+                    M.append([row[0], row[1]])
+
+                    # this was for purpose of making our scatterplots
+                    # look nicer, not needed for kmeans to function properly
+                    # rand = random.random() / 10000
+                    # M.append([row[0] + rand, row[1] + rand])
+                    # x.append(row[0]+ rand)
+                    # y.append(row[1] + rand)
+
+
+                # pyplt.scatter(x,y, s = .5)
+                # means = list(output)[0]
+                # mean_x = []
+                # mean_y = []
+                #
+                # for i in means:
+                #     mean_x.append(i[0])
+                #     mean_y.append(i[1])
+                # pyplt.scatter(mean_x, mean_y)
+                # pyplt.show()
+            output = kmeans(M, 5)[0].tolist()
+            repo[optimize.contributor + ".KMeans"].insert_one({"Neighborhoods": name,"means": output})
+        repo[optimize.contributor + ".KMeans"].metadata({'complete': True})
+
 
 
     @staticmethod

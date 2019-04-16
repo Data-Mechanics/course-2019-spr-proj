@@ -229,10 +229,10 @@ class combineData(dml.Algorithm):
             found = False
             for neighborhood in neighborhoods:
                 neighborhood_shapely = combineData.geojson_to_polygon(neighborhood["geometry"])
-                parcel_shapely = combineData.geojson_to_polygon(parcel_shape_assessment[i]["geometry"])[0]
+                parcel_shapely = combineData.geojson_to_polygon(parcels_with_health[i]["geometry"])[0]
                 for shape in neighborhood_shapely:
                     if shape.contains(parcel_shapely):
-                        parcels_by_neighborhood[neighborhood["properties"]["Name"]].append(parcel_shape_assessment[i])
+                        parcels_by_neighborhood[neighborhood["properties"]["Name"]].append(parcels_with_health[i])
                         found = True
                         break
                 if found:
