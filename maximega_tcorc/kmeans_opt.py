@@ -138,4 +138,4 @@ class kmeans_opt(dml.Algorithm):
 				
 		return doc
 
-kmeans_opt.execute()
+# kmeans_opt.execute()
