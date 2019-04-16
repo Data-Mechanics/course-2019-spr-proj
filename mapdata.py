@@ -17,10 +17,20 @@ from datetime import datetime
 my_key = 'AIzaSyAePvzBOkxdh5YYcgTQjhY9bHWlNEn3Sog'
 
 
-def time(home_addr, work_addr):
+def walk_time(home_addr, work_addr):
+    gmaps = googlemaps.Client(key=my_key)
+    time = datetime.now()
+    # WALKING TIME
+    commute_json = gmaps.distance_matrix(origins=home_addr, destinations=work_addr, mode='walking')
+    print(commute_json)
+    commute_time = commute_json['rows'][0]['elements'][0]['duration']['text']
+    return commute_time
+
+def drive_time(home_addr, work_addr):
     gmaps = googlemaps.Client(key=my_key)
     time = datetime.now()
     commute_json = gmaps.distance_matrix(origins=home_addr, destinations=work_addr)
+    print(commute_json)
     commute_time = commute_json['rows'][0]['elements'][0]['duration']['text']
     return commute_time
 
@@ -33,13 +43,10 @@ def distance(home_addr, work_addr):
     return commute_distance
 
 if __name__ == '__main__':
-#    home_addr = '418 Beachview dr. North Vancouver'
-    #home_addr = '418 Beachview Dr, North Vancouver'
     home_addr = '509 Park Dr, Boston'
-    #work_addr = '138 East 7th, Vancouver'
     work_addr = '800 Boylston St, Boston'
-    ct_time = time(home_addr,work_addr)
-    print(ct_time)
+    walk_ct_time = walk_time(home_addr,work_addr)
+    print(walk_ct_time)
     ct_dist = distance(home_addr,work_addr)
     print(ct_dist)
 

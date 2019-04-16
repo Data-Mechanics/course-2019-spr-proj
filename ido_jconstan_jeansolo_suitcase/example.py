@@ -118,6 +118,7 @@ class example(dml.Algorithm):
         r1 = json.loads(response)
         r1Addy = 'Address'
         r1BusStop = 'Pickup Stop'
+        r1School = 'School'
         r1 = addressNormalizer(r1Addy, r1)
 
         # DATA SET 2 [Spark Property Data]
@@ -175,37 +176,91 @@ class example(dml.Algorithm):
         # ('Address', 'School Name', 'Assessed Total', 'Y/N do they take the bus')
         t11 = union(t8, t10)
 
-        
-        print(md.time("418 Beachview Drive, North Vancouver, BC", "410 Beachview Drive, North Vancouver, BC"))
 
         # ('Address', 'City', 'State') of all addresses
         t12 = project(r2, lambda t: (t[r2Addy], t[r2City], t[r2State]))
 
         # ('Address', 'City', 'State', 'School Name', 'Assessed Total', 'Y/N do they take the bus')
         t13 = product(t11,t12)
-        print(t13[0])
         t14 = select(t13, lambda t: t[0][0] == t[1][0])
-        print(t14[0])
-
-        t13 = project(t14, lambda t: (t[0][0], t[1][1], t[1][2]))
-
-        # ('Bus Stop')
-        t15 = select(r1, lambda t: t[r1BusStop])
-        # append city state to bus stops
-        t16 = project(t15, lambda t: (t[0] + 'Natick, MA'))
+        
+        #t13school = project(t14, lambda t: (t[0][0], t[1][1], t[1][2], t[0][3]))
+        #print(t13school[0])
+        t13 = project(t14, lambda t: (t[0][0], t[1][1], t[1][2], t[0][1]))
 
 
+        t15 = []
         for i in range(0, len(t13)-1):
-            t13[i] = t13[i][0] + ", " + t13[i+1][1] + ", " + t13[i+1][2]
+            #t15[i][0] = t13[i][0] + ", " + t13[i+1][1] + ", " + t13[i+1][2]
+            t15.append(((t13[i][0] + ", " + t13[i+1][1] + ", " + t13[i+1][2]), (t13[i][3])))
 
-        
-        
+        # ('Bus Stop'), append city state to bus stops
+        t16 = project(r1, lambda t: (t[r1School], t[r1BusStop] + ', Natick, MA'))
+        #print(t16[0], t16[1])
+      
         #t13[0] = t13[0][0] + ", " + t13[1][1] + ", " + t13[1][2]
-        print(t13[0])
-        tg = "15 West Street, Natick, MA"
-        print(tg)
         print("-----GOOGLE-----")
-        print(md.time(t13[0], tg))
+        
+        
+        #separate student addresses by school attended - these will be the points in k-means
+        POINTS = []
+        tNHS = select(t15, lambda t: t[1] == 'Natick High School')
+        tMES = select(t15, lambda t: t[1] == 'Memorial Elementary School')
+        tJFKMS = select(t15, lambda t: t[1] == 'J. F. Kennedy Middle School')
+        tWMS = select(t15, lambda t: t[1] == 'Wilson Middle School')
+        tBES = select(t15, lambda t: t[1] == 'Brown Elementary School')
+        tBHES = select(t15, lambda t: t[1] == 'Bennett-Hemenway Elementary School')
+         
+        POINTS.append(tNHS)
+        POINTS.append(tMES)
+        POINTS.append(tJFKMS)
+        POINTS.append(tWMS)
+        POINTS.append(tBES)
+        POINTS.append(tBHES)
+        
+        #tNPS = select(t15, lambda t: t[1] == 'Natick Preschool')
+        #tJES = select(t15, lambda t: t[1] == 'Johnson Elementary School')
+        
+        #the stops are the means for k-means - converted to sets and back to remove duplicates
+        STOPS = []
+        tNHSStops = list(set(select(t16, lambda t: t[0] == 'NHS')))
+        tMESStops = list(set(select(t16, lambda t: t[0] == 'MM')))
+        tJFKMSStops = list(set(select(t16, lambda t: t[0] == 'KN')))
+        tWMSStops = list(set(select(t16, lambda t: t[0] == 'WL')))
+        tBESStops = list(set(select(t16, lambda t: t[0] == 'BR')))
+        tBHESStops = list(set(select(t16, lambda t: t[0] == 'BH')))
+        
+        STOPS.append(tNHSStops)
+        STOPS.append(tMESStops)
+        STOPS.append(tJFKMSStops)
+        STOPS.append(tWMSStops)
+        STOPS.append(tBESStops)
+        STOPS.append(tBHESStops)
+        
+        #print(STOPS)
+        
+        #implementation of k-means, with md.time as the distance function
+        #todo: set a departure time in md.time
+        
+        #done for every school separately
+        for x in range(len(STOPS)):
+            MEANS = STOPS[x]
+            OLD = []
+            
+            while OLD != MEANS:
+                OLD = MEANS
+                MPD = [(m, p, md.time(m,p)) for (m, p) in product(MEANS, POINTS)]
+                PDs = [(p, md.time(m,p)) for (m, p, d) in MPD]
+                PD = aggregate(PDs, min)
+                MP = [(m, p) for ((m,p,d), (p2,d2)) in product(MPD, PD) if p==p2 and d==d2]
+                MT = aggregate(MP, plus)
+
+                M1 = [(m, 1) for (m, _) in MP]
+                MC = aggregate(M1, sum)
+
+                MEANS = [scale(t,c) for ((m,t),(m2,c)) in product(MT, MC) if m == m2]
+                print(sorted(MEANS))
+        
         
         
         
@@ -391,6 +446,18 @@ def product(R, S):
 def aggregate(R, f):
     keys = {r[0] for r in R}
     return [(key, f([v for (k,v) in R if k == key])) for key in keys]
+    
+def plus(args):
+    p = [0,0]
+    for (x,y) in args:
+        p[0] += x
+        p[1] += y
+    return tuple(p)
+    
+def scale(p,c):
+    (x,y) = p
+    return (x/c, y/c)
+            
 '''
 # This is example code you might use for debugging this module.
 # Please remove all top-level function calls before submitting.
