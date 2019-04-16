@@ -9,6 +9,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas
 from pandas.plotting import parallel_coordinates
+from maximega_tcorc.helper_functions.cons_sat import cons_sat
+#from helper_functions.cons_sat import cons_sat
+
 
 
 class kmeans_opt(dml.Algorithm):
@@ -47,44 +50,25 @@ class kmeans_opt(dml.Algorithm):
 
 		for i in range(len(data_copy)):
 			data_copy[i]['zone'] = k_groupings[i]
-
-		
-		totals_real = [0] * k
+		avg_inc = [0] * k
+		count_inc = [0] * k
 		for item in data_copy:
-			totals_real[item['zone']] += (float(item['population']) * (item['trans_percent'] / 100)) * 2.75
+			avg_inc[item['zone']] += item['income']
+			count_inc[item['zone']] += 1
+		for i in range(len(avg_inc)):
+			avg_inc[i] /= count_inc[i]
 
-		overall_total_real = sum(totals_real)
+		for i in range(len(data_copy)):
+			data_copy[i]['avg_inc'] = avg_inc[data_copy[i]['zone']]
 
-		avgs_real = [0] * k
-		for i in range(len(totals_real)):
-			avgs_real[i] = totals_real[i]/overall_total_real
-		#print(avgs_real)
-		
-
-		#plt.scatter(X[:, 0], X[:, 1], s=30, c=kmeans.labels_)
-		#plt.show()
-
-		data = []
-		for i in range(len(X)):
-			s = str(k_groupings[i])
-			data.append({'Latitude': X[i][0], 'Longitute': X[i][1], 'Income': X[i][2], 'Population': X[i][3], 'Zone' : s})
-		
-		parallel_coordinates(data, 'Zone')
-		plt.show()
-
-		hypothetical_percentages = [0.14, 0.42, 0.08, 0.18, 0.18] #ik its a shit name we'll figure it out
-
-
-		# equation: (percentage income for each "zone") = (populaiton * public_transport_%) * X 
-		# (percentage income for each "zone") / (populaiton * public_transport_%) = X
-		# it doesnt really work but this is what we had on paper
-		totals_projected = [0] * k
-		for item in data_copy:
-			totals_projected[item['zone']] += float(item['population']) * (item['trans_percent'] / 100)
-		
-		new_zone_fares = [0] * k
-		for i in range(len(new_zone_fares)):
-			new_zone_fares[i] = (hypothetical_percentages[i] * overall_total_real) / totals_projected[i]
+		for i in range(k):
+			min_avg = min(avg_inc)
+			for item in data_copy:
+				if (item['avg_inc'] == min_avg):
+					item['zone'] = i
+			avg_inc.remove(min_avg)
+			
+		cons_sat(data_copy, k)
 		
 		#print(new_zone_fares)
 
