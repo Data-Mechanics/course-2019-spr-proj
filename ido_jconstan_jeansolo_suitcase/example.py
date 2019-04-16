@@ -249,8 +249,8 @@ class example(dml.Algorithm):
             
             while OLD != MEANS:
                 OLD = MEANS
-                MPD = [(m, p, md.time(m,p)) for (m, p) in product(MEANS, POINTS)]
-                PDs = [(p, md.time(m,p)) for (m, p, d) in MPD]
+                MPD = [(m, p, md.walk_time(m,p)) for (m, p) in product(MEANS, POINTS)]
+                PDs = [(p, md.walk_time(m,p)) for (m, p, d) in MPD]
                 PD = aggregate(PDs, min)
                 MP = [(m, p) for ((m,p,d), (p2,d2)) in product(MPD, PD) if p==p2 and d==d2]
                 MT = aggregate(MP, plus)
