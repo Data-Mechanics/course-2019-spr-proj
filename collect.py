@@ -125,6 +125,11 @@ class getData(dml.Algorithm):
         repo[getData.contributor + ".OpenSpaces"].insert_many(open_spaces)
         repo[getData.contributor + ".OpenSpaces"].metadata({'complete': True})
 
+        repo.logout()
+
+        endTime = datetime.datetime.now()
+        return {"start": startTime, "end": endTime}
+
     @staticmethod
     def provenance(doc=prov.model.ProvDocument(), startTime=None, endTime=None):
         client = dml.pymongo.MongoClient()
@@ -134,72 +139,70 @@ class getData(dml.Algorithm):
         doc.add_namespace('dat', 'http://datamechanics.io/data/')  # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/')  # The event log.
-        doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
+        this_script = doc.agent('alg:gasparde_ljmcgann_tlux#collect',
+                                {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'],
+                                 'ont:Extension': 'py'})
 
-        this_script = doc.agent('alg:gasparde_ljmcgann_tlux#collect', {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
+        # Data Mechanics Portal
+        doc.add_namespace('bct', 'http://datamechanics.io/data/gasparde_ljmcgann_tlux/')
 
-        resource = doc.entity('bdp:wc8w-nujj',
-                              {'prov:label': 'Collect Data', prov.model.PROV_TYPE: 'ont:DataResource',
+        bct_resource = doc.entity('bct:boston_census_track',
+                              {'prov:label': 'Collect Boston Census Tract Shapes',
+                                prov.model.PROV_TYPE: 'ont:DataResource',
                                'ont:Extension': 'json'})
+        getCensusTractShape = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+
+        doc.wasAssociatedWith(getCensusTractShape, this_script)
+        doc.usage(getCensusTractShape, bct_resource, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:Retrieval'})
+        CensusTractShape = doc.entity('dat:gasparde_ljmcgann_tlux#CensusTractShape',
+                                      {prov.model.PROV_LABEL: 'Boston Census Tract Shape',
+                                       prov.model.PROV_TYPE: 'ont:DataSet'})
+        doc.wasAttributedTo(CensusTractShape, this_script)
+        doc.wasGeneratedBy(CensusTractShape, getCensusTractShape, endTime)
+        doc.wasDerivedFrom(CensusTractShape, bct_resource, getCensusTractShape, getCensusTractShape, getCensusTractShape)
 
 
+        # CDC Portal
+        doc.add_namespace('cth','https://chronicdata.cdc.gov/resource/')
+        cth_resource = doc.entity('cth:47z2-4wuh',
+                                  {'prov:label': 'Collect Boston Census Tract Health Statistics',
+                                   prov.model.PROV_TYPE: 'ont:DataResource',
+                                   'ont:Extension': 'json'})
 
-        get_CensusTractShape = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
-        get_CensusTractHealth = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+        getCensusTractHealth = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(getCensusTractHealth, this_script)
+        doc.usage(getCensusTractHealth, cth_resource, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:Retrieval','ont:Query':'?placename=Boston'})
+
+
         get_Neighborhoods = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
         get_ParcelAssessments = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
         get_ParcelGeo = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
         get_OpenSpaces = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
 
 
-        doc.wasAssociatedWith(get_CensusTractHealth, this_script)
-        doc.wasAssociatedWith(get_CensusTractShape, this_script)
+
         doc.wasAssociatedWith(get_Neighborhoods, this_script)
         doc.wasAssociatedWith(get_ParcelGeo, this_script)
         doc.wasAssociatedWith(get_ParcelAssessments, this_script)
         doc.wasAssociatedWith(get_OpenSpaces, this_script)
 
 
-        doc.usage(get_CensusTractShape, resource, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:Retrieval',
-                   'ont:Query': '?type=Animal+Found&$select=type,latitude,longitude,OPEN_DT'
-                   }
-                  )
-        doc.usage(get_CensusTractHealth, resource, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:Retrieval',
-                   'ont:Query': '?type=Animal+Lost&$select=type,latitude,longitude,OPEN_DT'
-                   }
-                  )
+
         doc.usage(get_OpenSpaces, resource, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:Retrieval',
-                   'ont:Query': '?type=Animal+Found&$select=type,latitude,longitude,OPEN_DT'
-                   }
-                  )
+                  {prov.model.PROV_TYPE: 'ont:Retrieval'})
         doc.usage(get_ParcelGeo, resource, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:Retrieval',
-                   'ont:Query': '?type=Animal+Found&$select=type,latitude,longitude,OPEN_DT'
-                   }
-                  )
+                  {prov.model.PROV_TYPE: 'ont:Retrieval'})
         doc.usage(get_Neighborhoods, resource, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:Retrieval',
-                   'ont:Query': '?type=Animal+Lost&$select=type,latitude,longitude,OPEN_DT'
-                   }
-                  )
+                  {prov.model.PROV_TYPE: 'ont:Retrieval'})
         doc.usage(get_ParcelAssessments, resource, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:Retrieval',
-                   'ont:Query': '?type=Animal+Found&$select=type,latitude,longitude,OPEN_DT'
-                   }
-                  )
+                  {prov.model.PROV_TYPE: 'ont:Retrieval'})
 
 
-        CensusTractShape = doc.entity('dat:alice_bob#lost',
-                          {prov.model.PROV_LABEL: 'Animals Lost', prov.model.PROV_TYPE: 'ont:DataSet'})
-        doc.wasAttributedTo(CensusTractShape, this_script)
-        doc.wasGeneratedBy(CensusTractShape, get_CensusTractShape, endTime)
-        doc.wasDerivedFrom(CensusTractShape, resource, get_CensusTractShape, get_CensusTractShape, get_CensusTractShape)
 
-        CensusTractHealth = doc.entity('dat:alice_bob#found',
-                           {prov.model.PROV_LABEL: 'Animals Found', prov.model.PROV_TYPE: 'ont:DataSet'})
+
+
         doc.wasAttributedTo(CensusTractHealth, this_script)
         doc.wasGeneratedBy(CensusTractHealth, get_CensusTractHealth, endTime)
         doc.wasDerivedFrom(CensusTractHealth, resource, get_CensusTractHealth, get_CensusTractHealth, get_CensusTractHealth)
