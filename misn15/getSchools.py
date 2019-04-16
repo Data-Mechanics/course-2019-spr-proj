@@ -66,7 +66,7 @@ class getSchools(dml.Algorithm):
         doc.wasAssociatedWith(this_run, this_script)
         doc.usage(this_run, resource, startTime, None,
                   {prov.model.PROV_TYPE:'ont:Retrieval'
-                  }
+                   }
                   )
         doc.usage(this_run, resource2, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:Retrieval'

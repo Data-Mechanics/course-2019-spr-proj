@@ -145,20 +145,20 @@ class Correlation(dml.Algorithm):
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
 
-        this_script = doc.agent('alg:misn15#Correlation', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        resource = doc.entity('dat:misn15#crime_health_waste_space', {'prov:label':'Crime, Health, Waste, and Open Space Data', prov.model.PROV_TYPE:'ont:DataResource'})
+        this_script = doc.agent('alg:Correlation', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        resource = doc.entity('dat:crime_health_waste_space', {'prov:label':'Crime, Health, Waste, and Open Space Data', prov.model.PROV_TYPE:'ont:DataResource'})
         this_run = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(this_run, this_script)
         doc.usage(this_run, resource, startTime, None,
                   {prov.model.PROV_TYPE:'ont:Retrieval'
                   }
                 )
-        resource2 = doc.entity('dat:misn15#correlation', {prov.model.PROV_LABEL:'Correlation Coefficients', prov.model.PROV_TYPE:'ont:DataSet'})
+        resource2 = doc.entity('dat:correlation', {prov.model.PROV_LABEL:'Correlation Coefficients', prov.model.PROV_TYPE:'ont:DataSet'})
         doc.wasAttributedTo(resource2, this_script)
         doc.wasGeneratedBy(resource2, this_run, endTime)
         doc.wasDerivedFrom(resource2, resource, this_run, this_run, this_run)
 
-        resource3 = doc.entity('dat:misn15#score', {prov.model.PROV_LABEL: 'Health Scores for Zip Codes', prov.model.PROV_TYPE: 'ont:DataSet'})
+        resource3 = doc.entity('dat:score', {prov.model.PROV_LABEL: 'Health Scores for Zip Codes', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(resource3, this_script)
         doc.wasGeneratedBy(resource3, this_run, endTime)
         doc.wasDerivedFrom(resource3, resource, this_run, this_run, this_run)

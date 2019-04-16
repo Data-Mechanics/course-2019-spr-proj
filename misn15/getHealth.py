@@ -49,7 +49,7 @@ class getHealth(dml.Algorithm):
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
         doc.add_namespace('bdp', 'https://chronicdata.cdc.gov/resource/')
 
-        this_script = doc.agent('alg:misn15#getHealth', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        this_script = doc.agent('alg:getHealth', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
         resource = doc.entity('bdp:csmm-fdhi.json?cityname=Boston', {'prov:label':'Boston_health', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
         this_run = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(this_run, this_script)
@@ -59,7 +59,7 @@ class getHealth(dml.Algorithm):
                   }
                   )
 
-        resource2 = doc.entity('dat:misn15#health', {prov.model.PROV_LABEL:'Boston Health', prov.model.PROV_TYPE:'ont:DataSet'})
+        resource2 = doc.entity('dat:health', {prov.model.PROV_LABEL:'Boston Health', prov.model.PROV_TYPE:'ont:DataSet'})
         doc.wasAttributedTo(resource2, this_script)
         doc.wasGeneratedBy(resource2, this_run, endTime)
         doc.wasDerivedFrom(resource2, resource, this_run, this_run, this_run)

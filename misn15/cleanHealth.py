@@ -89,8 +89,8 @@ class cleanHealth(dml.Algorithm):
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
 
-        this_script = doc.agent('alg:misn15#cleanHealth', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        resource = doc.entity('dat:misn15#getHealth', {'prov:label':'Health Data', prov.model.PROV_TYPE:'ont:DataResource'})
+        this_script = doc.agent('alg:cleanHealth', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        resource = doc.entity('dat:getHealth', {'prov:label':'Health Data', prov.model.PROV_TYPE:'ont:DataResource'})
 
         health_data_cleaned = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(health_data_cleaned, this_script)
@@ -99,7 +99,7 @@ class cleanHealth(dml.Algorithm):
                    }
                   )
 
-        clean_health = doc.entity('dat:misn15#cleanHealth', {prov.model.PROV_LABEL:'Health Data Cleaned', prov.model.PROV_TYPE:'ont:DataSet'})
+        clean_health = doc.entity('dat:cleanHealth', {prov.model.PROV_LABEL:'Health Data Cleaned', prov.model.PROV_TYPE:'ont:DataSet'})
         doc.wasAttributedTo(clean_health, this_script)
         doc.wasGeneratedBy(clean_health, health_data_cleaned, endTime)
         doc.wasDerivedFrom(clean_health, resource, health_data_cleaned, health_data_cleaned, health_data_cleaned)

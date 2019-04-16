@@ -67,18 +67,18 @@ class getWasteAll(dml.Algorithm):
             in this script. Each run of the script will generate a new
             document describing that invocation event.
             '''
-        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/') # The scripts are in <folder>#<filename> format.
-        doc.add_namespace('dat', 'http://datamechanics.io/data/') # The data sets are in <user>#<collection> format.
+        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/misn15/') # The scripts are in <folder>#<filename> format.
+        doc.add_namespace('dat', 'http://datamechanics.io/data/misn15/') # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
         doc.add_namespace('bdp', 'http://datamechanics.io/data/')
-        doc.add_namespace('bdp2', 'http://datamechanics.io/data/misn15/')
-        doc.add_namespace('bdp3', 'http://datamechanics.io/data/misn15/')
+        doc.add_namespace('bdp2', 'http://datamechanics.io/data/misn15/master_waste/')
+        doc.add_namespace('bdp3', 'http://datamechanics.io/data/misn15/master_waste/')
 
         this_script = doc.agent('alg:getWasteAll', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
         resource = doc.entity('bdp:hwgenids', {'prov:label':'Boston_waste', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
-        resource2 = doc.entity('bdp2:master_waste/AUL_PT', {'prov:label': 'Boston_waste', prov.model.PROV_TYPE: 'ont:DataResource', 'ont:Extension': 'geojson'})
-        resource3 = doc.entity('bdp3:master_waste/c21e', {'prov:label': 'Boston_waste', prov.model.PROV_TYPE: 'ont:DataResource','ont:Extension': 'geojson'})
+        resource2 = doc.entity('bdp2:AUL_PT', {'prov:label': 'Boston_waste', prov.model.PROV_TYPE: 'ont:DataResource', 'ont:Extension': 'geojson'})
+        resource3 = doc.entity('bdp3:c21e', {'prov:label': 'Boston_waste', prov.model.PROV_TYPE: 'ont:DataResource','ont:Extension': 'geojson'})
         this_run = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(this_run, this_script)
         doc.usage(this_run, resource, startTime, None,

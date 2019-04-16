@@ -147,12 +147,12 @@ class crime_health_waste_space(dml.Algorithm):
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
         
-        this_script = doc.agent('alg:misn15#crime_health_waste_space', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        resource = doc.entity('dat:misn15#getWasteAll', {'prov:label':'Boston Waste Sites', prov.model.PROV_TYPE:'ont:DataResource'})
-        resource2 = doc.entity('dat:misn15#getCrime', {'prov:label':'Boston Crime Data', prov.model.PROV_TYPE:'ont:DataResource'})
-        resource3 = doc.entity('dat:misn15#getHealth', {'prov:label': 'Boston Health Data', prov.model.PROV_TYPE: 'ont:DataResource'})
-        resource4 = doc.entity('dat:misn15#getIncome', {'prov:label': 'Boston Average Income Data', prov.model.PROV_TYPE: 'ont:DataResource'})
-        resource5 = doc.entity('dat:misn15#transformOpenSpace', {'prov:label': 'Boston Open Spaces', prov.model.PROV_TYPE: 'ont:DataResource'})
+        this_script = doc.agent('alg:crime_health_waste_space', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        resource = doc.entity('dat:getWasteAll', {'prov:label':'Boston Waste Sites', prov.model.PROV_TYPE:'ont:DataResource'})
+        resource2 = doc.entity('dat:getCrime', {'prov:label':'Boston Crime Data', prov.model.PROV_TYPE:'ont:DataResource'})
+        resource3 = doc.entity('dat:getHealth', {'prov:label': 'Boston Health Data', prov.model.PROV_TYPE: 'ont:DataResource'})
+        resource4 = doc.entity('dat:getIncome', {'prov:label': 'Boston Average Income Data', prov.model.PROV_TYPE: 'ont:DataResource'})
+        resource5 = doc.entity('dat:transformOpenSpace', {'prov:label': 'Boston Open Spaces', prov.model.PROV_TYPE: 'ont:DataResource'})
        
         this_run = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(this_run, this_script)
@@ -176,7 +176,7 @@ class crime_health_waste_space(dml.Algorithm):
                   {prov.model.PROV_TYPE: 'ont:Retrieval'
                    }
                   )
-        resource6 = doc.entity('dat:misn15#crime_health_waste_space', {prov.model.PROV_LABEL:'Waste, Health, and Open Spaces Data', prov.model.PROV_TYPE:'ont:DataSet'})
+        resource6 = doc.entity('dat:crime_health_waste_space', {prov.model.PROV_LABEL:'Waste, Health, and Open Spaces Data', prov.model.PROV_TYPE:'ont:DataSet'})
         doc.wasAttributedTo(resource6, this_script)
         doc.wasGeneratedBy(resource6, this_run, endTime)
         doc.wasDerivedFrom(resource6, resource, this_run, this_run, this_run)

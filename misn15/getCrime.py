@@ -50,7 +50,7 @@ class getCrime(dml.Algorithm):
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
         doc.add_namespace('bdp', 'https://data.boston.gov/api/3/action/')
 
-        this_script = doc.agent('alg:misn15#getCrime', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        this_script = doc.agent('alg:getCrime', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
         resource = doc.entity('bdp:datastore_search_sql?sql=SELECT%20*%20from%20%2212cb3883-56f5-47de-afa5-3b1cf61b257b%22b&q=2016', {'prov:label':'Boston Crime', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
         this_run = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(this_run, this_script)
@@ -59,7 +59,7 @@ class getCrime(dml.Algorithm):
                   'ont:Query': 'sql?sql=SELECT%20*%20from%20%2212cb3883-56f5-47de-afa5-3b1cf61b257b%22b&q=2016'
                   }
                   )
-        resource2 = doc.entity('dat:misn15#crime', {prov.model.PROV_LABEL:'Boston Crime', prov.model.PROV_TYPE:'ont:DataSet'})
+        resource2 = doc.entity('dat:crime', {prov.model.PROV_LABEL:'Boston Crime', prov.model.PROV_TYPE:'ont:DataSet'})
         doc.wasAttributedTo(resource2, this_script)
         doc.wasGeneratedBy(resource2, this_run, endTime)
         doc.wasDerivedFrom(resource2, resource, this_run, this_run, this_run)
