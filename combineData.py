@@ -12,6 +12,7 @@ from math import *
 from tqdm import tqdm
 from rtree import index
 
+
 class combineData(dml.Algorithm):
     contributor = 'gasparde_ljmcgann_tlux'
     reads = [ contributor + ".CensusTractShape", contributor + ".CensusTractHealth",
@@ -96,6 +97,32 @@ class combineData(dml.Algorithm):
         return polys
 
     @staticmethod
+    def improvement_scores(input):
+        parcel_index = index.Index()
+        for i in range(len(input)):
+            parcel_bounds = combineData.geojson_to_polygon(input[i]["geometry"])[0].bounds
+            parcel_index.insert(i, parcel_bounds)
+
+        for i in tqdm(range(len(input))):
+            score_improvement = 0
+            new_park = combineData.geojson_to_polygon(input[i]["geometry"])[0]
+            check = min(100, len(input) - 1)
+            for other_parcel in [j for j in parcel_index.nearest(new_park.bounds, check)]:
+                other_parcel_shapely = combineData.geojson_to_polygon(input[other_parcel]["geometry"])[0]
+                shapely_distance = new_park.distance(other_parcel_shapely)
+                if shapely_distance < input[other_parcel]["min_distance"]:
+                    new_dist = combineData.geo_distance(other_parcel_shapely.centroid, new_park)
+                    if (input[other_parcel]["min_distance_km"] - new_dist) > 0:
+                        score_improvement += input[other_parcel]["min_distance_km"] - new_dist
+
+            input[i]["score_improvement"] = score_improvement
+
+        return input
+
+
+
+
+    @staticmethod
     def execute(trial=False):
         startTime = datetime.datetime.now()
 
@@ -127,11 +154,147 @@ class combineData(dml.Algorithm):
                             break
                         if found:
                             break
-        print(open_spaces_by_neighborhood["Allston"][0])
+        #print(open_spaces_by_neighborhood["Allston"][0])
+
+        ###############################################################
+
+        # put parcel shapes together with its parcel assessment
+        parcel_geo = list(repo[combineData.contributor + ".ParcelGeo"].find())
+        parcel_assessments = repo[combineData.contributor + ".ParcelAssessments"]
+
+        parcel_shape_assessment = []
+        # PID LONG
+        print("Combining Parcels:")
+        for i in tqdm(range(len(parcel_geo))):
+            PID = parcel_geo[i]["properties"]["PID_LONG"]
+            assessment = parcel_assessments.find_one({"_id":PID})
+            parcel_shape = parcel_geo[i]["geometry"]
+            if assessment is not None:
+                parcel_shape_assessment.append({**assessment, **{"geometry":parcel_shape}})
+        #print(len(parcel_shape_assessment))
+        #print(parcel_shape_assessment)
+        ###############################################################
+
+        # put census tract shapes together with its health statistics
+
+        census_tract_health = repo[combineData.contributor + ".CensusTractHealth"]
+        census_tract_shape = list(repo[combineData.contributor + ".CensusTractShape"].find())
+
+
+        c_t_health_shape = []
+        for i in range(len(census_tract_shape)):
+            tract = census_tract_shape[i]["Census Tract"]
+            health = census_tract_health.find_one({"_id":tract})
+            shape = {"geometry": {"type":census_tract_shape[i]["type"],
+                                  "coordinates":census_tract_shape[i]["coordinates"]}}
+            if health is not None:
+                c_t_health_shape.append({**health, **shape})
+
+        ###############################################################
+
+        # add which tract the parcel is in as well as the tracts health score
+
+        # rtree for tracts
+        tract_index = index.Index()
+        for i in range(len(c_t_health_shape)):
+
+            tract_shapely = combineData.geojson_to_polygon(c_t_health_shape[i]["geometry"])
+            tract_index.insert(i, tract_shapely[0].bounds)
+
+
+        print("Combining parcel with tracts")
+        parcels_with_health = []
+        for i in tqdm(range(len(parcel_shape_assessment))):
+            found = False
+            parcel_shapely = combineData.geojson_to_polygon(parcel_shape_assessment[i]["geometry"])[0]
+            for ti in [j for j in tract_index.nearest(parcel_shapely.bounds, 5)]:
+                tract_shapely = combineData.geojson_to_polygon(c_t_health_shape[ti]["geometry"])
+                for shape in tract_shapely:
+                    if shape.contains(parcel_shapely):
+                        tract_data = {"asthma":c_t_health_shape[ti]["asthma"], "low_phys":c_t_health_shape[ti]["low_phys"],
+                                      "obesity":c_t_health_shape[ti]["obesity"], "Census Tract":c_t_health_shape[ti]["_id"]}
+                        data = {**parcel_shape_assessment[i], **tract_data}
+                        parcels_with_health.append(data)
+                        found = True
+                        break
+                if found:
+                    break
+        #print(parcel_shape_assessment)
+        #print(len(parcel_shape_assessment))
+
+        ###############################################################
+
+        #add parcels to neighborhoods
         parcels_by_neighborhood = combineData.create_neighborhood_dict(neighborhoods)
-        parcel_geo = list(repo[combineData.contributor + ".ParcelGeo"])
-        parcel_assessments = list(repo[combineData.contributor + ".ParcelAssessments"])
-        censu
+        print(list(parcels_by_neighborhood.keys())[0])
+        print("Adding parcels to neighborhoods")
+        for i in tqdm(range(len(parcels_with_health))):
+            found = False
+            for neighborhood in neighborhoods:
+                neighborhood_shapely = combineData.geojson_to_polygon(neighborhood["geometry"])
+                parcel_shapely = combineData.geojson_to_polygon(parcel_shape_assessment[i]["geometry"])[0]
+                for shape in neighborhood_shapely:
+                    if shape.contains(parcel_shapely):
+                        parcels_by_neighborhood[neighborhood["properties"]["Name"]].append(parcel_shape_assessment[i])
+                        found = True
+                        break
+                if found:
+                    break
+
+        print(parcels_by_neighborhood["Allston"])
+
+        ##############################################################
+
+        # add distance to closest park and improvement scores to each parcel
+        # in each neighborhood
+
+        for neighborhood in list(parcels_by_neighborhood.keys()):
+            print(neighborhood)
+            for i in tqdm(range(len(parcels_by_neighborhood[neighborhood]))):
+                min_distance = 100
+                min_open_space = None
+                open_space_id = None
+                data = parcels_by_neighborhood[neighborhood][i]
+                parcel_shapely = combineData.geojson_to_polygon(data["geometry"])[0]
+                for open_space in open_spaces_by_neighborhood[neighborhood]:
+                    op_s_shapely = combineData.geojson_to_polygon(open_space["geometry"])
+                    for shape in op_s_shapely:
+                        distance = parcel_shapely.distance(shape)
+                        if distance < min_distance:
+                            min_distance = distance
+                            min_open_space = shape
+                            open_space_id = open_space["properties"]["OBJECTID"]
+                if min_open_space is not None:
+                    min_distance_km = combineData.geo_distance(parcel_shapely.centroid, min_open_space)
+                else:
+                    min_distance_km = 100
+                parcels_by_neighborhood[neighborhood][i]["min_distance"] = min_distance
+                parcels_by_neighborhood[neighborhood][i]["min_distance_km"] = min_distance_km
+                parcels_by_neighborhood[neighborhood][i]["nearest_open_space"] = open_space_id
+
+        r = json.dumps(parcels_by_neighborhood)
+        with open("parcel_by_neighborhood.json","w") as f:
+            f.write(r)
+        with open("parcel_by_neighborhood.json","r") as f:
+            r = f.read()
+        parcels_by_neighborhood = json.loads(r)
+        for neighborhood in list(parcels_by_neighborhood.keys()):
+            print(neighborhood)
+            # name = neighborhood.replace(" ","")
+            input = parcels_by_neighborhood[neighborhood]
+            parcels_by_neighborhood[neighborhood] = combineData.improvement_scores(input)
+            # print(parcels_by_neighborhood[neighborhood])
+            # repo.dropCollection(combineData.contributor + "." + name + "Parcels")
+            repo.createCollection(combineData.contributor + ".ParcelsCombined")
+            for i in range(len(parcels_by_neighborhood[neighborhood])):
+                parcels_by_neighborhood[neighborhood][i]["Neighborhood"] = neighborhood
+                try:
+                    repo[combineData.contributor + ".ParcelsCombined"].insert_one(parcels_by_neighborhood[neighborhood][i])
+                except Exception as e:
+                    print(e)
+            repo[combineData.contributor + ".ParcelsCombined"].metadata({'complete': True})
+
+
 
 
     @staticmethod

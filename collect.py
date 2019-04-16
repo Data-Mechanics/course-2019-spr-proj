@@ -94,7 +94,6 @@ class getData(dml.Algorithm):
         #print(unique_pid)
         repo.dropCollection(getData.contributor + ".ParcelAssessments")
         repo.createCollection(getData.contributor + ".ParcelAssessments")
-        # need to do this because dataset was too large to do
         repo[getData.contributor + ".ParcelAssessments"].insert_many(unique_pid)
 
         repo[getData.contributor + ".ParcelAssessments"].metadata({'complete': True})

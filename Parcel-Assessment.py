@@ -13,6 +13,7 @@ for i in range(9):
     Assessment = Assessment['value']
     All_Assessments += Assessment
 print(len(All_Assessments))
+
 dict_assessment = {}
 count = 0
 for assess in All_Assessments:
