@@ -91,8 +91,8 @@ class candidate_res(dml.Algorithm):
         repo.createCollection('candidate_res')
         columnName = ['FullName','StreetName','Zipcode','Duplicate','Landmark']
         df = pd.DataFrame(columns=columnName,data=l1)
-        idx=df1.groupby(by='Zipcode')['Duplicate'].idxmax()
-        res=df1.loc[idx,]
+        idx=df.groupby(by='Zipcode')['Duplicate'].idxmax()
+        res=df.loc[idx,]
         data = json.loads(res.to_json(orient="records"))
         repo[writes[0]].insert_many(data)
         repo[writes[0]].metadata({'complete': True})
