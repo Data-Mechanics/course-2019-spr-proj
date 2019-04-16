@@ -31,8 +31,8 @@ class Salesmen(dml.Algorithm):
         repo.createCollection('solution')
 
         # define stability threshold and accessibility threshold for constraint satisfaction problem
-        S = 0.6
-        A = 0.0
+        S = 0.2
+        A = 6.0
 
         # solve the optimization problem
         corr_evi = repo.henryhcy_jshen97_leochans_wangyp.correlationCVS.find_one({"document_type": "rating_eviction_correlation"})['corr']
@@ -102,29 +102,35 @@ class Salesmen(dml.Algorithm):
         total_accessibility_z3 = 0.0
         if (solver.check() == z3.sat):
             m = solver.model()
-        for i in range(len(dataset)):
-            name = 'x{}'.format(i)
-            if (m[z3.Real(name)] == 1):
-                place_id_list_z3.append(dataset[i][0])
-                point_list_z3.append(dataset[i][1])
-                total_stability_z3 += dataset[i][2]
+            for i in range(len(dataset)):
+                name = 'x{}'.format(i)
+                if (m[z3.Real(name)] == 1):
+                    place_id_list_z3.append(dataset[i][0])
+                    point_list_z3.append(dataset[i][1])
+                    total_stability_z3 += dataset[i][2]
 
-        total_accessibility_z3 += gd.distance(point_list_z3[0], point_list_z3[1]).km
-        total_accessibility_z3 += gd.distance(point_list_z3[0], point_list_z3[2]).km
-        total_accessibility_z3 += gd.distance(point_list_z3[1], point_list_z3[2]).km
+            total_accessibility_z3 += gd.distance(point_list_z3[0], point_list_z3[1]).km
+            total_accessibility_z3 += gd.distance(point_list_z3[0], point_list_z3[2]).km
+            total_accessibility_z3 += gd.distance(point_list_z3[1], point_list_z3[2]).km
 
-        vicinity_list_z3 = []
-        for i in place_id_list_z3:
-            vicinity_list_z3.append(repo.henryhcy_jshen97_leochans_wangyp.cvs.find_one({'place_id': i})['vicinity'])
+            vicinity_list_z3 = []
+            for i in place_id_list_z3:
+                vicinity_list_z3.append(repo.henryhcy_jshen97_leochans_wangyp.cvs.find_one({'place_id': i})['vicinity'])
 
-        d_z3 = {
-            'solution_type': 'constraint satisfaction',
-            'solution': place_id_list_z3,
-            'vicinity_list': vicinity_list_z3,
-            'max_sta': total_stability_z3,
-            'max_acc': total_accessibility_z3
-        }
-        repo.henryhcy_jshen97_leochans_wangyp.solution.insert_one(d_z3)
+            d_z3 = {
+                'solution_type': 'constraint satisfaction',
+                'solution': place_id_list_z3,
+                'vicinity_list': vicinity_list_z3,
+                'max_sta': total_stability_z3,
+                'max_acc': total_accessibility_z3
+            }
+            repo.henryhcy_jshen97_leochans_wangyp.solution.insert_one(d_z3)
+        else:
+            d_z3 = {
+                'solution_type': 'constraint satisfaction',
+                'solution': 'solution not found'
+            }
+            repo.henryhcy_jshen97_leochans_wangyp.solution.insert_one(d_z3)
 
         repo['henryhcy_jshen97_leochans_wangyp.solution'].metadata({'complete': True})
         print(repo['henryhcy_jshen97_leochans_wangyp.solution'].metadata())
