@@ -32,6 +32,7 @@ class ballot_questions(dml.Algorithm):
         df['NoScore'] = df.apply(lambda t: end_score - (t.YesScore - start_score), axis=1)
         print(df)
 
+        #df.to_excel("../BallotQuestionsOutput.xlsx")
         collection = 'stathisk_simonwu_nathanmo_nikm.scores'
         repo[collection].insert_many(json.loads(df.to_json(orient='records')))
         repo[collection].metadata({'complete': True})
