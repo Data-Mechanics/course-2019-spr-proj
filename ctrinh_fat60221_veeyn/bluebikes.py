@@ -119,7 +119,7 @@ class bluebikes(dml.Algorithm):
         repo.logout()
 
         return doc
-bluebikes.execute()
+# bluebikes.execute()
 '''
 # This is example code you might use for debugging this module.
 # Please remove all top-level function calls before submitting.
