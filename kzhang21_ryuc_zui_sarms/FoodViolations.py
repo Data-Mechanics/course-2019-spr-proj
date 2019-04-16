@@ -17,37 +17,43 @@ class FoodViolations(dml.Algorithm):
 
     @staticmethod
     def execute(trial=False):
+
         startTime = datetime.datetime.now()
+
         # Set up the database connection.
         # This will fail to connect to the one require SSH auth
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate('kzhang21_ryuc_zui_sarms', 'kzhang21_ryuc_zui_sarms')
 
-        df = pd.DataFrame(list(repo["kzhang21_ryuc_zui_sarms.food_inspections"].find()))
+        df = pd.DataFrame(
+            list(repo["kzhang21_ryuc_zui_sarms.food_inspections"].find()))
 
         # Project to select only the column we wants
         selected_columns = ["businessname", "licenseno", "violstatus", "address", "city", "state", "zip", "property_id",
-                            "location"]
+                            "location", "violdttm", "violation"]
         DF = df[selected_columns]
 
-        # Remove the row which has an empty value [x for row in table for x in row if x]
-        DF = DF.dropna()
-
         # Select all the Fail violations
-        DF = DF[DF["violstatus"] == "Fail"]
+        # DF = DF[DF["violstatus"] == "Fail"]
 
         # Count violations per restaurant
-        VC = DF.groupby("licenseno").count()
+        violation_DF = pd.DataFrame()
+        violation_DF["violationCount"] = DF.groupby(
+            "licenseno").count()["violation"]
+        violation_DF["violationDate"] = DF.groupby("licenseno").min()[
+            "violdttm"]
 
-        DF_R = DF.set_index("licenseno")[["businessname", "address", "city", "state", "zip", "location"]]
-        DF_R["violation_count"] = VC["violstatus"]
-        DF_R = DF_R.drop_duplicates()
+        violation_DF.join(
+            DF.set_index("licenseno")[set(
+                selected_columns) - {"violation", "violdttm", "licenseno"}].drop_duplicates()
+        )
+        # Get the earliest violation date of each licenseno. (Index is licenseno).
 
-        DF_R["_id"] = DF_R.index.values
-        DF_R["location"] = DF_R["location"].map(parse_coor)
+        violation_DF["_id"] = violation_DF.index.values
+        # DF_R["location"] = DF_R["location"].map(parse_coor)
 
-        r_dict = DF_R.to_dict(orient="record")
+        r_dict = violation_DF.to_dict(orient="record")
 
         repo.dropCollection("food_violations")
         repo.createCollection("food_violations")
@@ -61,18 +67,22 @@ class FoodViolations(dml.Algorithm):
 
     @staticmethod
     def provenance(doc=prov.model.ProvDocument(), startTime=None, endTime=None):
-        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')  # The scripts are in <folder>#<filename> format.
-        doc.add_namespace('dat', 'http://datamechanics.io/data/')  # The data sets are in <user>#<collection> format.
+        # The scripts are in <folder>#<filename> format.
+        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')
+        # The data sets are in <user>#<collection> format.
+        doc.add_namespace('dat', 'http://datamechanics.io/data/')
         doc.add_namespace('ont',
                           'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
-        doc.add_namespace('log', 'http://datamechanics.io/log/')  # The event log.
+        # The event log.
+        doc.add_namespace('log', 'http://datamechanics.io/log/')
         doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
 
         this_script = doc.agent('alg:alice_bob#FoodViolations',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
         resource = doc.entity('dat:zui_sarms#FoodInspection',
                               {prov.model.PROV_LABEL: 'Food Inspections', prov.model.PROV_TYPE: 'ont:DataSet'})
-        get_fv = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+        get_fv = doc.activity(
+            'log:uuid' + str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(get_fv, this_script)
         doc.usage(get_fv, resource, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:Computation'}
