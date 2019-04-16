@@ -35,8 +35,6 @@ class stats_analysis(dml.Algorithm):
         print(p_value)
         print(corr_coef)
 
-
-
         repo.logout()
 
         endTime = datetime.datetime.now()
