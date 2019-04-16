@@ -29,9 +29,9 @@ class get_taxitrips(dml.Algorithm):
         # ---[ Grab Data ]-------------------------------------------
         client = Socrata("data.cityofchicago.org", "xbEYuk5XxkYsIaXl3hn79XIoR")
         if trial:
-            results = client.get("wrvz-psew", select="trip_id,pickup_community_area,dropoff_community_area", where="trip_start_timestamp > '2013-01-01T00:00:00.000' AND trip_start_timestamp < '2019-01-01T00:00:00.000'", limit=10)
+            results = client.get("wrvz-psew", select="trip_id,pickup_community_area,dropoff_community_area", where="trip_start_timestamp > '2017-01-01T00:00:00.000' AND trip_start_timestamp < '2019-01-01T00:00:00.000' AND dropoff_community_area IS NOT NULL AND pickup_community_area IS NOT NULL", limit=10)
         if trial == False:
-            results = client.get("wrvz-psew", select="trip_id,pickup_community_area,dropoff_community_area", where="trip_start_timestamp > '2013-01-01T00:00:00.000' AND trip_start_timestamp < '2019-01-01T00:00:00.000'", limit=25000000)
+            results = client.get("wrvz-psew", select="trip_id,pickup_community_area,dropoff_community_area", where="trip_start_timestamp > '2017-01-01T00:00:00.000' AND trip_start_timestamp < '2019-01-01T00:00:00.000' AND dropoff_community_area IS NOT NULL AND pickup_community_area IS NOT NULL", limit=2000000)
         df = pd.DataFrame.from_records(results).to_json(orient="records")
         loaded = json.loads(df)
         # ---[ MongoDB Insertion ]-------------------------------------------
