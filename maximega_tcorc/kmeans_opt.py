@@ -9,10 +9,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas
 from pandas.plotting import parallel_coordinates
-from maximega_tcorc.helper_functions.cons_sat import cons_sat
-# from helper_functions.cons_sat import cons_sat
-from maximega_tcorc.helper_functions.lat_long_kmeans import run_lat_long_kmeans
-# from helper_functions.lat_long_kmeans import run_lat_long_kmeans
+#from maximega_tcorc.helper_functions.cons_sat import cons_sat
+from helper_functions.cons_sat import cons_sat
+#from maximega_tcorc.helper_functions.lat_long_kmeans import run_lat_long_kmeans
+from helper_functions.lat_long_kmeans import run_lat_long_kmeans
 
 
 class kmeans_opt(dml.Algorithm):
@@ -43,16 +43,11 @@ class kmeans_opt(dml.Algorithm):
 				X.append([nta['ntaname'], nta['position'][0], nta['position'][1], income])
 				data_copy.append(nta)
 
+		#------------------ K Means -----------------
 		kmeans = run_lat_long_kmeans(X)
 
-
-		# #------------------ K Means
-		# k = 5
-		# kmeans = KMeans(n_clusters=k, verbose=0, n_init = 100).fit(X)
-		# kmeans.fit_predict(X)
 		k = 5
 		k_groupings = kmeans.labels_
-
 
 		for i in range(len(data_copy)):
 			data_copy[i]['zone'] = k_groupings[i]
@@ -74,9 +69,10 @@ class kmeans_opt(dml.Algorithm):
 					item['zone'] = i
 			avg_inc.remove(min_avg)
 			
-		# cons_sat(data_copy, k)
-
-		
+		x = cons_sat(data_copy, k)
+		print(x.translate)
+		for i in x:
+			print(i.params)
 		
 		# ----------------- Reformat data for mongodb insertion -----------------
 		# insert_many_arr = []
@@ -136,5 +132,4 @@ class kmeans_opt(dml.Algorithm):
 		repo.logout()
 				
 		return doc
-
-# kmeans_opt.execute()
+kmeans_opt.execute()
