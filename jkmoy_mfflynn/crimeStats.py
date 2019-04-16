@@ -86,7 +86,7 @@ class crimeStats(dml.Algorithm):
             
         final_dataset = [{'incident':tup[0], 'mean':tup[1], 'stddev':tup[2]} for tup in stats_results]
 
-        print(final_dataset[0])
+        #print(final_dataset[0])
         
         repo.dropCollection('jkmoy_mfflynn.crimeStats')
         repo.createCollection('jkmoy_mfflynn.crimeStats')
