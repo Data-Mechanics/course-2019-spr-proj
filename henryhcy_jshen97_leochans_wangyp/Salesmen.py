@@ -31,7 +31,7 @@ class Salesmen(dml.Algorithm):
         repo.createCollection('solution')
 
         # define stability threshold and accessibility threshold for constraint satisfaction problem
-        S = 0.6
+        S = 0.2
         A = 6.0
 
         # solve the optimization problem
@@ -189,8 +189,9 @@ class Salesmen(dml.Algorithm):
         return doc
 
 # debug
-'''
+
 Salesmen.execute()
+'''
 doc = Salesmen.provenance()
 print(doc.get_provn())
 print(json.dumps(json.loads(doc.serialize()), indent=4))
