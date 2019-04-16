@@ -9,7 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas
 from pandas.plotting import parallel_coordinates
-from helper_functions.lat_long_kmeans import run_lat_long_kmeans
+from maximega_tcorc.helper_functions.lat_long_kmeans import run_lat_long_kmeans
 
 
 class kmeans_opt(dml.Algorithm):
@@ -28,6 +28,9 @@ class kmeans_opt(dml.Algorithm):
 		repo.authenticate('maximega_tcorc', 'maximega_tcorc')
 
 		nta_objects = repo.maximega_tcorc.income_with_NTA_with_percentages.find()
+
+		if trial:
+			nta_objects = nta_objects[0:50]
 		
 		X = []
 		data_copy = []
