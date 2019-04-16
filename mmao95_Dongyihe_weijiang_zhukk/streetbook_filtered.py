@@ -179,8 +179,8 @@ class streetbook_filtered(dml.Algorithm):
         doc.add_namespace('bdp', 'https://www.50states.com/bio/mass.htm')
 
         this_script = doc.agent('alg:'+contributor+'#streetbook_filtered', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        res_fp = doc.entity('bdp:fp', {'prov:label':'Famous People in MA', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
-        res_sb = doc.entity('bdp:sb', {'prov:label':'Street Book', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        res_fp = doc.entity('bdp:fp', {'prov:label':'Public Libraries', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        res_sb = doc.entity('bdp:sb', {'prov:label':'Boston Traffic', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
         filter_names = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(filter_names, this_script)
         doc.usage(filter_names, res_fp, startTime, None,
