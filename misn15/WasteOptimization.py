@@ -219,7 +219,7 @@ class WasteOptimization(dml.Algorithm):
         this_run = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(this_run, this_script)
 
-        doc.usage(get_merged, resource, startTime, None,
+        doc.usage(this_run, resource, startTime, None,
                   {prov.model.PROV_TYPE:'ont:Retrieval'
                    }
                   )
@@ -245,10 +245,10 @@ class WasteOptimization(dml.Algorithm):
 
         return doc
 
-WasteOptimization.execute(trial=True)
-doc = WasteOptimization.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
+##WasteOptimization.execute(trial=True)
+##doc = WasteOptimization.provenance()
+##print(doc.get_provn())
+##print(json.dumps(json.loads(doc.serialize()), indent=4))
 
 
 ## eof

@@ -36,9 +36,7 @@ After retrieving this data, I tried to match up Boston zip codes with the number
 
 ## Project #2
 
-#### Optimization
-
-For the optimization portion of the project, I first had to collect additional data sets. 
+For project 2, I first had to collect additional data sets in order to conduct a optimization and statistical analysis. 
 
    1) _getWasteAll_: I found several data sets on oil/hazardous waste sites within Massachusetts from the Massachusetts government and I     decided to merge them all into one complete data set. This data set ultimately adds to the oil and waste data sets that I retrieved in project one. The three data sets used are: [Oil/Hazardous Waste](https://docs.digital.mass.gov/dataset/massgis-data-massdep-tier-classified-oil-andor-hazardous-material-sites-mgl-c-21e), [Hazardous Waste Generators](https://docs.digital.mass.gov/dataset/list-massachusetts-hazardous-waste-generators-january-23-2018), and [Oil/Waste with Activity and Use Limitations](https://docs.digital.mass.gov/dataset/massgis-data-massdep-oil-andor-hazardous-material-sites-activity-and-use-limitations-aul).
 
@@ -54,12 +52,16 @@ _cleanHealth_: This transforms the health data set from having every row represe
 
 _crime_health_waste_space_: This algorithm sums up all of the crime, health issues, open spaces, and schools in a census FIPS tract and combines it with the population and average income of that area.
 
+#### Optimization
+
 _linearRegression_: I decided to use gradient descent and linear regression to determine whether there was a relationship between the data sets that I already collected. I first used gradient descent to see if I could find a solution that minimized the mean squared error more than linear regression. However, after running the algorithm using hundreds of iterations and a very small step size, the gradient descent algorithm had a very high mean squared error. I found that gradient descent is computationally less expensive but doesn't yield the most accurate results. So, instead, I used the statsmodel api in python which yielded more robust results. In addition to finding the coefficient, it allows me to find the p-values, t-values, and standard errors. I am also able to use robust standard errors with the stasmodel api linear regression which allows me to control for heteroskedasticity.
 
 _WasteOptimization_: I also thought it would be useful to find the centroids of these waste sites and find the centroids that maximize the distance to schools and green spaces and are located in the least densely populated areas. I wanted to find these clusters so that in the future, waste sites could be situated in these areas so as to minimize the impact hazardous waste has on people's lives.
 
 #### Statistical Analysis
 
-_Correlation_: I computed the correlation coefficients between health and crime, waste, open spaces, and income so as to see whether there was a relationship between any of these factors.
+_Correlation_: I computed the correlation coefficients between health and crime, waste, open spaces, and income so as to see whether there was a relationship between any of these factors. I also defined my own custom scoring metric to determine which neighborhoods had a higher quality of life than others. This metric is defined as follows:
 
-_Justification_:
+
+
+_Justification_: I first retrieved

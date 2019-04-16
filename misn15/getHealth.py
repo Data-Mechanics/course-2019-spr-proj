@@ -66,10 +66,10 @@ class getHealth(dml.Algorithm):
                   
         return doc
 
-getHealth.execute()
-doc = getHealth.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
+##getHealth.execute()
+##doc = getHealth.provenance()
+##print(doc.get_provn())
+##print(json.dumps(json.loads(doc.serialize()), indent=4))
 
 
 ## eof

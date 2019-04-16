@@ -57,7 +57,7 @@ class transformWasteAll(dml.Algorithm):
                     i += 1
                 else:
                     break
-
+            
             # get coordinates for hwgen
             for x in hwgen_list:
                 full_address = str(x[1] + ' ' + x[2] + ' ' + 'MASSACHUSETTS')
@@ -238,9 +238,9 @@ class transformWasteAll(dml.Algorithm):
 
         return doc
 
-transformWasteAll.execute()
-doc = transformWasteAll.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
+##transformWasteAll.execute()
+##doc = transformWasteAll.provenance()
+##print(doc.get_provn())
+##print(json.dumps(json.loads(doc.serialize()), indent=4))
 
 ## eof

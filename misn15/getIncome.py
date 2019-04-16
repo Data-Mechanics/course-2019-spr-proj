@@ -71,10 +71,10 @@ class getIncome(dml.Algorithm):
                   
         return doc
 
-getIncome.execute()
-doc = getIncome.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
+##getIncome.execute()
+##doc = getIncome.provenance()
+##print(doc.get_provn())
+##print(json.dumps(json.loads(doc.serialize()), indent=4))
 
 
 ## eof

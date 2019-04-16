@@ -165,10 +165,10 @@ class Correlation(dml.Algorithm):
                   
         return doc
 
-Correlation.execute()
-doc = Correlation.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
+##Correlation.execute()
+##doc = Correlation.provenance()
+##print(doc.get_provn())
+##print(json.dumps(json.loads(doc.serialize()), indent=4))
 
 
 ## eof

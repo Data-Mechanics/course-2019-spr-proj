@@ -81,10 +81,10 @@ class getSchools(dml.Algorithm):
                   
         return doc
 
-getSchools.execute()
-doc = getSchools.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
+##getSchools.execute()
+##doc = getSchools.provenance()
+##print(doc.get_provn())
+##print(json.dumps(json.loads(doc.serialize()), indent=4))
 
 
 ## eof

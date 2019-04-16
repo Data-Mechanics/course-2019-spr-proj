@@ -25,7 +25,9 @@ class transformOpenSpace(dml.Algorithm):
 
         # get coordinates for open space
         if trial:
-            open_space = open_space[0:25]
+            open_space = open_space[0:20]
+        else:
+            open_space = open_space
 
         openSpace_coords = []
         for x in open_space:
@@ -44,14 +46,15 @@ class transformOpenSpace(dml.Algorithm):
                     count += 1
             openSpace_coords += [[x['properties']['SITE_NAME'], avg_long/count, avg_lat/count]]
 
-            # get fips tract codes for open spaces
-            for x in openSpace_coords:
-                params = urllib.parse.urlencode({'latitude': x[2], 'longitude': x[1], 'format': 'json'})
-                url = 'https://geo.fcc.gov/api/census/block/find?' + params
-                response = requests.get(url)
-                data = response.json()
-                geoid = data['Block']['FIPS'][0:11]
-                x += [geoid]
+
+        # get fips tract codes for open spaces
+        for x in openSpace_coords:
+            params = urllib.parse.urlencode({'latitude': x[2], 'longitude': x[1], 'format': 'json'})
+            url = 'https://geo.fcc.gov/api/census/block/find?' + params
+            response = requests.get(url)
+            data = response.json()
+            geoid = data['Block']['FIPS'][0:11]
+            x += [geoid]
 
         repo.dropCollection("misn15.openSpace_centroids")
         repo.createCollection("misn15.openSpace_centroids")
@@ -59,6 +62,10 @@ class transformOpenSpace(dml.Algorithm):
         for x in openSpace_coords:
             entry = {'Name': x[0], 'Coordinates': (x[1], x[2]), 'FIPS': x[3]}
             repo['misn15.openSpace_centroids'].insert_one(entry)
+
+        # for x in open_space_list:
+        #     entry = {'coordinates': x}
+        #     repo['misn15.openSpace_centroids'].insert_one(entry)
 
         repo['misn15.openSpace_centroids'].metadata({'complete':True})
         print(repo['misn15.openSpace_centroids'].metadata())
@@ -97,10 +104,10 @@ class transformOpenSpace(dml.Algorithm):
 
         return doc
 
-transformOpenSpace.execute(trial=True)
-doc = transformOpenSpace.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
+#transformOpenSpace.execute(trial=True)
+#doc = transformOpenSpace.provenance()
+#print(doc.get_provn())
+#print(json.dumps(json.loads(doc.serialize()), indent=4))
 
 
 ## eof

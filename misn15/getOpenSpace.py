@@ -8,7 +8,7 @@ import uuid
 class getOpenSpace(dml.Algorithm):
     contributor = 'misn15'
     reads = []
-    writes = ['misn15.open_spaces']
+    writes = ['misn15.open_space']
 
     @staticmethod
     def execute(trial = False):
@@ -56,7 +56,7 @@ class getOpenSpace(dml.Algorithm):
         doc.wasAssociatedWith(this_run, this_script)
         doc.usage(this_run, resource, startTime, None,
                   {prov.model.PROV_TYPE:'ont:Retrieval'
-                  }
+                   }
                   )
         resource2 = doc.entity('dat:open_space', {prov.model.PROV_LABEL:'Boston Open Space Data Set', prov.model.PROV_TYPE:'ont:DataSet'})
         doc.wasAttributedTo(resource2, this_script)
@@ -65,10 +65,10 @@ class getOpenSpace(dml.Algorithm):
                   
         return doc
 
-getOpenSpace.execute()
-doc = getOpenSpace.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
-
+# getOpenSpace.execute()
+# doc = getOpenSpace.provenance()
+# print(doc.get_provn())
+# print(json.dumps(json.loads(doc.serialize()), indent=4))
+#
 
 ## eof

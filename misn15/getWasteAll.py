@@ -111,10 +111,10 @@ class getWasteAll(dml.Algorithm):
                   
         return doc
 
-getWasteAll.execute()
-doc = getWasteAll.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
+##getWasteAll.execute()
+##doc = getWasteAll.provenance()
+##print(doc.get_provn())
+##print(json.dumps(json.loads(doc.serialize()), indent=4))
 
 
 ## eof

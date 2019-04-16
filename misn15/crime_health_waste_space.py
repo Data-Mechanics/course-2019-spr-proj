@@ -1,4 +1,3 @@
-import json
 import urllib.request
 import dml
 import prov.model
@@ -187,10 +186,10 @@ class crime_health_waste_space(dml.Algorithm):
 
         return doc
 
-crime_health_waste_space.execute(trial = True)
-doc = crime_health_waste_space.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
+##crime_health_waste_space.execute(trial = True)
+##doc = crime_health_waste_space.provenance()
+##print(doc.get_provn())
+##print(json.dumps(json.loads(doc.serialize()), indent=4))
 
 
 ## eof
