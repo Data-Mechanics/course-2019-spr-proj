@@ -18,6 +18,7 @@ class ballot_questions(dml.Algorithm):
     def execute(trial=False):
         startTime = datetime.datetime.now()
 
+
         # Set up the database connection.
         dml.pymongo.MongoClient()
         client = dml.pymongo.MongoClient()
