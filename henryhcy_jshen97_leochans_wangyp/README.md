@@ -23,7 +23,13 @@
     
 ####General Description, Procedure, and Narrative
 The project is divided into two tasks:
-- Task One: Find a way to quantify the competitive relationship between the two of most popular franchising convenience stores in boston area: **CVS** and **Walgreen**
+- **Task One: Quantify Competition**
+    - Data
+        1. Explore the location selection of CVS and Walgreen
+        2. For each CVS store and Walgreen store, find its closest CVS and Walgreen and record the distance
+        3. Using statistical analysis to explore the competitive relationship between Walgreen and CVS
+    - Optimization problem: If we want to locate n new CVS stores or Walgreen stores, how can we maximize its influence.
+        1. CVS: we want the location of the new CVS stores to minimzie its distance between other Walgreen stores in order to increase its competitiveness against its opponent. Do the same for Walgreen stores
 * **Task Two: CVS, Larceny, and Eviction in the Central Boston**
     1. Let's assume and model that the **Stability S** of a store **i** is defined by **S_i = 1/(|E_i||L_i|)** where **|E_i|** and **|L_i|** are the number of eviction cases and the number of larceny cases that are related to store **i**:
     2. Among all type of crimes in the dataset crimes (Simple Assault, Battery, GTA, etc.), we assume that Larceny relates with the convenient store in the most direct way. By obtaining all eviction(**14k**) & larceny(**22k**) cases within **5.5km** of central boston, we successfully clustered all of them against the cvs stores(**18**) within **5km** of central boston.
