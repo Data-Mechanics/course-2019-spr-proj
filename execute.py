@@ -18,6 +18,7 @@ import prov.model
 
 parser = argparse.ArgumentParser()
 parser.add_argument("contributor_folder")
+parser.add_argument("--algo_class", required=False)
 parser.add_argument("-t", "--trial", help="run all algorithms in trial mode", action="store_true")
 args = parser.parse_args()
 
@@ -31,6 +32,10 @@ for r,d,f in os.walk(path):
             name_module = ".".join(file.split(".")[0:-1])
             module = importlib.import_module(path + "." + name_module)
             algorithms.append(module.__dict__[name_module])
+
+            if (name_module == args.algo_class):
+                module.__dict__[name_module].execute(trial=args.trial)
+                sys.exit(0)
 
 # Create an ordering of the algorithms based on the data
 # sets that they read and write.
