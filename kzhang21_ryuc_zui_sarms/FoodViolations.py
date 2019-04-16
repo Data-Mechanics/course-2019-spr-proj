@@ -56,8 +56,10 @@ class FoodViolations(dml.Algorithm):
                                            "NO_DATE"].groupby("licenseno").min()["violdttmClean"]
         violation_DF = violation_DF.dropna()
 
-        RDF = DF.set_index("licenseno")[set(
-            selected_columns) - {"violation", "violdttm", "licenseno", "violdttmClean"}]
+        new_columns_list = list(set(
+            selected_columns) - {"violation", "violdttm", "licenseno", "violdttmClean"})
+
+        RDF = DF.set_index("licenseno")[new_columns_list]
 
         log.debug("Removing duplicated")
         RDF = RDF.loc[~RDF.index.duplicated()]
