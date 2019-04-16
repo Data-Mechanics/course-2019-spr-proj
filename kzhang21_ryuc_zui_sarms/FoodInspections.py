@@ -19,6 +19,7 @@ import requests
 import zipfile
 
 log = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
 
 
 URL = "https://data.boston.gov/dataset/03693648-2c62-4a2c-a4ec-48de2ee14e18/resource/4582bec6-2b4f-4f9e-bc55-cbaa73117f4c/download/tmp77velm71.csv"
@@ -37,6 +38,8 @@ class FoodInspections(dml.Algorithm):
         # This will fail to connect to the one require SSH auth
         client = dml.pymongo.MongoClient()
         repo = client.repo
+
+        log.debug("Authenticating into mongoDB")
         repo.authenticate('kzhang21_ryuc_zui_sarms', 'kzhang21_ryuc_zui_sarms')
 
         # url = 'http://datamechanics.io/data/food_inspections.zip'
@@ -47,7 +50,7 @@ class FoodInspections(dml.Algorithm):
 
         DF = pd.read_csv('tmp77velm71.csv', low_memory=False)
 
-        print("HEREEEEE -----")
+        log.debug("Fetching CSV from %s", 'tmp77velm71')
 
         # Project to select only the column we wants
         selected_columns = ["businessname", "licenseno", "violstatus", "address", "city", "state", "zip", "property_id",
@@ -64,8 +67,7 @@ class FoodInspections(dml.Algorithm):
         repo.dropCollection("food_inspections")
         repo.createCollection("food_inspections")
 
-        for rr in r_dict:
-            repo['kzhang21_ryuc_zui_sarms.food_inspections'].insert_one(rr)
+        repo['kzhang21_ryuc_zui_sarms.food_inspections'].insert_many(r_dict)
 
         repo.logout()
 
