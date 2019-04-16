@@ -11,9 +11,12 @@ import pandas
 from pandas.plotting import parallel_coordinates
 from maximega_tcorc.helper_functions.lat_long_kmeans import run_lat_long_kmeans
 from maximega_tcorc.helper_functions.cons_sat import cons_sat
+from maximega_tcorc.helper_functions.Correlation import Correlation
+
 
 # from helper_functions.cons_sat import cons_sat
 # from helper_functions.lat_long_kmeans import run_lat_long_kmeans
+# from helper_functions.Correlation import Correlation
 
 
 class kmeans_opt(dml.Algorithm):
@@ -35,6 +38,10 @@ class kmeans_opt(dml.Algorithm):
 
 		if trial:
 			nta_objects = nta_objects[0:50]
+
+
+		incomes = []
+		pops = []
 		
 		X = []
 		data_copy = []
@@ -43,6 +50,10 @@ class kmeans_opt(dml.Algorithm):
 				income = nta['income']
 				X.append([nta['ntaname'], nta['position'][0], nta['position'][1], income])
 				data_copy.append(nta)
+				incomes.append(income)
+				pops.append(nta['trans_percent'])
+
+		Correlation(incomes, pops)
 
 		kmeans = run_lat_long_kmeans(X)
 
