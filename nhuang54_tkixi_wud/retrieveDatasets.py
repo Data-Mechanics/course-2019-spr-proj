@@ -8,9 +8,9 @@ import pandas as pd
 import json
 
 class retrieveDatasets(dml.Algorithm):
-    contributor = 'tkixi'
+    contributor = 'nhuang54_tkixi_wud'
     reads = []
-    writes = ['tkixi.boston_collisions', 'tkixi.boston_bikes', 'tkixi.traffic_lights', 'tkixi.boston_weather', 'tkixi.boston_hubway']
+    writes = ['nhuang54_tkixi_wud.boston_collisions', 'nhuang54_tkixi_wud.boston_bikes', 'nhuang54_tkixi_wud.traffic_lights', 'nhuang54_tkixi_wud.boston_hubway']
 
     @staticmethod
     def execute(trial = False):
@@ -20,7 +20,7 @@ class retrieveDatasets(dml.Algorithm):
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('tkixi', 'tkixi')
+        repo.authenticate('nhuang54_tkixi_wud', 'nhuang54_tkixi_wud')
 
         
 
@@ -46,55 +46,40 @@ class retrieveDatasets(dml.Algorithm):
         response = urllib.request.urlopen(url).read().decode("utf-8")
         r = json.loads(response)
         s = json.dumps(r, sort_keys=True, indent=2)
-        repo.dropCollection("tkixi.boston_hubway")
-        repo.createCollection("tkixi.boston_hubway")
+        repo.dropCollection("nhuang54_tkixi_wud.boston_hubway")
+        repo.createCollection("nhuang54_tkixi_wud.boston_hubway")
 
-        repo['tkixi.boston_collisions'].insert_many(r)
+        repo['nhuang54_tkixi_wud.boston_collisions'].insert_many(r)
         print("Done Inserting Dataset #2: Boston Hubway Stations")
-        repo['tkixi.boston_hubway'].metadata({'complete':True})
-        print(repo['tkixi.boston_hubway'].metadata())
+        repo['nhuang54_tkixi_wud.boston_hubway'].metadata({'complete':True})
+        print(repo['nhuang54_tkixi_wud.boston_hubway'].metadata())
         print()
 
-        # Dataset #3: Boston Weather
-        print("Inserting Dataset #3: Boston Weather")
-        url = 'http://datamechanics.io/data/tkixi/weather.json'
-        response = urllib.request.urlopen(url).read().decode("utf-8")
-        r = json.loads(response)
-        s = json.dumps(r, sort_keys=True, indent=2)
-        repo.dropCollection("tkixi.boston_weather")
-        repo.createCollection("tkixi.boston_weather")
-
-        repo['tkixi.boston_weather'].insert_many(r)
-        print("Done Inserting Dataset #3: Boston Weather")
-        repo['tkixi.boston_weather'].metadata({'complete':True})
-        print(repo['tkixi.boston_weather'].metadata())
-        print()
-
-        #Dataset #4: Boston Traffic Signals Locations
-        print("Inserting Dataset #4: Boston Traffic Signals Locations")
+        #Dataset #3: Boston Traffic Signals Locations
+        print("Inserting Dataset #3: Boston Traffic Signals Locations")
         url = 'http://bostonopendata-boston.opendata.arcgis.com/datasets/eee77dc4ab3d479f83b2100542285727_12.csv'
         data = pd.read_csv(url)
-        repo.dropCollection("tkixi.traffic_lights")
-        repo.createCollection("tkixi.traffic_lights")
+        repo.dropCollection("nhuang54_tkixi_wud.traffic_lights")
+        repo.createCollection("nhuang54_tkixi_wud.traffic_lights")
 
-        repo['tkixi.traffic_lights'].insert_many(data.to_dict('records'))
-        print("Done Inserting Dataset #4: Boston Traffic Signals Locations")
-        repo['tkixi.traffic_lights'].metadata({'complete':True})
-        print(repo['tkixi.traffic_lights'].metadata())
+        repo['nhuang54_tkixi_wud.traffic_lights'].insert_many(data.to_dict('records'))
+        print("Done Inserting Dataset #3: Boston Traffic Signals Locations")
+        repo['nhuang54_tkixi_wud.traffic_lights'].metadata({'complete':True})
+        print(repo['nhuang54_tkixi_wud.traffic_lights'].metadata())
         print()
 
-        #Dataset #5: Boston Vision Zero Crash Records
-        print("Inserting Dataset #5: Boston Collisions")
+        #Dataset #4: Boston Vision Zero Crash Records
+        print("Inserting Dataset #4: Boston Collisions")
         # url = 'https://data.boston.gov/dataset/7b29c1b2-7ec2-4023-8292-c24f5d8f0905/resource/e4bfe397-6bfc-49c5-9367-c879fac7401d/download/crash_open_data.csv'
         url = 'http://datamechanics.io/data/tkixi/crash_open_data.csv'
         data = pd.read_csv(url)
-        repo.dropCollection("tkixi.boston_collisions")
-        repo.createCollection("tkixi.boston_collisions")
+        repo.dropCollection("nhuang54_tkixi_wud.boston_collisions")
+        repo.createCollection("nhuang54_tkixi_wud.boston_collisions")
 
-        repo['tkixi.boston_collisions'].insert_many(data.to_dict('records'))
-        print("Done Inserting Dataset #5: Boston Collisions")
-        repo['tkixi.boston_collisions'].metadata({'complete':True})
-        print(repo['tkixi.boston_collisions'].metadata())
+        repo['nhuang54_tkixi_wud.boston_collisions'].insert_many(data.to_dict('records'))
+        print("Done Inserting Dataset #4: Boston Collisions")
+        repo['nhuang54_tkixi_wud.boston_collisions'].metadata({'complete':True})
+        print(repo['nhuang54_tkixi_wud.boston_collisions'].metadata())
         print()
 
 

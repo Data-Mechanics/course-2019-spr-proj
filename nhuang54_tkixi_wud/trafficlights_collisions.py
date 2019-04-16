@@ -11,10 +11,10 @@ from collections import defaultdict
 # Take all the bike collisions and cross reference to the streets 
 # with traffic lights to see if an accident has occured there
 # OUTPUT: a dataset aggregating the sum of all bike accidents that have happened at a particular traffic light
-class transformation2(dml.Algorithm):
-    contributor = 'tkixi'
-    reads = ['tkixi.traffic_lights','tkixi.boston_collisions']
-    writes = ['tkixi.trafficlight_collisions']
+class trafficlights_collisions(dml.Algorithm):
+    contributor = 'nhuang54_tkixi_wud'
+    reads = ['nhuang54_tkixi_wud.traffic_lights','nhuang54_tkixi_wud.boston_collisions']
+    writes = ['nhuang54_tkixi_wud.trafficlight_collisions']
 
 
     @staticmethod
@@ -26,7 +26,7 @@ class transformation2(dml.Algorithm):
             return [p(t) for t in R]
             
 
-        print("in transformation 2")
+        print("in trafficlights collision transformation")
         
         # { bike collisions : mode_type = bike
           #   "dispatch_ts": "2015-01-01 00:24:27",
@@ -47,16 +47,17 @@ class transformation2(dml.Algorithm):
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('tkixi', 'tkixi')
+        repo.authenticate('nhuang54_tkixi_wud', 'nhuang54_tkixi_wud')
 
-        bc = repo.tkixi.boston_collisions
-        bt = repo.tkixi.traffic_lights
+        bc = repo.nhuang54_tkixi_wud.boston_collisions
+        bt = repo.nhuang54_tkixi_wud.traffic_lights
 
 
         # Boston Collisions 
         # mode_type, xstreet1, xstreet2
         bostonCollisions = bc.find()
         print("###PRINTED Bike Collisions###")
+        pprint(bostonCollisions)
 
         # select to get all bike collisions
         bikeCollisions = select(bostonCollisions, lambda x: x['mode_type'] == 'bike')
@@ -111,10 +112,10 @@ class transformation2(dml.Algorithm):
      
                 
 
-        repo.dropCollection("tkixi.trafficlight_collisions")
-        repo.createCollection("tkixi.trafficlight_collisions")
+        repo.dropCollection("nhuang54_tkixi_wud.trafficlight_collisions")
+        repo.createCollection("nhuang54_tkixi_wud.trafficlight_collisions")
 
-        repo['tkixi.trafficlight_collisions'].insert_many(trafficlight_collision_data)
+        repo['nhuang54_tkixi_wud.trafficlight_collisions'].insert_many(trafficlight_collision_data)
         print("Done with Transformation 2")
 
         repo.logout()
@@ -129,7 +130,7 @@ class transformation2(dml.Algorithm):
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('tkixi', 'tkixi')
+        repo.authenticate('nhuang54_tkixi_wud', 'nhuang54_tkixi_wud')
         
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')
         doc.add_namespace('dat', 'http://datamechanics.io/?prefix=tkixi/')
@@ -139,9 +140,9 @@ class transformation2(dml.Algorithm):
         doc.add_namespace('cdp', 'https://data.cambridgema.gov/resource/')
         
         
-        this_script = doc.agent('alg:tkixi#transformation2', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        resource1 = doc.entity('dat:tkixi#crashRecords', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'csv'})
-        resource2 = doc.entity('dat:tkixi#trafficSignals', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'csv'})
+        this_script = doc.agent('alg:nhuang54_tkixi_wud#transformation2', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        resource1 = doc.entity('dat:nhuang54_tkixi_wud#crashRecords', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'csv'})
+        resource2 = doc.entity('dat:nhuang54_tkixi_wud#trafficSignals', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'csv'})
         
         transformation2 = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(transformation2, this_script)
@@ -157,7 +158,7 @@ class transformation2(dml.Algorithm):
                   }
                   )
 
-        trafficlightCollision = doc.entity('dat:tkixi#trafficlightCollision', {prov.model.PROV_LABEL:'Number of accidents that have happened at an intersection with traffic lights', prov.model.PROV_TYPE:'ont:DataSet'})
+        trafficlightCollision = doc.entity('dat:nhuang54_tkixi_wud#trafficlightCollision', {prov.model.PROV_LABEL:'Number of accidents that have happened at an intersection with traffic lights', prov.model.PROV_TYPE:'ont:DataSet'})
         doc.wasAttributedTo(trafficlightCollision, this_script)
         doc.wasGeneratedBy(trafficlightCollision, transformation2, endTime)
         doc.wasDerivedFrom(trafficlightCollision, resource1, transformation2, transformation2, transformation2)
@@ -170,7 +171,7 @@ class transformation2(dml.Algorithm):
         
         return doc
 
-# transformation2.execute()
+# trafficlights_collisions.execute()
 # doc = transformation2.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))
