@@ -32,7 +32,7 @@ class dotw(dml.Algorithm):
         
         total = len(collection)
         
-        data = [(doc['day_of_week'], 1) for doc in collection if doc['day_of_week'].strip != '']
+        data = [(doc['DAY_OF_WEEK'], 1) for doc in collection if doc['DAY_OF_WEEK'].strip != '']
         data = project(aggregate(data, sum), lambda t: (t[0], t[1], t[1]/500))
 
         finalDataset = [{'dotw':tup[0],'count':tup[1],'percent':tup[2]} for tup in data]
