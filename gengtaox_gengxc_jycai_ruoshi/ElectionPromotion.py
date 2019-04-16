@@ -2,6 +2,7 @@ import dml
 import prov.model
 import datetime
 import uuid
+import json
 import xlrd
 from scipy.optimize import linprog
 import numpy as np
@@ -63,6 +64,7 @@ class ElectionPromotion(dml.Algorithm):
 
         return {"start": startTime, "end": endTime}
 
+    @staticmethod
     def provenance(doc=prov.model.ProvDocument(), startTime=None, endTime=None):
         '''
         Create the provenance document describing everything happening
@@ -70,8 +72,7 @@ class ElectionPromotion(dml.Algorithm):
         document describing that invocation event.
         '''
 
-        doc.add_namespace('ont',
-                          'http://datamechanics.io/ontology')  # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
+        doc.add_namespace('ont', 'http://datamechanics.io/ontology')  # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('xtab', 'http://datamechanics.io/voter/')
 
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')  # The scripts are in <folder>#<filename> format.
@@ -80,19 +81,20 @@ class ElectionPromotion(dml.Algorithm):
 
         this_script = doc.agent('alg:gengtaox_gengxc_jycai_ruoshi#ElectionPromotion',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
-        resource_web = doc.entity('ucb:promotion', {'prov:label': 'Election Promotion',
-                                                prov.model.PROV_TYPE: 'ont:DataResource', 'ont:Extension': 'xlsx'})
+        resource_web = doc.entity('xtab:non', 
+                                {'prov:label': 'Election Promotion',
+                                                prov.model.PROV_TYPE: 'ont:DataSet', 'ont:Extension': 'xlsx'})
 
         get_web = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
 
         doc.wasAssociatedWith(get_web, this_script)
 
         doc.usage(get_web, resource_web, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:DataResource'
+                  {prov.model.PROV_TYPE: 'ont:DataSet'
                    })
 
         ElectionPromotion = doc.entity('dat:gengtaox_gengxc_jycai_ruoshi#ElectionPromotion',
-                           {prov.model.PROV_LABEL: 'Best election promotion', prov.model.PROV_TYPE: 'ont:DataSet'})
+                           {prov.model.PROV_LABEL: 'Best election promotion solution', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(ElectionPromotion, this_script)
 
         doc.wasGeneratedBy(ElectionPromotion, get_web, endTime)
@@ -101,3 +103,9 @@ class ElectionPromotion(dml.Algorithm):
 
         return doc
 ## eof
+if __name__ == "__main__":
+    ElectionPromotion.execute()
+    doc = ElectionPromotion.provenance()
+    print(doc.get_provn())
+    print(json.dumps(json.loads(doc.serialize()), indent=4))
+
