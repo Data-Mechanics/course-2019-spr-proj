@@ -36,10 +36,13 @@ uber_data_cleaning.py - ran once in order to create json
 
 Transformations: 
 transformation1.py - finding the difference between street names, and streets with landmarks on them, selecting only those that are not female street names
-transformation2.py - 
-transformation3.py - 
 
+transformation2.py - finding the streets that do not have public schools on them by scanning through the public school addresses and the streets
 
+transformation3.py - locating areas of boston where ubers travel most frequently 
 
+transformation4.py - combines the streets without landmarks and the streets without schools to find the unclaimed streets
+
+For poject 2 we 
 
 
