@@ -10,7 +10,7 @@ import json
 class retrieveDatasets(dml.Algorithm):
     contributor = 'nhuang54_tkixi_wud'
     reads = []
-    writes = ['nhuang54_tkixi_wud.boston_collisions', 'nhuang54_tkixi_wud.boston_bikes', 'nhuang54_tkixi_wud.traffic_lights', 'nhuang54_tkixi_wud.boston_hubway']
+    writes = ['nhuang54_tkixi_wud.boston_collisions', 'nhuang54_tkixi_wud.boston_bikes', 'nhuang54_tkixi_wud.traffic_lights', 'nhuang54_tkixi_wud.boston_hubway, nhuang54_tkixi_wud.boston_streetlights']
 
     @staticmethod
     def execute(trial = False):
@@ -31,13 +31,13 @@ class retrieveDatasets(dml.Algorithm):
         response = urllib.request.urlopen(url).read().decode("utf-8")
         r = json.loads(response)
         s = json.dumps(r, sort_keys=True, indent=2)
-        repo.dropCollection("tkixi.boston_bikes")
-        repo.createCollection("tkixi.boston_bikes")
+        repo.dropCollection("nhuang54_tkixi_wud.boston_bikes")
+        repo.createCollection("nhuang54_tkixi_wud.boston_bikes")
 
-        repo['tkixi.boston_bikes'].insert_many(r)
+        repo['nhuang54_tkixi_wud.boston_bikes'].insert_many(r)
         print("Done Inserting Dataset #1: Boston Bike Network System")
-        repo['tkixi.boston_bikes'].metadata({'complete':True})
-        print(repo['tkixi.boston_bikes'].metadata())
+        repo['nhuang54_tkixi_wud.boston_bikes'].metadata({'complete':True})
+        print(repo['nhuang54_tkixi_wud.boston_bikes'].metadata())
         print()
 
         # Dataset #2: Boston Hubway Stations 
@@ -82,7 +82,18 @@ class retrieveDatasets(dml.Algorithm):
         print(repo['nhuang54_tkixi_wud.boston_collisions'].metadata())
         print()
 
+        #Dataset #5: Boston Street Light Locations
+        print("Inserting Dataset #5: Boston Street Light Locations")
+        url = 'https://data.boston.gov/dataset/52b0fdad-4037-460c-9c92-290f5774ab2b/resource/c2fcc1e3-c38f-44ad-a0cf-e5ea2a6585b5/download/streetlight-locations.csv'
+        data = pd.read_csv(url)
+        repo.dropCollection("nhuang54_tkixi_wud.boston_streetlights")
+        repo.createCollection("nhuang54_tkixi_wud.boston_streetlights")
 
+        repo['nhuang54_tkixi_wud.boston_streetlights'].insert_many(data.to_dict('records'))
+        print("Done Inserting Dataset #5: Boston Street Light Locations")
+        repo['nhuang54_tkixi_wud.boston_streetlights'].metadata({'complete':True})
+        print(repo['nhuang54_tkixi_wud.boston_streetlights'].metadata())
+        print()
         
 
         repo.logout()
@@ -142,7 +153,7 @@ class retrieveDatasets(dml.Algorithm):
         doc.wasGeneratedBy(hubwayStation, get_hubwayStation, endTime)
         doc.wasDerivedFrom(hubwayStation, resource, get_hubwayStation, get_hubwayStation, get_hubwayStation)
 
-        # Dataset #3: Boston Weather
+        # Dataset #5: Boston Street Light Locations
         this_script = doc.agent('alg:tkixi#retrieveDatasets', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
         resource = doc.entity('bdp:boston-weather', {'prov:label':'Boston Weather', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
         get_bostonWeather = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)

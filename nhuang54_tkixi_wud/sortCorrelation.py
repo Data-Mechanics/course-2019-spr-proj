@@ -5,6 +5,8 @@ import prov.model
 import datetime
 import uuid
 import pandas as pd
+from pprint import pprint
+
 """
 Finds average point (lat, long) for each street in each district where crimes existed.
 This is for finding the "middle" of the street - used in findCrimeStats.
@@ -37,11 +39,23 @@ class sortCorrelation(dml.Algorithm):
         repo = client.repo
 
         repo.authenticate('nhuang54_tkixi_wud', 'nhuang54_tkixi_wud')
-        df = list(repo.tkixi.sortedNeighborhoods.find())
+        # df = list(repo.tkixi.sortedNeighborhoods.find())
+        
+        tc = repo.nhuang54_tkixi_wud.trafficlight_collisions.find() 
+        pprint(tc)
         items = []
-        for item in df:
-        	items.append(item.get('data'))
+        for item in tc:
+            pprint(item)
+            print(type(item.get('bike_collisions')))
+            items.append({'bike_collisions':item.get('bike_collisions'),
+                            'intersection':item.get('intersection')})
+            break
+        	# items.append(item.get('data'))
         items = pd.DataFrame(items)
+        print('printing')
+        pprint(items)
+        print('done')
+        # pprint(items)
         # @staticmethod
 
         corr = pd.DataFrame(items.corr())
@@ -49,10 +63,10 @@ class sortCorrelation(dml.Algorithm):
         repo.dropCollection("coorelations")
         repo.createCollection("coorelations")
 
-        r = {'field1': 'crimes', 'field2': 'streetlights', 'value': corr['lights']['crimes']}
-        repo['janellc_rstiffel_yash.coorelations'].insert(r)
-        repo['janellc_rstiffel_yash.coorelations'].metadata({'complete':True})
-        print(repo['janellc_rstiffel_yash.coorelations'].metadata())
+        r = {'field1': 'bike_collisions', 'field2': 'intersection', 'value': corr['bike_collisions']['intersection']}
+        repo['nhuang54_tkixi_wud.coorelations'].insert(r)
+        repo['nhuang54_tkixi_wud.coorelations'].metadata({'complete':True})
+        print(repo['nhuang54_tkixi_wud.coorelations'].metadata())
 
 
         repo.logout()
@@ -71,7 +85,7 @@ class sortCorrelation(dml.Algorithm):
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('janellc_rstiffel_yash', 'janellc_rstiffel_yash')
+        repo.authenticate('nhuang54_tkixi_wud', 'nhuang54_tkixi_wud')
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/') # The scripts are in <folder>#<filename> format.
         doc.add_namespace('dat', 'http://datamechanics.io/data/') # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
@@ -79,12 +93,12 @@ class sortCorrelation(dml.Algorithm):
 
         
         # Agent, entity, activity
-        this_script = doc.agent('alg:janellc_rstiffel_yash#sortCorrelations', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        this_script = doc.agent('alg:nhuang54_tkixi_wud#sortCorrelations', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
         
         # Resource = crimesData
         resource1 = doc.entity('dat:ferrys#streetlights', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
         # Resource = crimesData
-        resource2 = doc.entity('dat:janellc_rstiffel_yash#sortedNeighborhoods', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        resource2 = doc.entity('dat:nhuang54_tkixi_wud#sortedNeighborhoods', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
 
         #Activity
         find_correlation = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
@@ -102,7 +116,7 @@ class sortCorrelation(dml.Algorithm):
                   )
 
 
-        corr = doc.entity('dat:janellc_rstiffel_yash#coorelation', {prov.model.PROV_LABEL:'Correlation between streetlights and crimes', prov.model.PROV_TYPE:'ont:DataSet'})
+        corr = doc.entity('dat:nhuang54_tkixi_wud#coorelation', {prov.model.PROV_LABEL:'Correlation between streetlights and crimes', prov.model.PROV_TYPE:'ont:DataSet'})
         doc.wasAttributedTo(corr, this_script)
         doc.wasGeneratedBy(corr, find_correlation, endTime)
         doc.wasDerivedFrom(corr, resource1, resource2, find_correlation, find_correlation)

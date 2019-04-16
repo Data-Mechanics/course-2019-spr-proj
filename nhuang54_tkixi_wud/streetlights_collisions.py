@@ -6,14 +6,16 @@ import datetime
 import uuid
 from pprint import pprint
 from collections import defaultdict
+from opencage.geocoder import OpenCageGeocode
+
 
 
 # Take all the bike collisions and cross reference to the streets 
 # with traffic lights to see if an accident has occured there
 # OUTPUT: a dataset aggregating the sum of all bike accidents that have happened at a particular traffic light
-class trafficlights_collisions(dml.Algorithm):
+class streetlights_collisions(dml.Algorithm):
     contributor = 'nhuang54_tkixi_wud'
-    reads = ['nhuang54_tkixi_wud.traffic_lights','nhuang54_tkixi_wud.boston_collisions']
+    reads = ['nhuang54_tkixi_wud.boston_streetlights','nhuang54_tkixi_wud.boston_collisions']
     writes = ['nhuang54_tkixi_wud.trafficlight_collisions']
 
 
@@ -50,14 +52,13 @@ class trafficlights_collisions(dml.Algorithm):
         repo.authenticate('nhuang54_tkixi_wud', 'nhuang54_tkixi_wud')
 
         bc = repo.nhuang54_tkixi_wud.boston_collisions
-        bt = repo.nhuang54_tkixi_wud.traffic_lights
+        bt = repo.nhuang54_tkixi_wud.boston_streetlights
 
 
         # Boston Collisions 
         # mode_type, xstreet1, xstreet2
         bostonCollisions = bc.find()
         print("###PRINTED Bike Collisions###")
-        pprint(bostonCollisions)
 
         # select to get all bike collisions
         bikeCollisions = select(bostonCollisions, lambda x: x['mode_type'] == 'bike')
@@ -84,25 +85,48 @@ class trafficlights_collisions(dml.Algorithm):
         #     "Location": "Columbia Rd. & Wyola Place",
         #     "Dist": "DO"
         # },
-        
+        # {"the_geom" : "POINT (-71.07921632936232 42.35482231438127)", 
+        #   "OBJECTID" : 10, 
+        #   "TYPE" : "LIGHT", 
+        #   "Lat" : 42.3548223144, 
+        #   "Long" : -71.0792163294
+        #   }
+           
+        api_key = dml.auth['services']['openCagePortal']['api_key']
+        geocoder = OpenCageGeocode(api_key)
+        api_limit = 0
+
+
         data = []
-        trafficLights = bt.find()
-        for x in trafficLights:
+        streetLights = bt.find()
+        for x in streetLights:
+            lat = x['Lat']
+            lng = x['Long']
+            print('lat', lat)
+            api_limit+=1
+            results = geocoder.reverse_geocode(lat, lng)
+            print('printing results')
+            if 'road' in results[0]['components']:            
+                road = results[0]['components']['road']
+                print('road', road)
+                if api_limit > 15:
+                    break
             for y in collision_project:
-                lng = x['X']
-                lat = x['Y']
-                intersection = x['Location']
-                if x['OBJECTID'] == 841: #null data
-                    continue
-                intersection = intersection.replace('Mt.', 'Mount')
-                intersection = intersection.replace('.','')
-                intersection = intersection.upper()
-                # found an intersection that had a bike collision
-                if str(y['xstreet1']) and str(y['xstreet2']) in intersection:
-                    trafficlight_collisions = {}
-                    trafficlight_collisions['traffic_light'] = 1
-                    trafficlight_collisions.update({'intersection': intersection, 'location_type': y['location_type']})
-                    data.append(trafficlight_collisions)
+                break
+
+                # intersection = x['Location']
+
+
+
+                # intersection = intersection.replace('Mt.', 'Mount')
+                # intersection = intersection.replace('.','')
+                # intersection = intersection.upper()
+                # # found an intersection that had a bike collision
+                # if str(y['xstreet1']) and str(y['xstreet2']) in intersection:
+                #     trafficlight_collisions = {}
+                #     trafficlight_collisions['traffic_light'] = 1
+                #     trafficlight_collisions.update({'intersection': intersection, 'location_type': y['location_type']})
+                #     data.append(trafficlight_collisions)
         c = defaultdict(int)
         # how many accidents have happened at each intersection
         for d in data:
@@ -116,7 +140,7 @@ class trafficlights_collisions(dml.Algorithm):
         repo.createCollection("nhuang54_tkixi_wud.trafficlight_collisions")
 
         repo['nhuang54_tkixi_wud.trafficlight_collisions'].insert_many(trafficlight_collision_data)
-        print("Done with Transformation 2")
+        print("Done with Transformation of Traffic Lights + Bike Collisions")
 
         repo.logout()
         endTime = datetime.datetime.now()
@@ -171,7 +195,7 @@ class trafficlights_collisions(dml.Algorithm):
         
         return doc
 
-# trafficlights_collisions.execute()
+streetlights_collisions.execute()
 # doc = transformation2.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))
