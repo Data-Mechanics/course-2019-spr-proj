@@ -9,9 +9,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas
 from pandas.plotting import parallel_coordinates
+from maximega_tcorc.helper_functions.lat_long_kmeans import run_lat_long_kmeans
 from maximega_tcorc.helper_functions.cons_sat import cons_sat
 #from helper_functions.cons_sat import cons_sat
-
 
 
 class kmeans_opt(dml.Algorithm):
@@ -30,23 +30,33 @@ class kmeans_opt(dml.Algorithm):
 		repo.authenticate('maximega_tcorc', 'maximega_tcorc')
 
 		nta_objects = repo.maximega_tcorc.income_with_NTA_with_percentages.find()
+
+		if trial:
+			nta_objects = nta_objects[0:50]
 		
 		X = []
 		data_copy = []
 		for nta in nta_objects:
 			if(len(nta['stations'])!= 0):
 				income = nta['income']
-				pop = float(nta['population'])
-				X.append([nta['position'][0], nta['position'][1], income, pop])
+				X.append([nta['ntaname'], nta['position'][0], nta['position'][1], income])
 				data_copy.append(nta)
+
+		run_lat_long_kmeans(X)
+
+
+
+
+
 		
-		#------------------ K Means
+		# #------------------ K Means
 		k = 5
 		kmeans = KMeans(n_clusters=k, verbose=0, n_init = 100).fit(X)
 		kmeans.fit_predict(X)
-		#X = np.array(X)
+		X = np.array(X)
 
 		k_groupings = kmeans.labels_
+
 
 		for i in range(len(data_copy)):
 			data_copy[i]['zone'] = k_groupings[i]
@@ -144,4 +154,4 @@ class kmeans_opt(dml.Algorithm):
 				
 		return doc
 
-kmeans_opt.execute()
+# kmeans_opt.execute()
