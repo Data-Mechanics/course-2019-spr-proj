@@ -110,37 +110,24 @@ class linearRegression(dml.Algorithm):
             in this script. Each run of the script will generate a new
             document describing that invocation event.
             '''
-        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/') # The scripts are in <folder>#<filename> format.
-        doc.add_namespace('dat', 'http://datamechanics.io/data/') # The data sets are in <user>#<collection> format.
+        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/misn15/') # The scripts are in <folder>#<filename> format.
+        doc.add_namespace('dat', 'http://datamechanics.io/data/misn15/') # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
-        doc.add_namespace('waste', 'http://datamechanics.io/data/misn15/hwgenids.json') # The event log.
-        doc.add_namespace('oil', 'http://datamechanics.io/data/misn15/oil_sites.geojson') # The event log.
         
-        this_script = doc.agent('alg:misn15#transformWaste', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        resource = doc.entity('dat:waste', {'prov:label':'Boston Waste Sites', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
-        resource2 = doc.entity('dat:oil', {'prov:label':'Boston Oil Sites', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'geojson'})
-       
-        get_merged = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(get_merged, this_script)
-        doc.usage(get_merged, resource, startTime, None,
+        this_script = doc.agent('alg:linearRegression', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        resource = doc.entity('dat:crime_health_waste_space', {'prov:label':'Boston Crime, Health, Waste and Open Space Data', prov.model.PROV_TYPE:'ont:DataResource'})
+        this_run = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(this_run, this_script)
+        doc.usage(this_run, resource, startTime, None,
                   {prov.model.PROV_TYPE:'ont:Retrieval'
                         }
                   )
-        doc.usage(get_merged, resource2, startTime, None,
-                  {prov.model.PROV_TYPE:'ont:Retrieval'
-                        }
-                  )
-        oil_data = doc.entity('dat:misn15#oil', {prov.model.PROV_LABEL:'Waste Sites', prov.model.PROV_TYPE:'ont:DataSet'})
-        doc.wasAttributedTo(oil_data, this_script)
-        doc.wasGeneratedBy(oil_data, get_merged, endTime)
-        doc.wasDerivedFrom(oil_data, resource, get_merged, get_merged, get_merged)
+        resource2 = doc.entity('dat:reg_results', {prov.model.PROV_LABEL:'Linear Regression Results', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(resource2, this_script)
+        doc.wasGeneratedBy(resource2, this_run, endTime)
+        doc.wasDerivedFrom(resource2, resource, this_run, this_run, this_run)
 
-        waste_data = doc.entity('dat:misn15#waste', {prov.model.PROV_LABEL:'Waste Sites', prov.model.PROV_TYPE:'ont:DataSet'})
-        doc.wasAttributedTo(waste_data, this_script)
-        doc.wasGeneratedBy(waste_data, get_merged, endTime)
-        doc.wasDerivedFrom(waste_data, resource2, get_merged, get_merged, get_merged)
-                
         return doc
 
 linearRegression.execute()

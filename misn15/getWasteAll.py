@@ -71,21 +71,43 @@ class getWasteAll(dml.Algorithm):
         doc.add_namespace('dat', 'http://datamechanics.io/data/') # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
-        doc.add_namespace('waste', 'https://www.mass.gov/doc/list-of-massachusetts-hazardous-waste-generators-january-15-2019')
+        doc.add_namespace('bdp', 'http://datamechanics.io/data/')
+        doc.add_namespace('bdp2', 'http://datamechanics.io/data/misn15/')
+        doc.add_namespace('bdp3', 'http://datamechanics.io/data/misn15/')
 
-        this_script = doc.agent('alg:misn15#getWaste', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        resource = doc.entity('waste:Boston_waste', {'prov:label':'Boston_waste', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'csv'})
-        get_waste = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(get_waste, this_script)
-        doc.usage(get_waste, resource, startTime, None,
+        this_script = doc.agent('alg:getWasteAll', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        resource = doc.entity('bdp:hwgenids', {'prov:label':'Boston_waste', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        resource2 = doc.entity('bdp2:master_waste/AUL_PT', {'prov:label': 'Boston_waste', prov.model.PROV_TYPE: 'ont:DataResource', 'ont:Extension': 'geojson'})
+        resource3 = doc.entity('bdp3:master_waste/c21e', {'prov:label': 'Boston_waste', prov.model.PROV_TYPE: 'ont:DataResource','ont:Extension': 'geojson'})
+        this_run = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(this_run, this_script)
+        doc.usage(this_run, resource, startTime, None,
                   {prov.model.PROV_TYPE:'ont:Retrieval'
                   }
                   )
+        doc.usage(this_run, resource2, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:Retrieval'
+                   }
+                  )
+        doc.usage(this_run, resource3, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:Retrieval'
+                   }
+                  )
 
-        waste = doc.entity('dat:misn15#waste', {prov.model.PROV_LABEL:'Boston Waste', prov.model.PROV_TYPE:'ont:DataSet'})
-        doc.wasAttributedTo(waste, this_script)
-        doc.wasGeneratedBy(waste, get_waste, endTime)
-        doc.wasDerivedFrom(waste, resource, get_waste, get_waste, get_waste)
+        resource4 = doc.entity('dat:hwgen', {prov.model.PROV_LABEL:'Boston Hazardous Waste/Oil', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(resource4, this_script)
+        doc.wasGeneratedBy(resource4, this_run, endTime)
+        doc.wasDerivedFrom(resource4, resource, this_run, this_run, this_run)
+
+        resource5 = doc.entity('dat:aul', {prov.model.PROV_LABEL: 'Boston Waste with Limited Use', prov.model.PROV_TYPE: 'ont:DataSet'})
+        doc.wasAttributedTo(resource5, this_script)
+        doc.wasGeneratedBy(resource5, this_run, endTime)
+        doc.wasDerivedFrom(resource5, resource2, this_run, this_run, this_run)
+
+        resource6 = doc.entity('dat:waste', {prov.model.PROV_LABEL: 'Boston Hazardous Waste', prov.model.PROV_TYPE: 'ont:DataSet'})
+        doc.wasAttributedTo(resource6, this_script)
+        doc.wasGeneratedBy(resource6, this_run, endTime)
+        doc.wasDerivedFrom(resource6, resource3, this_run, this_run, this_run)
                   
         return doc
 

@@ -51,26 +51,33 @@ class getSchools(dml.Algorithm):
             in this script. Each run of the script will generate a new
             document describing that invocation event.
             '''
-        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/') # The scripts are in <folder>#<filename> format.
-        doc.add_namespace('dat', 'http://datamechanics.io/data/') # The data sets are in <user>#<collection> format.
+        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/misn15/') # The scripts are in <folder>#<filename> format.
+        doc.add_namespace('dat', 'http://datamechanics.io/data/misn15/') # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
-        doc.add_namespace('bdp', 'https://chronicdata.cdc.gov/resource/csmm-fdhi.json?cityname=Boston')
+        doc.add_namespace('bdp', 'https://opendata.arcgis.com/datasets/.geojson')
+        doc.add_namespace('bdp2', 'https://opendata.arcgis.com/datasets/')
 
-        this_script = doc.agent('alg:misn15#getHealth', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        resource = doc.entity('bdp:Boston_health', {'prov:label':'Boston_health', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
-        get_health = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(get_health, this_script)
-        doc.usage(get_health, resource, startTime, None,
-                  {prov.model.PROV_TYPE:'ont:Retrieval',
-                  'ont:Query':'?cityname=Boston'
+        this_script = doc.agent('alg:getSchools', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        resource = doc.entity('bdp:1d9509a8b2fd485d9ad471ba2fdb1f90_0', {'prov:label':'Boston Public Schools', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'geojson'})
+        resource2 = doc.entity('bdp2:0046426a3e4340a6b025ad52b41be70a_1',{'prov:label': 'Boston Non-Public Schools', prov.model.PROV_TYPE: 'ont:DataResource','ont:Extension': 'geojson'})
+
+        this_run = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(this_run, this_script)
+        doc.usage(this_run, resource, startTime, None,
+                  {prov.model.PROV_TYPE:'ont:Retrieval'
                   }
                   )
+        doc.usage(this_run, resource2, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:Retrieval'
+                   }
+                  )
 
-        health = doc.entity('dat:misn15#health', {prov.model.PROV_LABEL:'Boston Health', prov.model.PROV_TYPE:'ont:DataSet'})
-        doc.wasAttributedTo(health, this_script)
-        doc.wasGeneratedBy(health, get_health, endTime)
-        doc.wasDerivedFrom(health, resource, get_health, get_health, get_health)
+        resource3 = doc.entity('dat:schools', {prov.model.PROV_LABEL:'Boston Schools Data', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(resource3, this_script)
+        doc.wasGeneratedBy(resource3, this_run, endTime)
+        doc.wasDerivedFrom(resource3, resource, this_run, this_run, this_run)
+        doc.wasDerivedFrom(resource3, resource2, this_run, this_run, this_run)
                   
         return doc
 

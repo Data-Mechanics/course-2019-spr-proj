@@ -212,8 +212,6 @@ class transformWasteAll(dml.Algorithm):
         doc.add_namespace('dat', 'http://datamechanics.io/data/') # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
-        doc.add_namespace('waste', 'http://datamechanics.io/data/misn15/hwgenids.json') # The event log.
-        doc.add_namespace('oil', 'http://datamechanics.io/data/misn15/oil_sites.geojson') # The event log.
         
         this_script = doc.agent('alg:misn15#transformWaste', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
         resource = doc.entity('dat:waste', {'prov:label':'Boston Waste Sites', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
@@ -241,7 +239,7 @@ class transformWasteAll(dml.Algorithm):
                 
         return doc
 
-transformWasteAll.execute(trial=True)
+transformWasteAll.execute()
 doc = transformWasteAll.provenance()
 print(doc.get_provn())
 print(json.dumps(json.loads(doc.serialize()), indent=4))
