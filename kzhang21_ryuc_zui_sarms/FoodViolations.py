@@ -2,12 +2,14 @@ import datetime
 import logging
 import uuid
 
+
 import dml
 import pandas as pd
 import prov.model
 
 # Is this URL permanent?
 log = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
 
 
 class FoodViolations(dml.Algorithm):
@@ -24,12 +26,15 @@ class FoodViolations(dml.Algorithm):
         # This will fail to connect to the one require SSH auth
         client = dml.pymongo.MongoClient()
         repo = client.repo
+        log.debug("Authenticating into mongoDB")
         repo.authenticate('kzhang21_ryuc_zui_sarms', 'kzhang21_ryuc_zui_sarms')
 
+        log.debug("Fetching data from kzhang21_ryuc_zui_sarms.food_inspections")
         df = pd.DataFrame(
-            list(repo["kzhang21_ryuc_zui_sarms.food_inspections"].find()))
+            list(repo["kzhang21_ryuc_zui_sarms.food_inspections"].find())
+        )
 
-        # Project to select only the column we wants
+        log.debug("Project to select only the column we wants")
         selected_columns = ["businessname", "licenseno", "violstatus", "address", "city", "state", "zip", "property_id",
                             "location", "violdttm", "violation"]
         DF = df[selected_columns]
@@ -37,26 +42,42 @@ class FoodViolations(dml.Algorithm):
         # Select all the Fail violations
         # DF = DF[DF["violstatus"] == "Fail"]
 
-        # Count violations per restaurant
+        DF["violdttmClean"] = DF["violdttm"].map(
+            lambda x: x.strip()).map(lambda x: x if x else "NO_DATE")
+
+        log.debug("Counting violations per restaurant")
         violation_DF = pd.DataFrame()
+
         violation_DF["violationCount"] = DF.groupby(
             "licenseno").count()["violation"]
-        violation_DF["violationDate"] = DF.groupby("licenseno").min()[
-            "violdttm"]
 
-        violation_DF.join(
-            DF.set_index("licenseno")[set(
-                selected_columns) - {"violation", "violdttm", "licenseno"}].drop_duplicates()
-        )
-        # Get the earliest violation date of each licenseno. (Index is licenseno).
+        log.debug("Get the earliest violation date of each licenseno. (Index is licenseno).")
+        violation_DF["violationDate"] = DF[DF["violdttmClean"] !=
+                                           "NO_DATE"].groupby("licenseno").min()["violdttmClean"]
+        violation_DF = violation_DF.dropna()
 
-        violation_DF["_id"] = violation_DF.index.values
+        RDF = DF.set_index("licenseno")[set(
+            selected_columns) - {"violation", "violdttm", "licenseno", "violdttmClean"}]
+
+        log.debug("Removing duplicated")
+        RDF = RDF.loc[~RDF.index.duplicated()]
+
+        RDF["violationCount"] = violation_DF["violationCount"]
+        RDF["violationDate"] = violation_DF["violationDate"]
+        RDF["violationDateParsed"] = pd.to_datetime(RDF["violationDate"])
+        RDF["violationDays"] = RDF["violationDateParsed"].map(
+            lambda x: (startTime - x).days)
+        RDF = RDF.loc[RDF["violationDays"].dropna().index, :]
+
+        RDF["_id"] = RDF.index.values
         # DF_R["location"] = DF_R["location"].map(parse_coor)
 
-        r_dict = violation_DF.to_dict(orient="record")
+        r_dict = RDF.to_dict(orient="record")
 
         repo.dropCollection("food_violations")
         repo.createCollection("food_violations")
+
+        log.debug("Pandas PEACE!! Pushing data into mongoDB")
         repo['kzhang21_ryuc_zui_sarms.food_violations'].insert_many(r_dict)
 
         repo.logout()
