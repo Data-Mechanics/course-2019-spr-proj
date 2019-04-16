@@ -1,5 +1,6 @@
 import dml
 import datetime
+import geopy.distance
 import json
 import prov.model
 import pprint
@@ -32,26 +33,19 @@ class CvsWalCrime(dml.Algorithm):
         repo.createCollection('cvsCrime')
         repo.createCollection('walgreenCrime')
 
+        # geo-location of boston
+        lat_bos = 42.361145
+        lng_bos = -71.057083
+        coord_bos = (lat_bos, lng_bos)
+
         # insert those crime incidents that are within 30 km of boston.
-        for document in repo.henryhcy_jshen97_leochans_wangyp.crime.find():
-            # R is the approximate radius of the earth in km
-            # @see Haversine formula for latlng distance
-            # All trig function in python use radian
-            R = 6373.0
+        for document in repo.henryhcy_jshen97_leochans_wangyp.crime.find({'OFFENSE_CODE_GROUP': 'Larceny'}):
+            lat_cri = document['Lat'] if document['Lat'] != None else 0.0
+            lng_cri = document['Long'] if document['Long'] != None else 0.0
+            coord_cri = (lat_cri, lng_cri)
 
-            lat_bos = 42.361145
-            lng_bos = -71.057083
-
-            lat = document['Lat'] if document['Lat'] != None else 0.0
-            lng = document['Long'] if document['Long'] != None else 0.0
-
-            dlon = lng_bos - lng
-            dlat = lat_bos - lat
-            a = sin(dlat / 2) ** 2 + cos(lat) * cos(lat_bos) * sin(dlon / 2) ** 2
-            c = 2 * atan2(sqrt(a), sqrt(1 - a))
-
-            distance = R * c
-            if (distance < 30):
+            distance = geopy.distance.distance(coord_bos, coord_cri)
+            if (distance < 5.5):
                 d = {
                     'document_type': 'crime',
                     'crime_id': document['INCIDENT_NUMBER'],
@@ -63,31 +57,43 @@ class CvsWalCrime(dml.Algorithm):
 
         # insert cvs within 15 km of boston
         for item in repo.henryhcy_jshen97_leochans_wangyp.cvs.find():
-            d = {
-                'document_type': 'cvs',
-                'location': item['geometry']['location'],
-                'place_id': item['place_id'],
-                'rating': item['rating'] if 'rating' in item.keys() else None,
-                'rating_count': item['user_ratings_total'] if 'user_ratings_total' in item.keys() else None
-            }
-            repo['henryhcy_jshen97_leochans_wangyp.cvsCrime'].insert_one(d)
+            lat_cvs = item['geometry']['location']['lat']
+            lng_cvs = item['geometry']['location']['lng']
+            coord_cvs = (lat_cvs, lng_cvs)
+
+            distance = geopy.distance.distance(coord_bos, coord_cvs)
+            if (distance <= 5):
+                d = {
+                    'document_type': 'cvs',
+                    'location': item['geometry']['location'],
+                    'place_id': item['place_id'],
+                    'rating': item['rating'] if 'rating' in item.keys() else None,
+                    'rating_count': item['user_ratings_total'] if 'user_ratings_total' in item.keys() else None
+                }
+                repo['henryhcy_jshen97_leochans_wangyp.cvsCrime'].insert_one(d)
 
         repo['henryhcy_jshen97_leochans_wangyp.cvsCrime'].metadata({'complete': True})
         print(repo['henryhcy_jshen97_leochans_wangyp.cvsCrime'].metadata())
 
         # insert walgreen within 15 km of boston
         for item in repo.henryhcy_jshen97_leochans_wangyp.walgreen.find():
-            d = {
-                'document_type': 'walgreen',
-                'location': item['geometry']['location'],
-                'place_id': item['place_id'],
-                'rating': item['rating'] if 'rating' in item.keys() else None,
-                'rating_count': item['user_ratings_total'] if 'user_ratings_total' in item.keys() else None
-            }
-            repo['henryhcy_jshen97_leochans_wangyp.walgreenCrime'].insert_one(d)
+            lat_wal = item['geometry']['location']['lat']
+            lng_wal = item['geometry']['location']['lng']
+            coord_wal = (lat_wal, lng_wal)
 
-        repo['henryhcy_jshen97_leochans_wangyp.WalgreenCrime'].metadata({'complete': True})
-        print(repo['henryhcy_jshen97_leochans_wangyp.WalgreenCrime'].metadata())
+            distance = geopy.distance.distance(coord_bos, coord_wal)
+            if (distance <= 5):
+                d = {
+                    'document_type': 'walgreen',
+                    'location': item['geometry']['location'],
+                    'place_id': item['place_id'],
+                    'rating': item['rating'] if 'rating' in item.keys() else None,
+                    'rating_count': item['user_ratings_total'] if 'user_ratings_total' in item.keys() else None
+                }
+                repo['henryhcy_jshen97_leochans_wangyp.walgreenCrime'].insert_one(d)
+
+        repo['henryhcy_jshen97_leochans_wangyp.walgreenCrime'].metadata({'complete': True})
+        print(repo['henryhcy_jshen97_leochans_wangyp.walgreenCrime'].metadata())
 
         repo.logout()
 
@@ -134,7 +140,7 @@ class CvsWalCrime(dml.Algorithm):
         doc.wasDerivedFrom(cvsCrime, resource_cvs, combine_cvs, combine_cvs, combine_cvs)
         doc.wasDerivedFrom(cvsCrime, resource_crime, combine_cvs, combine_cvs, combine_cvs)
 
-        walCrime = doc.entity('dat:henryhcy_jshen97_leochans_wangyp#walCrime', {prov.model.PROV_LABEL: 'Combine Walgreen Crime', prov.model.PROV_TYPE: 'ont:DataSet'})
+        walCrime = doc.entity('dat:henryhcy_jshen97_leochans_wangyp#walgreenCrime', {prov.model.PROV_LABEL: 'Combine Walgreen Crime', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(walCrime, this_script)
         doc.wasGeneratedBy(walCrime, combine_wal, end_time)
         doc.wasDerivedFrom(walCrime, resource_wal, combine_wal, combine_wal, combine_wal)
@@ -145,8 +151,9 @@ class CvsWalCrime(dml.Algorithm):
 
 # debug
 
+'''
 CvsWalCrime.execute()
 doc = CvsWalCrime.provenance()
 print(doc.get_provn())
 print(json.dumps(json.loads(doc.serialize()), indent=4))
-
+'''
