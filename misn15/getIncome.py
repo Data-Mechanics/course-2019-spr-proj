@@ -1,4 +1,3 @@
-import urllib.request
 import json
 import dml
 import prov.model
@@ -10,11 +9,11 @@ from us import states
 class getIncome(dml.Algorithm):
     contributor = 'misn15'
     reads = []
-    writes = ['misn15.income']
+    writes = ['misn15.income', 'misn15.population']
 
     @staticmethod
     def execute(trial = False):
-        '''Retrieve income data from Census Bureau'''
+        '''Retrieve income and population data from Census Bureau'''
         startTime = datetime.datetime.now()
 
         # Set up the database connection.
@@ -22,9 +21,15 @@ class getIncome(dml.Algorithm):
         repo = client.repo
         repo.authenticate('misn15', 'misn15')
 
-
         c = Census("a839d0b0a206355591f27266b5205596d1bae45c", year=2017)
         income = c.acs5.state_county_tract('B06011_001E', states.MA.fips, '025', Census.ALL)
+        population = c.acs5.state_county_tract('B01003_001E', states.MA.fips, '025', Census.ALL)
+
+        repo.dropCollection("population")
+        repo.createCollection("population")
+        repo['misn15.population'].insert_many(population)
+        repo['misn15.population'].metadata({'complete': True})
+        print(repo['misn15.population'].metadata())
 
         repo.dropCollection("income")
         repo.createCollection("income")
