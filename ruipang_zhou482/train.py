@@ -34,7 +34,7 @@ class train(dml.Algorithm):
 		for i in repo['ruipang_zhou482.publicSchool'].find():
 			publicSchool[i["zipcode"]] = i["num_school"]
 		propertyAssessment = {}
-		for i in repo['ruipang_zhou482.PropertyAssessment'].find():
+		for i in repo['ruipang_zhou482.propertyAssessment'].find():
 			propertyAssessment[i["zipcode"]] = i["avg_value"]
 		police = {}
 		for i in repo['ruipang_zhou482.police'].find():

@@ -24,10 +24,10 @@ class totalSchool(dml.Algorithm):
         repo.authenticate('ruipang_zhou482', 'ruipang_zhou482')
 
         public_school = []
-        for i in repo['ruipang_zhou482.PublicSchool'].find():
+        for i in repo['ruipang_zhou482.publicSchool'].find():
             public_school.append(i)
         private_school = []
-        for i in repo['ruipang_zhou482.PrivateSchool'].find():
+        for i in repo['ruipang_zhou482.privateSchool'].find():
             private_school.append(i)
 
     
