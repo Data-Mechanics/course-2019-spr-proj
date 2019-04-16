@@ -79,7 +79,7 @@ class FoodViolations(dml.Algorithm):
         repo.dropCollection("food_violations")
         repo.createCollection("food_violations")
 
-        log.debug("Pandas PEACE!! Pushing data into mongoDB")
+        log.debug("🐼 PEACE!! Pushing data into mongoDB 🍃")
         repo['kzhang21_ryuc_zui_sarms.food_violations'].insert_many(r_dict)
 
         repo.logout()
