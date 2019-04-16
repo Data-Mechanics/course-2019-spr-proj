@@ -18,10 +18,13 @@ def createScatter(df):
     
 
 def vectorizeAndCluster(data, labels):
+    # convert dictionary to vector
     v = DictVectorizer(sparse=False)
+    # running k means
     X = v.fit_transform(data)
     kmeans = KMeans(n_clusters=5)
     pred = kmeans.fit_predict(X)
+    # print labels
     # printLabels(pred, labels)
     return [kmeans, X]
 
@@ -43,6 +46,7 @@ def printLabels(pred_classes, labels):
             
             
 def formatIntoVectors(dataf):
+    # create list of object
     vector_arr = []
     labels = np.array([])
     for (idx, row) in dataf.iterrows():
@@ -56,6 +60,7 @@ def formatIntoVectors(dataf):
     return vectorizeAndCluster(vector_arr, labels)
     
 def scalePoints(df):
+    # scale between 0-1
     min_max_scaler = preprocessing.MinMaxScaler()
     counts_minmax = min_max_scaler.fit_transform(df['x'].values.reshape(-1,1))
     counts_minmax = pd.DataFrame(counts_minmax)
