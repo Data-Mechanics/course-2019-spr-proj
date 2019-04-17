@@ -50,7 +50,7 @@ class crimeLongLat(dml.Algorithm):
         types = [i[2] for i in data2]
         data = [(i[0],i[1]) for i in data2]
         
-        cluster_number = 10 #number of offical neighborhoods in boston
+        cluster_number = 23 #number of offical neighborhoods in boston
         kmeans = KMeans(n_clusters=cluster_number)
         kmeans.fit(data)
 
