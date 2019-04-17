@@ -30,8 +30,8 @@ class eatNplay(dml.Algorithm):
         repo.authenticate('kzhang21_ryuc_zui_sarms', 'kzhang21_ryuc_zui_sarms')
 
         #retrieve data sets
-        foodData = pd.DataFrame(repo.kzhang21_ryuc.food.find())
-        entData = pd.DataFrame(repo.kzhang21_ryuc.play.find())
+        foodData = pd.DataFrame(repo.kzhang21_ryuc_zui_sarms.food.find())
+        entData = pd.DataFrame(repo.kzhang21_ryuc_zui_sarms.play.find())
 
         #map neighborhood to zipcode 
         nZip = {}
