@@ -21,7 +21,7 @@ class prediction_weather_incident(dml.Algorithm):
     writes = ['liweixi_mogujzhu.prediction_weather_incident']
 
     @staticmethod
-    def execute(trial=False):
+    def execute(trial=True):
         '''Retrieve some data sets (not using the API here for the sake of simplicity).'''
         startTime = datetime.datetime.now()
 
@@ -34,12 +34,14 @@ class prediction_weather_incident(dml.Algorithm):
         # Create the training data and target
         data_name = 'liweixi_mogujzhu.weather_fire_incident_transformation'
         data = pd.DataFrame(list(repo[data_name].find()))
+        print(data.shape)
+        # If trial mode, use half of the data for training
+        if trial:
+            data = data[:data.shape[0]//2]
         data['LSCORE'] = data['NINCIDENT']
         data['TDIFF'] = data["TMAX"]-data["TMIN"]
         X = data[["TAVG","TDIFF","PRCP","SNOW","AWND"]]
         y = data["LSCORE"].astype(float)
-        # print(X)
-        # print(y)
         # Scale the data to range [0,1]
         min_max_scaler = MinMaxScaler()
         x_scaled = numpy.array(min_max_scaler.fit_transform(X.values))
@@ -100,45 +102,30 @@ class prediction_weather_incident(dml.Algorithm):
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('alice_bob', 'alice_bob')
+        repo.authenticate('liweixi_mogujzhu', 'liweixi_mogujzhu')
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')  # The scripts are in <folder>#<filename> format.
         doc.add_namespace('dat', 'http://datamechanics.io/data/')  # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont',
                           'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/')  # The event log.
-        doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
 
-        this_script = doc.agent('alg:alice_bob#example',
+
+        this_script = doc.agent('alg:liweixi_mogujzhu#prediction_weather_incident',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
-        resource = doc.entity('bdp:wc8w-nujj',
-                              {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource',
+        resource = doc.entity('dat:liweixi_mogujzhu#weather_fire_incident_transformation',
+                              {'prov:label': 'Boston Weather and Fire Incident', prov.model.PROV_TYPE: 'ont:DataResource',
                                'ont:Extension': 'json'})
-        get_found = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
-        get_lost = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(get_found, this_script)
-        doc.wasAssociatedWith(get_lost, this_script)
-        doc.usage(get_found, resource, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:Retrieval',
-                   'ont:Query': '?type=Animal+Found&$select=type,latitude,longitude,OPEN_DT'
-                   }
-                  )
-        doc.usage(get_lost, resource, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:Retrieval',
-                   'ont:Query': '?type=Animal+Lost&$select=type,latitude,longitude,OPEN_DT'
-                   }
-                  )
+        get_prediction_weather_incident = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
 
-        lost = doc.entity('dat:alice_bob#lost',
-                          {prov.model.PROV_LABEL: 'Animals Lost', prov.model.PROV_TYPE: 'ont:DataSet'})
-        doc.wasAttributedTo(lost, this_script)
-        doc.wasGeneratedBy(lost, get_lost, endTime)
-        doc.wasDerivedFrom(lost, resource, get_lost, get_lost, get_lost)
+        doc.wasAssociatedWith(get_prediction_weather_incident, this_script)
 
-        found = doc.entity('dat:alice_bob#found',
-                           {prov.model.PROV_LABEL: 'Animals Found', prov.model.PROV_TYPE: 'ont:DataSet'})
-        doc.wasAttributedTo(found, this_script)
-        doc.wasGeneratedBy(found, get_found, endTime)
-        doc.wasDerivedFrom(found, resource, get_found, get_found, get_found)
+        weather_fire_incident_transformation = doc.entity('dat:liweixi_mogujzhu#weather_fire_incident_transformation',
+                          {prov.model.PROV_LABEL: 'Boston Weather and Fire Incident', prov.model.PROV_TYPE: 'ont:DataSet'})
+        doc.wasAttributedTo(weather_fire_incident_transformation, this_script)
+        doc.wasGeneratedBy(weather_fire_incident_transformation, get_prediction_weather_incident, endTime)
+        doc.wasDerivedFrom(weather_fire_incident_transformation, resource,
+                           get_prediction_weather_incident, get_prediction_weather_incident,
+                           get_prediction_weather_incident)
 
         repo.logout()
 
