@@ -29,7 +29,7 @@ DEFAULT_TERM = 'dinner'
 DEFAULT_LOCATION = 'Boston, MA'
 SEARCH_LIMIT = 1
 
-class yelp_longLat(dml.Algorithm):
+class viola_longLat(dml.Algorithm):
     contributor = 'kzhang21_ryuc_zui_sarms'
     reads = ['kzhang21_ryuc_zui_sarms.food_violations', 'kzhang21_ryuc_zui_sarms.yelp_business']
     writes = ['kzhang21_ryuc_zui_sarms.yelp_longLat']
@@ -82,7 +82,7 @@ class yelp_longLat(dml.Algorithm):
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
         doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
 
-        this_script = doc.agent('alg:kzhang21_ryuc_zui_sarms#yelp_longLat', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        this_script = doc.agent('alg:kzhang21_ryuc_zui_sarms#viola_longLat', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
         resource = doc.entity('bdp:business.json', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
         get_business = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(get_business, this_script)
@@ -91,7 +91,7 @@ class yelp_longLat(dml.Algorithm):
                   }
                   )
 
-        yelp_longLat = doc.entity('dat:kzhang21_ryuc_zui_sarms#yelp_longLat', {prov.model.PROV_LABEL:'Yelp Long Lat', prov.model.PROV_TYPE:'ont:DataSet'})
+        yelp_longLat = doc.entity('dat:kzhang21_ryuc_zui_sarms#viola_longLat', {prov.model.PROV_LABEL:'Violation Long Lat', prov.model.PROV_TYPE:'ont:DataSet'})
         doc.wasAttributedTo(yelp_longLat, this_script)
         doc.wasGeneratedBy(yelp_longLat, get_business, endTime)
         doc.wasDerivedFrom(yelp_longLat, resource, get_business, get_business, get_business)
