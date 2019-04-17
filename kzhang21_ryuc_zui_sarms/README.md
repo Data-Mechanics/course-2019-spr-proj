@@ -1,5 +1,3 @@
-# Project #1
-
 # Project #2
 **Duy Nguyen** and **Sarah M'Saad** and **Colleen Kim** and **Kelly Zhang**
 
