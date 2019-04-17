@@ -80,21 +80,28 @@ class close_stop(dml.Algorithm):
         doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
 
         this_script = doc.agent('alg:kzhang21_ryuc_zui_sarms#close_stop', {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
-        yelp_business = doc.entity('dat:kzhang21_ryuc_zui_sarms#yelp_business', {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource',
+        yelp_business = doc.entity('dat:kzhang21_ryuc_zui_sarms#yelp_business', {'prov:label': 'Targeted Yelp Businesses', prov.model.PROV_TYPE: 'ont:DataSet',
                                 'ont:Extension': 'json'})
-        mbta_stops = doc.entity('dat:kzhang21_ryuc_zui_sarms#mbta_stops', {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource',
+        mbta_stops = doc.entity('dat:kzhang21_ryuc_zui_sarms#mbta_stops', {'prov:label': 'Nearby MBTA Stops', prov.model.PROV_TYPE: 'ont:DataSet',
                             'ont:Extension': 'json'})
-        find_closest = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(find_closest, this_script)
-        doc.usage(find_closest, mbta_stops, startTime, None,{prov.model.PROV_TYPE: 'ont:Retrieval'})
-        doc.usage(find_closest, yelp_business, startTime, None, {prov.model.PROV_TYPE: 'ont:Retrieval'})
 
-        close_stop = doc.entity('dat:kzhang21_ryuc_zui_sarms#close_stop',
-                                   {prov.model.PROV_LABEL: 'Close Stop', prov.model.PROV_TYPE: 'ont:DataSet'})
-        doc.wasAttributedTo(close_stop, this_script)
-        doc.wasGeneratedBy(close_stop, find_closest, endTime)
-        doc.wasDerivedFrom(close_stop, yelp_business, find_closest, find_closest, find_closest)
-        doc.wasDerivedFrom(close_stop, mbta_stops, find_closest, find_closest, find_closest)
+        find_closest = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+        
+        doc.wasAssociatedWith(find_closest, this_script)
+        doc.usage(find_closest, mbta_stops, startTime, None,{prov.model.PROV_TYPE: 'ont:Computation'})
+        doc.usage(find_closest, yelp_business, startTime, None, {prov.model.PROV_TYPE: 'ont:Computation'})
+
+        yelp = doc.entity('dat:kzhang21_ryuc_zui_sarms#yelp_business',
+            {prov.model.PROV_LABEL:'Filtered Yelp Dest', prov.model.PROV_TYPE:'ont:DataSet '})
+        doc.wasAttributedTo(yelp, this_script)
+        doc.wasGeneratedBy(yelp, find_closest, endTime)
+        doc.wasDerivedFrom(yelp, yelp_business, find_closest, find_closest, find_closest)
+
+        stop = doc.entity('dat:kzhang21_ryuc_zui_sarms#close_stop',
+                                   {prov.model.PROV_LABEL: 'Filtered Close Stops', prov.model.PROV_TYPE: 'ont:DataSet'})
+        doc.wasAttributedTo(stop, this_script)
+        doc.wasGeneratedBy(stop, find_closest, endTime)
+        doc.wasDerivedFrom(stop, yelp_business, find_closest, find_closest, find_closest)
 
         repo.logout()
 

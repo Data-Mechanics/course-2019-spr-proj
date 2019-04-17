@@ -98,7 +98,7 @@ class airbnb(dml.Algorithm):
         doc.add_namespace('airbnb', 'http://datamechanics.io/data/')
 
         this_script = doc.agent('alg:kzhang21_ryuc_zui_sarms#airbnb', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        resource = doc.entity('airbnb:airbnb_listing.csv', {'prov:label':'Airbnb, Location Search', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        resource = doc.entity('airbnb:airbnb_listing.csv', {'prov:label':'Airbnb, Location Search', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'csv'})
         get_place = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(get_place, this_script)
         doc.usage(get_place, resource, startTime, None,{prov.model.PROV_TYPE:'ont:Retrieval'})
@@ -111,13 +111,6 @@ class airbnb(dml.Algorithm):
         repo.logout()
                   
         return doc
-
-# This is example code you might use for debugging this module.
-# Please remove all top-level function calls before submitting.
-# Airbnb.execute()
-# doc = Airbnb.provenance()
-# print(doc.get_provn())
-# print(json.dumps(json.loads(doc.serialize()), indent=4))
 
 
 ## eof
