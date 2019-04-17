@@ -226,7 +226,7 @@ class questionsMajorityResult(dml.Algorithm):
         return doc
 
 
-questionsMajorityResult.execute()
+#questionsMajorityResult.execute()
 # doc = questionsMajorityResult.provenance()
 # doc.serialize()
 # print(doc.get_provn())
