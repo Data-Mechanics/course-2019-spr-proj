@@ -40,7 +40,7 @@ class FoodViolations(dml.Algorithm):
         DF = df[selected_columns]
 
         # Select all the Fail violations
-        # DF = DF[DF["violstatus"] == "Fail"]
+        DF = DF[DF["violstatus"] == "Fail"]
 
         DF["violdttmClean"] = DF["violdttm"].map(
             lambda x: x.strip()).map(lambda x: x if x else "NO_DATE")
@@ -69,6 +69,7 @@ class FoodViolations(dml.Algorithm):
         RDF["violationDateParsed"] = pd.to_datetime(RDF["violationDate"])
         RDF["violationDays"] = RDF["violationDateParsed"].map(
             lambda x: (startTime - x).days)
+        RDF["violationRate"] = RDF["violationCount"]/RDF["violationDays"]
         RDF = RDF.loc[RDF["violationDays"].dropna().index, :]
 
         RDF["_id"] = RDF.index.values
