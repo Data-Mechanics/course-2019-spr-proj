@@ -26,7 +26,7 @@ DEFAULT_LOCATION = 'Boston, MA'
 SEARCH_LIMIT = 1
 class yelp_business(dml.Algorithm):
     contributor = 'kzhang21_ryuc_zui_sarms'
-    reads = ['kzhang21_ryuc_zui_sarms.food_inspections']
+    reads = ['kzhang21_ryuc_zui_sarms.food_inspections_squished', 'kzhang21_ryuc_zui_sarms.food_violations']
     writes = ['kzhang21_ryuc_zui_sarms.yelp_business']
 
     @staticmethod
@@ -40,7 +40,8 @@ class yelp_business(dml.Algorithm):
         repo = client.repo
         repo.authenticate('kzhang21_ryuc_zui_sarms', 'kzhang21_ryuc_zui_sarms')
 
-       
+        # repo.dropCollection("yelp_business")
+        # repo.createCollection("yelp_business")
 
         zip_codes = {'02108', '02109', '02110', '02111', '02113', '02114', '02115', '02116', '02118', '02119', '02120',
                      '02121', '02122', '02124', '02125', '02126', '02127', '02128', '02129', '02130', '02131', '02132',
@@ -48,28 +49,35 @@ class yelp_business(dml.Algorithm):
                      '02117', '02123', '02137', '02196', '02205', '02283', '02284', '02298', '02201', '02204', '02206',
                      '02211', '02212', '02217', '02241', '02266', '02293', '02297'}
 
-        food_inspections = repo['kzhang21_ryuc_zui_sarms.food_inspections']
+        food_inspections = repo['kzhang21_ryuc_zui_sarms.food_inspections_squished']
         df_inspections = pd.DataFrame(list(food_inspections.find()))
+
+        food_violations = repo['kzhang21_ryuc_zui_sarms.food_violations']
 
         ## for each entry in violation get data
         for index, row in df_inspections.iterrows():
             term = row["businessname"]
             location = row["address"] + ', Boston, MA'
+            # log.info('get: %s', row)
             result = query_api(term, location)
 
             if result != [] and result is not None:
                 result = result[0]
                 if str(result["location"]["zip_code"]) in zip_codes:
-                    result['license_number'] = row["licenseno"]
-                    log.info('Adding: %s', result['name'])
-                    repo['kzhang21_ryuc_zui_sarms.yelp_business'].insert(result)
+                    result['license_number'] = row["_id"]
+                    violation = food_violations.find_one({'_id': row["_id"]})
+                    if violation:
+                        # log.info('Violation Rate: %s = %.2f', row["businessname"], violation['violationRate'])
+                        result['violation_rate'] = violation['violationRate']
+                    else:
+                        result['violation_rate'] = 0
+                    # log.info('Adding: %s', result['name'])
+                    repo['kzhang21_ryuc_zui_sarms.yelp_business'].insert_one(result)
 
         log.debug("Finishing %s", __name__)
         
         log.debug("Push data into mongoDB")
 
-        repo.dropCollection("yelp_business")
-        repo.createCollection("yelp_business")
         repo.logout()
 
         endTime = datetime.datetime.now()
