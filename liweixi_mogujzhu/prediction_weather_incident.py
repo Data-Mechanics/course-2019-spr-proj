@@ -119,11 +119,11 @@ class prediction_weather_incident(dml.Algorithm):
 
         doc.wasAssociatedWith(get_prediction_weather_incident, this_script)
 
-        weather_fire_incident_transformation = doc.entity('dat:liweixi_mogujzhu#weather_fire_incident_transformation',
-                          {prov.model.PROV_LABEL: 'Boston Weather and Fire Incident', prov.model.PROV_TYPE: 'ont:DataSet'})
-        doc.wasAttributedTo(weather_fire_incident_transformation, this_script)
-        doc.wasGeneratedBy(weather_fire_incident_transformation, get_prediction_weather_incident, endTime)
-        doc.wasDerivedFrom(weather_fire_incident_transformation, resource,
+        prediction_weather_incident = doc.entity('dat:liweixi_mogujzhu#prediction_weather_incident',
+                          {prov.model.PROV_LABEL: 'Prediction Boston Weather and Fire Incident', prov.model.PROV_TYPE: 'ont:DataSet'})
+        doc.wasAttributedTo(prediction_weather_incident, this_script)
+        doc.wasGeneratedBy(prediction_weather_incident, get_prediction_weather_incident, endTime)
+        doc.wasDerivedFrom(prediction_weather_incident, resource,
                            get_prediction_weather_incident, get_prediction_weather_incident,
                            get_prediction_weather_incident)
 
