@@ -158,7 +158,7 @@ class statistical_analysis(dml.Algorithm):
 # Please remove all top-level function calls before submitting.
 statistical_analysis.execute()
 '''
-doc = example.provenance()
+doc = statistical_analysis.provenance()
 print(doc.get_provn())
 print(json.dumps(json.loads(doc.serialize()), indent=4))
 '''
