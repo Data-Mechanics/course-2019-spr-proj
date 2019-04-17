@@ -345,7 +345,7 @@ class example(dml.Algorithm):
         #POINTS_NEW = 
         
         print("Before loop")
-        for x in range(1,len(STOPS_NEW)):
+        for x in range(len(STOPS_NEW)):
             print("STOPS_NEW[",x,"]")
             strFileName = 'k_means_school_' + str(x) + '.csv'
             MEANS = []
