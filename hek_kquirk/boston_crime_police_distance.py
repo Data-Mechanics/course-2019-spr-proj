@@ -5,19 +5,33 @@ import prov.model
 import datetime
 import uuid
 
+import pandas as pd
 import numpy as np
 from ast import literal_eval
 from scipy.cluster.vq import vq, kmeans, whiten
+import scipy.stats
+from geopy.distance import distance
 
 def goodCoords(t):
     return abs(t[0]) > 0.0 and t[0] != -1 and abs(t[1]) > 0.0 and t[1] != -1
 
-class boston_crime_clusters(dml.Algorithm):
+stations = {'A1': (42.361751,-71.060117),
+            'A15': (42.361751,-71.060117),
+            'A7': (42.3710345,-71.0388061),
+            'B2': (42.3284313,-71.0862445),
+            'B3': (42.2846826,-71.0916905),
+            'C6': (42.361751,-71.060117),
+            'C11': (42.2980276,-71.0590886),
+            'D4': (42.3394369,-71.0692247),
+            'D14': (42.3493611,-71.1505902),
+            'E5': (42.2867829,-71.1484246),
+            'E13': (42.299275,-71.115235),
+            'E18': (42.2564288,-71.1242782)}
+
+class boston_crime_police_distance(dml.Algorithm):
     contributor = 'hek_kquirk'
     reads = ['hek_kquirk.boston_crime_incidents']
-    writes = ['hek_kquirk.boston_crime_clusters']
-
-    stations = np.array([(42.361751,-71.060117),(42.3710345,-71.0388061),(42.3284313,-71.0862445),(42.2846826,-71.0916905),(42.361751,-71.060117),(42.2980276,-71.0590886),(42.3394369,-71.0692247),(42.3493611,-71.1505902),(42.2867829,-71.1484246),(42.299275,-71.115235),(42.2564288,-71.1242782)])
+    writes = ['hek_kquirk.boston_crime_police_distance']
     
     @staticmethod
     def execute(trial = False):
@@ -29,37 +43,22 @@ class boston_crime_clusters(dml.Algorithm):
         repo.authenticate('hek_kquirk', 'hek_kquirk')
 
         # Drop/recreate mongo collection
-        repo.dropCollection("boston_crime_clusters")
-        repo.createCollection("boston_crime_clusters")
+        repo.dropCollection("boston_crime_police_distance")
+        repo.createCollection("boston_crime_police_distance")
 
         # Get crime incident locations and convert to float tuples
-        incident_locs_raw = repo['hek_kquirk.boston_crime_incidents'].find({}, {'Location': 1})
-        incident_locs = [literal_eval(inc['Location']) for inc in incident_locs_raw
-                               if goodCoords(literal_eval(inc['Location']))]
-
-        #One cluster per police station
-        incident_locs_np = np.array(incident_locs)
-        res = kmeans(incident_locs_np, boston_crime_clusters.stations)
+        incident_locs_raw = repo['hek_kquirk.boston_crime_incidents'].find({}, {'Location': 1, 'DISTRICT': 1})
+        distances = [distance(l, stations[s]) for l,s in ((literal_eval(inc['Location']), inc['DISTRICT']) for inc in incident_locs_raw)
+                         if goodCoords(l) and s in stations]
+        print(len(distances))
         
-        #Create kml file (for google maps)
-        d = ''
-        d += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-        d += "<kml xmlns=\"http://www.opengis.net/kml/2.2\">\n"
-        d += "<Document>\n"
-        for r in res[0]:
-            d += "<Placemark>\n"
-            d += "<Point>\n"
-            d += "<coordinates>" + str(r[1]) + "," + str(r[0]) + ",0</coordinates>"
-            d += "</Point>\n"
-            d += "</Placemark>\n"
-        d += "</Document>\n"
-        d += "</kml>"
+        distances = np.histogram(distances, [i/5 for i in range(15)])
+        print(distances)
 
-        doc = {"_id": "boston_crime_clusters.kml", "contents": d}
-        repo['hek_kquirk.boston_crime_clusters'].insert(doc)
-
-        repo['hek_kquirk.boston_crime_clusters'].metadata({'complete':True})
-        print(repo['hek_kquirk.boston_crime_clusters'].metadata())
+        print(scipy.stats.pearsonr(distances[1][1:],distances[0]))
+        
+        repo['hek_kquirk.boston_crime_police_distance'].metadata({'complete':True})
+        print(repo['hek_kquirk.boston_crime_police_distance'].metadata())
         
         repo.logout()
         
