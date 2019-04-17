@@ -312,10 +312,12 @@ class example(dml.Algorithm):
         
         #implementation of k-means, with md.time as the distance function
         #todo: set a departure time in md.time
-
+        print('\n\nSTOPS NEW: ',STOPS_NEW ,'\n\n')
         testLen = 5
         #done for every school separately
         #for x in range(len(STOPS_OG)):
+        #STOPS_NEW = 
+        #POINTS_NEW = 
         for x in range(5):
             MEANS = []
             POINTSC = []
@@ -327,14 +329,15 @@ class example(dml.Algorithm):
             #MEANS = [(2,2), (10,10)]
             #POINTSC = [(1,1),(3,4),(9,8)]
             #print("\nMeans: ",MEANS, "\n")
+            
             while not isClose(MEANS, OLD):
                 OLD = MEANS
 
-                MPD = [(m, p, md.walk_time_url(m,p)) for (m, p) in product(MEANS, POINTSC)]
-                PDs = [(p, md.walk_time_url(m,p)) for (m, p, d) in MPD]
+                #MPD = [(m, p, md.walk_time_url(m,p)) for (m, p) in product(MEANS, POINTSC)]
+                #PDs = [(p, md.walk_time_url(m,p)) for (m, p, d) in MPD]
 
-                #MPD = [(m, p, dist(m,p)) for (m, p) in product(MEANS, POINTSC)]
-                #PDs = [(p, dist(m,p)) for (m, p, d) in MPD]
+                MPD = [(m, p, dist(m,p)) for (m, p) in product(MEANS, POINTSC)]
+                PDs = [(p, dist(m,p)) for (m, p, d) in MPD]
 
                 PD = aggregate(PDs, min)
                 MP = [(m, p) for ((m,p,d), (p2,d2)) in product(MPD, PD) if p==p2 and d==d2]
@@ -345,11 +348,13 @@ class example(dml.Algorithm):
                 MC = aggregate(M1, sum)
 
                 MEANS = [scale(t,c) for ((m,t),(m2,c)) in product(MT, MC) if m == m2]
-                #print("\n old: ", OLD)
-                #print("\n means: ", MEANS, "\n")
+                
+                print("\n old: ", OLD)
+                print("\n means: ", MEANS, "\n")
                 
                 #reverse geocode
-                print("sorted(MEANS): ", sorted(MEANS))
+                
+                #print("sorted(MEANS): ", sorted(MEANS))
             print("\n\nOLD = MEANS WOOHOO\n\n")
         
         
@@ -547,10 +552,10 @@ def scale(p,c):
     (x,y) = p
     return (x/c, y/c)
     
-#def dist(p, q):
-#    (x1,y1) = p
-#    (x2,y2) = q
-#    return (x1-x2)**2 + (y1-y2)**2
+def dist(p, q):
+    (x1,y1) = p
+    (x2,y2) = q
+    return (x1-x2)**2 + (y1-y2)**2
 
 def isClose(MEANS, OLD):
     if len(MEANS)!=len(OLD):
