@@ -33,10 +33,24 @@ class NicePlaces(dml.Algorithm):
         
         # The coordinate 
         CURRENT_PLACE= (42.3601, -71.0589)
+        
         # The number of places we pick 
-        N = 5
-        MAX_DIST = 3
-        MIN_DIST = 0
+        if trial:
+            N = 5
+        else:
+            N = 500
+
+        # What is the furthest you would like to go
+        MAX_DIST = 100
+
+        # What is the least amount of distance you would like to go
+        MIN_DIST = 0.12
+
+        # What is the average rating of the places you would like to go to
+        AVG_RATE = 4
+        # What is the average violation rating of the places you would like to go
+        AVG_VIOR = 0
+
         Places = random.choices(data, k=N)    
 
         # Places: x_0 ... x_n are whether a place is chosen
@@ -61,7 +75,7 @@ class NicePlaces(dml.Algorithm):
         # Fetch the coordinate pair from each of the place
         DPs = [(x["coordinates"]["latitude"], x["coordinates"]["longitude"]) for x in Places]
         Dists = [dist(CURRENT_PLACE, x) for x in DPs]
-        
+        log.debug("Dists %s", Dists)
         # Distance; d_0 ... d_n is the distance from the current place to the place n
         D_mapping = [(ds == dis) for (ds, dis) in zip(Ds, Dists)]
 
@@ -69,6 +83,14 @@ class NicePlaces(dml.Algorithm):
             sum([xs * ds for (xs, ds) in zip(Xs, Ds)]) > MIN_DIST,
             sum([xs * ds for (xs, ds) in zip(Xs, Ds)]) <= MAX_DIST
             ]
+
+        R_const = [
+            (sum([xs*rs for (xs, rs) in zip(Xs, Rs)]) / N) >= AVG_RATE
+        ]
+
+        V_const = [
+            (sum([xs*vs for (xs, vs) in zip(Xs, Vs)]) / N) <= AVG_RATE
+        ]
 
         solver = z3.Solver()
 
@@ -93,7 +115,30 @@ class NicePlaces(dml.Algorithm):
     
     @staticmethod
     def provenance(doc=prov.model.ProvDocument(), startTime=None, endTime=None):
-        return None
+        # Set up the database connection.
+        client = dml.pymongo.MongoClient()
+        repo = client.repo
+        repo.authenticate('kzhang21_ryuc_zui_sarms', 'kzhang21_ryuc_zui_sarms')
+        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')  # The scripts are in <folder>#<filename> format.
+        doc.add_namespace('dat', 'http://datamechanics.io/data/')  # The data sets are in <user>#<collection> format.
+        doc.add_namespace('ont', 'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
+        doc.add_namespace('log', 'http://datamechanics.io/log/')  # The event log.
+        
+        this_script = doc.agent('alg:kzhang21_ryuc_zui_sarms#NicePlaces', {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
+        resource = doc.entity('dat:kzhang21_ryuc_zui_sarms#yelp_business',{'prov:label': 'Yelp Businesses', prov.model.PROV_TYPE: 'ont:DataSet', 'ont:Extension': 'json'})
+        get_places = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(get_places, this_script)
+        doc.usage(get_places, resource, startTime, None, {prov.model.PROV_TYPE: 'ont:Computation'})
+
+        places = doc.entity('dat:kzhang21_ryuc_zui_sarms#places',
+            {prov.model.PROV_LABEL:'Nice Yelp Places', prov.model.PROV_TYPE:'ont:DataSet '})
+        doc.wasAttributedTo(places, this_script)
+        doc.wasGeneratedBy(places, get_places, endTime)
+        doc.wasDerivedFrom(places, resource, get_places, get_places, get_places)
+
+        repo.logout()
+        
+        return doc
 
 def dist(a, b):
     lat_a, lgn_a = a
