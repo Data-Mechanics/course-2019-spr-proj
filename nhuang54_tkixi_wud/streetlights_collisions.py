@@ -16,7 +16,7 @@ from opencage.geocoder import OpenCageGeocode
 class streetlights_collisions(dml.Algorithm):
     contributor = 'nhuang54_tkixi_wud'
     reads = ['nhuang54_tkixi_wud.boston_streetlights','nhuang54_tkixi_wud.boston_collisions']
-    writes = ['nhuang54_tkixi_wud.trafficlight_collisions']
+    writes = ['nhuang54_tkixi_wud.streetlight_collisions']
 
 
     @staticmethod

@@ -8,8 +8,6 @@ import pandas as pd
 from pprint import pprint
 
 """
-Finds average point (lat, long) for each street in each district where crimes existed.
-This is for finding the "middle" of the street - used in findCrimeStats.
 
 """
 
@@ -48,14 +46,14 @@ class pairwiseCorrelation(dml.Algorithm):
         corr = pd.DataFrame(data.corr()) # Compute pairwise correlation of columns
         pprint(corr)
 
-        repo.dropCollection("correlations")
-        repo.createCollection("correlations")
+        repo.dropCollection("correlation")
+        repo.createCollection("correlation")
 
         r = {'field1': 'streetlight', 'field2': 'collisions', 'value': corr['streetlight']['collisions']}
         pprint(r)
-        repo['nhuang54_tkixi_wud.correlations'].insert(r)
-        repo['nhuang54_tkixi_wud.correlations'].metadata({'complete':True})
-        print(repo['nhuang54_tkixi_wud.correlations'].metadata())
+        repo['nhuang54_tkixi_wud.correlation'].insert(r)
+        repo['nhuang54_tkixi_wud.correlation'].metadata({'complete':True})
+        print(repo['nhuang54_tkixi_wud.correlation'].metadata())
 
 
         repo.logout()

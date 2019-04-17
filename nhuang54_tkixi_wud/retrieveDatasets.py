@@ -10,7 +10,7 @@ import json
 class retrieveDatasets(dml.Algorithm):
     contributor = 'nhuang54_tkixi_wud'
     reads = []
-    writes = ['nhuang54_tkixi_wud.boston_collisions', 'nhuang54_tkixi_wud.boston_bikes', 'nhuang54_tkixi_wud.traffic_lights', 'nhuang54_tkixi_wud.boston_hubway, nhuang54_tkixi_wud.boston_streetlights']
+    writes = ['nhuang54_tkixi_wud.boston_collisions', 'nhuang54_tkixi_wud.boston_bikes', 'nhuang54_tkixi_wud.boston_streetlights']
 
     @staticmethod
     def execute(trial = False):
@@ -40,33 +40,6 @@ class retrieveDatasets(dml.Algorithm):
         print(repo['nhuang54_tkixi_wud.boston_bikes'].metadata())
         print()
 
-        # Dataset #2: Boston Hubway Stations 
-        print("Inserting Dataset #2: Boston Hubway Stations")
-        url = 'http://datamechanics.io/data/tkixi/hubway.json'
-        response = urllib.request.urlopen(url).read().decode("utf-8")
-        r = json.loads(response)
-        s = json.dumps(r, sort_keys=True, indent=2)
-        repo.dropCollection("nhuang54_tkixi_wud.boston_hubway")
-        repo.createCollection("nhuang54_tkixi_wud.boston_hubway")
-
-        repo['nhuang54_tkixi_wud.boston_hubway'].insert_many(r)
-        print("Done Inserting Dataset #2: Boston Hubway Stations")
-        repo['nhuang54_tkixi_wud.boston_hubway'].metadata({'complete':True})
-        print(repo['nhuang54_tkixi_wud.boston_hubway'].metadata())
-        print()
-
-        #Dataset #3: Boston Traffic Signals Locations
-        print("Inserting Dataset #3: Boston Traffic Signals Locations")
-        url = 'http://bostonopendata-boston.opendata.arcgis.com/datasets/eee77dc4ab3d479f83b2100542285727_12.csv'
-        data = pd.read_csv(url)
-        repo.dropCollection("nhuang54_tkixi_wud.traffic_lights")
-        repo.createCollection("nhuang54_tkixi_wud.traffic_lights")
-
-        repo['nhuang54_tkixi_wud.traffic_lights'].insert_many(data.to_dict('records'))
-        print("Done Inserting Dataset #3: Boston Traffic Signals Locations")
-        repo['nhuang54_tkixi_wud.traffic_lights'].metadata({'complete':True})
-        print(repo['nhuang54_tkixi_wud.traffic_lights'].metadata())
-        print()
 
         #Dataset #4: Boston Vision Zero Crash Records
         print("Inserting Dataset #4: Boston Collisions")
@@ -99,6 +72,7 @@ class retrieveDatasets(dml.Algorithm):
         repo.logout()
 
         endTime = datetime.datetime.now()
+        print("done with data retrieval")
 
         return {"start":startTime, "end":endTime}
     
@@ -211,7 +185,7 @@ class retrieveDatasets(dml.Algorithm):
 
 # This is example code you might use for debugging this module.
 # Please remove all top-level function calls before submitting.
-retrieveDatasets.execute()
+# retrieveDatasets.execute()
 # doc = example.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))
