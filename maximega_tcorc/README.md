@@ -28,11 +28,17 @@ Problem to Solve:
 
 
 K-Means:
+
+
   We are using k-means on latitude, longitude, and income of each neighborhood to determine the zones for the fare changes. To be able to run k-means with these variables, we first had to scale them all into numbers in the range between 0-1 using the MinMaxScaler. After running k-means on this scaled data, we plotted the error as a function of k to see which value of k minimized the error. Then, we plotted the neighborhoods by their original un-scaled latitude and longitude points, color-coded with their respective zones. Using latitude and longitude in addition to income for k-means gives a better grouping for the zones instead of basing it solely off of income. 
 
 
 Constraint Satisfaction:
+
+
   We then created a set of constraints to find the new fares for each of the zones. We utilized a z3-solver to help find a solution to our constraint satisfaction problem. The first constraint we set was that the sum of each of the k fares when multiplied by the number of riders per each zone must equal the real overall revenue for the normal $2.75 fare rides. We then made sure that there was a balance in revenue between the zones by creating a constraint in which the new fares can not create a zone that accounts for more than 30% of daily MTA revenue. Similarly we put the opposite constraint to ensure that no zone accounts for less than 5% of daily revenue. Another constraint we set was that no fare can be greater than 1.25 times any other fare. We then ensured that zone 1 was the zone with the lowest average income, …, and zone k would be the zone with the highest average income. The last constraint we made was that (fare zone 1 < fare zone 2, …, fare zone k-1 < fare zone k). For further information on the constraint satisfaction please see the commented code. 
 
 Statistical Analysis:
+
+
   For statistical analysis, we computed the correlation coefficient and p-value between the average income and the corresponding percent of the population of that neighborhood using the subway. We found that they were negatively correlated, seeing as our p value was greater than the coefficient. Therefore, as the average income increases, the percent of people using subway decreases. To find out whether or not this was significant, we computed the absolute value of the coefficient and compared it to our p-value. Seeing as our p-value was lower than that absolute value, our coefficient was significant. 
