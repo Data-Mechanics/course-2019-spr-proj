@@ -50,6 +50,8 @@ class uber_kmean(dml.Algorithm):
         data = pd.DataFrame(json_data)
         data = data[(data['latitude']>42) & (data['longitude']>-80) ]
         df = pd.DataFrame(columns=['x', 'y', 'k'])
+        if trial:
+            data = data.head(20)
         def kmean(input):
             def rep(x):
                 for each in MP:

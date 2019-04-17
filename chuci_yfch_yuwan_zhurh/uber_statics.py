@@ -49,13 +49,19 @@ class uber_statics(dml.Algorithm):
         def p(x, y):
             c0 = corr(x, y)
             corrs = []
-            for k in range(0, 2000):
+            if trial:
+                up = 5
+            else:
+                up = 2000
+            for k in range(0, up):
                 y_permuted = permute(y)
                 corrs.append(corr(x, y_permuted))
             return len([c for c in corrs if abs(c) >= abs(c0)]) / len(corrs)
         json_data = list(repo['chuci_yfch_yuwan_zhurh.uber_loc'].find())
         data = pd.DataFrame(json_data)
         data = data[(data['latitude'] > 42) & (data['longitude'] > -80)]
+        if trial:
+            data = data.head(50)
         data['distance'] = data.apply(find_dist, axis=1)
         x = list(data['distance'])
         y = list(data['Mean Travel Time (Seconds)'])
@@ -79,6 +85,10 @@ class uber_statics(dml.Algorithm):
         json_data_gov = list(repo['chuci_yfch_yuwan_zhurh.gov'].find())
         data_gov = pd.DataFrame(json_data_gov)
         data_gov = data_gov[data_gov['winner']]
+
+        if trial:
+            data_unemploy = data_unemploy.head(50)
+            data_gov = data_gov.head(50)
 
         after_merge = data_gov.merge(data_unemploy, right_on='City', left_on='reportingunitname')
 
