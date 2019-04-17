@@ -58,7 +58,7 @@ class mbta_stops(dml.Algorithm):
                    }
                   )
 
-        mbta_stops = doc.entity('dat:kzhang21_ryuc_zui_sarms#mbta_stops', {prov.model.PROV_LABEL: 'MBTA Stops', prov.model.PROV_TYPE: 'ont:DataSet'})
+        mbta_stops = doc.entity('dat:kzhang21_ryuc_zui_sarms#mbta', {prov.model.PROV_LABEL: 'MBTA Stops', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(mbta_stops, this_script)
         doc.wasGeneratedBy(mbta_stops, get_stops, endTime)
         doc.wasDerivedFrom(mbta_stops, resource, get_stops, get_stops, get_stops)
