@@ -87,7 +87,6 @@ class analysis(dml.Algorithm):
         return doc
                            
 
-analysis.execute()
 
 
 

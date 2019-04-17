@@ -107,7 +107,3 @@ class totalSchool(dml.Algorithm):
         return doc
 
 
-totalSchool.execute()
-
-
-

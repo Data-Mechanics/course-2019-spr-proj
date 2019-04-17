@@ -105,10 +105,3 @@ class propertyAssessment(dml.Algorithm):
         repo.logout()
 
         return doc
-
-propertyAssessment.execute()
-doc = propertyAssessment.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
-
-## eof

@@ -92,8 +92,3 @@ class privateSchool(dml.Algorithm):
         repo.logout()
 
         return doc
-
-privateSchool.execute()
-doc = privateSchool.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))

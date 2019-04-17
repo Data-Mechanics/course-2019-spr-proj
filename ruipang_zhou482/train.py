@@ -5,7 +5,8 @@ import prov.model
 import datetime
 import uuid
 import numpy as np
-import os
+import os 
+import random
 from sklearn.linear_model import LinearRegression
 def aggregate(R, f):
 	keys = {r[0] for r in R}
@@ -66,15 +67,24 @@ class train(dml.Algorithm):
 				row["hospital"] = 0
 			row["propertyAssessment"] = propertyAssessment[zipcode]
 			data[zipcode] = row
-
+		if trial == True:
+			print("Train.py running in trial mode")
+			toDelete = []
+			for key in data:
+				r = random.random()
+				if r < 0.5:
+					toDelete.append(key)
+			for key in toDelete:
+				data.pop(key)
 		X = []
 		y = []
 		for zipcode in data:
 			X.append([data[zipcode]["publicSchool"], data[zipcode]["privateSchool"], data[zipcode]["police"], data[zipcode]["hospital"]])
 			y.append(data[zipcode]["propertyAssessment"])
-		print(X, y)
 		reg = LinearRegression().fit(X, y)
-		print(reg.coef_)
+		f = open("ruipang_zhou482/out.txt", "a")
+		f.write("Linear Regression Coefficient:" + str(reg.coef_[0]) + " " + str(reg.coef_[1]) + " " + str(reg.coef_[2]) + " " + str(reg.coef_[3]) + "\n")
+		f.write("Linear Regression Intercept:" + str(reg.intercept_) + "\n")
 			
 
 		
@@ -113,5 +123,3 @@ class train(dml.Algorithm):
 		repo.logout()
 
 		return doc
-
-train.execute()
