@@ -106,10 +106,10 @@ class optimize(dml.Algorithm):
             if len(distance_kmeans) > 0:
                 dist_output = kmeans(distance_kmeans, 5)[0].tolist()
                 repo[optimize.contributor + ".KMeans"].insert_one(
-                    {"Neighborhood": name, "type": "distance", "means": dist_output})
+                    {"Neighborhood": name, "metric": "distance", "means": dist_output})
                 health_output = kmeans(health_score_kmeans, 5)[0].tolist()
                 repo[optimize.contributor + ".KMeans"].insert_one(
-                    {"Neighborhood": name, "type": "health", "means": health_output})
+                    {"Neighborhood": name, "metric": "health", "means": health_output})
 
         repo[optimize.contributor + ".KMeans"].metadata({'complete': True})
 
