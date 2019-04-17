@@ -51,31 +51,43 @@ We supplement a dataset of car crash spots and visualize it on google map, we wi
 ### Optimization Problem
 
 Problem:
-    We have the dataset of all car-crashing spots in revere city. After using google map to visualize these spots, we found that the car-crashing spots are distributed everywhere in this city. However, we still found several spots in the car accidents heat map where car accidents are most likely to happen, some spots like traffic circle.
-    We believe that there are still other spots which we can not discover simply by observing the heat map of car
-    accidents.So we decided to build up a model about this problem, using the Optimization Techniques to solve
-    this problem.
+We have the dataset of all car-crashing spots in revere city. After using google map to visualize these spots, we found that the car-crashing spots are distributed everywhere in this city. However, we still found several spots in the car accidents heat map where car accidents are most likely to happen, some spots like traffic circle.
+We believe that there are still other spots which we can not discover simply by observing the heat map of car
+accidents.So we decided to build up a model about this problem, using the Optimization Techniques to solve
+this problem.
+
+ 
 
 The problem is about:
-    Find n spots in revere city where car accidents are most likely to happen. In this problem, n is a variable
-    you can choose yourself.
+Find n spots in revere city where car accidents are most likely to happen. In this problem, n is a variable
+you can choose yourself.
+
+ 
 
 Solution:
     We abstract this real world problem to a mathematical model. To simplify the problem, we divide the map
     into grid map and calculate the car accidents happened in each grid. Then we use a slide window to
     go throw the grids and find the grid where car accidents are most likely to happen. For example n=5, then
     we have C1,C2,C3,C4,C5 for 5 positions of the slide window.  
-    
-    System states S = {grid in this grid map}^n  
-    
-    then the constraints are:
-    1, the grid map is 100*100
-    2, the slide window slides inside the region, the stride is 1 and the window size is 3, it should also be
-    a square window.
-    3, Ci and Cj can not overlap each other, which means if the slide window overlaps, we only keep the bigger one.  
-    
-    the metric is:
-    1, C = C1 +C2 + ... + C5, we need to find a state in S which maximize C 
+
+ 
+ 
+System states S = {grid in this grid map}^n  
+
+
+
+then the constraints are:
+1, the grid map is 100*100
+2, the slide window slides inside the region, the stride is 1 and the window size is 3, it should also be
+a square window.
+3, Ci and Cj can not overlap each other, which means if the slide window overlaps, we only keep the bigger one.  
+
+
+
+the metric is:
+1, C = C1 +C2 + ... + C5, we need to find a state in S which maximize C 
+
+
 
 Running Example:
     {'left-up': (42.43524010097626, -71.02176294730468), 'right-up': (42.43524010097626, -71.01961702927072), 'right-bottom': (42.43691010921584, -71.01961702927072), 'left-bottom': (42.43691010921584, 42.43524010097626)}
