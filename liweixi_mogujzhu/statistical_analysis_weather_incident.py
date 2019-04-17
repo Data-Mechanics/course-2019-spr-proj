@@ -42,11 +42,13 @@ class statistical_analysis_weather_incident(dml.Algorithm):
         # if trial mode, use half of the data for analysis
         if trial:
             data = data[:data.shape[0]//2]
+        insert_data = []
         # TMAX and fire incident
         for feature in ["TMAX", "TAVG", "TMIN", "AWND", "PRCP", "SNOW"]:
             result = scipy.stats.pearsonr(data[feature], data['NINCIDENT'])
             print("Correlation coefficient between",feature,"and number of incident", result[0])
             print("P-value between",feature,"and number of incident", result[1])
+            insert_data.append([feature,result[0],result[1]])
 
         # Create the training data and target
         data2_name = 'liweixi_mogujzhu.prediction_weather_incident'
@@ -56,10 +58,13 @@ class statistical_analysis_weather_incident(dml.Algorithm):
         result = scipy.stats.pearsonr(x, y)
         print("Correlation coefficient between model predict and true value", result[0])
         print("P-value between model predict and true value", result[1])
+        insert_data.append(["MODEL_PRED", result[0], result[1]])
+        insert_data = pd.DataFrame(insert_data,columns=["FEATURE","CORR","PVALUE"])
+        print(insert_data)
         # insert result into mongoDB
-        # repo['liweixi_mogujzhu.statistical_analysis_weather_incident'].insert_many(insert_data.to_dict('records'))
-        # repo['liweixi_mogujzhu.statistical_analysis_weather_incident'].metadata({'complete': True})
-        # print(repo['liweixi_mogujzhu.statistical_analysis_weather_incident'].metadata())
+        repo['liweixi_mogujzhu.statistical_analysis_weather_incident'].insert_many(insert_data.to_dict('records'))
+        repo['liweixi_mogujzhu.statistical_analysis_weather_incident'].metadata({'complete': True})
+        print(repo['liweixi_mogujzhu.statistical_analysis_weather_incident'].metadata())
         repo.logout()
         endTime = datetime.datetime.now()
         return {"start": startTime, "end": endTime}
