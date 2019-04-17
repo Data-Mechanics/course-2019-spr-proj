@@ -9,6 +9,8 @@ import pymongo
 from bson.objectid import ObjectId
 import mapdata as md
 import csv
+from random import shuffle
+from math import sqrt
 
 class example(dml.Algorithm):
     contributor = 'ido_jconstan_jeansolo_suitcase'
@@ -405,6 +407,14 @@ class example(dml.Algorithm):
             for i in range(len(POINTS_NEW[x])):
                 POINTSC.append(POINTS_NEW[x][i])
 
+            M = MEANS
+            P = POINTSC
+            MPD = [(m, p, dist(m,p)) for (m, p) in product(M, P)]
+            PDs = [(p, dist(m,p)) for (m, p, d) in MPD]
+            PD = aggregate(PDs, min)
+            MP = [(m, p) for ((m,p,d), (p2,d2)) in product(MPD, PD) if p==p2 and d==d2]
+            avg(MP)
+
             
             with open(strFileName, mode='w') as csv_file:
                 fieldnames = ['new_stop']
@@ -666,6 +676,32 @@ def isClose(MEANS, OLD):
         if not res or not res2:
             return False
     return True
+
+def permute(x):
+    shuffled = [xi for xi in x]
+    shuffle(shuffled)
+    return shuffled
+
+def avg(x): # Average
+    return sum(x)/len(x)
+
+def stddev(x): # Standard deviation.
+    m = avg(x)
+    return sqrt(sum([(xi-m)**2 for xi in x])/len(x))
+
+def cov(x, y): # Covariance.
+    return sum([(xi-avg(x))*(yi-avg(y)) for (xi,yi) in zip(x,y)])/len(x)
+
+def corr(x, y): # Correlation coefficient.
+    if stddev(x)*stddev(y) != 0:
+        return cov(x, y)/(stddev(x)*stddev(y))
+
+def p(x, y):
+    c0 = corr(x, y)
+    corrs = []
+    for k in range(0, 2000):
+        y_permuted = permute(y)
+        corrs.append(corr(x, y_permuted))
             
 '''
 # This is example code you might use for debugging this module.
