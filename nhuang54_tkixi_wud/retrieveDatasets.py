@@ -113,7 +113,7 @@ class retrieveDatasets(dml.Algorithm):
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('tkixi', 'tkixi')
+        repo.authenticate('nhuang54_tkixi_wud', 'nhuang54_tkixi_wud')
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/') # The scripts are in <folder>#<filename> format.
         doc.add_namespace('dat', 'http://datamechanics.io/data/') # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
@@ -121,7 +121,7 @@ class retrieveDatasets(dml.Algorithm):
         doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/') #boston data portal
 
         # Dataset #1: Boston Bike Network System
-        this_script = doc.agent('alg:tkixi#retrieveDatasets', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        this_script = doc.agent('alg:nhuang54_tkixi_wud#retrieveDatasets', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
         resource = doc.entity('bdp:boston-existing-bike-network', {'prov:label':'Existing Bike Network', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
         get_bikeNetwork = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(get_bikeNetwork, this_script)
@@ -131,7 +131,7 @@ class retrieveDatasets(dml.Algorithm):
                   }
                   )
 
-        bikeNetwork = doc.entity('dat:tkixi#bikeNetwork', {prov.model.PROV_LABEL:'Existing Bike Network', prov.model.PROV_TYPE:'ont:DataSet'})
+        bikeNetwork = doc.entity('dat:nhuang54_tkixi_wud#bikeNetwork', {prov.model.PROV_LABEL:'Existing Bike Network', prov.model.PROV_TYPE:'ont:DataSet'})
         doc.wasAttributedTo(bikeNetwork, this_script)
         doc.wasGeneratedBy(bikeNetwork, get_bikeNetwork, endTime)
         doc.wasDerivedFrom(bikeNetwork, resource, get_bikeNetwork, get_bikeNetwork, get_bikeNetwork)
@@ -148,13 +148,13 @@ class retrieveDatasets(dml.Algorithm):
                   }
                   )
 
-        hubwayStation = doc.entity('dat:tkixi#hubwayStation', {prov.model.PROV_LABEL:'Hubway Stations', prov.model.PROV_TYPE:'ont:DataSet'})
+        hubwayStation = doc.entity('dat:nhuang54_tkixi_wud#hubwayStation', {prov.model.PROV_LABEL:'Hubway Stations', prov.model.PROV_TYPE:'ont:DataSet'})
         doc.wasAttributedTo(hubwayStation, this_script)
         doc.wasGeneratedBy(hubwayStation, get_hubwayStation, endTime)
         doc.wasDerivedFrom(hubwayStation, resource, get_hubwayStation, get_hubwayStation, get_hubwayStation)
 
         # Dataset #5: Boston Street Light Locations
-        this_script = doc.agent('alg:tkixi#retrieveDatasets', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        this_script = doc.agent('alg:nhuang54_tkixi_wud#retrieveDatasets', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
         resource = doc.entity('bdp:boston-weather', {'prov:label':'Boston Weather', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
         get_bostonWeather = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(get_bostonWeather, this_script)
@@ -164,13 +164,13 @@ class retrieveDatasets(dml.Algorithm):
                   }
                   )
 
-        bostonWeather = doc.entity('dat:tkixi#bostonWeather', {prov.model.PROV_LABEL:'Boston Weather', prov.model.PROV_TYPE:'ont:DataSet'})
+        bostonWeather = doc.entity('dat:nhuang54_tkixi_wud#bostonWeather', {prov.model.PROV_LABEL:'Boston Weather', prov.model.PROV_TYPE:'ont:DataSet'})
         doc.wasAttributedTo(bostonWeather, this_script)
         doc.wasGeneratedBy(bostonWeather, get_bostonWeather, endTime)
         doc.wasDerivedFrom(bostonWeather, resource, get_bostonWeather, get_bostonWeather, get_bostonWeather)
 
         # Dataset #4: Boston Traffic Signals Locations
-        this_script = doc.agent('alg:tkixi#retrieveDatasets', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        this_script = doc.agent('alg:nhuang54_tkixi_wud#retrieveDatasets', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
         resource = doc.entity('bdp:boston-traffic-signal-locations', {'prov:label':'Traffic Signals Locations', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'csv'})
         get_trafficSignals = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(get_trafficSignals, this_script)
@@ -180,7 +180,7 @@ class retrieveDatasets(dml.Algorithm):
                   }
                   )
 
-        trafficSignals = doc.entity('dat:tkixi#trafficSignals', {prov.model.PROV_LABEL:'Traffic Signals Locations', prov.model.PROV_TYPE:'ont:DataSet'})
+        trafficSignals = doc.entity('dat:nhuang54_tkixi_wud#trafficSignals', {prov.model.PROV_LABEL:'Traffic Signals Locations', prov.model.PROV_TYPE:'ont:DataSet'})
         doc.wasAttributedTo(trafficSignals, this_script)
         doc.wasGeneratedBy(trafficSignals, get_trafficSignals, endTime)
         doc.wasDerivedFrom(trafficSignals, resource, get_trafficSignals, get_trafficSignals, get_trafficSignals)
@@ -211,7 +211,7 @@ class retrieveDatasets(dml.Algorithm):
 
 # This is example code you might use for debugging this module.
 # Please remove all top-level function calls before submitting.
-# retrieveDatasets.execute()
+retrieveDatasets.execute()
 # doc = example.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))

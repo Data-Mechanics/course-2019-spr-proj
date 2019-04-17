@@ -205,7 +205,7 @@ class streetlights_collisions(dml.Algorithm):
         
         return doc
 
-# streetlights_collisions.execute()
+streetlights_collisions.execute()
 # doc = transformation2.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))
