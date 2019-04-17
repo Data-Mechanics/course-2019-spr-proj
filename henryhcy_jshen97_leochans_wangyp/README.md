@@ -33,7 +33,7 @@ The project is divided into two tasks:
 
         3. Using **statistical analysis** to test our hypothesis.
 
-           
+            
 
            1. Related script: **find_Distance**
 
@@ -53,13 +53,13 @@ The project is divided into two tasks:
 
            3. For further analsis, we plot the following histograms. It is interesting that there are around 16 pairs of CVS and Walgreen right next to each other which is consistent with our intuition.   It is reasonable to believe that density of CVS and Walgreen stores is proportional with the density of population. Hopefully, we can have further investigation about the location selction in next part of the project. 
 
-               ![](Screen Shot 2019-04-17 at 12.18.21 AM.png)
+               ![](cvs_cvs.png)
 
-               ![](Screen Shot 2019-04-17 at 12.18.25 AM.png)
+               ![](cvs_walgreen.png)
 
-               ![](Screen Shot 2019-04-17 at 12.18.30 AM.png)
+               ![](walgreen_walgreen.png)
 
-               ![](Screen Shot 2019-04-17 at 12.18.33 AM.png)
+               ![](walgreen_cvs.png)
 
                
 
