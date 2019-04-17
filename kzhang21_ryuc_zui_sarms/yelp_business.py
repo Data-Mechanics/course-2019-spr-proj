@@ -6,18 +6,14 @@ import prov.model
 import datetime
 import uuid
 import pandas as pd
+import random
 
-import argparse
 import json
 import requests
-import sys
-import os
-
-from urllib.error import HTTPError
 from urllib.parse import quote
 
 log = logging.getLogger(__name__)
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 AUTH = json.loads(open("auth.json").read())
 
@@ -33,7 +29,7 @@ SEARCH_LIMIT = 1
 
 class yelp_business(dml.Algorithm):
     contributor = 'kzhang21_ryuc_zui_sarms'
-    reads = ['kzhang21_ryuc_zui_sarms.food_violations']
+    reads = ['kzhang21_ryuc_zui_sarms.food_inspections']
     writes = ['kzhang21_ryuc_zui_sarms.yelp_business']
 
     @staticmethod
@@ -55,39 +51,22 @@ class yelp_business(dml.Algorithm):
                      '02117', '02123', '02137', '02196', '02205', '02283', '02284', '02298', '02201', '02204', '02206',
                      '02211', '02212', '02217', '02241', '02266', '02293', '02297']
 
-        food_violations = repo['kzhang21_ryuc_zui_sarms.food_violations']
-        df_violations = pd.DataFrame(list(food_violations.find()))
+        food_inspections = repo['kzhang21_ryuc_zui_sarms.food_inspections']
+        df_inspections = pd.DataFrame(list(food_inspections.find()))
 
 
         ## for each entry in violation get data
-        print('HERE: lets get this business')
-        # for index, row in df_violations.iterrows():
-        #
-        #     term = row["businessname"]
-        #     location =  row["address"] + ', ' + row["city"] + ', ' + row["state"] + ', ' + row["zip"]
-        #
-        #
-        #     try:
-        #         result = query_api(input_values.term, input_values.location)
-        #         if result["location"]["zip_code"] in zip_codes:
-        #             print(row["businessname"])
-        #             result["violation_rate"] = row["violationRate"]
-        #             repo['kzhang21_ryuc_zui_sarms.yelp_business'].insert(result)
-        #     except HTTPError as error:
-        #         sys.exit(
-        #             'Encountered HTTP error {0} on {1}:\n {2}\nAbort program.'.format(
-        #                 error.code,
-        #                 error.url,
-        #                 error.read(),
-        #             )
-        #         )
-        #
-        # repo['kzhang21_ryuc_zui_sarms.yelp_business'].metadata({'complete':True})
-        #
-        # print(repo['kzhang21_ryuc_zui_sarms.yelp_business'].metadata())
-        #
-        # repo.logout()
-        #
+        for index, row in df_inspections.iterrows():
+            term = row["businessname"]
+            location = row["address"] + ', Boston, MA'
+            result = query_api(term, location)
+
+            if result != [] and result is not None:
+                result = result[0]
+                if str(result["location"]["zip_code"]) in zip_codes:
+                    result['license_number'] = row["licenseno"]
+                    log.info('Adding: %s', result['name'])
+                    repo['kzhang21_ryuc_zui_sarms.yelp_business'].insert(result)
 
         log.debug("Finishing %s", __name__)
 
@@ -145,11 +124,10 @@ def search(api_key, term, location):
     return request(API_HOST, SEARCH_PATH, api_key, url_params=url_params)
 
 def query_api(term, location):
+
     response = search(API_KEY, term, location)
-
     businesses = response.get('businesses')
-
-    return businesses[0]
+    return businesses
 
 
 
