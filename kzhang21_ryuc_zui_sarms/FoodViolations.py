@@ -101,11 +101,10 @@ class FoodViolations(dml.Algorithm):
                           'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         # The event log.
         doc.add_namespace('log', 'http://datamechanics.io/log/')
-        doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
 
-        this_script = doc.agent('alg:alice_bob#FoodViolations',
+        this_script = doc.agent('alg:kzhang21_ryuc_zui_sarms#FoodViolations',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
-        resource = doc.entity('dat:zui_sarms#FoodInspection',
+        resource = doc.entity('dat:kzhang21_ryuc_zui_sarms#FoodInspection',
                               {prov.model.PROV_LABEL: 'Food Inspections', prov.model.PROV_TYPE: 'ont:DataSet'})
         get_fv = doc.activity(
             'log:uuid' + str(uuid.uuid4()), startTime, endTime)
@@ -113,11 +112,11 @@ class FoodViolations(dml.Algorithm):
         doc.usage(get_fv, resource, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:Computation'}
                   )
-        fv = doc.entity('dat:kzhang21_ryuc_zui_sarms#FoodViolations',
-                        {prov.model.PROV_LABEL: 'Food Establishment Violations', prov.model.PROV_TYPE: 'ont:DataSet'})
-        doc.wasAttributedTo(fv, this_script)
-        doc.wasGeneratedBy(fv, get_fv, endTime)
-        doc.wasDerivedFrom(fv, resource, get_fv, get_fv, get_fv)
+        fi = doc.entity('dat:kzhang21_ryuc_zui_sarms#FoodInspection',
+                        {prov.model.PROV_LABEL: 'Food Inspections', prov.model.PROV_TYPE: 'ont:DataSet'})
+        doc.wasAttributedTo(fi, this_script)
+        doc.wasGeneratedBy(fi, get_fv, endTime)
+        doc.wasDerivedFrom(fi, resource, get_fv, get_fv, get_fv)
 
         return doc
 
