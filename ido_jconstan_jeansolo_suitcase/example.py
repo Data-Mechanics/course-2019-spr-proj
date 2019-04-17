@@ -7,6 +7,7 @@ import uuid
 import pymongo
 from bson.objectid import ObjectId
 import mapdata as md
+import csv
 
 class example(dml.Algorithm):
     contributor = 'ido_jconstan_jeansolo_suitcase'
@@ -215,16 +216,23 @@ class example(dml.Algorithm):
         POINTS_OG.append(tBES)
         POINTS_OG.append(tBHES)
         
-        # Convert to lang/long for k-means        
-        POINTS_NEW = POINTS_OG      
-        for i in range(len(POINTS_OG)):
-            for j in range(5):
-                print("point ", i, " ", j)
-                f = json.loads(json.dumps(md.toLatLong(POINTS_OG[i][j])))
-                #indexed to 0, but there is only a 0th element. it shouldn't be an array but go ogle made a decision
-                lat = f[0]['geometry']['location']['lat']
-                lng = f[0]['geometry']['location']['lng']
-                POINTS_NEW[i][j] = (lat,lng)
+        with open('HomesLatLng.csv', mode='w') as csv_file:
+            fieldnames = ['lat', 'long']
+            writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+
+            writer.writeheader()            
+
+            # Convert to lang/long for k-means        
+            POINTS_NEW = POINTS_OG      
+            for i in range(len(POINTS_OG)):
+                for j in range(5):
+                    print("point ", i, " ", j)
+                    f = json.loads(json.dumps(md.toLatLong(POINTS_OG[i][j])))
+                    #indexed to 0, but there is only a 0th element. it shouldn't be an array but go ogle made a decision
+                    lat = f[0]['geometry']['location']['lat']
+                    lng = f[0]['geometry']['location']['lng']
+                    POINTS_NEW[i][j] = tuple([lat,lng])
+                    writer.writerow({'lat': lat, 'long': lng})
                 
         
         #the stops are the means for k-means - converted to sets and back to remove duplicates
@@ -251,35 +259,43 @@ class example(dml.Algorithm):
                 #indexed to 0, but there is only a 0th element. it shouldn't be an array but go ogle made a decision
                 lat = f[0]['geometry']['location']['lat']
                 lng = f[0]['geometry']['location']['lng']
-                STOPS_NEW[i][j] = (lat,lng)
+                STOPS_NEW[i][j] = tuple([lat,lng])
         
         #implementation of k-means, with md.time as the distance function
         #todo: set a departure time in md.time
 
+        testLen = 5
         #done for every school separately
         for x in range(len(STOPS_OG)):
-            MEANS = STOPS_OG[x]
-            print("MEANS[0]: ", MEANS[0])
-            POINTSC = POINTS_OG[x]
+            MEANS = []
+            POINTSC = []
             OLD = []
+
+            for i in range(testLen):
+                MEANS.append(STOPS_NEW[x][i])
+                POINTSC.append(POINTS_NEW[x][i])
             
             while OLD != MEANS:
                 OLD = MEANS
 #(3,4), (3,8)
                 MPD = [(m, p, md.walk_time_url(m,p)) for (m, p) in product(MEANS, POINTSC)]
                 PDs = [(p, md.walk_time_url(m,p)) for (m, p, d) in MPD]
+                print("PDs: ", PDs)
+
                 PD = aggregate(PDs, min)
                 MP = [(m, p) for ((m,p,d), (p2,d2)) in product(MPD, PD) if p==p2 and d==d2]
                 MT = aggregate(MP, plus)
+                print("MT: ", MT)
                 
                 M1 = [(m, 1) for (m, _) in MP]
                 MC = aggregate(M1, sum)
-                
+                print("MC: ", MC)
+
                 MEANS = [scale(t,c) for ((m,t),(m2,c)) in product(MT, MC) if m == m2]
                 
                 #reverse geocode
                 
-                print(sorted(MEANS))
+                print("sorted(MEANS): ", sorted(MEANS))
         
         
         repo.logout()

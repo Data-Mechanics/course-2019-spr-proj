@@ -28,12 +28,17 @@ def walk_time(home_addr, work_addr):
     return commute_time
 
 def walk_time_url(home_addr, work_addr): 
-    url ='https://maps.googleapis.com/maps/api/distancematrix/json?'
+    url ='https://maps.googleapis.com/maps/api/distancematrix/json?mode=walking'
     x1, y1 = home_addr
     x2, y2 = work_addr
-    r = requests.get(url + 'origins = ' + x1 + "|" + y1 +
-        '&destinations = ' + x2 + "|" + y2 +
-        '&key = ' + my_key) 
+
+    urlString = url + '&origins=' + str(x1) + "," + str(y1) + '&destinations=' + str(x2) + "," + str(y2) + '&key=' + my_key
+
+    r = requests.get(urlString) 
+    res = r.json()
+    res = res['rows'][0]['elements'][0]['duration']['value']
+    return res
+    
                      
 
 
