@@ -29,8 +29,10 @@ def walk_time(home_addr, work_addr):
 
 def walk_time_url(home_addr, work_addr): 
     url ='https://maps.googleapis.com/maps/api/distancematrix/json?'
-    r = requests.get(url + 'origins = ' + home_addr +
-        '&destinations = ' + work_addr +
+    x1, y1 = home_addr
+    x2, y2 = work_addr
+    r = requests.get(url + 'origins = ' + x1 + "|" + y1 +
+        '&destinations = ' + x2 + "|" + y2 +
         '&key = ' + my_key) 
                      
 
