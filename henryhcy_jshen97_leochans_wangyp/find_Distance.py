@@ -9,6 +9,7 @@ from urllib.request import urlopen
 import math
 from geopy.distance import geodesic
 
+
 '''
 This scripe is going to read two collections, for every cvs store, we are going to find
 the closest walgreen and 7/11 store and calculate the distance. And save it into the data base
@@ -35,6 +36,10 @@ def product(R, S):
 def aggregate(R, f):
     keys = {r[0] for r in R}
     return [(key, f([v for (k,_,v) in R if k == key])) for key in keys]
+
+
+
+
 
 class find_Distance(dml.Algorithm):
     contributor = 'henryhcy_jshen97_leochans_wangyp'
@@ -141,16 +146,47 @@ class find_Distance(dml.Algorithm):
         waltocvs_stdv = math.sqrt(sum([(xi-waltocvs_mean)**2 for xi in waltocvs])/len(waltocvs))
         waltowal_stdv = math.sqrt(sum([(xi-waltowal_mean)**2 for xi in waltowal])/len(waltowal))
 
-        #print(sum([1 for x in cvstocvs if x == 0]))
-     
-        #print(sum([1 for x in cvstowal if x == 0]))
+        corr_cvs = sum([(xi-cvstocvs_mean)*(yi-cvstowal_mean) for (xi,yi) in zip(cvstocvs,cvstowal)])/len(cvstocvs)
+        corr_wal = sum([(xi-waltocvs_mean)*(yi-waltowal_mean) for (xi,yi) in zip(waltocvs,waltowal)])/len(waltocvs)
 
+        repo.dropCollection('wal_wal_cvs')
+        repo.dropCollection('cvs_wal_cvs')
         repo.createCollection('wal_wal_cvs')
         repo.createCollection('cvs_wal_cvs')
         repo['henryhcy_jshen97_leochans_wangyp.wal_wal_cvs'].insert(walRel)
         repo['henryhcy_jshen97_leochans_wangyp.wal_wal_cvs'].metadata({'complete': True})
         repo['henryhcy_jshen97_leochans_wangyp.cvs_wal_cvs'].insert(cvsRel)
         repo['henryhcy_jshen97_leochans_wangyp.cvs_wal_cvs'].metadata({'complete': True})
+
+        '''     
+        print statistical results for analysis
+        
+        print('cvs', corr_cvs)
+        print('wal', corr_wal)
+        
+
+        print('cvstocvs_mean',cvstocvs_mean)
+        print('cvstowal_mean',cvstowal_mean)
+        print('waltocvs_mean',waltocvs_mean)
+        print('waltowal_mean',waltowal_mean)
+
+        print('cvstocvs_stdv',cvstocvs_stdv )
+        print('cvstowal_stdv',cvstowal_stdv)
+        print('waltocvs_stdv',waltocvs_stdv)
+        print('waltowal_stdv',waltowal_stdv)
+
+        print(cvstocvs)
+        print(cvstowal)
+        print(waltocvs)
+        print(waltowal)
+
+        #print(sum([1 for x in cvstocvs if x == 0]))
+     
+        #print(sum([1 for x in cvstowal if x == 0]))
+        
+        '''
+
+        
         
 
         repo.logout()
@@ -158,56 +194,45 @@ class find_Distance(dml.Algorithm):
         end_time = datetime.datetime.now()
 
         return {"start": startTime, "end": end_time}
+    
     @staticmethod
-    def provenance(doc=prov.model.ProvDocument(), startTime=None, endTime=None):
-        '''Create the provenance document describing everything happening
-            in this script. Each run of the script will generate a new
-            document describing that invocation event.'''
-        # Set up the database connection.
+    def provenance(doc=prov.model.ProvDocument(), start_time=None, end_time=None):
+        '''
+        Create the provenance document describing everything happening
+        in this script. Each run of the script will generate a new
+        document describing that invocation event.
+        '''
+
         client = dml.pymongo.MongoClient()
         repo = client.repo
-
         repo.authenticate('henryhcy_jshen97_leochans_wangyp', 'henryhcy_jshen97_leochans_wangyp')
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')  # The scripts are in <folder>#<filename> format.
         doc.add_namespace('dat', 'http://datamechanics.io/data/')  # The data sets are in <user>#<collection> format.
-        doc.add_namespace('ont',
-                          'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
+        doc.add_namespace('ont', 'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/')  # The event log.
-        doc.add_namespace('bdp', 'https://data.boston.gov/export/767/71c/')
 
-        this_script = doc.agent('alg:henryhcy_jshen97_leochans_wangyp#find_Distance',
+        this_script = doc.agent('alg:henryhcy_jshen97_leochans_wangyp#find_distance',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
+        resource_cvs = doc.entity('dat:cvs', {'prov:label': 'CVS Boston', prov.model.PROV_TYPE: 'ont:DataSet'})
+        resource_wal = doc.entity('dat:wal', {'prov:label': 'Walgreen Boston', prov.model.PROV_TYPE: 'ont:DataSet'})
+        run1 = doc.activity('log:uuid' + str(uuid.uuid4()), start_time, end_time)
+        run2 = doc.activity('log:uuid' + str(uuid.uuid4()), start_time, end_time)
 
+        doc.wasAssociatedWith(run1, this_script)
+        doc.usage(run1, resource_cvs, start_time, None, {prov.model.PROV_TYPE: 'ont:Computation'})
 
-        resource1 = doc.entity('dat:henryhcy_jshen97_leochans_wangyp#cvs',
-                               {'prov:label': 'cvs', prov.model.PROV_TYPE: 'ont:DataSet'})
-        resource2 = doc.entity('dat:henryhcy_jshen97_leochans_wangyp#walgreen',
-                               {'prov:label': 'walgreen', prov.model.PROV_TYPE: 'ont:DataSet'})
+        doc.wasAssociatedWith(run2, this_script)
+        doc.usage(run2, resource_wal, start_time, None, {prov.model.PROV_TYPE: 'ont:Computation'})
 
-        this_run = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+        cvs_wal_cvs = doc.entity('dat:henryhcy_jshen97_leochans_wangyp#cvs_wal_cvs', {prov.model.PROV_LABEL: 'find closest cvs and walgreen for each cvs', prov.model.PROV_TYPE: 'ont:DataSet'})
+        doc.wasAttributedTo(cvs_wal_cvs, this_script)
+        doc.wasGeneratedBy(cvs_wal_cvs, run1, end_time)
+        doc.wasDerivedFrom(cvs_wal_cvs, resource_cvs, run1, run1, run1)
 
-        output1 = doc.entity('dat:henryhcy_jshen97_leochans_wangyp#wal_wal&cvs',
-                            {prov.model.PROV_LABEL: 'cvs_wal&cvs', prov.model.PROV_TYPE: 'ont:DataSet'})
-        output2 = doc.entity('dat:henryhcy_jshen97_leochans_wangyp#wal_wal&cvs',
-                            {prov.model.PROV_LABEL: 'wal_wal&cvs', prov.model.PROV_TYPE: 'ont:DataSet'})
-
-        # get_lost = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
-        #
-        doc.wasAssociatedWith(this_run, this_script)
-        doc.used(this_run, resource1, startTime)
-        doc.used(this_run, resource2, startTime)
-
-
-        doc.wasAttributedTo(output1, this_script)
-        doc.wasAttributedTo(output2, this_script)
-
-        doc.wasGeneratedBy(output1, this_run, endTime)
-        doc.wasGeneratedBy(output2, this_run, endTime)
-        doc.wasDerivedFrom(output1, resource1, this_run, this_run, this_run)
-        doc.wasDerivedFrom(output1, resource2, this_run, this_run, this_run)
-        doc.wasDerivedFrom(output2, resource1, this_run, this_run, this_run)
-        doc.wasDerivedFrom(output2, resource2, this_run, this_run, this_run)
-
+        wal_wal_cvs = doc.entity('dat:henryhcy_jshen97_leochans_wangyp#wal_wal_cvs', {prov.model.PROV_LABEL: 'Combine Walgreen Eviction', prov.model.PROV_TYPE: 'ont:DataSet'})
+        doc.wasAttributedTo(wal_wal_cvs, this_script)
+        doc.wasGeneratedBy(wal_wal_cvs, run2, end_time)
+        doc.wasDerivedFrom(wal_wal_cvs, resource_wal, run2, run2, run2)
         repo.logout()
 
         return doc

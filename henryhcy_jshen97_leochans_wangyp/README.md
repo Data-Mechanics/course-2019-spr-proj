@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ###cs504 Project 2 Modeling, Optimization, and Statistical Analysis
 
 ####Team Formation
@@ -21,16 +20,66 @@
 - MBTA stops in boston area
     - (http://datamechanics.io/data/MBTA_Stops.json)
 - **File rlated**: DataRetrieval.py
-    
+  
 ####General Description, Procedure, and Narrative
 The project is divided into two tasks:
-- **Task One: Quantify Competition**
-    - Data
-        1. Explore the location selection of CVS and Walgreen
-        2. For each CVS store and Walgreen store, find its closest CVS and Walgreen and record the distance
-        3. Using statistical analysis to explore the competitive relationship between Walgreen and CVS
-    - Optimization problem: If we want to locate n new CVS stores or Walgreen stores, how can we maximize its influence.
-        1. CVS: we want the location of the new CVS stores to minimzie its distance between other Walgreen stores in order to increase its competitiveness against its opponent. Do the same for Walgreen stores
+- **Task One: Quantify Competition Between two major pharmacy brands CVS and Walgreen in Boston area **
+
+    - **Question**: As two of the biggest pharmacy brands, CVS and Walgreen have their stores all around Boston area. We find it interesting that some CVS and Walgreen stores are next to each other. Thus, we make the following hyphothesis: for both CVS and Walgreen, they are trying to locate their stores closer to their competitor than their own stores in order to increase their brand influence and maximize their scope of service. Then we do the following steps to test our hypothesis.
+
+        1. For each CVS stores in boston area, we find the closest Walgreen and CVS stores and record their distances.
+
+        2. Apply step 1. for every Walgreen stores in our dataset. 
+
+        3. Using **statistical analysis** to test our hypothesis.
+
+           
+
+           1. Related script: **find_Distance**
+
+              | CVS (miles)        | Distance to closest Walgreen | Distance to closest CVS |
+              | ------------------ | ---------------------------- | ----------------------- |
+              | Mean               | 1.32                         | 1.06                    |
+              | Standard Deviation | 1.40                         | 0.66                    |
+              | Correlation        | 0.35                         | 0.35                    |
+
+              | Walgreen (miles)   | Distance to closest Walgreen | Distance to closest CVS |
+              | ------------------ | ---------------------------- | ----------------------- |
+              | Mean               | 0.74                         | 0.57                    |
+              | Standard Deviation | 0.70                         | 0.59                    |
+              | Correlation        | 0.23                         | 0.23                    |
+
+           2. From the above statistical results, we can tell that our previous hypothesis about the location selection of CVS and Walgreen that depends on their competitors doesn't hold strongly enough. However, we can say that contrast with cvs, the locations of Walgreen stores are intensive because it has lower mean value and standard deviation. Also, it seems like Walgreen are more likely to locate their stores closer to CVS stores. 
+
+           3. For further analsis, we plot the following histograms. It is interesting that there are around 16 pairs of CVS and Walgreen right next to each other which is consistent with our intuition.   It is reasonable to believe that density of CVS and Walgreen stores is proportional with the density of population. Hopefully, we can have further investigation about the location selction in next part of the project. 
+
+               ![](/Users/yuanpei/Desktop/Screen Shot 2019-04-17 at 12.18.21 AM.png)
+
+               ![](/Users/yuanpei/Desktop/Screen Shot 2019-04-17 at 12.18.25 AM.png)
+
+               ![](/Users/yuanpei/Desktop/Screen Shot 2019-04-17 at 12.18.30 AM.png)
+
+               ![](/Users/yuanpei/Desktop/Screen Shot 2019-04-17 at 12.18.33 AM.png)
+
+               
+
+               
+
+    - **Optimization problem**: If we want to locate N new CVS stores or Walgreen stores, how can we maximize its influence.
+
+        1. Related scripe: **k_mean**
+
+        2. We believe that a brand can maximize its influence by placing a new store as close as possible to it's competetive brand. In tuition, both CVS and Walgreen have the similar service which means none of them have advantages on having special service or selling distinctive products. Customers will select the most convenient(closest) store. If new cvs store is placed close to some Walgreen stores, it is able to attract some nearby customers from Walgreen to increase its brand influence.
+
+        3. For locating new CVS stores, We use k-means algorithm to find k clusters of Walgreen stores. The locations of the clusters are the potential locations for new CVS stores that could increase brand influence. Then we did the same for new Walgreen stores.
+
+        4. The locations of potential new CVS and Walgreen stores are stored in our dataset for future use （new_cvs, new_wa）
+
+        5. Results: 
+
+            ​		3 new CVS locations: [{ "lat" : 42.33149123333333, "lng" : -71.07000355925928 }, { "lat" : 42.36790251666666, "lng" : -71.12384277083335 },{ "lat" : 42.44012102222222, "lng" : -71.03259612222222 }]
+
+            ​		3 new Walgreen locations : [{"lat" : 42.30725281, "lng" : -71.15437599999998 },{ "lat" : 42.36873335, "lng" : -71.02850679999999 }, { "lat" : 42.41221626875, "lng" : -71.16324264375002 }]
 * **Task Two: CVS, Larceny, and Eviction in the Central Boston**
     1. Let's assume and model that the **Stability S** of a store **i** is defined by **S_i = 1/(|E_i||L_i|)** where **|E_i|** and **|L_i|** are the number of eviction cases and the number of larceny cases that are related to store **i**:
     2. Among all type of crimes in the dataset crimes (Simple Assault, Battery, GTA, etc.), we assume that Larceny relates with the convenient store in the most direct way. By obtaining all eviction(**14k**) & larceny(**22k**) cases within **5.5km** of central boston, we successfully clustered all of them against the cvs stores(**18**) within **5km** of central boston.

@@ -114,7 +114,8 @@ class k_mean(dml.Algorithm):
         n = 3
         new_walgreen = algo(n,cvs_lcoation)
         new_cvs = algo(n,wal_location)
-
+        repo.dropCollection('new_walgreen')
+        repo.dropCollection('new_cvs')
         repo.createCollection('new_walgreen')
         repo.createCollection('new_cvs')
         repo['henryhcy_jshen97_leochans_wangyp.new_walgreen'].insert(new_walgreen)
@@ -136,6 +137,7 @@ class k_mean(dml.Algorithm):
         repo = client.repo
 
         repo.authenticate('henryhcy_jshen97_leochans_wangyp', 'henryhcy_jshen97_leochans_wangyp')
+        
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')  # The scripts are in <folder>#<filename> format.
         doc.add_namespace('dat', 'http://datamechanics.io/data/')  # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont',
