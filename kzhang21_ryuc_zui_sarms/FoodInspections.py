@@ -48,7 +48,8 @@ class FoodInspections(dml.Algorithm):
         file_path = os.path.dirname(os.path.realpath(__file__))
         z.extractall(file_path)
 
-        DF = pd.read_csv('tmp77velm71.csv', low_memory=False)
+        #DF = pd.read_csv('tmp77velm71.csv', low_memory=False)
+        (DF,_,_) = pd.read_csv(url, low_memory=False)
 
         log.debug("Fetching CSV from %s", 'tmp77velm71')
 
