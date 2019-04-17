@@ -19,7 +19,9 @@ class example(dml.Algorithm):
               'ido_jconstan_jeansolo_suitcase.zones',
               'ido_jconstan_jeansolo_suitcase.traffic_count',
               'ido_jconstan_jeansolo_suitcase.asap_student_address',
-              'ido_jconstan_jeansolo_suitcase.student_address'
+              'ido_jconstan_jeansolo_suitcase.student_address',
+              'ido_jconstan_jeansolo_suitcase.HomesLatLng',
+              'ido_jconstan_jeansolo_suitcase.StopsLatLng'
               ]
 
     @staticmethod
@@ -108,6 +110,28 @@ class example(dml.Algorithm):
         repo['ido_jconstan_jeansolo_suitcase.student_address'].metadata({'complete':True})
         print(repo['ido_jconstan_jeansolo_suitcase.student_address'].metadata())
 
+        #DATA SET 8 [HomesLatLng]
+        url = 'http://datamechanics.io/data/ido_jconstan_jeansolo_suitcase/HomesLatLng.json'
+        response = urllib.request.urlopen(url).read().decode("utf-8")
+        r = json.loads(response)
+        s = json.dumps(r, sort_keys=True, indent=2)
+        repo.dropCollection("HomesLatLng")
+        repo.createCollection("HomesLatLng")
+        repo['ido_jconstan_jeansolo_suitcase.HomesLatLng'].insert_many(r)
+        repo['ido_jconstan_jeansolo_suitcase.HomesLatLng'].metadata({'complete':True})
+        print(repo['ido_jconstan_jeansolo_suitcase.HomesLatLng'].metadata())
+
+        #DATA SET 9 [StopsLatLng]
+        url = 'http://datamechanics.io/data/ido_jconstan_jeansolo_suitcase/StopsLatLng.json'
+        response = urllib.request.urlopen(url).read().decode("utf-8")
+        r = json.loads(response)
+        s = json.dumps(r, sort_keys=True, indent=2)
+        repo.dropCollection("StopsLatLng")
+        repo.createCollection("StopsLatLng")
+        repo['ido_jconstan_jeansolo_suitcase.StopsLatLng'].insert_many(r)
+        repo['ido_jconstan_jeansolo_suitcase.StopsLatLng'].metadata({'complete':True})
+        print(repo['ido_jconstan_jeansolo_suitcase.StopsLatLng'].metadata())
+
         ################################################################################################
         # Data manipulation 
         ################################################################################################
@@ -154,6 +178,21 @@ class example(dml.Algorithm):
         r7Addy = 'Street Number + Address 1 + Address 2 + Apt'
         r7SchoolName = 'School Name'
         r7 = addressNormalizer(r7Addy, r7)
+
+        # DATA SET 8 [HomesLatLng]
+        # Homes Latitude and Longitude Data
+        # r8 = {'lat', 'long, 'og'}
+        url = 'http://datamechanics.io/data/ido_jconstan_jeansolo_suitcase/HomesLatLng.json'
+        response = urllib.request.urlopen(url).read().decode("utf-8")
+        r8 = json.loads(response)
+
+
+        # DATA SET 9 [StopsLatLng]
+        # Bus Stops Latitude and Longitude
+        # r9 = {'lat', 'long, 'og'}
+        url = 'http://datamechanics.io/data/ido_jconstan_jeansolo_suitcase/StopsLatLng.json'
+        response = urllib.request.urlopen(url).read().decode("utf-8")
+        r9 = json.loads(response)
 
         # ('Address', 'NumChildren') ; number of children at each house 
         t1 = project(r7, lambda t: (t[r7Addy], 1) ) # list of addresses
@@ -424,11 +463,11 @@ class example(dml.Algorithm):
         resource_workZones = doc.entity('dbg2:36fcf981-e414-4891-93ea-f5905cec46fc', {'prov:label':'Work Zones', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
         resource_trafficCount = doc.entity('oda:53cd17c661da464c807dfa6ae0563470_0', {'prov:label':'Traffic Count', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
 
-
         resource_asapStudentAddress = doc.entity('dat:asap_student_address', {'prov:label':'ASAP Student Address', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
         resource_studentAddress = doc.entity('dat:student_address', {'prov:label':'Student Address', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
 
-
+        resource_HomesLatLng = doc.entity('dat:HomesLatLng', {'prov:label':'Homes Latitude and Longitude', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        resource_StopsLatLng = doc.entity('dat:StopsLatLng', {'prov:label':'Stops Latitude and Longitude', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
 
 
         get_registered_students = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
@@ -438,6 +477,8 @@ class example(dml.Algorithm):
         get_traffic_count = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         get_asap_student_address = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         get_student_address = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        get_HomesLatLng = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        get_StopsLatLng = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
 
         doc.wasAssociatedWith(get_registered_students, this_script)
         doc.wasAssociatedWith(get_property_data, this_script)
@@ -447,6 +488,8 @@ class example(dml.Algorithm):
 
         doc.wasAssociatedWith(get_asap_student_address, this_script)
         doc.wasAssociatedWith(get_student_address, this_script)
+        doc.wasAssociatedWith(get_HomesLatLng, this_script)
+        doc.wasAssociatedWith(get_StopsLatLng, this_script)
 
         doc.usage(get_registered_students, resource_registeredStudents, startTime, None,
                   {prov.model.PROV_TYPE:'ont:Retrieval',
@@ -476,7 +519,11 @@ class example(dml.Algorithm):
                   }
                   )
 
-        doc.usage(get_student_address, resource_studentAddress, startTime, None,
+        doc.usage(get_HomesLatLng, resource_HomesLatLng, startTime, None,
+                  {prov.model.PROV_TYPE:'ont:Retrieval',
+                  }
+                  )
+        doc.usage(get_StopsLatLng, resource_StopsLatLng, startTime, None,
                   {prov.model.PROV_TYPE:'ont:Retrieval',
                   }
                   )
@@ -519,6 +566,18 @@ class example(dml.Algorithm):
         doc.wasAttributedTo(student_address, this_script)
         doc.wasGeneratedBy(student_address, get_student_address, endTime)
         doc.wasDerivedFrom(student_address, resource_studentAddress, get_student_address, get_student_address, get_student_address)
+
+
+        Homes_Lat_Lng = doc.entity('dat:ido_jconstan_jeansolo_suitcase#HomesLatLng', {prov.model.PROV_LABEL:'Homes Latitude and Longitude', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(Homes_Lat_Lng, this_script)
+        doc.wasGeneratedBy(student_address, get_HomesLatLng, endTime)
+        doc.wasDerivedFrom(Homes_Lat_Lng, resource_HomesLatLng, get_HomesLatLng, get_HomesLatLng, get_HomesLatLng)
+
+        Stops_Lat_Lng = doc.entity('dat:ido_jconstan_jeansolo_suitcase#StopsLatLng', {prov.model.PROV_LABEL:'Stops Latitude and Longitude', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(Stops_Lat_Lng, this_script)
+        doc.wasGeneratedBy(Stops_Lat_Lng, get_StopsLatLng, endTime)
+        doc.wasDerivedFrom(Stops_Lat_Lng, resource_StopsLatLng, get_Stops_Lat_Lng, get_Stops_Lat_Lng, get_Stops_Lat_Lng)
+
 
         repo.logout()
                   
