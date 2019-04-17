@@ -21,7 +21,7 @@ class prediction_weather_incident(dml.Algorithm):
     writes = ['liweixi_mogujzhu.prediction_weather_incident']
 
     @staticmethod
-    def execute(trial=True):
+    def execute(trial=False):
         '''Retrieve some data sets (not using the API here for the sake of simplicity).'''
         startTime = datetime.datetime.now()
 
@@ -45,15 +45,17 @@ class prediction_weather_incident(dml.Algorithm):
         # Scale the data to range [0,1]
         min_max_scaler = MinMaxScaler()
         x_scaled = numpy.array(min_max_scaler.fit_transform(X.values))
-        y_scaled = numpy.array(min_max_scaler.fit_transform(y.values.reshape(-1,1)))
+        y_scaled_value = numpy.array(min_max_scaler.fit_transform(y.values.reshape(-1,1)))
         kbd = KBinsDiscretizer(n_bins=3,encode='ordinal',strategy='quantile')
-        y_scaled = kbd.fit_transform(y_scaled)
+        y_scaled = kbd.fit_transform(y_scaled_value)
         # Shuffle the data and create the training set and testing set
-        X_shuffled, y_shuffled = shuffle(x_scaled,y_scaled)
+        X_shuffled, y_shuffled, y_shuffled_scaled_value = shuffle(x_scaled,y_scaled, y_scaled_value)
         X_train = X_shuffled[:int(X.shape[0]*0.8)]
         y_train = y_shuffled[:int(X.shape[0]*0.8)].ravel()
+        y_train_value = y_shuffled_scaled_value[:int(X.shape[0]*0.8)].ravel()
         X_test = X_shuffled[int(X.shape[0]*0.8):]
         y_test = y_shuffled[int(X.shape[0]*0.8):].ravel()
+        y_test_value = y_shuffled_scaled_value[int(X.shape[0]*0.8):].ravel()
         # Ser up the classifiers. We use 7 different classifier in this case
         classifiers = [
             linear_model.SGDClassifier(),
@@ -72,17 +74,19 @@ class prediction_weather_incident(dml.Algorithm):
             print("Testing accuracy:",clf.score(X_test,y_test),"Base: 0.33")
 
 
-        insert_data = pd.DataFrame(data['DATE'])
+        insert_data = pd.DataFrame()
         model = svm.SVC(probability=True)
         model.fit(X_train, y_train)
         print("Final Classifer", model)
-        pred = model.predict_proba(x_scaled)
-        print(pred)
-        # pred = pd.DataFrame(pred).replace(0.0, "LOW").replace(1.0,"MID").replace(2.0,"HIGH")
+        pred = model.predict_proba(X_test)
+        pred_label = model.predict(X_test)
+        print("Accuracy",model.score(X_test, y_test))
         insert_data["LOW_PROB"]=pred[:,0]
         insert_data["MID_PROB"]=pred[:,1]
         insert_data["HIGH_PROB"]=pred[:,2]
-        insert_data["TRUELABEL"]=pd.DataFrame(y_scaled.ravel()).replace(0.0, "LOW").replace(1.0,"MID").replace(2.0,"HIGH")
+        insert_data["PRED_LABEL"]=pd.DataFrame(pred_label).replace(0.0, "LOW").replace(1.0,"MID").replace(2.0,"HIGH")
+        insert_data["TRUE_LABEL"]=pd.DataFrame(y_test).replace(0.0, "LOW").replace(1.0,"MID").replace(2.0,"HIGH")
+        insert_data["TRUE_VALUE"]=y_test_value
         print(insert_data)
         repo['liweixi_mogujzhu.prediction_weather_incident'].insert_many(insert_data.to_dict('records'))
         repo['liweixi_mogujzhu.prediction_weather_incident'].metadata({'complete': True})
