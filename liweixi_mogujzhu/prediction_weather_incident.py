@@ -38,8 +38,8 @@ class prediction_weather_incident(dml.Algorithm):
         data['TDIFF'] = data["TMAX"]-data["TMIN"]
         X = data[["TAVG","TDIFF","PRCP","SNOW","AWND"]]
         y = data["LSCORE"].astype(float)
-        print(X)
-        print(y)
+        # print(X)
+        # print(y)
         # Scale the data to range [0,1]
         min_max_scaler = MinMaxScaler()
         x_scaled = numpy.array(min_max_scaler.fit_transform(X.values))
@@ -52,6 +52,7 @@ class prediction_weather_incident(dml.Algorithm):
         y_train = y_shuffled[:int(X.shape[0]*0.8)].ravel()
         X_test = X_shuffled[int(X.shape[0]*0.8):]
         y_test = y_shuffled[int(X.shape[0]*0.8):].ravel()
+        # Ser up the classifiers. We use 7 different classifier in this case
         classifiers = [
             linear_model.SGDClassifier(),
             linear_model.LogisticRegression(),
@@ -67,15 +68,20 @@ class prediction_weather_incident(dml.Algorithm):
             clf.fit(X_train, y_train)
             print("Training accuracy:",clf.score(X_train, y_train),"Base: 0.33")
             print("Testing accuracy:",clf.score(X_test,y_test),"Base: 0.33")
-            print(clf.predict(X_test))
+
 
         insert_data = pd.DataFrame(data['DATE'])
-        model = ensemble.GradientBoostingClassifier()
+        model = svm.SVC(probability=True)
         model.fit(X_train, y_train)
-        pred = model.predict(x_scaled)
-        pred = pd.DataFrame(pred).replace(0.0, "LOW").replace(1.0,"MID").replace(2.0,"HIGH")
+        print("Final Classifer", model)
+        pred = model.predict_proba(x_scaled)
         print(pred)
-        insert_data["PRED"]=pred
+        # pred = pd.DataFrame(pred).replace(0.0, "LOW").replace(1.0,"MID").replace(2.0,"HIGH")
+        insert_data["LOW_PROB"]=pred[:,0]
+        insert_data["MID_PROB"]=pred[:,1]
+        insert_data["HIGH_PROB"]=pred[:,2]
+        insert_data["TRUELABEL"]=pd.DataFrame(y_scaled.ravel()).replace(0.0, "LOW").replace(1.0,"MID").replace(2.0,"HIGH")
+        print(insert_data)
         repo['liweixi_mogujzhu.prediction_weather_incident'].insert_many(insert_data.to_dict('records'))
         repo['liweixi_mogujzhu.prediction_weather_incident'].metadata({'complete': True})
         print(repo['liweixi_mogujzhu.prediction_weather_incident'].metadata())
@@ -140,12 +146,13 @@ class prediction_weather_incident(dml.Algorithm):
 
 
 
-# # This is example code you might use for debugging this module.
-# # Please remove all top-level function calls before submitting.
-prediction_weather_incident.execute()
-# doc = example.provenance()
-# print(doc.get_provn())
-# print(json.dumps(json.loads(doc.serialize()), indent=4))
-#
-#
-# ## eof
+# This is example code you might use for debugging this module.
+# Please remove all top-level function calls before submitting.
+if __name__ == "__main__":
+    prediction_weather_incident.execute()
+    # doc = prediction_weather_incident.provenance()
+    # print(doc.get_provn())
+    # print(json.dumps(json.loads(doc.serialize()), indent=4))
+
+
+## eof
