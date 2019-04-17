@@ -43,24 +43,24 @@ class getZipcodes(dml.Algorithm):
             in this script. Each run of the script will generate a new
             document describing that invocation event.
             '''
-        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/misn15/') # The scripts are in <folder>#<filename> format.
-        doc.add_namespace('dat', 'http://datamechanics.io/data/misn15/') # The data sets are in <user>#<collection> format.
+        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/') # The scripts are in <folder>#<filename> format.
+        doc.add_namespace('dat', 'http://datamechanics.io/data/') # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
-        doc.add_namespace('bdp', 'http://datamechanics.io/data/')
+        doc.add_namespace('bdp', 'https://www.huduser.gov/portal/datasets/')
 
-        this_script = doc.agent('alg:getZipcodes', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        resource = doc.entity('bdp:zip_tracts', {'prov:label':'Boston Zip Codes', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
-        this_run = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(this_run, this_script)
-        doc.usage(this_run, resource, startTime, None,
+        this_script = doc.agent('alg:misn15#getZipcodes', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        resource = doc.entity('bdp:usps_crosswalk', {'prov:label':'Boston Zip Codes', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        get_zips = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(get_zips, this_script)
+        doc.usage(get_zips, resource, startTime, None,
                   {prov.model.PROV_TYPE:'ont:Retrieval'
-                  }
+                   }
                   )
-        resource2 = doc.entity('dat:zipcodes', {prov.model.PROV_LABEL:'Boston Zip Code Data Set', prov.model.PROV_TYPE:'ont:DataSet'})
-        doc.wasAttributedTo(resource2, this_script)
-        doc.wasGeneratedBy(resource2, this_run, endTime)
-        doc.wasDerivedFrom(resource2, resource, this_run, this_run, this_run)
+        zip_codes = doc.entity('dat:misn15#zipcodes', {prov.model.PROV_LABEL:'Boston Zip Code Data Set', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(zip_codes, this_script)
+        doc.wasGeneratedBy(zip_codes, get_zips, endTime)
+        doc.wasDerivedFrom(zip_codes, resource, get_zips, get_zips, get_zips)
                   
         return doc
 

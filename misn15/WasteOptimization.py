@@ -205,42 +205,42 @@ class WasteOptimization(dml.Algorithm):
             in this script. Each run of the script will generate a new
             document describing that invocation event.
             '''
-        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/misn15/') # The scripts are in <folder>#<filename> format.
-        doc.add_namespace('dat', 'http://datamechanics.io/data/misn15/') # The data sets are in <user>#<collection> format.
+        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/') # The scripts are in <folder>#<filename> format.
+        doc.add_namespace('dat', 'http://datamechanics.io/data/') # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
         
-        this_script = doc.agent('alg:WasteOptimization', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        resource = doc.entity('dat:waste_all', {'prov:label':'Boston Waste Sites', prov.model.PROV_TYPE:'ont:DataResource'})
-        resource2 = doc.entity('dat:schools', {'prov:label':'All Schools in Boston', prov.model.PROV_TYPE:'ont:DataResource'})
-        resource3 = doc.entity('dat:openSpace_centroids', {'prov:label': 'Centroids of Open Spaces in Boston', prov.model.PROV_TYPE: 'ont:DataResource'})
-        resource4 = doc.entity('dat:population', {'prov:label': 'Population of Boston FIPS Codes', prov.model.PROV_TYPE: 'ont:DataResource'})
-        this_run = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(this_run, this_script)
+        this_script = doc.agent('alg:misn15#WasteOptimization', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        resource = doc.entity('dat:misn15#waste_all', {'prov:label':'Boston Waste Sites', prov.model.PROV_TYPE:'ont:DataSet'})
+        resource2 = doc.entity('dat:misn15#schools', {'prov:label':'All Schools in Boston', prov.model.PROV_TYPE:'ont:DataSet'})
+        resource3 = doc.entity('dat:misn15#openSpace_centroids', {'prov:label': 'Centroids of Open Spaces in Boston', prov.model.PROV_TYPE: 'ont:DataSet'})
+        resource4 = doc.entity('dat:misn15#population', {'prov:label': 'Population of Boston FIPS Codes', prov.model.PROV_TYPE: 'ont:DataSet'})
+        get_wasteOptimal = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(get_wasteOptimal, this_script)
 
-        doc.usage(this_run, resource, startTime, None,
-                  {prov.model.PROV_TYPE:'ont:Retrieval'
+        doc.usage(get_wasteOptimal, resource, startTime, None,
+                  {prov.model.PROV_TYPE:'ont:Computation'
                    }
                   )
-        doc.usage(this_run, resource2, startTime, None,
-                  {prov.model.PROV_TYPE:'ont:Retrieval'
+        doc.usage(get_wasteOptimal, resource2, startTime, None,
+                  {prov.model.PROV_TYPE:'ont:Computation'
                    }
                   )
-        doc.usage(this_run, resource3, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:Retrieval'
+        doc.usage(get_wasteOptimal, resource3, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:Computation'
                    }
                   )
-        doc.usage(this_run, resource4, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:Retrieval'
+        doc.usage(get_wasteOptimal, resource4, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:Computation'
                    }
                   )
-        resource5 = doc.entity('dat:waste_optimal', {prov.model.PROV_LABEL:'Waste Centroids Ranked using Certain Criteria', prov.model.PROV_TYPE:'ont:DataSet'})
-        doc.wasAttributedTo(resource5, this_script)
-        doc.wasGeneratedBy(resource5, this_run, endTime)
-        doc.wasDerivedFrom(resource5, resource, this_run, this_run, this_run)
-        doc.wasDerivedFrom(resource5, resource2, this_run, this_run, this_run)
-        doc.wasDerivedFrom(resource5, resource3, this_run, this_run, this_run)
-        doc.wasDerivedFrom(resource5, resource4, this_run, this_run, this_run)
+        waste_optimal = doc.entity('dat:misn15#waste_optimal', {prov.model.PROV_LABEL:'Waste Centroids Ranked using Certain Criteria', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(waste_optimal, this_script)
+        doc.wasGeneratedBy(waste_optimal, get_wasteOptimal, endTime)
+        doc.wasDerivedFrom(waste_optimal, resource, get_wasteOptimal, get_wasteOptimal, get_wasteOptimal)
+        doc.wasDerivedFrom(waste_optimal, resource2, get_wasteOptimal, get_wasteOptimal, get_wasteOptimal)
+        doc.wasDerivedFrom(waste_optimal, resource3, get_wasteOptimal, get_wasteOptimal, get_wasteOptimal)
+        doc.wasDerivedFrom(waste_optimal, resource4, get_wasteOptimal, get_wasteOptimal, get_wasteOptimal)
 
         return doc
 

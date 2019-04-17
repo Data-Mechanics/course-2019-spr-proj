@@ -43,26 +43,26 @@ class getHealth(dml.Algorithm):
             in this script. Each run of the script will generate a new
             document describing that invocation event.
             '''
-        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/misn15/') # The scripts are in <folder>#<filename> format.
-        doc.add_namespace('dat', 'http://datamechanics.io/data/misn15/') # The data sets are in <user>#<collection> format.
+        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/') # The scripts are in <folder>#<filename> format.
+        doc.add_namespace('dat', 'http://datamechanics.io/data/') # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
         doc.add_namespace('bdp', 'https://chronicdata.cdc.gov/resource/')
 
-        this_script = doc.agent('alg:getHealth', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        resource = doc.entity('bdp:csmm-fdhi.json?cityname=Boston', {'prov:label':'Boston_health', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
-        this_run = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(this_run, this_script)
-        doc.usage(this_run, resource, startTime, None,
+        this_script = doc.agent('alg:misn15#getHealth', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        resource = doc.entity('bdp:csmm-fdhi', {'prov:label':'Boston_health', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        get_health = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(get_health, this_script)
+        doc.usage(get_health, resource, startTime, None,
                   {prov.model.PROV_TYPE:'ont:Retrieval',
                   'ont:Query':'?cityname=Boston'
-                  }
+                   }
                   )
 
-        resource2 = doc.entity('dat:health', {prov.model.PROV_LABEL:'Boston Health', prov.model.PROV_TYPE:'ont:DataSet'})
-        doc.wasAttributedTo(resource2, this_script)
-        doc.wasGeneratedBy(resource2, this_run, endTime)
-        doc.wasDerivedFrom(resource2, resource, this_run, this_run, this_run)
+        health = doc.entity('dat:misn15#health', {prov.model.PROV_LABEL:'Boston Health', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(health, this_script)
+        doc.wasGeneratedBy(health, get_health, endTime)
+        doc.wasDerivedFrom(health, resource, get_health, get_health, get_health)
                   
         return doc
 

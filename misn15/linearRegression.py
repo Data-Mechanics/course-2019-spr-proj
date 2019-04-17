@@ -140,22 +140,29 @@ class linearRegression(dml.Algorithm):
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
         
         this_script = doc.agent('alg:misn15#linearRegression', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        resource = doc.entity('dat:misn15#crime_health_waste_space', {'prov:label':'Boston Crime, Health, Waste and Open Space Data', prov.model.PROV_TYPE:'ont:DataResource'})
-        this_run = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(this_run, this_script)
-        doc.usage(this_run, resource, startTime, None,
-                  {prov.model.PROV_TYPE:'ont:Retrieval'
-                        }
+        resource = doc.entity('dat:misn15#crime_health_waste_space', {'prov:label':'Boston Crime, Health, Waste and Open Space Data', prov.model.PROV_TYPE:'ont:DataSet'})
+        get_reg = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(get_reg, this_script)
+        doc.usage(get_reg, resource, startTime, None,
+                  {prov.model.PROV_TYPE:'ont:Computation'
+                   }
                   )
-        resource2 = doc.entity('dat:misn15#reg_results', {prov.model.PROV_LABEL:'Linear Regression Results', prov.model.PROV_TYPE:'ont:DataSet'})
-        doc.wasAttributedTo(resource2, this_script)
-        doc.wasGeneratedBy(resource2, this_run, endTime)
-        doc.wasDerivedFrom(resource2, resource, this_run, this_run, this_run)
+        get_logreg = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(get_logreg, this_script)
+        doc.usage(get_logreg, resource, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:Computation'
+                   }
+                  )
 
-        resource3 = doc.entity('dat:misn15#log_results', {prov.model.PROV_LABEL: 'Logistic Regression Results', prov.model.PROV_TYPE: 'ont:DataSet'})
-        doc.wasAttributedTo(resource3, this_script)
-        doc.wasGeneratedBy(resource3, this_run, endTime)
-        doc.wasDerivedFrom(resource3, resource, this_run, this_run, this_run)
+        reg_results = doc.entity('dat:misn15#reg_results', {prov.model.PROV_LABEL:'Linear Regression Results', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(reg_results, this_script)
+        doc.wasGeneratedBy(reg_results, get_reg, endTime)
+        doc.wasDerivedFrom(reg_results, resource, get_reg, get_reg, get_reg)
+
+        log_results = doc.entity('dat:misn15#log_results', {prov.model.PROV_LABEL: 'Logistic Regression Results', prov.model.PROV_TYPE: 'ont:DataSet'})
+        doc.wasAttributedTo(log_results, this_script)
+        doc.wasGeneratedBy(log_results, get_logreg, endTime)
+        doc.wasDerivedFrom(log_results, resource, get_logreg, get_logreg, get_logreg)
 
         return doc
 

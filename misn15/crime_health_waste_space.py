@@ -8,8 +8,8 @@ import requests
 
 class crime_health_waste_space(dml.Algorithm):
     contributor = 'misn15'
-    reads = ['misn15.waste_all', 'misn15.health', 'misn15.crime', 'misn15.income', 'misn15.openSpace_centroids']
-    writes = ['misn15.crime_health_waste_space', 'misn15.health_prob']
+    reads = ['misn15.waste_all', 'misn15.clean_health', 'misn15.crime', 'misn15.income', 'misn15.openSpace_centroids']
+    writes = ['misn15.crime_health_waste_space']
 
     @staticmethod
     def execute(trial = False):
@@ -41,10 +41,10 @@ class crime_health_waste_space(dml.Algorithm):
         crime = list(repo['misn15.crime'].find())
 
         if trial:
-            waste_all = waste_all[0:50]
-            clean_health = clean_health[0:50]
-            open_space = open_space[0:50]
-            crime = crime[0:50]
+            waste_all = waste_all[0:40]
+            clean_health = clean_health[0:40]
+            open_space = open_space[0:40]
+            crime = crime[0:40]
 
         # get crime coordinates and classify them into fips tracts
         crime_fips = []
@@ -110,7 +110,6 @@ class crime_health_waste_space(dml.Algorithm):
         crime_health = crime_health.drop(columns=['tractfips'])
 
         # get total health incidences for all fips tracts
-        total_occur = 0
         health_occur = []
         for x in range(len(crime_health)):
             total_occur = 0
@@ -136,7 +135,6 @@ class crime_health_waste_space(dml.Algorithm):
                      'probability of disease': final_df.iloc[x,-6]}
             repo['misn15.crime_health_waste_space'].insert_one(entry)
 
-
         repo['misn15.crime_health_waste_space'].metadata({'complete':True})
         print(repo['misn15.crime_health_waste_space'].metadata())
 
@@ -153,48 +151,48 @@ class crime_health_waste_space(dml.Algorithm):
             in this script. Each run of the script will generate a new
             document describing that invocation event.
             '''
-        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/misn15/') # The scripts are in <folder>#<filename> format.
-        doc.add_namespace('dat', 'http://datamechanics.io/data/misn15/') # The data sets are in <user>#<collection> format.
+        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/') # The scripts are in <folder>#<filename> format.
+        doc.add_namespace('dat', 'http://datamechanics.io/data/') # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
         
-        this_script = doc.agent('alg:crime_health_waste_space', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        resource = doc.entity('dat:getWasteAll', {'prov:label':'Boston Waste Sites', prov.model.PROV_TYPE:'ont:DataResource'})
-        resource2 = doc.entity('dat:getCrime', {'prov:label':'Boston Crime Data', prov.model.PROV_TYPE:'ont:DataResource'})
-        resource3 = doc.entity('dat:getHealth', {'prov:label': 'Boston Health Data', prov.model.PROV_TYPE: 'ont:DataResource'})
-        resource4 = doc.entity('dat:getIncome', {'prov:label': 'Boston Average Income Data', prov.model.PROV_TYPE: 'ont:DataResource'})
-        resource5 = doc.entity('dat:transformOpenSpace', {'prov:label': 'Boston Open Spaces', prov.model.PROV_TYPE: 'ont:DataResource'})
+        this_script = doc.agent('alg:misn15#crime_health_waste_space', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        resource = doc.entity('dat:misn15#waste_all', {'prov:label':'Boston Waste Sites', prov.model.PROV_TYPE:'ont:DataSet'})
+        resource2 = doc.entity('dat:misn15#crime', {'prov:label':'Boston Crime Data', prov.model.PROV_TYPE:'ont:DataSet'})
+        resource3 = doc.entity('dat:misn15#health', {'prov:label': 'Boston Health Data', prov.model.PROV_TYPE: 'ont:DataSet'})
+        resource4 = doc.entity('dat:misn15#income', {'prov:label': 'Boston Average Income Data', prov.model.PROV_TYPE: 'ont:DataSet'})
+        resource5 = doc.entity('dat:misn15#openSpace_centroids', {'prov:label': 'Boston Open Spaces', prov.model.PROV_TYPE: 'ont:DataSet'})
        
-        this_run = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(this_run, this_script)
-        doc.usage(this_run, resource, startTime, None,
-                  {prov.model.PROV_TYPE:'ont:Retrieval'
+        get_crime_waste_health = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(get_crime_waste_health, this_script)
+        doc.usage(get_crime_waste_health, resource, startTime, None,
+                  {prov.model.PROV_TYPE:'ont:Computation'
                         }
                   )
-        doc.usage(this_run, resource2, startTime, None,
-                  {prov.model.PROV_TYPE:'ont:Retrieval'
+        doc.usage(get_crime_waste_health, resource2, startTime, None,
+                  {prov.model.PROV_TYPE:'ont:Computation'
                         }
                   )
-        doc.usage(this_run, resource3, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:Retrieval'
+        doc.usage(get_crime_waste_health, resource3, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:Computation'
                    }
                   )
-        doc.usage(this_run, resource4, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:Retrieval'
+        doc.usage(get_crime_waste_health, resource4, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:Computation'
                    }
                   )
-        doc.usage(this_run, resource5, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:Retrieval'
+        doc.usage(get_crime_waste_health, resource5, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:Computation'
                    }
                   )
-        resource6 = doc.entity('dat:crime_health_waste_space', {prov.model.PROV_LABEL:'Waste, Health, and Open Spaces Data', prov.model.PROV_TYPE:'ont:DataSet'})
-        doc.wasAttributedTo(resource6, this_script)
-        doc.wasGeneratedBy(resource6, this_run, endTime)
-        doc.wasDerivedFrom(resource6, resource, this_run, this_run, this_run)
-        doc.wasDerivedFrom(resource6, resource2, this_run, this_run, this_run)
-        doc.wasDerivedFrom(resource6, resource3, this_run, this_run, this_run)
-        doc.wasDerivedFrom(resource6, resource4, this_run, this_run, this_run)
-        doc.wasDerivedFrom(resource6, resource5, this_run, this_run, this_run)
+        crime_health_waste_space = doc.entity('dat:misn15#crime_health_waste_space', {prov.model.PROV_LABEL:'Waste, Health, and Open Spaces Data', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(crime_health_waste_space, this_script)
+        doc.wasGeneratedBy(crime_health_waste_space, get_crime_waste_health, endTime)
+        doc.wasDerivedFrom(crime_health_waste_space, resource, get_crime_waste_health, get_crime_waste_health, get_crime_waste_health)
+        doc.wasDerivedFrom(crime_health_waste_space, resource2, get_crime_waste_health, get_crime_waste_health, get_crime_waste_health)
+        doc.wasDerivedFrom(crime_health_waste_space, resource3, get_crime_waste_health, get_crime_waste_health, get_crime_waste_health)
+        doc.wasDerivedFrom(crime_health_waste_space, resource4, get_crime_waste_health, get_crime_waste_health, get_crime_waste_health)
+        doc.wasDerivedFrom(crime_health_waste_space, resource5, get_crime_waste_health, get_crime_waste_health, get_crime_waste_health)
 
         return doc
 

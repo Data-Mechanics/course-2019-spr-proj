@@ -49,24 +49,24 @@ class getIncome(dml.Algorithm):
             in this script. Each run of the script will generate a new
             document describing that invocation event.
             '''
-        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/misn15/') # The scripts are in <folder>#<filename> format.
-        doc.add_namespace('dat', 'http://datamechanics.io/data/misn15/') # The data sets are in <user>#<collection> format.
+        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/') # The scripts are in <folder>#<filename> format.
+        doc.add_namespace('dat', 'http://datamechanics.io/data/') # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
         doc.add_namespace('bdp', 'https://api.census.gov/data/')
 
-        this_script = doc.agent('alg:getIncome', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        this_script = doc.agent('alg:misn15#getIncome', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
         resource = doc.entity('bdp:B06011_001E', {'prov:label':'Income for Each FIPS Code', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
-        this_run = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(this_run, this_script)
-        doc.usage(this_run, resource, startTime, None,
+        get_income = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(get_income, this_script)
+        doc.usage(get_income, resource, startTime, None,
                   {prov.model.PROV_TYPE:'ont:Retrieval'
                    }
                   )
-        resource2 = doc.entity('dat:income', {prov.model.PROV_LABEL:'Boston Income', prov.model.PROV_TYPE:'ont:DataSet'})
-        doc.wasAttributedTo(resource2, this_script)
-        doc.wasGeneratedBy(resource2, this_run, endTime)
-        doc.wasDerivedFrom(resource2, resource, this_run, this_run, this_run)
+        income = doc.entity('dat:misn15#income', {prov.model.PROV_LABEL:'Boston Income', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(income, this_script)
+        doc.wasGeneratedBy(income, get_income, endTime)
+        doc.wasDerivedFrom(income, resource, get_income, get_income, get_income)
                   
         return doc
 

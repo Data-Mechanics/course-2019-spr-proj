@@ -44,24 +44,24 @@ class getOpenSpace(dml.Algorithm):
             in this script. Each run of the script will generate a new
             document describing that invocation event.
             '''
-        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/misn15/') # The scripts are in <folder>#<filename> format.
-        doc.add_namespace('dat', 'http://datamechanics.io/data/misn15/') # The data sets are in <user>#<collection> format.
+        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/') # The scripts are in <folder>#<filename> format.
+        doc.add_namespace('dat', 'http://datamechanics.io/data/') # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
         doc.add_namespace('bdp', 'https://opendata.arcgis.com/datasets/')
 
-        this_script = doc.agent('alg:getOpenSpace', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        this_script = doc.agent('alg:misn15#getOpenSpace', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
         resource = doc.entity('bdp:2868d370c55d4d458d4ae2224ef8cddd_7', {'prov:label':'Boston Geospatial Data for Open Spaces', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'geojson'})
-        this_run = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(this_run, this_script)
-        doc.usage(this_run, resource, startTime, None,
+        get_openSpace = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(get_openSpace, this_script)
+        doc.usage(get_openSpace, resource, startTime, None,
                   {prov.model.PROV_TYPE:'ont:Retrieval'
                    }
                   )
-        resource2 = doc.entity('dat:open_space', {prov.model.PROV_LABEL:'Boston Open Space Data Set', prov.model.PROV_TYPE:'ont:DataSet'})
-        doc.wasAttributedTo(resource2, this_script)
-        doc.wasGeneratedBy(resource2, this_run, endTime)
-        doc.wasDerivedFrom(resource2, resource, this_run, this_run, this_run)
+        open_space = doc.entity('dat:misn15#open_space', {prov.model.PROV_LABEL:'Boston Open Space Data Set', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(open_space, this_script)
+        doc.wasGeneratedBy(open_space, get_openSpace, endTime)
+        doc.wasDerivedFrom(open_space, resource, get_openSpace, get_openSpace, get_openSpace)
                   
         return doc
 

@@ -29,7 +29,7 @@ class cleanHealth(dml.Algorithm):
         health_pd = health_pd[pd.isnull(health_pd['tractfips']) == False]
         health_pd = health_pd[pd.isnull(health_pd['data_value']) == False]
 
-        # get coordinates and append column to dataframe
+        # get coordinates and append column to data frame
         result = []
         for x in range(len(health_pd)):
             result.append(health_pd['geolocation'].iloc[x]['coordinates'])
@@ -82,25 +82,25 @@ class cleanHealth(dml.Algorithm):
             in this script. Each run of the script will generate a new
             document describing that invocation event.
             '''
-        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/misn15/') # The scripts are in <folder>#<filename> format.
-        doc.add_namespace('dat', 'http://datamechanics.io/data/misn15/') # The data sets are in <user>#<collection> format.
+        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/') # The scripts are in <folder>#<filename> format.
+        doc.add_namespace('dat', 'http://datamechanics.io/data/') # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
 
-        this_script = doc.agent('alg:cleanHealth', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        resource = doc.entity('dat:getHealth', {'prov:label':'Health Data', prov.model.PROV_TYPE:'ont:DataResource'})
+        this_script = doc.agent('alg:misn15#cleanHealth', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        resource = doc.entity('dat:misn15#health', {'prov:label':'Health Data', prov.model.PROV_TYPE:'ont:DataSet'})
 
-        health_data_cleaned = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(health_data_cleaned, this_script)
-        doc.usage(health_data_cleaned, resource, startTime, None,
-                  {prov.model.PROV_TYPE:'ont:Retrieval',
+        get_cleanHealth = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(get_cleanHealth, this_script)
+        doc.usage(get_cleanHealth, resource, startTime, None,
+                  {prov.model.PROV_TYPE:'ont:Computation',
                    }
                   )
 
-        clean_health = doc.entity('dat:cleanHealth', {prov.model.PROV_LABEL:'Health Data Cleaned', prov.model.PROV_TYPE:'ont:DataSet'})
+        clean_health = doc.entity('dat:misn15#clean_health', {prov.model.PROV_LABEL:'Health Data Cleaned', prov.model.PROV_TYPE:'ont:DataSet'})
         doc.wasAttributedTo(clean_health, this_script)
-        doc.wasGeneratedBy(clean_health, health_data_cleaned, endTime)
-        doc.wasDerivedFrom(clean_health, resource, health_data_cleaned, health_data_cleaned, health_data_cleaned)
+        doc.wasGeneratedBy(clean_health, get_cleanHealth, endTime)
+        doc.wasDerivedFrom(clean_health, resource, get_cleanHealth, get_cleanHealth, get_cleanHealth)
 
         return doc
 

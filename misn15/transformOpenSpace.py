@@ -62,10 +62,6 @@ class transformOpenSpace(dml.Algorithm):
             entry = {'Name': x[0], 'Coordinates': (x[1], x[2]), 'FIPS': x[3]}
             repo['misn15.openSpace_centroids'].insert_one(entry)
 
-        # for x in open_space_list:
-        #     entry = {'coordinates': x}
-        #     repo['misn15.openSpace_centroids'].insert_one(entry)
-
         repo['misn15.openSpace_centroids'].metadata({'complete':True})
         print(repo['misn15.openSpace_centroids'].metadata())
 
@@ -82,24 +78,24 @@ class transformOpenSpace(dml.Algorithm):
             in this script. Each run of the script will generate a new
             document describing that invocation event.
             '''
-        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/misn15/') # The scripts are in <folder>#<filename> format.
-        doc.add_namespace('dat', 'http://datamechanics.io/data/misn15/') # The data sets are in <user>#<collection> format.
+        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/') # The scripts are in <folder>#<filename> format.
+        doc.add_namespace('dat', 'http://datamechanics.io/data/') # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
 
-        this_script = doc.agent('alg:transformOpenSpace', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        resource = doc.entity('dat:open_space', {'prov:label':'Boston Open Space Sites', prov.model.PROV_TYPE:'ont:DataResource'})
+        this_script = doc.agent('alg:misn15#transformOpenSpace', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        resource = doc.entity('dat:misn15#open_space', {'prov:label':'Boston Open Space Sites', prov.model.PROV_TYPE:'ont:DataSet'})
 
-        this_run = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(this_run, this_script)
-        doc.usage(this_run, resource, startTime, None,
-                  {prov.model.PROV_TYPE:'ont:Retrieval'
-                        }
+        get_openSpace = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(get_openSpace, this_script)
+        doc.usage(get_openSpace, resource, startTime, None,
+                  {prov.model.PROV_TYPE:'ont:Computation'
+                   }
                   )
-        resource2 = doc.entity('dat:openSpace_centroids', {prov.model.PROV_LABEL:'Centroids of Open Spaces', prov.model.PROV_TYPE:'ont:DataSet'})
-        doc.wasAttributedTo(resource2, this_script)
-        doc.wasGeneratedBy(resource2, this_run, endTime)
-        doc.wasDerivedFrom(resource2, resource, this_run, this_run, this_run)
+        openSpace_centroids = doc.entity('dat:misn15#openSpace_centroids', {prov.model.PROV_LABEL:'Centroids of Open Spaces', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(openSpace_centroids, this_script)
+        doc.wasGeneratedBy(openSpace_centroids, get_openSpace, endTime)
+        doc.wasDerivedFrom(openSpace_centroids, resource, get_openSpace, get_openSpace, get_openSpace)
 
         return doc
 
