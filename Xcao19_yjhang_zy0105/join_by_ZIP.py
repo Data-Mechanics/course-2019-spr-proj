@@ -102,9 +102,6 @@ class join_by_ZIP(dml.Algorithm):
             document describing that invocation event.
             '''
         # New
-        client = dml.pymongo.MongoClient()
-        repo = client.repo
-        repo.authenticate('chuci_yfch_yuwan_zhurh', 'chuci_yfch_yuwan_zhurh')
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')  # The scripts are in <folder>#<filename> format.
         doc.add_namespace('dat', 'http://datamechanics.io/data/')  # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
@@ -154,8 +151,6 @@ class join_by_ZIP(dml.Algorithm):
         doc.wasDerivedFrom(property, count_all_by_zip, activity, activity, activity)
         doc.wasAttributedTo(count_all_by_zip, agent)
         doc.wasGeneratedBy(count_all_by_zip, activity, endTime)
-        
-        repo.logout()
 
         return doc
 
