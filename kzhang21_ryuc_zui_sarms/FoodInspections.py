@@ -24,6 +24,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 URL = "https://data.boston.gov/dataset/03693648-2c62-4a2c-a4ec-48de2ee14e18/resource/4582bec6-2b4f-4f9e-bc55-cbaa73117f4c/download/tmp77velm71.csv"
 
+
 class FoodInspections(dml.Algorithm):
     contributor = 'kzhang21_ryuc_zui_sarms'
     reads = []
@@ -49,11 +50,10 @@ class FoodInspections(dml.Algorithm):
         csv_file = io.BytesIO(f)
         log.debug("Extracting file ")
         DF = pd.read_csv(csv_file, low_memory=False)
-        
+
         if trial:
             log.info("In trial mode, only fetch 20k")
             DF = DF.iloc[:20000, :]
-    
 
         # (DF,_,_) = pd.read_csv(url, low_memory=False)
 
@@ -66,7 +66,6 @@ class FoodInspections(dml.Algorithm):
         # Remove the row which has an empty violation date.
         DF = DF.iloc[DF["violdttm"].dropna().index, :].loc[:, selected_columns]
 
-        
         DF["_id"] = DF.index.values
 
         r_dict = DF.to_dict(orient="record")
@@ -78,7 +77,8 @@ class FoodInspections(dml.Algorithm):
 
         log.debug("Finished with the non-squished version of FI")
 
-        squished_columns = ["businessname", "licenseno", "address", "city", "state", "zip", "location"]
+        squished_columns = ["businessname", "licenseno",
+                            "address", "city", "state", "zip", "location"]
 
         DF_S = DF[squished_columns].set_index("licenseno")
         DF_S = DF_S.loc[~DF_S.index.duplicated()]
@@ -89,7 +89,8 @@ class FoodInspections(dml.Algorithm):
         repo.dropCollection("food_inspections_squished")
         repo.createCollection("food_inspections_squished")
 
-        repo['kzhang21_ryuc_zui_sarms.food_inspections_squished'].insert_many(r_dict)
+        repo['kzhang21_ryuc_zui_sarms.food_inspections_squished'].insert_many(
+            r_dict)
 
         log.debug("Finished with the squished version of FI")
         repo.logout()
@@ -104,11 +105,14 @@ class FoodInspections(dml.Algorithm):
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate('kzhang21_ryuc_zui_sarms', 'kzhang21_ryuc_zui_sarms')
-        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')  # The scripts are in <folder>#<filename> format.
-        doc.add_namespace('dat', 'http://datamechanics.io/data/')  # The data sets are in <user>#<collection> format.
+        # The scripts are in <folder>#<filename> format.
+        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')
+        # The data sets are in <user>#<collection> format.
+        doc.add_namespace('dat', 'http://datamechanics.io/data/')
         doc.add_namespace('ont',
                           'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
-        doc.add_namespace('log', 'http://datamechanics.io/log/')  # The event log.
+        # The event log.
+        doc.add_namespace('log', 'http://datamechanics.io/log/')
         doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
 
         this_script = doc.agent('alg:kzhang21_ryuc_zui_sarms#FoodInspection',
@@ -116,7 +120,8 @@ class FoodInspections(dml.Algorithm):
         resource = doc.entity('bdp:4582bec6-2b4f-4f9e-bc55-cbaa73117f4c',
                               {'prov:label': 'Food Establishment Inspections', prov.model.PROV_TYPE: 'ont:DataResource',
                                'ont:Extension': 'csv'})
-        get_fi = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+        get_fi = doc.activity(
+            'log:uuid' + str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(get_fi, this_script)
         doc.usage(get_fi, resource, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:Retrieval',
@@ -132,4 +137,3 @@ class FoodInspections(dml.Algorithm):
         repo.logout()
 
         return doc
-
