@@ -2,6 +2,7 @@ from random import shuffle
 from statistics import *
 import pandas as pd
 import json
+from z3 import *
 
 def avg(x):
     return sum(x)/len(x)
@@ -29,3 +30,19 @@ def json_to_df(json_dict):
     json_str = json.dumps(json_dict)
     df = pd.read_json(json_str)
     return df.sort_index()
+
+def afford(price, population_income):
+    income_multiple = 4.5 # buy home 4.5x income
+    count = 0
+    for i in population_income:
+        count += (If(price <= (i*income_multiple), 1, 0))
+        # count += 1 if price <= i*income_multiple else 0
+    return count/len(population_income)
+
+def afford1(price, population_income):
+    income_multiple = 4.5 # buy home 4.5x income
+    count = 0
+    for i in population_income:
+        # count += (If(price <= (i*income_multiple), 1, 0))
+        count += 1 if price <= i*income_multiple else 0
+    return count/len(population_income)
