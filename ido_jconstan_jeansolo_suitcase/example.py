@@ -257,10 +257,10 @@ class example(dml.Algorithm):
         #todo: set a departure time in md.time
 
         #done for every school separately
-        for x in range(len(STOPS_NEW)):
-            MEANS = STOPS_NEW[x]
+        for x in range(len(STOPS_OG)):
+            MEANS = STOPS_OG[x]
             print("MEANS[0]: ", MEANS[0])
-            POINTSC = POINTS_NEW[x]
+            POINTSC = POINTS_OG[x]
             OLD = []
             
             while OLD != MEANS:
@@ -271,13 +271,15 @@ class example(dml.Algorithm):
                 PD = aggregate(PDs, min)
                 MP = [(m, p) for ((m,p,d), (p2,d2)) in product(MPD, PD) if p==p2 and d==d2]
                 MT = aggregate(MP, plus)
-
+                
                 M1 = [(m, 1) for (m, _) in MP]
                 MC = aggregate(M1, sum)
-
-                #con
+                
                 MEANS = [scale(t,c) for ((m,t),(m2,c)) in product(MT, MC) if m == m2]
-                #con
+                
+                #reverse geocode
+                
+                print(sorted(MEANS))
         
         
         repo.logout()
