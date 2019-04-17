@@ -307,7 +307,7 @@ class example(dml.Algorithm):
                         print("Error! ", "stop ", i, " ", j, ": ", STOPS_NEW[i][j])
                     writer.writerow({'lat': lat, 'lng': lng, 'og': og})
         '''
-        
+        #read the lat/lng from the csv file
         temp = []
         tswitch = False
         with open('StopsLatLng.csv', mode='r') as csv_file:
@@ -321,7 +321,7 @@ class example(dml.Algorithm):
                 elif not tswitch:
                     tswitch = True
 
-
+        #make a new structure, & eliminate elements that are not floats (where the geocode api failed to convert)
         STOPS_NEW = []
         count = 0
         for i in range(len(STOPS_OG)):   
@@ -338,14 +338,14 @@ class example(dml.Algorithm):
         #implementation of k-means, with md.time as the distance function
         #todo: set a departure time in md.time
         #print('\n\nSTOPS NEW: ',STOPS_NEW ,'\n\n')
-        testLen = 5
+        #testLen = 5
         #done for every school separately
         #for x in range(len(STOPS_OG)):
         #STOPS_NEW = 
         #POINTS_NEW = 
         
         print("Before loop")
-        for x in range(len(STOPS_NEW)):
+        for x in range(1,len(STOPS_NEW)):
             print("STOPS_NEW[",x,"]")
             strFileName = 'k_means_school_' + str(x) + '.csv'
             MEANS = []
