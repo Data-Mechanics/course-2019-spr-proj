@@ -57,6 +57,8 @@ class yelp_business(dml.Algorithm):
 
         ## for each entry in violation get data
         ## Once FoodInspections is in trial mode so is yelp_business
+
+        
         for index, row in df_inspections.iterrows():
             term = row["businessname"]
             location = row["address"] + ', Boston, MA'
@@ -75,7 +77,9 @@ class yelp_business(dml.Algorithm):
                         result['violation_rate'] = 0
                     # log.info('Adding: %s', result['name'])
                     repo['kzhang21_ryuc_zui_sarms.yelp_business'].insert_one(result)
-
+            if index >= 50 and trial:
+                break
+                
         log.debug("Finishing %s", __name__)
         
         log.debug("Push data into mongoDB")
