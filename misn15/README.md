@@ -80,5 +80,5 @@ _Justification_: For this project, I wanted to explore the relationship between 
 
 If waste turned out to be a significant factor affecting health, I wanted to calculate areas where waste sites would have minimal impact on people's lives. In order to do that, I used DBSCAN clustering because this library allows me to use the haversine metric which is better for geospatial data. I find waste clusters and then find the distances from these clusters to schools, open spaces, as well as the population of the fips tract that the cluster resides in. Then I rank the clusters based on these factors.
 
-Finally, I find the correlations between health and factors such as waste, open spaces and crimes to see if there is a relationship and how strong that relationship is. I also create a custom metric that gives you a sense of how healthy a certain area is. 
+Finally, I find the correlations between health and factors such as waste, open spaces and crimes to see if there is a relationship and how strong that relationship is. I also create a custom metric that gives you a sense of how healthy a certain area is. I hoped that by doing this conclusion I could determine what sort of external factors affect a person's health and thereby, pinpointing areas where the city could help improve the quality of life for its citizens.
 
