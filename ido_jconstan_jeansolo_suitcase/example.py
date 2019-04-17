@@ -343,48 +343,50 @@ class example(dml.Algorithm):
         #for x in range(len(STOPS_OG)):
         #STOPS_NEW = 
         #POINTS_NEW = 
-     
+        
+        print("Before loop")
         for x in range(len(STOPS_NEW)):
+            print("STOPS_NEW[",x,"]")
+            strFileName = 'k_means_school_' + str(x) + '.csv'
             MEANS = []
             POINTSC = []
             OLD = []
+            
             
             for i in range(len(STOPS_NEW[x])):
                 MEANS.append(STOPS_NEW[x][i])
             for i in range(len(POINTS_NEW[x])):
                 POINTSC.append(POINTS_NEW[x][i])
-            #MEANS = [(2,2), (10,10)]
-            #POINTSC = [(1,1),(3,4),(9,8)]
-            #print("\nMeans: ",MEANS, "\n")
-            #print("len(MEANS", len(MEANS))
-            #print("len(MEANS[0])", len(MEANS[0]))
-            while not isClose(MEANS, sorted(OLD)):
-                #print("\n\n\n\n\n\n")
-                OLD = MEANS
-                #print("MEANS1", MEANS)
-                #MPD = [(m, p, md.walk_time_url(m,p)) for (m, p) in product(MEANS, POINTSC)]
-                #PDs = [(p, md.walk_time_url(m,p)) for (m, p, d) in MPD]
 
-                MPD = [(m, p, dist(m,p)) for (m, p) in product(MEANS, POINTSC)]
-                PDs = [(p, dist(m,p)) for (m, p, d) in MPD]
+            
+            with open(strFileName, mode='w') as csv_file:
+                fieldnames = ['new_stop']
+                writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+                writer.writeheader()
 
-                PD = aggregate(PDs, min)
-                MP = [(m, p) for ((m,p,d), (p2,d2)) in product(MPD, PD) if p==p2 and d==d2]
-                #print("MP: ", MP)
-                MT = aggregate(MP, plus)
-                
-                M1 = [(m, 1) for (m, _) in MP]
-                MC = aggregate(M1, sum)
+                while sorted(OLD) != sorted(MEANS):
+                    print("iteration")
+                    
+                    OLD = MEANS
+                    
+                    MPD = [(m, p, dist(m,p)) for (m, p) in product(MEANS, POINTSC)]
+                    PDs = [(p, d) for (m, p, d) in MPD]
+                    
+                    PD = aggregate(PDs, min)
+                    MP = [(m, p) for ((m,p,d), (p2,d2)) in product(MPD, PD) if p==p2 and d==d2]
+                    
+                    MT = aggregate(MP, plus)
+                    
+                    M1 = [(m, 1) for (m, _) in MP]
+                    MC = aggregate(M1, sum)
+                    
+                    MEANS = [scale(t,c) for ((m,t),(m2,c)) in product(MT, MC) if m == m2]
 
-                MEANS = [scale(t,c) for ((m,t),(m2,c)) in product(MT, MC) if m == m2]
-                #print("MEANS1", MEANS)
-                print("\n old: ", OLD)
-                print("\n means: ", MEANS, "\n")
-                
-                #reverse geocode
-                
-                #print("sorted(MEANS): ", sorted(MEANS))
-            print("\n\nOLD = MEANS WOOHOO\n\n")
+                # write MEANS to file
+                for i in MEANS:
+                    writer.writerow({'new_stop': i})
+
+                print("\n\nOLD = MEANS WOOHOO\n\n")
         
         
         repo.logout()
