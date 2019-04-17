@@ -38,7 +38,7 @@ def aggregate(R, f):
 
 class find_Distance(dml.Algorithm):
     contributor = 'henryhcy_jshen97_leochans_wangyp'
-    reads = ['henryhcy_jshen97_leochans_wangyp.7eleven','henryhcy_jshen97_leochans_wangyp.cvs', 'henryhcy_jshen97_leochans_wangyp.walgreen']
+    reads = ['henryhcy_jshen97_leochans_wangyp.cvs', 'henryhcy_jshen97_leochans_wangyp.walgreen']
     writes = ['henryhcy_jshen97_leochans_wangyp.wal_wal_cvs','henryhcy_jshen97_leochans_wangyp.cvs_wal_cvs']
 
     @staticmethod
@@ -166,6 +166,7 @@ class find_Distance(dml.Algorithm):
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
+
         repo.authenticate('henryhcy_jshen97_leochans_wangyp', 'henryhcy_jshen97_leochans_wangyp')
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')  # The scripts are in <folder>#<filename> format.
         doc.add_namespace('dat', 'http://datamechanics.io/data/')  # The data sets are in <user>#<collection> format.
@@ -211,4 +212,9 @@ class find_Distance(dml.Algorithm):
 
         return doc
 
+'''
 find_Distance.execute()
+doc = find_Distance.provenance()
+print(doc.get_provn())
+print(json.dumps(json.loads(doc.serialize()), indent=4))
+'''

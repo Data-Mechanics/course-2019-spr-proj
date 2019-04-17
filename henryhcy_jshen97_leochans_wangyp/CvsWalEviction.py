@@ -39,27 +39,10 @@ class CvsWalEviction(dml.Algorithm):
 
         # pick those evictions that are within 15 km of Boston and insert = 136
         for document in repo.henryhcy_jshen97_leochans_wangyp.eviction.find():
-<<<<<<< HEAD
-            # R is the approximate radius of the earth in km
-            # @see Haversine formula for latlng distance
-            # All trig function in python use radian
-            R = 6373000.0
-
-            lat_bos = 42.361145
-            lng_bos = -71.057083
-
-            lat = document['latitude']
-            lng = document['longitude']
-
-            dlon = lng_bos - lng
-            dlat = lat_bos - lat
-            a = sin(dlat / 2) ** 2 + cos(lat) * cos(lat_bos) * sin(dlon / 2) ** 2
-            c = 2 * atan2(sqrt(a), sqrt(1 - a))
-=======
             lat_evi = document['latitude']
             lng_evi = document['longitude']
             coord_evi = (lat_evi, lng_evi)
->>>>>>> 875098f17be0cae8e35f81bbd0804366d2bce7d1
+
 
             distance = geopy.distance.distance(coord_bos, coord_evi)
             if (distance < 5.5):
@@ -74,7 +57,7 @@ class CvsWalEviction(dml.Algorithm):
 
         # insert cvs within 5 km of boston
         for item in repo.henryhcy_jshen97_leochans_wangyp.cvs.find():
-<<<<<<< HEAD
+
             
             d = {
                 'name': 'CVS',
@@ -84,7 +67,7 @@ class CvsWalEviction(dml.Algorithm):
                 'rating_count': item['user_ratings_total'] if 'user_ratings_total' in item.keys() else None
             }
             repo['henryhcy_jshen97_leochans_wangyp.cvsEviction'].insert_one(d)
-=======
+
             lat_cvs = item['geometry']['location']['lat']
             lng_cvs = item['geometry']['location']['lng']
             coord_cvs = (lat_cvs, lng_cvs)
@@ -99,7 +82,6 @@ class CvsWalEviction(dml.Algorithm):
                     'rating_count': item['user_ratings_total'] if 'user_ratings_total' in item.keys() else None
                 }
                 repo['henryhcy_jshen97_leochans_wangyp.cvsEviction'].insert_one(d)
->>>>>>> 875098f17be0cae8e35f81bbd0804366d2bce7d1
 
         repo['henryhcy_jshen97_leochans_wangyp.cvsEviction'].metadata({'complete': True})
         print(repo['henryhcy_jshen97_leochans_wangyp.cvsEviction'].metadata())
