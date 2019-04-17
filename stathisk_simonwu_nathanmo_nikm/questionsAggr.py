@@ -84,8 +84,9 @@ class questionsAggr(dml.Algorithm):
         final = koalas.DataFrame(data=project(aggregate(combined, multipleAverages), unzipper),
                                  columns=['Locality', 'Yes', 'No', 'Blanks', 'Total Votes Cast'])
         print(final)
-        repo['avgAnswers'].insert_many(json.loads(final.to_json(orient='records')))
-        repo['avgAnswers'].metadata({'complete': True})
+        repo['stathisk_simonwu_nathanmo_nikm.avgAnswers'].drop()
+        repo['stathisk_simonwu_nathanmo_nikmavg.Answers'].insert_many(json.loads(final.to_json(orient='records')))
+        repo['stathisk_simonwu_nathanmo_nikm.avgAnswers'].metadata({'complete': True})
 
     @staticmethod
     def provenance(doc=prov.model.ProvDocument(), startTime=None, endTime=None):

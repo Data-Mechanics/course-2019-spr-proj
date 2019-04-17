@@ -159,12 +159,16 @@ class questionsMajorityResult(dml.Algorithm):
             combined = aggregate(union(combined, res), sum)
 
         weightedC = koalas.DataFrame(data=project(combined2, average), columns=['Locality', 'Result'])
-        repo['weighted'].insert_many(json.loads(weightedC.to_json(orient='records')))
-        repo['weighted'].metadata({'complete': True})
+        repo['stathisk_simonwu_nathanmo_nikm.weighted'].drop()
+        repo['stathisk_simonwu_nathanmo_nikm.weighted'].insert_many(json.loads(weightedC.to_json(orient='records')))
+        repo['stathisk_simonwu_nathanmo_nikm.weighted'].metadata({'complete': True})
+
 
         majorityC = koalas.DataFrame(data=project(combined, average), columns=['Locality', 'Result'])
-        repo['majority'].insert_many(json.loads(majorityC.to_json(orient='records')))
-        repo['majority'].metadata({'complete': True})
+        print(majorityC)
+        repo['stathisk_simonwu_nathanmo_nikm.majority'].drop()
+        repo['stathisk_simonwu_nathanmo_nikm.majority'].insert_many(json.loads(majorityC.to_json(orient='records')))
+        repo['stathisk_simonwu_nathanmo_nikm.majority'].metadata({'complete': True})
 
     @staticmethod
     def provenance(doc=prov.model.ProvDocument(), startTime=None, endTime=None):
@@ -222,7 +226,7 @@ class questionsMajorityResult(dml.Algorithm):
         return doc
 
 
-# questionsMajorityResult.execute()
+questionsMajorityResult.execute()
 # doc = questionsMajorityResult.provenance()
 # doc.serialize()
 # print(doc.get_provn())

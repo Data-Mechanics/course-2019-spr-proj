@@ -56,6 +56,7 @@ class questionsAllYears(dml.Algorithm):
             # Add each question to its corresponding collection
             df = koalas.read_csv(urls[i][0])
             collection = 'stathisk_simonwu_nathanmo_nikm.' + question
+            repo[collection].drop()
             repo[collection].insert_many(json.loads(df.to_json(orient='records')))
             repo[collection].metadata({'complete': True})
 
@@ -89,12 +90,7 @@ class questionsAllYears(dml.Algorithm):
         resource = doc.entity('dat:links',
                               {'prov:label': 'ballot questions links ', prov.model.PROV_TYPE: 'ont:DataResource',
                                'ont:Extension': 'json'})
-        resources = []
-        for i in range(0, 25):
-            resources.append(doc.entity('dat:question ' + str(i),
-                                        {'prov:label': 'ballot question ' + str(i),
-                                         prov.model.PROV_TYPE: 'ont:DataResource',
-                                         'ont:Extension': 'json'}))
+
         # -----------------------------------------
 
         for i in range(0, 25):
