@@ -35,18 +35,18 @@ class yelp_longLat(dml.Algorithm):
         repo.authenticate('kzhang21_ryuc_zui_sarms', 'kzhang21_ryuc_zui_sarms')
 
         violationData = pd.DataFrame(repo.kzhang21_ryuc_zui_sarms.food_violations.find({"location": float("nan")}))
+    
         
         for index,row in violationData.iterrows():
             if pd.isnull(row['location']) or row['location'] is None:
                 address = row['address'] + ", " + row['city'] + ", " + row['state']
                 address =' '.join(address.split())
-                print(geocoding(address))
+                #print(geocoding(address))
                 addr, lat, lgn = geocoding(address)
                 row["location"] = (lat, lgn)
                 row["address"] = addr
 
                 repo.kzhang21_ryuc_zui_sarms.food_violations.replace_one({"_id": row["_id"]}, row.to_dict(), upsert=True)
-
 
         
         log.debug("Push data into mongoDB")
@@ -122,7 +122,7 @@ def geocoding(address):
         log.error("Error in Geocoding %s", address)
         return (address, -1, -1)
 
-# viola_longLat.execute()
-# doc = viola_longLat.provenance()
+# yelp_longLat.execute()
+# doc = yelp_longLat.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))
