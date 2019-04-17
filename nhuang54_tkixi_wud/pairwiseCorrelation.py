@@ -37,9 +37,6 @@ class pairwiseCorrelation(dml.Algorithm):
             data = data[:20]
             
         data = pd.DataFrame(data) # constructs DataFrame with data
-        # print('printing')
-        # pprint(data)
-        # print('done')
 
         corr = pd.DataFrame(data.corr()) # Compute pairwise correlation of columns
         pprint(corr)
@@ -76,40 +73,28 @@ class pairwiseCorrelation(dml.Algorithm):
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
 
-        
-        # Agent, entity, activity
         this_script = doc.agent('alg:nhuang54_tkixi_wud#pairwiseCorrelation', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
         
-        # Resource = crimesData
-        resource1 = doc.entity('dat:ferrys#streetlights', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
-        # Resource = crimesData
-        resource2 = doc.entity('dat:nhuang54_tkixi_wud#sortedNeighborhoods', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        resource2 = doc.entity('dat:nhuang54_tkixi_wud#streetlights', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
 
-        #Activity
-        find_correlation = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(find_correlation, this_script)
+        getCorrelation = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(getCorrelation, this_script)
 
-        doc.usage(find_correlation, resource1, startTime, None,
-                  {prov.model.PROV_TYPE:'ont:Calculation',
-                  'ont:Query':''
-                  }
-                  )
-        doc.usage(find_correlation, resource2, startTime, None,
+        doc.usage(getCorrelation, resource1, startTime, None,
                   {prov.model.PROV_TYPE:'ont:Calculation',
                   'ont:Query':''
                   }
                   )
 
 
-        corr = doc.entity('dat:nhuang54_tkixi_wud#coorelation', {prov.model.PROV_LABEL:'Correlation between streetlights and crimes', prov.model.PROV_TYPE:'ont:DataSet'})
-        doc.wasAttributedTo(corr, this_script)
-        doc.wasGeneratedBy(corr, find_correlation, endTime)
-        doc.wasDerivedFrom(corr, resource1, resource2, find_correlation, find_correlation)
+        bikestreetlight_correlation = doc.entity('dat:nhuang54_tkixi_wud#bikestreetlight_correlation', {prov.model.PROV_LABEL:'Correlation of number of bike incidents and street lights present', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(bikestreetlight_correlation, this_script)
+        doc.wasGeneratedBy(bikestreetlight_correlation, getCorrelation, endTime)
+        doc.wasDerivedFrom(bikestreetlight_correlation, resource1, resource2, getCorrelation, getCorrelation)
 
         repo.logout()
                   
         return doc
 if __name__ == '__main__':
     pairwiseCorrelation.execute(trial=True)
-# pairwiseCorrelation.execute()
 

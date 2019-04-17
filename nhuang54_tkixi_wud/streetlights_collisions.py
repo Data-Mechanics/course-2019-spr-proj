@@ -192,7 +192,7 @@ class streetlights_collisions(dml.Algorithm):
                   }
                   )
 
-        streetlightCollision = doc.entity('dat:nhuang54_tkixi_wud#streetlightCollision', {prov.model.PROV_LABEL:'Number of accidents that have happened at a particular street with the number of streetlights present per accident', prov.model.PROV_TYPE:'ont:DataSet'})
+        streetlightCollision = doc.entity('dat:nhuang54_tkixi_wud#streetlightCollision', {prov.model.PROV_LABEL:'Number of accidents that have happened at a particular street with the accumulated number of streetlights present per accident', prov.model.PROV_TYPE:'ont:DataSet'})
         doc.wasAttributedTo(streetlightCollision, this_script)
         doc.wasGeneratedBy(streetlightCollision, streetlightcollision_transformation, endTime)
         doc.wasDerivedFrom(streetlightCollision, resource1, streetlightcollision_transformation, streetlightcollision_transformation, streetlightcollision_transformation)

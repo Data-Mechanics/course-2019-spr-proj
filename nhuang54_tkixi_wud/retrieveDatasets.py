@@ -22,11 +22,9 @@ class retrieveDatasets(dml.Algorithm):
         repo = client.repo
         repo.authenticate('nhuang54_tkixi_wud', 'nhuang54_tkixi_wud')
 
-        
 
-
-        # Dataset #1: Boston Bike Network System
-        print("Inserting Dataset #1: Boston Bike Network System")
+        # Dataset : Boston Bike Network System
+        print("Inserting Dataset : Boston Bike Network System")
         url = 'http://datamechanics.io/data/tkixi/bike_network.json'
         response = urllib.request.urlopen(url).read().decode("utf-8")
         r = json.loads(response)
@@ -35,14 +33,14 @@ class retrieveDatasets(dml.Algorithm):
         repo.createCollection("nhuang54_tkixi_wud.boston_bikes")
 
         repo['nhuang54_tkixi_wud.boston_bikes'].insert_many(r)
-        print("Done Inserting Dataset #1: Boston Bike Network System")
+        print("Done Inserting Dataset : Boston Bike Network System")
         repo['nhuang54_tkixi_wud.boston_bikes'].metadata({'complete':True})
         print(repo['nhuang54_tkixi_wud.boston_bikes'].metadata())
         print()
 
 
-        #Dataset #4: Boston Vision Zero Crash Records
-        print("Inserting Dataset #4: Boston Collisions")
+        #Dataset : Boston Vision Zero Crash Records
+        print("Inserting Dataset: Boston Collisions")
         # url = 'https://data.boston.gov/dataset/7b29c1b2-7ec2-4023-8292-c24f5d8f0905/resource/e4bfe397-6bfc-49c5-9367-c879fac7401d/download/crash_open_data.csv'
         url = 'http://datamechanics.io/data/tkixi/crash_open_data.csv'
         data = pd.read_csv(url)
@@ -50,20 +48,20 @@ class retrieveDatasets(dml.Algorithm):
         repo.createCollection("nhuang54_tkixi_wud.boston_collisions")
 
         repo['nhuang54_tkixi_wud.boston_collisions'].insert_many(data.to_dict('records'))
-        print("Done Inserting Dataset #4: Boston Collisions")
+        print("Done Inserting Dataset : Boston Collisions")
         repo['nhuang54_tkixi_wud.boston_collisions'].metadata({'complete':True})
         print(repo['nhuang54_tkixi_wud.boston_collisions'].metadata())
         print()
 
-        # Dataset #5: Boston Street Light Locations
-        print("Inserting Dataset #5: Boston Street Light Locations")
+        # Dataset : Boston Street Light Locations
+        print("Inserting Dataset : Boston Street Light Locations")
         url = 'https://data.boston.gov/dataset/52b0fdad-4037-460c-9c92-290f5774ab2b/resource/c2fcc1e3-c38f-44ad-a0cf-e5ea2a6585b5/download/streetlight-locations.csv'
         data = pd.read_csv(url)
         repo.dropCollection("nhuang54_tkixi_wud.boston_streetlights")
         repo.createCollection("nhuang54_tkixi_wud.boston_streetlights")
 
         repo['nhuang54_tkixi_wud.boston_streetlights'].insert_many(data.to_dict('records'))
-        print("Done Inserting Dataset #5: Boston Street Light Locations")
+        print("Done Inserting Dataset : Boston Street Light Locations")
         repo['nhuang54_tkixi_wud.boston_streetlights'].metadata({'complete':True})
         print(repo['nhuang54_tkixi_wud.boston_streetlights'].metadata())
         print()
@@ -94,7 +92,7 @@ class retrieveDatasets(dml.Algorithm):
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
         doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/') #boston data portal
 
-        # Dataset #1: Boston Bike Network System
+        # Dataset : Boston Bike Network System
         this_script = doc.agent('alg:nhuang54_tkixi_wud#retrieveDatasets', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
         resource = doc.entity('bdp:boston-existing-bike-network', {'prov:label':'Existing Bike Network', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
         get_bikeNetwork = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
@@ -111,55 +109,29 @@ class retrieveDatasets(dml.Algorithm):
         doc.wasDerivedFrom(bikeNetwork, resource, get_bikeNetwork, get_bikeNetwork, get_bikeNetwork)
 
 
-        # Dataset #2: Boston Hubway Stations 
-        this_script = doc.agent('alg:tkixi#retrieveDatasets', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        resource = doc.entity('bdp:boston-hubway-station', {'prov:label':'Hubway Stations', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
-        get_hubwayStation = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(get_hubwayStation, this_script)
-        doc.usage(get_hubwayStation, resource, startTime, None,
-                  {prov.model.PROV_TYPE:'ont:Retrieval',
-                  'ont:Query':''
-                  }
-                  )
-
-        hubwayStation = doc.entity('dat:nhuang54_tkixi_wud#hubwayStation', {prov.model.PROV_LABEL:'Hubway Stations', prov.model.PROV_TYPE:'ont:DataSet'})
-        doc.wasAttributedTo(hubwayStation, this_script)
-        doc.wasGeneratedBy(hubwayStation, get_hubwayStation, endTime)
-        doc.wasDerivedFrom(hubwayStation, resource, get_hubwayStation, get_hubwayStation, get_hubwayStation)
-
-        # Dataset #5: Boston Street Light Locations
+        # Dataset : Boston Street Light Locations
         this_script = doc.agent('alg:nhuang54_tkixi_wud#retrieveDatasets', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        resource = doc.entity('bdp:boston-weather', {'prov:label':'Boston Weather', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
-        get_bostonWeather = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(get_bostonWeather, this_script)
-        doc.usage(get_bostonWeather, resource, startTime, None,
+        resource = doc.entity('bdp:boston_streetlights', {'prov:label':'Boston Streetlights', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        get_streetlights = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(get_streetlights, this_script)
+        doc.usage(get_streetlights, resource, startTime, None,
                   {prov.model.PROV_TYPE:'ont:Retrieval',
                   'ont:Query':''
                   }
                   )
 
-        bostonWeather = doc.entity('dat:nhuang54_tkixi_wud#bostonWeather', {prov.model.PROV_LABEL:'Boston Weather', prov.model.PROV_TYPE:'ont:DataSet'})
-        doc.wasAttributedTo(bostonWeather, this_script)
-        doc.wasGeneratedBy(bostonWeather, get_bostonWeather, endTime)
-        doc.wasDerivedFrom(bostonWeather, resource, get_bostonWeather, get_bostonWeather, get_bostonWeather)
+        streetLights = doc.entity('dat:nhuang54_tkixi_wud#streetLights', {prov.model.PROV_LABEL:'Boston Street Lights', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(streetLights, this_script)
+        doc.wasGeneratedBy(streetLights, get_streetlights, endTime)
+        doc.wasDerivedFrom(streetLights, resource, get_streetlights, get_streetlights, get_streetlights)
 
-        # Dataset #4: Boston Traffic Signals Locations
-        this_script = doc.agent('alg:nhuang54_tkixi_wud#retrieveDatasets', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        resource = doc.entity('bdp:boston-traffic-signal-locations', {'prov:label':'Traffic Signals Locations', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'csv'})
-        get_trafficSignals = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(get_trafficSignals, this_script)
-        doc.usage(get_trafficSignals, resource, startTime, None,
-                  {prov.model.PROV_TYPE:'ont:Retrieval',
-                  'ont:Query':''
-                  }
-                  )
 
         trafficSignals = doc.entity('dat:nhuang54_tkixi_wud#trafficSignals', {prov.model.PROV_LABEL:'Traffic Signals Locations', prov.model.PROV_TYPE:'ont:DataSet'})
         doc.wasAttributedTo(trafficSignals, this_script)
         doc.wasGeneratedBy(trafficSignals, get_trafficSignals, endTime)
         doc.wasDerivedFrom(trafficSignals, resource, get_trafficSignals, get_trafficSignals, get_trafficSignals)
 
-        # Dataset #5: Boston Vision Zero Crash Records
+        # Dataset : Boston Vision Zero Crash Records
         this_script = doc.agent('alg:tkixi#retrieveDatasets', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
         resource = doc.entity('bdp:boston-vision-zero-crash-records', {'prov:label':'Vision Zero Crash Records', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'csv'})
         get_crashRecords = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
