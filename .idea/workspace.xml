@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7ba2df39-ef6b-47e2-9c2e-bb52af9a986d" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/robinhe_rqtian_hongyf_zhjiang/optimization_crashspots.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/robinhe_rqtian_hongyf_zhjiang/Optimization-CrashSpots.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/robinhe_rqtian_hongyf_zhjiang/Statistics.py" beforeDir="false" afterPath="$PROJECT_DIR$/robinhe_rqtian_hongyf_zhjiang/Statistics.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/robinhe_rqtian_hongyf_zhjiang/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/robinhe_rqtian_hongyf_zhjiang/README.md" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -18,8 +15,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/robinhe_rqtian_hongyf_zhjiang/Statistics.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1095">
-              <caret line="73" column="29" lean-forward="true" selection-start-line="73" selection-start-column="29" selection-end-line="73" selection-end-column="29" />
+            <state relative-caret-position="390">
+              <caret line="26" column="14" selection-start-line="26" selection-start-column="14" selection-end-line="26" selection-end-column="14" />
               <folding>
                 <element signature="e#644#662#0" expanded="true" />
               </folding>
@@ -28,13 +25,13 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/robinhe_rqtian_hongyf_zhjiang/optimization_crashspots.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="431">
-              <caret line="252" column="37" selection-start-line="252" selection-start-column="37" selection-end-line="252" selection-end-column="37" />
-              <folding>
-                <element signature="e#1688#1699#0" expanded="true" />
-              </folding>
+        <entry file="file://$PROJECT_DIR$/robinhe_rqtian_hongyf_zhjiang/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="242">
+                <caret line="60" column="91" selection-start-line="60" selection-start-column="91" selection-end-line="60" selection-end-column="91" />
+              </first_editor>
+              <second_editor />
             </state>
           </provider>
         </entry>
@@ -75,10 +72,10 @@
         <option value="$PROJECT_DIR$/robinhe_rqtian_hongyf_zhjiang/revereCrashAll.py" />
         <option value="$PROJECT_DIR$/robinhe_rqtian_hongyf_zhjiang/crashAll.py" />
         <option value="$PROJECT_DIR$/robinhe_rqtian_hongyf_zhjiang/crashSpots.py" />
-        <option value="$PROJECT_DIR$/robinhe_rqtian_hongyf_zhjiang/README.md" />
         <option value="$PROJECT_DIR$/robinhe_rqtian_hongyf_zhjiang/Optimization-CrashSpots.py" />
         <option value="$PROJECT_DIR$/robinhe_rqtian_hongyf_zhjiang/Statistics.py" />
         <option value="$PROJECT_DIR$/robinhe_rqtian_hongyf_zhjiang/optimization_crashspots.py" />
+        <option value="$PROJECT_DIR$/robinhe_rqtian_hongyf_zhjiang/README.md" />
       </list>
     </option>
   </component>
@@ -143,7 +140,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.Statistics">
+  <component name="RunManager" selected="Python.optimization_crashspots">
     <configuration name="K-means-CrashSpot" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="course-2019-spr-proj" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -232,7 +229,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="example" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="optimization_crashspots" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="course-2019-spr-proj" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -240,12 +237,12 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/robinhe_rqtian_hongyf_zhjiang" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/alice_bob/example.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/robinhe_rqtian_hongyf_zhjiang/optimization_crashspots.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -256,11 +253,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.optimization_crashspots" />
         <item itemvalue="Python.Statistics" />
         <item itemvalue="Python.K-means-CrashSpot" />
         <item itemvalue="Python.crashAll" />
         <item itemvalue="Python.crashSpots" />
-        <item itemvalue="Python.example" />
       </list>
     </recent_temporary>
   </component>
@@ -275,12 +272,12 @@
       <option name="presentableId" value="Default" />
       <updated>1555349378216</updated>
       <workItem from="1555349380688" duration="7827000" />
-      <workItem from="1555423739573" duration="39999000" />
+      <workItem from="1555423739573" duration="40427000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="47826000" />
+    <option name="totallyTimeSpent" value="48254000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -300,7 +297,7 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32959184" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32857144" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32857144" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -309,7 +306,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.32857144" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="bottom" id="Terminal" order="11" weight="0.29489797" />
+      <window_info anchor="bottom" id="Terminal" order="11" visible="true" weight="0.29489797" />
       <window_info anchor="bottom" id="Python Console" order="12" weight="0.32959184" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -332,6 +329,7 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/course_2019_spr_proj$demo1.coverage" NAME="demo1 Coverage Results" MODIFIED="1555423837356" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/robinhe_rqtian_hongyf_zhjiang/trash" />
+    <SUITE FILE_PATH="coverage/course_2019_spr_proj$optimization_crashspots.coverage" NAME="optimization_crashspots Coverage Results" MODIFIED="1555526530171" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/robinhe_rqtian_hongyf_zhjiang" />
     <SUITE FILE_PATH="coverage/course_2019_spr_proj$crashAll.coverage" NAME="crashAll Coverage Results" MODIFIED="1555513805721" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/robinhe_rqtian_hongyf_zhjiang" />
     <SUITE FILE_PATH="coverage/course_2019_spr_proj$example.coverage" NAME="example Coverage Results" MODIFIED="1555447622386" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/course_2019_spr_proj$Statistics.coverage" NAME="Statistics Coverage Results" MODIFIED="1555526452764" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/robinhe_rqtian_hongyf_zhjiang" />
@@ -503,16 +501,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/robinhe_rqtian_hongyf_zhjiang/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="416">
-            <caret line="57" column="27" selection-start-line="57" selection-start-column="27" selection-end-line="57" selection-end-column="27" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/robinhe_rqtian_hongyf_zhjiang/Optimization-CrashSpots.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="405">
@@ -523,23 +511,33 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/robinhe_rqtian_hongyf_zhjiang/optimization_crashspots.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2603">
+          <caret line="252" column="42" lean-forward="true" selection-start-line="252" selection-start-column="42" selection-end-line="252" selection-end-column="42" />
+          <folding>
+            <element signature="e#1688#1699#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/robinhe_rqtian_hongyf_zhjiang/Statistics.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1095">
-          <caret line="73" column="29" lean-forward="true" selection-start-line="73" selection-start-column="29" selection-end-line="73" selection-end-column="29" />
+        <state relative-caret-position="390">
+          <caret line="26" column="14" selection-start-line="26" selection-start-column="14" selection-end-line="26" selection-end-column="14" />
           <folding>
             <element signature="e#644#662#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/robinhe_rqtian_hongyf_zhjiang/optimization_crashspots.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="431">
-          <caret line="252" column="37" selection-start-line="252" selection-start-column="37" selection-end-line="252" selection-end-column="37" />
-          <folding>
-            <element signature="e#1688#1699#0" expanded="true" />
-          </folding>
+    <entry file="file://$PROJECT_DIR$/robinhe_rqtian_hongyf_zhjiang/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="242">
+            <caret line="60" column="91" selection-start-line="60" selection-start-column="91" selection-end-line="60" selection-end-column="91" />
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>
