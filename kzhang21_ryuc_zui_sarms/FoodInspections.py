@@ -42,11 +42,11 @@ class FoodInspections(dml.Algorithm):
         log.debug("Authenticating into mongoDB")
         repo.authenticate('kzhang21_ryuc_zui_sarms', 'kzhang21_ryuc_zui_sarms')
 
-        # url = 'http://datamechanics.io/data/food_inspections.zip'
-        # r = requests.get(url)
-        # z = zipfile.ZipFile(io.BytesIO(r.content))
-        # file_path = os.path.dirname(os.path.realpath(__file__))
-        # z.extractall(file_path)
+        url = 'http://datamechanics.io/data/food_inspections.zip'
+        r = requests.get(url)
+        z = zipfile.ZipFile(io.BytesIO(r.content))
+        file_path = os.path.dirname(os.path.realpath(__file__))
+        z.extractall(file_path)
 
         DF = pd.read_csv('tmp77velm71.csv', low_memory=False)
 

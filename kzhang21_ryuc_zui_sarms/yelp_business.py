@@ -10,6 +10,7 @@ import argparse
 import json
 import requests
 import sys
+import os
 
 from urllib.error import HTTPError
 from urllib.parse import quote
@@ -52,42 +53,36 @@ class yelp_business(dml.Algorithm):
         df_violations = pd.DataFrame(list(food_violations.find()))
 
         parser = argparse.ArgumentParser()
+        ## for each entry in violation get data
+        print('HERE: lets get this business')
+        for index, row in df_violations.iterrows():
 
-        with open('yelp_businesses_new.json') as json_file:
-            CACHE = json.load(json_file)
-            if len(CACHE) < 2:
-                ## for each entry in violation get data
-                print('HERE: lets get this business')
-                for index, row in df_violations.iterrows():
+            term = row["businessname"]
+            location =  row["address"] + ', ' + row["city"] + ', ' + row["state"] + ', ' + row["zip"]
 
-                    term = row["businessname"]
-                    location =  row["address"] + ', ' + row["city"] + ', ' + row["state"] + ', ' + row["zip"]
+            parser.add_argument('-q', '--term', dest='term', default=term,
+                                type=str, help='Search term (default: %(default)s)')
+            parser.add_argument('-l', '--location', dest='location',
+                                default=location, type=str,
+                                help='Search location (default: %(default)s)')
 
-                    parser.add_argument('-q', '--term', dest='term', default=term,
-                                        type=str, help='Search term (default: %(default)s)')
-                    parser.add_argument('-l', '--location', dest='location',
-                                        default=location, type=str,
-                                        help='Search location (default: %(default)s)')
+            input_values = parser.parse_args()
 
-                    input_values = parser.parse_args()
+            try:
+                result = query_api(input_values.term, input_values.location)
+                if result["location"]["zip_code"] in zip_codes:
+                    print(row["businessname"])
+                    result["violation_rate"] = row["violationRate"]
+                    repo['kzhang21_ryuc_zui_sarms.yelp_business'].insert(result)
+            except HTTPError as error:
+                sys.exit(
+                    'Encountered HTTP error {0} on {1}:\n {2}\nAbort program.'.format(
+                        error.code,
+                        error.url,
+                        error.read(),
+                    )
+                )
 
-                    try:
-                        result = query_api(input_values.term, input_values.location)
-                        if result["location"]["zip_code"] in zip_codes:
-                            print(row["businessname"])
-                            result["violation_rate"] = row["violationRate"]
-                            CACHE.append(result)
-                    except HTTPError as error:
-                        sys.exit(
-                            'Encountered HTTP error {0} on {1}:\n {2}\nAbort program.'.format(
-                                error.code,
-                                error.url,
-                                error.read(),
-                            )
-                        )
-                json.dump(CACHE, json_file)
-
-        repo['kzhang21_ryuc_zui_sarms.yelp_business'].insert_many(CACHE)
         repo['kzhang21_ryuc_zui_sarms.yelp_business'].metadata({'complete':True})
 
         print(repo['kzhang21_ryuc_zui_sarms.yelp_business'].metadata())
