@@ -220,8 +220,11 @@ class example(dml.Algorithm):
         for i in range(len(POINTS_OG)):
             for j in range(5):
                 print("point ", i, " ", j)
-                POINTS_NEW[i][j] = json.loads(str(md.toLatLong(POINTS_OG[i][j])))
-                print("POINTS_NEW[",i,"][",j,"] = ", POINTS_NEW[i][j])
+                f = json.loads(json.dumps(md.toLatLong(POINTS_OG[i][j])))
+                #indexed to 0, but there is only a 0th element. it shouldn't be an array but go ogle made a decision
+                lat = f[0]['geometry']['location']['lat']
+                lng = f[0]['geometry']['location']['lng']
+                POINTS_NEW[i][j] = (lat,lng)
                 
         
         #the stops are the means for k-means - converted to sets and back to remove duplicates
@@ -244,8 +247,11 @@ class example(dml.Algorithm):
         for i in range(len(STOPS_OG)):
             for j in range(5):
                 print("stop ", i, " ", j)
-                STOPS_NEW[i][j] = md.toLatLong(STOPS_OG[i][j])
-                STOPS_NEW[i][j]
+                f = json.loads(json.dumps(md.toLatLong(STOPS_OG[i][j])))
+                #indexed to 0, but there is only a 0th element. it shouldn't be an array but go ogle made a decision
+                lat = f[0]['geometry']['location']['lat']
+                lng = f[0]['geometry']['location']['lng']
+                STOPS_NEW[i][j] = (lat,lng)
         
         #implementation of k-means, with md.time as the distance function
         #todo: set a departure time in md.time
@@ -259,7 +265,7 @@ class example(dml.Algorithm):
             
             while OLD != MEANS:
                 OLD = MEANS
-
+#(3,4), (3,8)
                 MPD = [(m, p, md.walk_time_url(m,p)) for (m, p) in product(MEANS, POINTSC)]
                 PDs = [(p, md.walk_time_url(m,p)) for (m, p, d) in MPD]
                 PD = aggregate(PDs, min)
