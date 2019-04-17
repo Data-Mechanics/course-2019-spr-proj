@@ -34,6 +34,7 @@ class questions(dml.Algorithm):
             repo.createCollection(question)
 
             df = koalas.read_csv(urls[i])
+            print(df)
             collection = 'stathisk_simonwu_nathanmo_nikm.' + question
             repo[collection].insert_many(json.loads(df.to_json(orient='records')))
             repo[collection].metadata({'complete': True})
