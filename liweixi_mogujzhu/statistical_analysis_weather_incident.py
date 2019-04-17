@@ -8,6 +8,7 @@ import datetime
 import uuid
 import numpy
 import pandas as pd
+import scipy.stats
 
 from random import shuffle
 from math import sqrt
@@ -17,7 +18,7 @@ from math import sqrt
 # daily weather (temperature, rain, wind etc.) and fire incident
 class statistical_analysis_weather_incident(dml.Algorithm):
     contributor = 'liweixi_mogujzhu'
-    reads = ['liweixi_mogujzhu.weather_fire_incident_transformation']
+    reads = ['liweixi_mogujzhu.weather_fire_incident_transformation', 'liweixi_mogujzhu.prediction_weather_incident']
     writes = ['liweixi_mogujzhu.statistical_analysis_weather_incident']
 
     @staticmethod
@@ -41,23 +42,20 @@ class statistical_analysis_weather_incident(dml.Algorithm):
         # if trial mode, use half of the data for analysis
         if trial:
             data = data[:data.shape[0]//2]
-
         # TMAX and fire incident
-        data1 = [(x, y) for x in data['TMAX'] ]
+        for feature in ["TMAX", "TAVG", "TMIN", "AWND", "PRCP", "SNOW"]:
+            result = scipy.stats.pearsonr(data[feature], data['NINCIDENT'])
+            print("Correlation coefficient between",feature,"and number of incident", result[0])
+            print("P-value between",feature,"and number of incident", result[1])
 
-        print(NINCIDENT)
-        # data_ = [(18, 28), (24, 18), (27, 31), (14, 15), (46, 23),
-        # (36, 19), (27, 10), (34, 25), (19, 15), (13, 13),
-        # (4, 2), (17, 20), (28, 12), (36, 11), (26, 14),
-        # (19, 19), (24, 13), (25, 6), (20, 8), (17, 22),
-        # (18, 8), (25, 12), (28, 27), (31, 28), (35, 22),
-        # (17, 8), (19, 19), (23, 23), (22, 11)]
-        # x = [xi for (xi, yi) in data]
-        # y = [yi for (xi, yi) in data]
-        
-
-
-
+        # Create the training data and target
+        data2_name = 'liweixi_mogujzhu.prediction_weather_incident'
+        data_model = pd.DataFrame(list(repo[data2_name].find()))
+        x = [max(i[0],i[1],i[2]) for i in data_model.values]
+        y = data_model["TRUE_VALUE"]
+        result = scipy.stats.pearsonr(x, y)
+        print("Correlation coefficient between model predict and true value", result[0])
+        print("P-value between model predict and true value", result[1])
         # insert result into mongoDB
         # repo['liweixi_mogujzhu.statistical_analysis_weather_incident'].insert_many(insert_data.to_dict('records'))
         # repo['liweixi_mogujzhu.statistical_analysis_weather_incident'].metadata({'complete': True})
@@ -87,8 +85,11 @@ class statistical_analysis_weather_incident(dml.Algorithm):
 
         this_script = doc.agent('alg:liweixi_mogujzhu#statistical_analysis_weather_incident',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
-        resource = doc.entity('dat:liweixi_mogujzhu#weather_fire_incident_transformation',
+        resource1 = doc.entity('dat:liweixi_mogujzhu#weather_fire_incident_transformation',
                               {'prov:label': 'Boston Weather and Fire Incident', prov.model.PROV_TYPE: 'ont:DataResource',
+                               'ont:Extension': 'json'})
+        resource2 = doc.entity('dat:liweixi_mogujzhu#prediction_weather_incident',
+                              {'prov:label': 'Prediction Boston Weather and Fire Incident', prov.model.PROV_TYPE: 'ont:DataResource',
                                'ont:Extension': 'json'})
         get_statistical_analysis_weather_incident = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
 
@@ -98,10 +99,12 @@ class statistical_analysis_weather_incident(dml.Algorithm):
                           {prov.model.PROV_LABEL: 'Boston Weather and Fire Incident', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(statistical_analysis_weather_incident, this_script)
         doc.wasGeneratedBy(statistical_analysis_weather_incident, get_statistical_analysis_weather_incident, endTime)
-        doc.wasDerivedFrom(statistical_analysis_weather_incident, resource,
+        doc.wasDerivedFrom(statistical_analysis_weather_incident, resource1,
                            get_statistical_analysis_weather_incident, get_statistical_analysis_weather_incident,
                            get_statistical_analysis_weather_incident)
-
+        doc.wasDerivedFrom(statistical_analysis_weather_incident, resource2,
+                           get_statistical_analysis_weather_incident, get_statistical_analysis_weather_incident,
+                           get_statistical_analysis_weather_incident)
         repo.logout()
 
         return doc
@@ -124,6 +127,14 @@ def cov(x, y): # Covariance.
 def corr(x, y): # Correlation coefficient.
     if stddev(x)*stddev(y) != 0:
         return cov(x, y)/(stddev(x)*stddev(y))
+
+def p(x, y):
+    c0 = corr(x, y)
+    corrs = []
+    for k in range(0, 200):
+        y_permuted = permute(y)
+        corrs.append(corr(x, y_permuted))
+    return len([c for c in corrs if abs(c) >= abs(c0)]) / len(corrs)
 
 # This is example code you might use for debugging this module.
 # Please remove all top-level function calls before submitting.
