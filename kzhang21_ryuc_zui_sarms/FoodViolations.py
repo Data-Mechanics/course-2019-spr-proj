@@ -30,6 +30,7 @@ class FoodViolations(dml.Algorithm):
         repo.authenticate('kzhang21_ryuc_zui_sarms', 'kzhang21_ryuc_zui_sarms')
 
         log.debug("Fetching data from kzhang21_ryuc_zui_sarms.food_inspections")
+
         df = pd.DataFrame(
             list(repo["kzhang21_ryuc_zui_sarms.food_inspections"].find())
         )
@@ -51,7 +52,8 @@ class FoodViolations(dml.Algorithm):
         violation_DF["violationCount"] = DF.groupby(
             "licenseno").count()["violation"]
 
-        log.debug("Get the earliest violation date of each licenseno. (Index is licenseno).")
+        log.debug(
+            "Get the earliest violation date of each licenseno. (Index is licenseno).")
         violation_DF["violationDate"] = DF[DF["violdttmClean"] !=
                                            "NO_DATE"].groupby("licenseno").min()["violdttmClean"]
         violation_DF = violation_DF.dropna()

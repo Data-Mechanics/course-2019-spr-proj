@@ -49,6 +49,12 @@ class FoodInspections(dml.Algorithm):
         csv_file = io.BytesIO(f)
         log.debug("Extracting file ")
         DF = pd.read_csv(csv_file, low_memory=False)
+        
+        if trial:
+            log.info("In trial mode, only fetch 20k")
+            DF = DF.iloc[:20000, :]
+    
+
         # (DF,_,_) = pd.read_csv(url, low_memory=False)
 
         log.debug("Fetching CSV from %s", 'tmp77velm71')

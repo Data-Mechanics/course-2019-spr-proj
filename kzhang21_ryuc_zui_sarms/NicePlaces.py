@@ -33,10 +33,24 @@ class NicePlaces(dml.Algorithm):
         
         # The coordinate 
         CURRENT_PLACE= (42.3601, -71.0589)
+        
         # The number of places we pick 
-        N = 5
-        MAX_DIST = 3
-        MIN_DIST = 0
+        if trial:
+            N = 5
+        else:
+            N = 500
+
+        # What is the furthest you would like to go
+        MAX_DIST = 100
+
+        # What is the least amount of distance you would like to go
+        MIN_DIST = 0.12
+
+        # What is the average rating of the places you would like to go to
+        AVG_RATE = 4
+        # What is the average violation rating of the places you would like to go
+        AVG_VIOR = 0
+
         Places = random.choices(data, k=N)    
 
         # Places: x_0 ... x_n are whether a place is chosen
@@ -61,7 +75,7 @@ class NicePlaces(dml.Algorithm):
         # Fetch the coordinate pair from each of the place
         DPs = [(x["coordinates"]["latitude"], x["coordinates"]["longitude"]) for x in Places]
         Dists = [dist(CURRENT_PLACE, x) for x in DPs]
-        
+        log.debug("Dists %s", Dists)
         # Distance; d_0 ... d_n is the distance from the current place to the place n
         D_mapping = [(ds == dis) for (ds, dis) in zip(Ds, Dists)]
 
@@ -69,6 +83,14 @@ class NicePlaces(dml.Algorithm):
             sum([xs * ds for (xs, ds) in zip(Xs, Ds)]) > MIN_DIST,
             sum([xs * ds for (xs, ds) in zip(Xs, Ds)]) <= MAX_DIST
             ]
+
+        R_const = [
+            (sum([xs*rs for (xs, rs) in zip(Xs, Rs)]) / N) >= AVG_RATE
+        ]
+
+        V_const = [
+            (sum([xs*vs for (xs, vs) in zip(Xs, Vs)]) / N) <= AVG_RATE
+        ]
 
         solver = z3.Solver()
 
