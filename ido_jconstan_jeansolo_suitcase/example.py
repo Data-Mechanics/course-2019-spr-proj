@@ -4,6 +4,7 @@ import dml
 import prov.model
 import datetime
 import uuid
+import math
 import pymongo
 from bson.objectid import ObjectId
 import mapdata as md
@@ -314,7 +315,8 @@ class example(dml.Algorithm):
 
         testLen = 5
         #done for every school separately
-        for x in range(len(STOPS_OG)):
+        #for x in range(len(STOPS_OG)):
+        for x in range(5):
             MEANS = []
             POINTSC = []
             OLD = []
@@ -322,26 +324,33 @@ class example(dml.Algorithm):
             for i in range(testLen):
                 MEANS.append(STOPS_NEW[x][i])
                 POINTSC.append(POINTS_NEW[x][i])
-            
-            while OLD != MEANS:
+            #MEANS = [(2,2), (10,10)]
+            #POINTSC = [(1,1),(3,4),(9,8)]
+            #print("\nMeans: ",MEANS, "\n")
+            while not isClose(MEANS, OLD):
                 OLD = MEANS
 
                 MPD = [(m, p, md.walk_time_url(m,p)) for (m, p) in product(MEANS, POINTSC)]
                 PDs = [(p, md.walk_time_url(m,p)) for (m, p, d) in MPD]
 
+                #MPD = [(m, p, dist(m,p)) for (m, p) in product(MEANS, POINTSC)]
+                #PDs = [(p, dist(m,p)) for (m, p, d) in MPD]
+
                 PD = aggregate(PDs, min)
                 MP = [(m, p) for ((m,p,d), (p2,d2)) in product(MPD, PD) if p==p2 and d==d2]
-                print("MP: ", MP)
+                #print("MP: ", MP)
                 MT = aggregate(MP, plus)
                 
                 M1 = [(m, 1) for (m, _) in MP]
                 MC = aggregate(M1, sum)
 
                 MEANS = [scale(t,c) for ((m,t),(m2,c)) in product(MT, MC) if m == m2]
+                #print("\n old: ", OLD)
+                #print("\n means: ", MEANS, "\n")
                 
                 #reverse geocode
-                
                 print("sorted(MEANS): ", sorted(MEANS))
+            print("\n\nOLD = MEANS WOOHOO\n\n")
         
         
         repo.logout()
@@ -537,6 +546,23 @@ def plus(args):
 def scale(p,c):
     (x,y) = p
     return (x/c, y/c)
+    
+#def dist(p, q):
+#    (x1,y1) = p
+#    (x2,y2) = q
+#    return (x1-x2)**2 + (y1-y2)**2
+
+def isClose(MEANS, OLD):
+    if len(MEANS)!=len(OLD):
+        return False
+    for x in range(len(MEANS)):
+        a = MEANS[x]
+        b = OLD[x]
+        res = math.isclose(a[0],b[0],abs_tol=.00001) #check lat/long to see if this is a good tolerance
+        res2 = math.isclose(a[1],b[1],abs_tol=.00001)
+        if not res or not res2:
+            return False
+    return True
             
 '''
 # This is example code you might use for debugging this module.
