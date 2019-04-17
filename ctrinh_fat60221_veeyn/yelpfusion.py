@@ -57,7 +57,7 @@ BUSINESS_PATH = '/v3/businesses/'  # Business ID will come after slash.
 # Defaults for our simple example.
 DEFAULT_TERM = 'coffee shop'
 DEFAULT_LOCATION = 'Commonwealth Ave and Lake St, Boston, MA 02135'
-SEARCH_LIMIT = 2
+SEARCH_LIMIT = 5
 
 
 def request(host, path, api_key, url_params=None):

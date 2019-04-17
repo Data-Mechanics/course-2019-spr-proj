@@ -186,17 +186,18 @@ class stations(dml.Algorithm):
         doc.add_namespace('dat', 'http://datamechanics.io/data/') # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
-        doc.add_namespace('ylp', 'https://api.yelp.com/')
+        # doc.add_namespace('ylp', 'https://api.yelp.com/')
+        doc.add_namespace('mbt', 'https://api-v3.mbta.com/')
 
         this_script = doc.agent('alg:ctrinh_fat60221_veeyn#stations', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        resource = doc.entity('ylp:v3/businesses/search', {'prov:label':'Yelp Fusion', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        resource = doc.entity('mbt:stops?filter[route]=?', {'prov:label':'MBTA / Yelp Fusion', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
         get_stations = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(get_stations, this_script)
         doc.usage(get_stations, resource, startTime, None,
                   {prov.model.PROV_TYPE:'ont:Retrieval'}
                   )
 
-        stations = doc.entity('dat:ctrinh_fat60221_veeyn#stations', {prov.model.PROV_LABEL:'stations Shop Locations', prov.model.PROV_TYPE:'ont:DataSet'})
+        stations = doc.entity('dat:ctrinh_fat60221_veeyn#stations', {prov.model.PROV_LABEL:'MBTA Station / Coffee Shop Locations', prov.model.PROV_TYPE:'ont:DataSet'})
         doc.wasAttributedTo(stations, this_script)
         doc.wasGeneratedBy(stations, get_stations, endTime)
         doc.wasDerivedFrom(stations, resource, get_stations, get_stations, get_stations)
