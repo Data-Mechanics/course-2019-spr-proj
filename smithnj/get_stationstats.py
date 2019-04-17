@@ -7,14 +7,14 @@ import pandas as pd
 from sodapy import Socrata
 
 ############################################
-# get_censushardship.py
-# Script for collecting Chicago Census Socioeconomic Indicators
+# get_stationsttats.py
+# Script for collecting CTA Station Ridership data
 ############################################
 
-class get_censushardship(dml.Algorithm):
+class get_stationstats(dml.Algorithm):
     contributor = 'smithnj'
     reads = []
-    writes = ['smithnj.census']
+    writes = ['smithnj.ctastats']
 
     @staticmethod
     def execute(trial=False):
@@ -25,15 +25,18 @@ class get_censushardship(dml.Algorithm):
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate('smithnj', 'smithnj')
-        repo_name = 'smithnj.census'
+        repo_name = 'smithnj.ctastats'
         # ---[ Grab Data ]-------------------------------------------
         client = Socrata("data.cityofchicago.org", "xbEYuk5XxkYsIaXl3hn79XIoR")
-        results = client.get("kn9c-c2s2", select="ca,hardship_index", limit=1000)
+        if (trial):
+            results = client.get("t2rn-p8d7", select="station_id,stationame,month_beginning,monthtotal", where="month_beginning > '2012-12-01T00:00:00.000' AND month_beginning < '2019-01-01T00:00:00.000'", limit=100)
+        if (trial == False):
+            results = client.get("t2rn-p8d7", select="station_id,stationame,month_beginning,monthtotal", where="month_beginning > '2012-12-01T00:00:00.000' AND month_beginning < '2019-01-01T00:00:00.000'", limit=30000)
         df = pd.DataFrame.from_records(results).to_json(orient="records")
         loaded = json.loads(df)
         # ---[ MongoDB Insertion ]-------------------------------------------
-        repo.dropCollection('census')
-        repo.createCollection('census')
+        repo.dropCollection(repo_name)
+        repo.createCollection(repo_name)
         print('done')
         repo[repo_name].insert_many(loaded)
         repo[repo_name].metadata({'complete': True})
@@ -42,40 +45,38 @@ class get_censushardship(dml.Algorithm):
         repo.logout()
         endTime = datetime.datetime.now()
 
-        return {"start": startTime, "end": endTime}
-
     @staticmethod
     def provenance(doc=prov.model.ProvDocument(), startTime=None, endTime=None):
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate('smithnj', 'smithnj')
-        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/smithnj/census') # The scripts are in <folder>#<filename> format.
-        doc.add_namespace('dat', 'http://datamechanics.io/data/smithnj/census')  # The data sets are in <user>#<collection> format.
+        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/smithnj/ctastats') # The scripts are in <folder>#<filename> format.
+        doc.add_namespace('dat', 'http://datamechanics.io/data/smithnj/ctastats')  # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont','http://datamechanics.io/ontology#')
         # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/')  # The event log.
         doc.add_namespace('bdp', 'http://datamechanics.io/?prefix=smithnj/')
 
-        this_script = doc.agent('alg:smithnj#get_censushardship',
+        this_script = doc.agent('alg:smithnj#get_stationstats',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
-        resource = doc.entity('bdp:census',
-                              {'prov:label': 'data set of census socioeconimc hardship per community area', prov.model.PROV_TYPE: 'ont:DataResource',
+        resource = doc.entity('bdp:stationstats',
+                              {'prov:label': 'data set of l station statistics', prov.model.PROV_TYPE: 'ont:DataResource',
                                'ont:Extension': 'json'})
-        get_censushardship = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+        get_stationstats = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
 
-        doc.wasAssociatedWith(get_censushardship, this_script)
-        doc.usage(get_censushardship, resource, startTime, None,
+        doc.wasAssociatedWith(get_stationstats, this_script)
+        doc.usage(get_stationstats, resource, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:Retrieval',
-                   'ont:Query': '?select=ca,hardship_index'
+                   'ont:Query': '$select=station_id,stationame,month_beginning,monthtotal'
                    }
                   )
 
-        census = doc.entity('dat:smithnj#census',
-                          {prov.model.PROV_LABEL: 'Census Hardship', prov.model.PROV_TYPE: 'ont:DataSet'})
-        doc.wasAttributedTo(census, this_script)
-        doc.wasGeneratedBy(census, get_censushardship, endTime)
-        doc.wasDerivedFrom(census, resource, get_censushardship, get_censushardship, get_censushardship)
+        ctastats = doc.entity('dat:smithnj#ctastats',
+                          {prov.model.PROV_LABEL: 'L Stations Ridership Statistics', prov.model.PROV_TYPE: 'ont:DataSet'})
+        doc.wasAttributedTo(ctastats, this_script)
+        doc.wasGeneratedBy(ctastats, get_stationstats, endTime)
+        doc.wasDerivedFrom(ctastats, resource, get_stationstats, get_stationstats, get_stationstats)
 
         repo.logout()
 
