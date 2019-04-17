@@ -304,7 +304,6 @@ class example(dml.Algorithm):
                 if (type(x) == float):
                     POINTS_NEW[i].append(temp[count])
                     count += 1     
-
                  
         
         #the stops are the means for k-means - converted to sets and back to remove duplicates
@@ -392,7 +391,9 @@ class example(dml.Algorithm):
         #for x in range(len(STOPS_OG)):
         #STOPS_NEW = 
         #POINTS_NEW = 
-        
+
+
+
         # read new stops from csv
         new_stops = []
         tswitch = False
@@ -405,10 +406,13 @@ class example(dml.Algorithm):
                 for row in csv_reader:
                     if row and tswitch:
                         stop = row
-                        new_stops.append(eval(row[0]))
+                        new_stops.append(row)
                     elif not tswitch:
                         tswitch = True
-        print('NEW_STOPS',new_stops)
+
+        # parse points
+        new_stops = pointParser(new_stops)
+        print('new_stops',new_stops)
 
 
         print("Before loop")
@@ -738,7 +742,67 @@ def p(x, y):
     for k in range(0, 2000):
         y_permuted = permute(y)
         corrs.append(corr(x, y_permuted))
-            
+
+def pointParser(point_list):
+    point_list_float = []
+
+    for i in point_list:
+        lst_lat = []
+        lst_lng = []
+        str_lat = ''
+        str_lng = ''
+        flt_lat = 0.0
+        flt_lng = 0.0
+
+        # create a tuple from this
+    
+        charIdx = 0
+        # lat value
+        if i[0][charIdx] == '(':
+            charIdx += 1
+            lst_lat.append(i[0][charIdx])
+
+            # get vals until we hit a '.'
+            charIdx += 1
+            while i[0][charIdx] != '.':
+                lst_lat.append(i[0][charIdx])
+                charIdx += 1
+            # append the '.'
+            lst_lat.append(i[0][charIdx])
+
+            # get vals until we hit a ','
+            charIdx += 1
+            while i[0][charIdx] != ',':
+                lst_lat.append(i[0][charIdx])
+                charIdx += 1
+            # skip ',_'
+            charIdx += 2
+
+            # lng value
+            # get vals until we hit a '.'
+            while i[0][charIdx] != '.':
+                lst_lng.append(i[0][charIdx])
+                charIdx += 1
+            # append the '.'
+            lst_lng.append(i[0][charIdx])
+
+            # get vals until we hit a ')'
+            charIdx += 1
+            while i[0][charIdx] != ')':
+                lst_lng.append(i[0][charIdx])
+                charIdx += 1
+        
+            # done parsing
+            str_lat = ''.join(lst_lat)
+            str_lng = ''.join(lst_lng)
+            flt_lat = float(str_lat)
+            flt_lng = float (str_lng)
+            point_list_float.append((flt_lat, flt_lng))
+        else:
+            print("error")
+
+
+    return point_list_float
 '''
 # This is example code you might use for debugging this module.
 # Please remove all top-level function calls before submitting.
