@@ -60,6 +60,7 @@ class combineData(dml.Algorithm):
         """
         val = {}
         for neighborhood in neighborhoods:
+            print(neighborhood)
             val[neighborhood['properties']['Name']] = []
         return val
 
@@ -122,7 +123,7 @@ class combineData(dml.Algorithm):
         # multiple neighborhoods
         open_spaces = list(repo[combineData.contributor + ".OpenSpaces"].find())
 
-        neighborhoods = [list(repo[combineData.contributor + ".Neighborhoods"].find())[24]] if trial \
+        neighborhoods = list(repo[combineData.contributor + ".Neighborhoods"].find({"properties.Name":"Allston"})) if trial \
             else list(repo[combineData.contributor + ".Neighborhoods"].find())
 
         open_space_index = index.Index()
