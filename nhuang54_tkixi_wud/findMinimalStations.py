@@ -51,6 +51,7 @@ class findMinimalStations(dml.Algorithm):
 
     @staticmethod
     def execute(trial = False):
+        print('finding minimal stations')
         '''Retrieve some data sets (not using the API here for the sake of simplicity).'''
         startTime = datetime.datetime.now()
 
@@ -68,9 +69,6 @@ class findMinimalStations(dml.Algorithm):
         # After inputting the constraints, we use z3 to find a solution.
 
         # api key: dml.auth['services']['openCagePortal']['api_key']
-
-        if trial:
-          print("TRIAL IS TRUE")
 
         streets = []
         counter = 0

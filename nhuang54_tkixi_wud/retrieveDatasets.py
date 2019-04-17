@@ -49,7 +49,7 @@ class retrieveDatasets(dml.Algorithm):
         repo.dropCollection("nhuang54_tkixi_wud.boston_hubway")
         repo.createCollection("nhuang54_tkixi_wud.boston_hubway")
 
-        repo['nhuang54_tkixi_wud.boston_collisions'].insert_many(r)
+        repo['nhuang54_tkixi_wud.boston_hubway'].insert_many(r)
         print("Done Inserting Dataset #2: Boston Hubway Stations")
         repo['nhuang54_tkixi_wud.boston_hubway'].metadata({'complete':True})
         print(repo['nhuang54_tkixi_wud.boston_hubway'].metadata())

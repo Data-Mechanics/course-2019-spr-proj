@@ -21,6 +21,7 @@ class streetlights_collisions(dml.Algorithm):
 
     @staticmethod
     def execute(trial = False):
+        print('finding streetlight collisions')
 
         def select(R, s):
             return [t for t in R if s(t)]
@@ -88,65 +89,69 @@ class streetlights_collisions(dml.Algorithm):
         api_limit = 0
 
 
-        # data = []
-        # streetLights = bt.find()
-        # for x in streetLights:
-        #     if api_limit > 500:
-        #         break
-        #     lat = x['Lat']
-        #     lng = x['Long']
-        #     print('lat', lat)
-        #     api_limit+=1
-        #     results = geocoder.reverse_geocode(lat, lng)
-        #     print('printing results')
-        #     if 'road' in results[0]['components']:            
-        #         road = results[0]['components']['road']
-        #         road = road.replace('Street', 'St')
-        #         road = road.replace('Drive', 'Dr')
-        #         road = road.replace('Avenue', 'Ave')
-        #         road = road.replace('Court', 'Ct')
-        #         road = road.replace('Highway', 'Hwy')
-        #         road = road.replace('Parkway', 'Pkwy')
-        #         road = road.replace('Road', 'Rd')
-        #         road = road.replace('Boulevard', 'Blvd')
-        #         road = road.upper()
-        #     else:
-        #         continue
+        data = []
+        streetLights = bt.find()
+
+        for x in streetLights:
+            if trial:
+                if api_limit > 50:
+                    break
+            if api_limit > 500:
+                break
+            lat = x['Lat']
+            lng = x['Long']
+            print('lat', lat)
+            api_limit+=1
+            results = geocoder.reverse_geocode(lat, lng)
+            print('printing results')
+            if 'road' in results[0]['components']:            
+                road = results[0]['components']['road']
+                road = road.replace('Street', 'St')
+                road = road.replace('Drive', 'Dr')
+                road = road.replace('Avenue', 'Ave')
+                road = road.replace('Court', 'Ct')
+                road = road.replace('Highway', 'Hwy')
+                road = road.replace('Parkway', 'Pkwy')
+                road = road.replace('Road', 'Rd')
+                road = road.replace('Boulevard', 'Blvd')
+                road = road.upper()
+            else:
+                continue
             
-        #     for y in collision_project:
-        #         xstreet1 = str(y['xstreet1'])
-        #         xstreet2 = str(y['xstreet2'])
-        #         if road in xstreet1 or road in xstreet2:
-        #             streetlight_collisions = {}
-        #             streetlight_collisions['streetlight'] = 1
-        #             streetlight_collisions.update({'road': road})
-        #             data.append(streetlight_collisions)
+            for y in collision_project:
+                xstreet1 = str(y['xstreet1'])
+                xstreet2 = str(y['xstreet2'])
+                if road in xstreet1 or road in xstreet2:
+                    streetlight_collisions = {}
+                    streetlight_collisions['streetlight'] = 1
+                    streetlight_collisions.update({'road': road})
+                    data.append(streetlight_collisions)
 
-        # c = defaultdict(int)
-        # # how many accidents have happened at each intersection
-        # for d in data:
-        #     c[d['road']] += d['streetlight'] 
+        c = defaultdict(int)
+        # how many accidents have happened at each intersection
+        for d in data:
+            c[d['road']] += d['streetlight'] 
 
 
-        # e = defaultdict(int)
-        # for f in collision_project:
-        #     e[f['xstreet1']] += 1
-        #     e[f['xstreet2']] += 1
-        # # print(e)
+        e = defaultdict(int)
+        for f in collision_project:
+            e[f['xstreet1']] += 1
+            e[f['xstreet2']] += 1
+        # print(e)
 
-        # data2 = []
-        # streetlight_collision_data = [{'road': road, 'streetlight': streetlight} for road, streetlight in c.items()]
-        # # print(streetlight_collision_data)
-        # for x in streetlight_collision_data:
-        #     if x['road'] in e:
-        #         # print(e)
-        #         match = {}
-        #         match.update(x)
-        #         match.update({'collisions': e.get(x['road'])})
-        #         data2.append(match)
+        data2 = []
+        streetlight_collision_data = [{'road': road, 'streetlight': streetlight} for road, streetlight in c.items()]
+        # print(streetlight_collision_data)
+        for x in streetlight_collision_data:
+            if x['road'] in e:
+                # print(e)
+                match = {}
+                match.update(x)
+                match.update({'collisions': e.get(x['road'])})
+                data2.append(match)
         # print(data2)
         
-        data2 = [{'road': 'MARLBOROUGH ST', 'streetlight': 126, 'collisions': 6}, {'road': 'BACK ST', 'streetlight': 6, 'collisions': 3}, {'road': 'BEACON ST', 'streetlight': 1113, 'collisions': 43}, {'road': 'SAINT BOTOLPH ST', 'streetlight': 54, 'collisions': 6}, {'road': 'HUNTINGTON AVE', 'streetlight': 726, 'collisions': 26}, {'road': 'RING RD', 'streetlight': 4, 'collisions': 4}, {'road': 'EXETER ST', 'streetlight': 63, 'collisions': 7}, {'road': 'BOYLSTON ST', 'streetlight': 1326, 'collisions': 34}, {'road': 'NEWBURY ST', 'streetlight': 480, 'collisions': 10}, {'road': 'DARTMOUTH ST', 'streetlight': 546, 'collisions': 13}, {'road': 'COMMONWEALTH AVE', 'streetlight': 2400, 'collisions': 60}, {'road': 'SAINT JAMES AVE', 'streetlight': 64, 'collisions': 4}, {'road': 'STUART ST', 'streetlight': 49, 'collisions': 7}, {'road': 'CLARENDON ST', 'streetlight': 84, 'collisions': 3}]
+        # data2 = [{'road': 'MARLBOROUGH ST', 'streetlight': 126, 'collisions': 6}, {'road': 'BACK ST', 'streetlight': 6, 'collisions': 3}, {'road': 'BEACON ST', 'streetlight': 1113, 'collisions': 43}, {'road': 'SAINT BOTOLPH ST', 'streetlight': 54, 'collisions': 6}, {'road': 'HUNTINGTON AVE', 'streetlight': 726, 'collisions': 26}, {'road': 'RING RD', 'streetlight': 4, 'collisions': 4}, {'road': 'EXETER ST', 'streetlight': 63, 'collisions': 7}, {'road': 'BOYLSTON ST', 'streetlight': 1326, 'collisions': 34}, {'road': 'NEWBURY ST', 'streetlight': 480, 'collisions': 10}, {'road': 'DARTMOUTH ST', 'streetlight': 546, 'collisions': 13}, {'road': 'COMMONWEALTH AVE', 'streetlight': 2400, 'collisions': 60}, {'road': 'SAINT JAMES AVE', 'streetlight': 64, 'collisions': 4}, {'road': 'STUART ST', 'streetlight': 49, 'collisions': 7}, {'road': 'CLARENDON ST', 'streetlight': 84, 'collisions': 3}]
 
         repo.dropCollection("nhuang54_tkixi_wud.streetlight_collisions")
         repo.createCollection("nhuang54_tkixi_wud.streetlight_collisions")
@@ -179,7 +184,7 @@ class streetlights_collisions(dml.Algorithm):
         resource2 = doc.entity('dat:nhuang54_tkixi_wud#bike_collisions', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'csv'})
         
         streetlightcollision_transformation = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(transformation2, this_script)
+        doc.wasAssociatedWith(streetlightcollision_transformation, this_script)
 
         doc.usage(streetlightcollision_transformation, resource1, startTime, None,
                   {prov.model.PROV_TYPE:'ont:Calculation',
@@ -205,7 +210,10 @@ class streetlights_collisions(dml.Algorithm):
         
         return doc
 
-streetlights_collisions.execute()
+if __name__ == '__main__':
+    streetlights_collisions.execute(trial=True)
+
+# streetlights_collisions.execute()
 # doc = transformation2.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))
