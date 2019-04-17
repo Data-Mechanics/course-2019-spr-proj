@@ -30,6 +30,12 @@ This dataset can be derived from [http://bostonopendata-boston.opendata.arcgis.c
 ## Project #2
 In this part, we filtered and optimized existing datasets from multiple datasets in project 1. In addition, we used K means to solve a constraint satisfaction problem and implemented statistical analysis.
 
+### famous_people
+We updated `famous_people` produced in project 1 with a new data source [United States Famous People](https://www.smithsonianmag.com/smithsonianmag/meet-100-most-significant-americans-all-time-180953341/), such that streets like `Washington St` will not be renamed.
+
+### filtered_famous_people_streets
+With the dataset `famous_people`, we remove streets whose names are any of famous people's first names or last names. We used the MongoDB built-in filter syntax to improve efficiency. The output `filtered_famous_people_streets` is the input of later-on steps.
+
 ### Streetbook_filtered
 Given the datasets in project 1, we filtered unnecessary entries from Landmarks, Famous people, Colleges and Universities and Uber Movement data, etc. Besides, for redundant street names, we processed corresponding rows given their redundant times and gave an alternate dataset.
 
