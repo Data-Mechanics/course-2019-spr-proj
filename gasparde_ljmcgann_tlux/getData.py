@@ -142,6 +142,7 @@ class getData(dml.Algorithm):
         doc.add_namespace('ont',
                           'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/')  # The event log.
+
         this_script = doc.agent('alg:gasparde_ljmcgann_tlux#collect',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'],
                                  'ont:Extension': 'py'})
@@ -159,6 +160,7 @@ class getData(dml.Algorithm):
         doc.wasAssociatedWith(getCensusTractShape, this_script)
         doc.usage(getCensusTractShape, bct_resource, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:Retrieval'})
+
         CensusTractShape = doc.entity('dat:gasparde_ljmcgann_tlux#CensusTractShape',
                                       {prov.model.PROV_LABEL: 'Boston Census Tract Shape',
                                        prov.model.PROV_TYPE: 'ont:DataSet'})
@@ -169,9 +171,9 @@ class getData(dml.Algorithm):
 
         # CDC Portal
 
-        doc.add_namespace('cth', 'https://chronicdata.cdc.gov/resource/')
+        doc.add_namespace('cdc', 'https://chronicdata.cdc.gov/resource/')
 
-        cth_resource = doc.entity('cth:47z2-4wuh',
+        cth_resource = doc.entity('cdc:47z2-4wuh',
                                   {'prov:label': 'Collect Boston Census Tract Health Statistics',
                                    prov.model.PROV_TYPE: 'ont:DataResource',
                                    'ont:Extension': 'json'})
@@ -188,10 +190,10 @@ class getData(dml.Algorithm):
         doc.wasDerivedFrom(CensusTractHealth, cth_resource, getCensusTractHealth, getCensusTractHealth,
                            getCensusTractHealth)
 
-        # Boston Open Spaces
+        # Boston Open Data
 
         doc.add_namespace('bod', 'http://bostonopendata-boston.opendata.arcgis.com/datasets/')
-        osb_resource = doc.entity('osb:2868d370c55d4d458d4ae2224ef8cddd_7', {'prov:label': 'Collect Open Spaces in Boston',
+        osb_resource = doc.entity('bod:2868d370c55d4d458d4ae2224ef8cddd_7', {'prov:label': 'Collect Open Spaces in Boston',
                                                                              prov.model.PROV_TYPE: 'ont:DataResource',
                                                                              'ont:Extension': 'geojson'})
 
@@ -205,59 +207,57 @@ class getData(dml.Algorithm):
         doc.wasGeneratedBy(OpenSpaces, getOpenSpaces, endTime)
         doc.wasDerivedFrom(OpenSpaces, osb_resource, getOpenSpaces, getOpenSpaces, getOpenSpaces)
 
-        # Boston Neighborhoods
 
-        bnh_resource = doc.entity('bnh:47z2-4wuh',
+
+        bnh_resource = doc.entity('bod:47z2-4wuh',
                                   {'prov:label': 'Collect Boston Neighborhoods',
                                    prov.model.PROV_TYPE: 'ont:DataResource',
                                    'ont:Extension': 'geojson'})
 
-        getNeighborhoods = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(getNeighborhoods, this_script)
-        doc.usage(getNeighborhoods, bnh_resource, startTime, None,
+        get_Neighborhoods = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(get_Neighborhoods, this_script)
+        doc.usage(get_Neighborhoods, bnh_resource, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:Retrieval'})
 
         Neighborhoods = doc.entity('dat:gasparde_ljmcgann_tlux#Neighborhoods',
                                    {prov.model.PROV_LABEL: 'Shape of Boston Neighborhoods', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(Neighborhoods, this_script)
-        doc.wasGeneratedBy(Neighborhoods, getNeighborhoods, endTime)
-        doc.wasDerivedFrom(Neighborhoods, bnh_resource, getNeighborhoods, getNeighborhoods, getNeighborhoods)
+        doc.wasGeneratedBy(Neighborhoods, get_Neighborhoods, endTime)
+        doc.wasDerivedFrom(Neighborhoods, bnh_resource, get_Neighborhoods, get_Neighborhoods, get_Neighborhoods)
 
-        # Parcel Geoson Data
 
-        pgd_resource = doc.entity('pgd:b7739e6673104c048f5e2f28bb9b2281_0',
+        pgd_resource = doc.entity('bod:b7739e6673104c048f5e2f28bb9b2281_0',
                                   {'prov:label': 'Collect Parcel Shape',
                                    prov.model.PROV_TYPE: 'ont:DataResource',
                                    'ont:Extension': 'geojson'})
 
-        getParcelGeo = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(getParcelGeo, this_script)
-        doc.usage(getParcelGeo, pgd_resource, startTime, None,
+        get_ParcelGeo = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(get_ParcelGeo, this_script)
+        doc.usage(get_ParcelGeo, pgd_resource, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:Retrieval'})
 
         ParcelGeo = doc.entity('dat:gasparde_ljmcgann_tlux#ParcelGeo',
                                {prov.model.PROV_LABEL: 'The Shape of the Parcels', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(ParcelGeo, this_script)
-        doc.wasGeneratedBy(ParcelGeo, getParcelGeo, endTime)
-        doc.wasDerivedFrom(ParcelGeo, pgd_resource, getParcelGeo, getParcelGeo, getParcelGeo)
+        doc.wasGeneratedBy(ParcelGeo, get_ParcelGeo, endTime)
+        doc.wasDerivedFrom(ParcelGeo, pgd_resource, get_ParcelGeo, get_ParcelGeo, get_ParcelGeo)
 
-        # Parcel Assessment
 
-        pas_resource = doc.entity('pas:fd351943-c2c6-4630-992d-3f895360febd',
+        pas_resource = doc.entity('bod:fd351943-c2c6-4630-992d-3f895360febd',
                                   {'prov:label': 'Collect Boston Parcel Assessment Value',
                                    prov.model.PROV_TYPE: 'ont:DataResource',
                                    'ont:Extension': 'json'})
-        getParcelAssessments = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(getParcelAssessments, this_script)
-        doc.usage(getParcelAssessments, pas_resource, startTime, None,
+        get_ParcelAssessments = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(get_ParcelAssessments, this_script)
+        doc.usage(get_ParcelAssessments, pas_resource, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:Retrieval'})
 
         ParcelAssessments = doc.entity('dat:gasparde_ljmcgann_tlux#ParcelAssessments',
                                        {prov.model.PROV_LABEL: 'Assessment Value of Parcels', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(ParcelAssessments, this_script)
-        doc.wasGeneratedBy(ParcelAssessments, getParcelAssessments, endTime)
-        doc.wasDerivedFrom(ParcelAssessments, pas_resource, getParcelAssessments, getParcelAssessments,
-                           getParcelAssessments)
+        doc.wasGeneratedBy(ParcelAssessments, get_ParcelAssessments, endTime)
+        doc.wasDerivedFrom(ParcelAssessments, pas_resource, get_ParcelAssessments, get_ParcelAssessments,
+                           get_ParcelAssessments)
 
         repo.logout()
 

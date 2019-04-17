@@ -10,7 +10,7 @@ import matplotlib.pyplot as pyplt
 
 class optimize(dml.Algorithm):
     contributor = 'gasparde_ljmcgann_tlux'
-    reads = [contributor + ".Neighborhoods", contributor + ".ParcelsCombined"]
+    reads = [contributor + ".Neighborhoods", contributor + ".ParcelsCombined", contributor + ".Statistics"]
     writes = [contributor + ".KMeans"]
 
     @staticmethod
@@ -25,9 +25,9 @@ class optimize(dml.Algorithm):
     @staticmethod
     def distance_score(distance_score, stdev, mean):
         z_score = (distance_score - mean)/(stdev)
-        if z_score > 1:
+        if z_score > 1.5:
             return 100
-        elif z_score > .5:
+        elif z_score > .75:
             return 10
         else:
             return 1
@@ -79,26 +79,30 @@ class optimize(dml.Algorithm):
             health_score_kmeans = []
             x = []
             y = []
-
+            if stats.find_one({"Neighborhood":name, "variable": "distance_score"}) is not None:
+                dist_mean = float(stats.find_one({"Neighborhood": name, "variable": "distance_score", "statistic": "mean"})["value"])
+                dist_stdev = float(stats.find_one({"Neighborhood": name, "variable": "distance_score", "statistic": "std_dev"})["value"])
             for j in range(len(neighborhood)):
 
                 shape = optimize.geojson_to_polygon(neighborhood[j]["geometry"])[0]
                 # out of order, want [latitude, longitude]
                 coords = [shape.centroid.coords[0][1], shape.centroid.coords[0][0]]
                 # do weighted kmeans by adding additional points
-                print(int(neighborhood[j]["distance_score"]))
-                dist_weight = optimize.distance_score(neighborhood[j]["distance_score"])
+
+                dist_weight = optimize.distance_score(neighborhood[j]["distance_score"], dist_stdev, dist_mean)
                 health_weight = optimize.health_score(neighborhood[j])
-                for _ in range(1):
+                for _ in range(dist_weight):
                     distance_kmeans.append([coords[0], coords[1]])
+                    rand = random.random() / 10000
+                    x.append(coords[0] + rand)
+                    y.append(coords[1] + rand)
                 for _ in range(health_weight):
                     #health_score_kmeans.append([coords[0], coords[1]])
                     #this was for purpose of making our scatterplots
                     #look nicer, not needed for kmeans to function properly
-                    rand = random.random() / 10000
-                    health_score_kmeans.append([coords[0] + rand, coords[1] + rand])
-                    x.append(coords[0]+ rand)
-                    y.append(coords[1] + rand)
+
+                    health_score_kmeans.append([coords[0], coords[1]])
+
 
 
                 pyplt.scatter(x,y, s = .5)
@@ -113,8 +117,8 @@ class optimize(dml.Algorithm):
 
                 mean_x = []
                 mean_y = []
-                print(health_score_kmeans)
-                for i in health_output:
+                #print(health_score_kmeans)
+                for i in dist_output:
                     mean_x.append(i[0])
                     mean_y.append(i[1])
                 pyplt.scatter(mean_x, mean_y)
