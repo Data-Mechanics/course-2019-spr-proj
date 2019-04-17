@@ -21,7 +21,6 @@ class streetlights_collisions(dml.Algorithm):
 
     @staticmethod
     def execute(trial = False):
-        print('finding streetlight collisions')
 
         def select(R, s):
             return [t for t in R if s(t)]
@@ -29,7 +28,6 @@ class streetlights_collisions(dml.Algorithm):
             return [p(t) for t in R]
             
 
-        print("in trafficlights collision transformation")
         
         # { bike collisions : mode_type = bike
           #   "dispatch_ts": "2015-01-01 00:24:27",
@@ -59,7 +57,6 @@ class streetlights_collisions(dml.Algorithm):
         # Boston Collisions 
         # mode_type, xstreet1, xstreet2
         bostonCollisions = bc.find()
-        print("###PRINTED Bike Collisions###")
 
         # select to get all bike collisions
         bikeCollisions = select(bostonCollisions, lambda x: x['mode_type'] == 'bike')
@@ -100,10 +97,10 @@ class streetlights_collisions(dml.Algorithm):
                 break
             lat = x['Lat']
             lng = x['Long']
-            print('lat', lat)
+            # print('lat', lat)
             api_limit+=1
             results = geocoder.reverse_geocode(lat, lng)
-            print('printing results')
+            # print('printing results')
             if 'road' in results[0]['components']:            
                 road = results[0]['components']['road']
                 road = road.replace('Street', 'St')
@@ -137,7 +134,6 @@ class streetlights_collisions(dml.Algorithm):
         for f in collision_project:
             e[f['xstreet1']] += 1
             e[f['xstreet2']] += 1
-        # print(e)
 
         data2 = []
         streetlight_collision_data = [{'road': road, 'streetlight': streetlight} for road, streetlight in c.items()]
@@ -149,7 +145,6 @@ class streetlights_collisions(dml.Algorithm):
                 match.update(x)
                 match.update({'collisions': e.get(x['road'])})
                 data2.append(match)
-        # print(data2)
         
         # data2 = [{'road': 'MARLBOROUGH ST', 'streetlight': 126, 'collisions': 6}, {'road': 'BACK ST', 'streetlight': 6, 'collisions': 3}, {'road': 'BEACON ST', 'streetlight': 1113, 'collisions': 43}, {'road': 'SAINT BOTOLPH ST', 'streetlight': 54, 'collisions': 6}, {'road': 'HUNTINGTON AVE', 'streetlight': 726, 'collisions': 26}, {'road': 'RING RD', 'streetlight': 4, 'collisions': 4}, {'road': 'EXETER ST', 'streetlight': 63, 'collisions': 7}, {'road': 'BOYLSTON ST', 'streetlight': 1326, 'collisions': 34}, {'road': 'NEWBURY ST', 'streetlight': 480, 'collisions': 10}, {'road': 'DARTMOUTH ST', 'streetlight': 546, 'collisions': 13}, {'road': 'COMMONWEALTH AVE', 'streetlight': 2400, 'collisions': 60}, {'road': 'SAINT JAMES AVE', 'streetlight': 64, 'collisions': 4}, {'road': 'STUART ST', 'streetlight': 49, 'collisions': 7}, {'road': 'CLARENDON ST', 'streetlight': 84, 'collisions': 3}]
 
@@ -157,7 +152,7 @@ class streetlights_collisions(dml.Algorithm):
         repo.createCollection("nhuang54_tkixi_wud.streetlight_collisions")
 
         repo['nhuang54_tkixi_wud.streetlight_collisions'].insert_many(data2)
-        print("Done with Transformation of Traffic Lights + Bike Collisions")
+        # print("Done with Transformation of Traffic Lights + Bike Collisions")
 
         repo.logout()
         endTime = datetime.datetime.now()

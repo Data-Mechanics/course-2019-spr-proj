@@ -9,6 +9,7 @@ from pprint import pprint
 
 """
 
+
 """
 
 
@@ -20,6 +21,7 @@ class pairwiseCorrelation(dml.Algorithm):
 
     @staticmethod
     def execute(trial = False):
+        print('computing pairwise correlation')
         startTime = datetime.datetime.now()
 
         # Set up the database connection.
@@ -35,6 +37,7 @@ class pairwiseCorrelation(dml.Algorithm):
                             'collisions':item.get('collisions')})
         if trial:
             data = data[:20]
+            print('trial', data)
             
         data = pd.DataFrame(data) # constructs DataFrame with data
         # print('printing')
@@ -109,7 +112,8 @@ class pairwiseCorrelation(dml.Algorithm):
         repo.logout()
                   
         return doc
-if __name__ == '__main__':
-    pairwiseCorrelation.execute(trial=True)
-# pairwiseCorrelation.execute()
+        
+# if __name__ == '__main__':
+#     pairwiseCorrelation.execute(trial=True)
+pairwiseCorrelation.execute()
 

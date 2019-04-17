@@ -32,7 +32,7 @@ def findLatLongByName(path):
   # check null case
   name = path['STREET_NAM']
   query = name + ", Boston, MA"
-  print("name is " + query)
+  # print("name is " + query)
 
   results = geocoder.geocode(query)
 
@@ -51,7 +51,7 @@ class findMinimalStations(dml.Algorithm):
 
     @staticmethod
     def execute(trial = False):
-        print('finding minimal stations')
+        # print('finding minimal stations')
         '''Retrieve some data sets (not using the API here for the sake of simplicity).'''
         startTime = datetime.datetime.now()
 
@@ -169,13 +169,11 @@ class findMinimalStations(dml.Algorithm):
 
         repo.logout()
 
-        print("before endTime")
+        # print("before endTime")
         endTime = datetime.datetime.now()
 
-        print("before return statement")
+        # print("before return statement")
 
-        for c in s.assertions():
-          print(c)
 
 
         return {"start":startTime, "end":endTime}
