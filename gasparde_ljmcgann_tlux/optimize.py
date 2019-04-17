@@ -98,12 +98,10 @@ class optimize(dml.Algorithm):
                     for _ in range(dist_weight):
                         distance_kmeans.append([coords[0], coords[1]])
                     for _ in range(health_weight):
-                        # health_score_kmeans.append([coords[0], coords[1]])
-                        # this was for purpose of making our scatterplots
-                        # look nicer, not needed for kmeans to function properly
-
                         health_score_kmeans.append([coords[0], coords[1]])
 
+            # this check is to be compatible with trial method as other neighborhoods
+            # will be empty
             if len(distance_kmeans) > 0:
                 dist_output = kmeans(distance_kmeans, 5)[0].tolist()
                 repo[optimize.contributor + ".KMeans"].insert_one(
