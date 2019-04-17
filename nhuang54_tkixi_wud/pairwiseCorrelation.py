@@ -17,7 +17,7 @@ This is for finding the "middle" of the street - used in findCrimeStats.
 class pairwiseCorrelation(dml.Algorithm):
     contributor = 'nhuang54_tkixi_wud'
     reads = ['nhuang54_tkixi_wud.streetlight_collisions']
-    writes = ['nhuang54_tkixi_wud.coorelation']
+    writes = ['nhuang54_tkixi_wud.correlation']
 
 
     @staticmethod
@@ -44,14 +44,14 @@ class pairwiseCorrelation(dml.Algorithm):
         corr = pd.DataFrame(data.corr()) # Compute pairwise correlation of columns
         pprint(corr)
 
-        repo.dropCollection("coorelations")
-        repo.createCollection("coorelations")
+        repo.dropCollection("correlations")
+        repo.createCollection("correlations")
 
         r = {'field1': 'streetlight', 'field2': 'collisions', 'value': corr['streetlight']['collisions']}
         pprint(r)
-        repo['nhuang54_tkixi_wud.coorelations'].insert(r)
-        repo['nhuang54_tkixi_wud.coorelations'].metadata({'complete':True})
-        print(repo['nhuang54_tkixi_wud.coorelations'].metadata())
+        repo['nhuang54_tkixi_wud.correlations'].insert(r)
+        repo['nhuang54_tkixi_wud.correlations'].metadata({'complete':True})
+        print(repo['nhuang54_tkixi_wud.correlations'].metadata())
 
 
         repo.logout()
