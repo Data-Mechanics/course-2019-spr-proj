@@ -18,7 +18,12 @@ The datasets that we chose to retrieve are ones that are based on emergency serv
 * modeLocationCount.py - Count the different car accidents and street type pairs to see if a certain mode of transportation (vehicle, bike, etc) was more dangerous/prone to accidents on a certain type of street (one-ways, intersections, etc).
 
 # Project #2
-The purpose of our project is to analyze the overall safety of Boston and each of its towns.
+The purpose of our project is to analyze the overall safety of Boston and each of its towns. To try to achieve this, we grabbed datasets concerning emergency services in Boston, as documented in project #1. For this project, we mainly focused on the 9-1-1 crime reports and road accidents. We had to exclude using fire incident reports because the dataset lacked any type of fields that helped pinpoint a location (latitude and longitude). For our constraint satisfaction, we chose to run k-means clustering, where k = 23, the number of official towns in Boston. With those 23 centroids, we plotted each crime incident and road accident based on their latitude and longitude and found the centroid each point was closest to. We did this 2 separate times, one for crime and one for road accidents, they were not done together. Once this was done, we derived statistics from each of the clusters as our statistical analysis. For every cluster for crime, we calculated the number of violent crimes and calculated the standard deviation and average across all clusters so that we could see the distribution of violent crimes throughout Boston. Similarly, we did the same thing for road accidents, but we just counted accidents in general, so we could see how traffic accidents were different in every town/cluster. At the end of this, we had a general idea of how safe or unsafe Boston could be as a whole. Clustering allowed us to separate out different parts of the city and see if it were safe or unsafe, relative to the other clusters. 
+
+To achieve this in programming, we utilized the scikit-learn library for python3:
+```bash
+from sklearn.cluster import KMeans
+```
 
 ## Running 
 To run our code, clone the data and cd into the top-level directory (course-2019-spr-proj) and run:
