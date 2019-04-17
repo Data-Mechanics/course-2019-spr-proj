@@ -84,13 +84,29 @@ class linearRegression(dml.Algorithm):
         std_err = np.array(reg.bse).tolist()
         p_values = np.array(reg.pvalues).tolist()
         t_stat = np.array(reg.tvalues).tolist()
-        mse = mean_squared_error(y, y_hat)
-        results = {'coefficients': coef, 'standard error': std_err, 'p-values': p_values, 't-statistics': t_stat}
+        results = {'reg_1': {'coefficients': coef, 'standard error': std_err, 'p-values': p_values, 't-statistics': t_stat}}
         #print(reg.summary())
+
+        # regress crime on open spaces, waste, and income
+        X = final_matrix[:, 0:2]
+        ones = np.ones([X.shape[0], 1])
+        X = np.concatenate((ones, X), axis=1)
+        y = final_matrix[:, 3]
+        y.shape = (len(final_matrix), 1)
+        X = sm.add_constant(X)
+
+        # get output of regression
+        reg = sm.OLS(y, X).fit(cov_type='HC1')
+        coef = np.array(reg.params).tolist()
+        std_err = np.array(reg.bse).tolist()
+        p_values = np.array(reg.pvalues).tolist()
+        t_stat = np.array(reg.tvalues).tolist()
+        results2 = {'reg_2': {'coefficients': coef, 'standard error': std_err, 'p-values': p_values, 't-statistics': t_stat}}
 
         repo.dropCollection("misn15.reg_results")
         repo.createCollection("misn15.reg_results")
         repo['misn15.reg_results'].insert_one(results)
+        repo['misn15.reg_results'].insert_one(results2)
         repo['misn15.reg_results'].metadata({'complete':True})
         print(repo['misn15.reg_results'].metadata())
 
@@ -166,7 +182,7 @@ class linearRegression(dml.Algorithm):
 
         return doc
 
-##linearRegression.execute()
+linearRegression.execute()
 ##doc = linearRegression.provenance()
 ##print(doc.get_provn())
 ##print(json.dumps(json.loads(doc.serialize()), indent=4))
