@@ -87,8 +87,6 @@ class DatasetInsertion(dml.Algorithm):
 
         # # major roads
         # url = 'https://drive.google.com/file/d/10a3ZoJjx2kgCRWEwjjCoTHADFV-uYV3e/view?usp=sharing'
-        # major roads
-        # url = 'major_roads.json'
         # response = urllib.request.urlopen(url).read().decode("utf-8")
         # r = json.loads(response)
         # with open('major_roads.json') as f:
