@@ -131,13 +131,14 @@ class weather_fire_incident_transformation(dml.Algorithm):
         return doc
 
 
-# '''
-# # This is example code you might use for debugging this module.
-# # Please remove all top-level function calls before submitting.
-# '''
-# weather_fire_incident_transormation.execute()
-# doc = weather_fire_incident_transormation.provenance()
+'''
+# This is example code you might use for debugging this module.
+# Please remove all top-level function calls before submitting.
+'''
+if __name__ == "__main__":
+    weather_fire_incident_transformation.execute()
+# doc = weather_fire_incident_transformation.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))
-#
-# ## eof
+
+## eof
