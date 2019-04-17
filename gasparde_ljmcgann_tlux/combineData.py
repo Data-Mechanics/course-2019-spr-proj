@@ -184,7 +184,6 @@ class combineData(dml.Algorithm):
             else:
                 print(parcel_shape_assessment[i]["_id"])
 
-
         # print(len(parcel_shape_assessment))
         # print(parcel_shape_assessment)
 
@@ -298,9 +297,7 @@ class combineData(dml.Algorithm):
 
     @staticmethod
     def provenance(doc=prov.model.ProvDocument(), startTime=None, endTime=None):
-        client = dml.pymongo.MongoClient()
-        repo = client.repo
-        repo.authenticate('gasparde_ljmcgann_tlux', 'gasparde_ljmcgann_tlux')
+
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')  # The scripts are in <folder>#<filename> format.
         doc.add_namespace('dat', 'http://datamechanics.io/data/')  # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont',
@@ -364,4 +361,4 @@ class combineData(dml.Algorithm):
                            getParcelsCombined)
         doc.wasDerivedFrom(ParcelsCombined, ParcelAssessments, getParcelsCombined, getParcelsCombined,
                            getParcelsCombined)
-
+        return doc

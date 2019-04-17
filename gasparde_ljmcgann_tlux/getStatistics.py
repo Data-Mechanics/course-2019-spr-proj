@@ -11,14 +11,14 @@ import uuid
 from scipy.stats import pearsonr
 from statistics import mean, stdev
 
+
 class getStatistics(dml.Algorithm):
     contributor = 'gasparde_ljmcgann_tlux'
     reads = [contributor + ".Neighborhoods", contributor + ".ParcelsCombined"]
     writes = [contributor + ".Statistics"]
 
     @staticmethod
-    def execute(trial = False):
-
+    def execute(trial=False):
 
         client = dml.pymongo.MongoClient()
         repo = client.repo
@@ -30,7 +30,7 @@ class getStatistics(dml.Algorithm):
         repo.createCollection(getStatistics.contributor + ".Statistics")
         for i in range(len(neighborhoods)):
             name = neighborhoods[i]["properties"]["Name"]
-            data = list(parcels.find({"Neighborhood":name}))
+            data = list(parcels.find({"Neighborhood": name}))
             if len(data) > 0:
                 for category in ["obesity", "asthma", "low_phys"]:
                     x = []
@@ -39,20 +39,21 @@ class getStatistics(dml.Algorithm):
                         y.append(float(data[i][category]))
                         x.append(float(data[i]["distance_score"]))
 
-                    corr = pearsonr(x,y)
-                    repo[getStatistics.contributor + ".Statistics"].insert_one({"Neighborhood": name , "variable": category,
-                                                                         "statistic": "pearsonr", "value":corr})
+                    corr = pearsonr(x, y)
+                    repo[getStatistics.contributor + ".Statistics"].insert_one(
+                        {"Neighborhood": name, "variable": category,
+                         "statistic": "pearsonr", "value": corr})
                     m = mean(y)
                     repo[getStatistics.contributor + ".Statistics"].insert_one(
                         {"Neighborhood": name, "variable": category,
-                         "statistic":"mean","value": m})
+                         "statistic": "mean", "value": m})
                     repo[getStatistics.contributor + ".Statistics"].insert_one(
                         {"Neighborhood": name, "variable": category,
-                          "statistic":"std_dev","val": stdev(y, m)})
+                         "statistic": "std_dev", "val": stdev(y, m)})
 
         for i in range(len(neighborhoods)):
             name = neighborhoods[i]["properties"]["Name"]
-            data = list(parcels.find({"Neighborhood":name}))
+            data = list(parcels.find({"Neighborhood": name}))
             if len(data) > 0:
                 x = []
                 for i in range(len(data)):
@@ -60,17 +61,13 @@ class getStatistics(dml.Algorithm):
                 m = mean(x)
                 repo[getStatistics.contributor + ".Statistics"].insert_one(
                     {"Neighborhood": name, "variable": "distance_score",
-                     "statistic":"mean","value": m})
+                     "statistic": "mean", "value": m})
                 repo[getStatistics.contributor + ".Statistics"].insert_one(
                     {"Neighborhood": name, "variable": "distance_score",
-                     "statistic":"std_dev","value": stdev(x,m)})
-
+                     "statistic": "std_dev", "value": stdev(x, m)})
 
     @staticmethod
     def provenance(doc=prov.model.ProvDocument(), startTime=None, endTime=None):
-        client = dml.pymongo.MongoClient()
-        repo = client.repo
-        repo.authenticate('gasparde_ljmcgann_tlux', 'gasparde_ljmcgann_tlux')
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')  # The scripts are in <folder>#<filename> format.
         doc.add_namespace('dat', 'http://datamechanics.io/data/')  # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont',
@@ -107,3 +104,4 @@ class getStatistics(dml.Algorithm):
                            getStatistics)
         doc.wasDerivedFrom(Stats, ParcelsCombined, getStatistics, getStatistics,
                            getStatistics)
+        return doc

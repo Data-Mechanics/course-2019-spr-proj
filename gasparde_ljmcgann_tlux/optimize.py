@@ -26,7 +26,7 @@ class optimize(dml.Algorithm):
 
     @staticmethod
     def distance_score(distance_score, stdev, mean):
-        z_score = (distance_score - mean)/(stdev)
+        z_score = (distance_score - mean) / (stdev)
         if z_score > 1.5:
             return 100
         elif z_score > .75:
@@ -59,7 +59,6 @@ class optimize(dml.Algorithm):
                 polys.append(poly)
         return polys
 
-
     @staticmethod
     def execute(trial=False):
         startTime = datetime.datetime.now()
@@ -80,9 +79,12 @@ class optimize(dml.Algorithm):
             neighborhood = list(parcels.find({"Neighborhood": name}))
             distance_kmeans = []
             health_score_kmeans = []
-            if stats.find_one({"Neighborhood":name, "variable": "distance_score"}) is not None:
-                dist_mean = float(stats.find_one({"Neighborhood": name, "variable": "distance_score", "statistic": "mean"})["value"])
-                dist_stdev = float(stats.find_one({"Neighborhood": name, "variable": "distance_score", "statistic": "std_dev"})["value"])
+            if stats.find_one({"Neighborhood": name, "variable": "distance_score"}) is not None:
+                dist_mean = float(
+                    stats.find_one({"Neighborhood": name, "variable": "distance_score", "statistic": "mean"})["value"])
+                dist_stdev = float(
+                    stats.find_one({"Neighborhood": name, "variable": "distance_score", "statistic": "std_dev"})[
+                        "value"])
                 for j in range(len(neighborhood)):
 
                     shape = optimize.geojson_to_polygon(neighborhood[j]["geometry"])[0]
@@ -95,12 +97,11 @@ class optimize(dml.Algorithm):
                     for _ in range(dist_weight):
                         distance_kmeans.append([coords[0], coords[1]])
                     for _ in range(health_weight):
-                        #health_score_kmeans.append([coords[0], coords[1]])
-                        #this was for purpose of making our scatterplots
-                        #look nicer, not needed for kmeans to function properly
+                        # health_score_kmeans.append([coords[0], coords[1]])
+                        # this was for purpose of making our scatterplots
+                        # look nicer, not needed for kmeans to function properly
 
                         health_score_kmeans.append([coords[0], coords[1]])
-
 
             if len(distance_kmeans) > 0:
                 dist_output = kmeans(distance_kmeans, 5)[0].tolist()
@@ -112,13 +113,8 @@ class optimize(dml.Algorithm):
 
         repo[optimize.contributor + ".KMeans"].metadata({'complete': True})
 
-
-
     @staticmethod
     def provenance(doc=prov.model.ProvDocument(), startTime=None, endTime=None):
-        client = dml.pymongo.MongoClient()
-        repo = client.repo
-        repo.authenticate('gasparde_ljmcgann_tlux', 'gasparde_ljmcgann_tlux')
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')  # The scripts are in <folder>#<filename> format.
         doc.add_namespace('dat', 'http://datamechanics.io/data/')  # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont',
@@ -162,3 +158,4 @@ class optimize(dml.Algorithm):
                            getOptimization)
         doc.wasDerivedFrom(Optimization, Stats, getOptimization, getOptimization,
                            getOptimization)
+        return doc
