@@ -9,18 +9,16 @@ import datetime
 import io
 import logging
 import os
-import tempfile
 import uuid
+import zipfile
 
 import dml
 import pandas as pd
 import prov.model
 import requests
-import zipfile
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
-
 
 URL = "https://data.boston.gov/dataset/03693648-2c62-4a2c-a4ec-48de2ee14e18/resource/4582bec6-2b4f-4f9e-bc55-cbaa73117f4c/download/tmp77velm71.csv"
 
@@ -137,3 +135,5 @@ class FoodInspections(dml.Algorithm):
         repo.logout()
 
         return doc
+
+# eof

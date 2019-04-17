@@ -2,7 +2,6 @@ import datetime
 import logging
 import uuid
 
-
 import dml
 import pandas as pd
 import prov.model
@@ -19,7 +18,6 @@ class FoodViolations(dml.Algorithm):
 
     @staticmethod
     def execute(trial=False):
-
         startTime = datetime.datetime.now()
 
         # Set up the database connection.
@@ -71,7 +69,7 @@ class FoodViolations(dml.Algorithm):
         RDF["violationDateParsed"] = pd.to_datetime(RDF["violationDate"])
         RDF["violationDays"] = RDF["violationDateParsed"].map(
             lambda x: (startTime - x).days)
-        RDF["violationRate"] = RDF["violationCount"]/RDF["violationDays"]
+        RDF["violationRate"] = RDF["violationCount"] / RDF["violationDays"]
         RDF = RDF.loc[RDF["violationDays"].dropna().index, :]
 
         RDF["_id"] = RDF.index.values
@@ -134,3 +132,5 @@ def parse_coor(s):
     long = float(long)
 
     return [lat, long]
+
+# eof

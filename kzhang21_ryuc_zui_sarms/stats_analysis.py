@@ -1,20 +1,15 @@
-import urllib.request
-import json
-import dml
-import prov.model
 import datetime
-import uuid
-import pandas as pd
-import numpy as np
-from scipy import stats
-
-from random import shuffle
-from math import sqrt
-
 import logging
+import uuid
+
+import dml
+import pandas as pd
+import prov.model
+from scipy import stats
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
+
 
 class stats_analysis(dml.Algorithm):
     contributor = 'kzhang21_ryuc_zui_sarms'
@@ -23,7 +18,7 @@ class stats_analysis(dml.Algorithm):
 
     @staticmethod
     def execute(trial=False):
-        '''Retrieve some data sets (not using the API here for the sake of simplicity).'''
+
         startTime = datetime.datetime.now()
 
         # Set up the database connection.
@@ -37,7 +32,8 @@ class stats_analysis(dml.Algorithm):
         yelp_business = repo['kzhang21_ryuc_zui_sarms.yelp_business']
         stats_variables = repo['kzhang21_ryuc_zui_sarms.statistics']
 
-        yelp_files = list(yelp_business.find({}, {"price": 1, "rating": 1, "violation_rate": 1, "review_count": 1, "_id": 0}))
+        yelp_files = list(
+            yelp_business.find({}, {"price": 1, "rating": 1, "violation_rate": 1, "review_count": 1, "_id": 0}))
 
         log.info('One example: %s', yelp_files[0])
 
@@ -49,6 +45,7 @@ class stats_analysis(dml.Algorithm):
                 row['price'] = None
 
         df_yelp = pd.DataFrame(yelp_files).apply(pd.Series)
+
         def getStats(one, two):
             filtered_df = df_yelp[df_yelp[one].notnull() & df_yelp[two].notnull()]
             x = filtered_df[one]
@@ -91,10 +88,10 @@ class stats_analysis(dml.Algorithm):
         this_script = doc.agent('alg:kzhang21_ryuc_zui_sarms#yelp_business',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
         yelp_business = doc.entity('dat:kzhang21_ryuc_zui_sarms#yelp_business',
-                              {'prov:label': 'yelp data', prov.model.PROV_TYPE: 'ont:DataSet'})
+                                   {'prov:label': 'yelp data', prov.model.PROV_TYPE: 'ont:DataSet'})
         get_stats = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
         statistics = doc.entity('dat:kzhang21_ryuc_zui_sarms#statistics',
-                              {'prov:label': 'statistics data', prov.model.PROV_TYPE: 'ont:DataSet'})
+                                {'prov:label': 'statistics data', prov.model.PROV_TYPE: 'ont:DataSet'})
 
         doc.wasAssociatedWith(get_stats, this_script)
         doc.usage(get_stats, yelp_business, startTime, None,
@@ -109,8 +106,5 @@ class stats_analysis(dml.Algorithm):
         repo.logout()
 
         return doc
-# stats_analysis.execute()
-# doc = stats_analysis.provenance()
-# print(doc.get_provn())
-# print(json.dumps(json.loads(doc.serialize()), indent=4))
-## eof
+
+# eof

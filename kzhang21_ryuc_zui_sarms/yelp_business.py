@@ -8,7 +8,6 @@ import dml
 import pandas as pd
 import prov.model
 import requests
-import random
 
 log = logging.getLogger(__name__)
 
@@ -25,17 +24,19 @@ BUSINESS_PATH = '/v3/businesses/'  # Business ID will come after slash.
 DEFAULT_TERM = 'dinner'
 DEFAULT_LOCATION = 'Boston, MA'
 SEARCH_LIMIT = 1
+
+
 class yelp_business(dml.Algorithm):
     contributor = 'kzhang21_ryuc_zui_sarms'
     reads = ['kzhang21_ryuc_zui_sarms.food_inspections_squished', 'kzhang21_ryuc_zui_sarms.food_violations']
     writes = ['kzhang21_ryuc_zui_sarms.yelp_business']
 
     @staticmethod
-    def execute(trial = False):
+    def execute(trial=False):
 
         startTime = datetime.datetime.now()
         log.debug("Running %s", __name__)
-        
+
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
@@ -58,7 +59,7 @@ class yelp_business(dml.Algorithm):
         ## for each entry in violation get data
         ## Once FoodInspections is in trial mode so is yelp_business
 
-        
+
         for index, row in df_inspections.iterrows():
             term = row["businessname"]
             location = row["address"] + ', Boston, MA'
@@ -79,43 +80,49 @@ class yelp_business(dml.Algorithm):
                     repo['kzhang21_ryuc_zui_sarms.yelp_business'].insert_one(result)
             if index >= 50 and trial:
                 break
-                
+
         log.debug("Finishing %s", __name__)
-        
+
         log.debug("Push data into mongoDB")
 
         repo.logout()
 
         endTime = datetime.datetime.now()
 
-        return {"start":startTime, "end":endTime}
-    
+        return {"start": startTime, "end": endTime}
+
     @staticmethod
-    def provenance(doc = prov.model.ProvDocument(), startTime = None, endTime = None):
+    def provenance(doc=prov.model.ProvDocument(), startTime=None, endTime=None):
 
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate('kzhang21_ryuc_zui_sarms', 'kzhang21_ryuc_zui_sarms')
-        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/') # The scripts are in <folder>#<filename> format.
-        doc.add_namespace('dat', 'http://datamechanics.io/data/') # The data sets are in <user>#<collection> format.
-        doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
-        doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
+        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')  # The scripts are in <folder>#<filename> format.
+        doc.add_namespace('dat', 'http://datamechanics.io/data/')  # The data sets are in <user>#<collection> format.
+        doc.add_namespace('ont',
+                          'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
+        doc.add_namespace('log', 'http://datamechanics.io/log/')  # The event log.
         doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
         # ['', '']
-        this_script = doc.agent('alg:kzhang21_ryuc_zui_sarms#yelp_business', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        resource1 = doc.entity('dat:kzhang21_ryuc_zui_sarms#food_inspections_squished', {'prov:label':'Food Inspections', prov.model.PROV_TYPE:'ont:DataSet'})
-        resource2 = doc.entity('dat:kzhang21_ryuc_zui_sarms#food_violations', {'prov:label':'Food Violations', prov.model.PROV_TYPE:'ont:DataSet'})
-        resource3 = doc.entity('yelp:api',{'prov:label':'Yelp Businesses',prov.model.PROV_TYPE:'ont:DataResource','ont:Extension':'json'})
-        
-        get_business = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
-        
+        this_script = doc.agent('alg:kzhang21_ryuc_zui_sarms#yelp_business',
+                                {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
+        resource1 = doc.entity('dat:kzhang21_ryuc_zui_sarms#food_inspections_squished',
+                               {'prov:label': 'Food Inspections', prov.model.PROV_TYPE: 'ont:DataSet'})
+        resource2 = doc.entity('dat:kzhang21_ryuc_zui_sarms#food_violations',
+                               {'prov:label': 'Food Violations', prov.model.PROV_TYPE: 'ont:DataSet'})
+        resource3 = doc.entity('yelp:api', {'prov:label': 'Yelp Businesses', prov.model.PROV_TYPE: 'ont:DataResource',
+                                            'ont:Extension': 'json'})
+
+        get_business = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+
         doc.wasAssociatedWith(get_business, this_script)
-        doc.usage(get_business, resource1, startTime, None, {prov.model.PROV_TYPE:'ont:Retrieval'})
+        doc.usage(get_business, resource1, startTime, None, {prov.model.PROV_TYPE: 'ont:Retrieval'})
         doc.usage(get_business, resource2, startTime, None, {prov.model.PROV_TYPE: 'ont:Retrieval'})
         doc.usage(get_business, resource3, startTime, None, {prov.model.PROV_TYPE: 'ont:Retrieval'})
 
-        yelp_business = doc.entity('dat:kzhang21_ryuc_zui_sarms#yelp_business', {prov.model.PROV_LABEL:'Yelp Businesses', prov.model.PROV_TYPE:'ont:DataSet'})
+        yelp_business = doc.entity('dat:kzhang21_ryuc_zui_sarms#yelp_business',
+                                   {prov.model.PROV_LABEL: 'Yelp Businesses', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(yelp_business, this_script)
         doc.wasGeneratedBy(yelp_business, get_business, endTime)
         doc.wasDerivedFrom(yelp_business, resource1, get_business)
@@ -123,8 +130,9 @@ class yelp_business(dml.Algorithm):
         doc.wasDerivedFrom(yelp_business, resource3, get_business)
 
         repo.logout()
-                  
+
         return doc
+
 
 def request(host, path, api_key, url_params=None):
     url_params = url_params or {}
@@ -136,6 +144,7 @@ def request(host, path, api_key, url_params=None):
 
     return response.json()
 
+
 def search(api_key, term, location):
     url_params = {
         'term': term.replace(' ', '+'),
@@ -144,12 +153,10 @@ def search(api_key, term, location):
     }
     return request(API_HOST, SEARCH_PATH, api_key, url_params=url_params)
 
-def query_api(term, location):
 
+def query_api(term, location):
     response = search(API_KEY, term, location)
     businesses = response.get('businesses')
     return businesses
 
-
-
-## eof
+# eof

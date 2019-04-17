@@ -1,23 +1,16 @@
-import urllib.request
-import json
-import dml
-import prov.model
 import datetime
-import uuid
-import pandas as pd
-import logging
-
-import argparse
 import json
-import requests
-import sys
-import os
+import logging
+import uuid
 
-from urllib.error import HTTPError
-from urllib.parse import quote
+import dml
+import pandas as pd
+import prov.model
+import requests
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
+
 
 class yelp_longLat(dml.Algorithm):
     contributor = 'kzhang21_ryuc_zui_sarms'
@@ -25,7 +18,7 @@ class yelp_longLat(dml.Algorithm):
     writes = ['kzhang21_ryuc_zui_sarms.yelp_longLat']
 
     @staticmethod
-    def execute(trial = False):
+    def execute(trial=False):
 
         startTime = datetime.datetime.now()
 
@@ -35,20 +28,19 @@ class yelp_longLat(dml.Algorithm):
         repo.authenticate('kzhang21_ryuc_zui_sarms', 'kzhang21_ryuc_zui_sarms')
 
         violationData = pd.DataFrame(repo.kzhang21_ryuc_zui_sarms.food_violations.find({"location": float("nan")}))
-    
-        
-        for index,row in violationData.iterrows():
+
+        for index, row in violationData.iterrows():
             if pd.isnull(row['location']) or row['location'] is None:
                 address = row['address'] + ", " + row['city'] + ", " + row['state']
-                address =' '.join(address.split())
-                #print(geocoding(address))
+                address = ' '.join(address.split())
+                # print(geocoding(address))
                 addr, lat, lgn = geocoding(address)
                 row["location"] = (lat, lgn)
                 row["address"] = addr
 
-                repo.kzhang21_ryuc_zui_sarms.food_violations.replace_one({"_id": row["_id"]}, row.to_dict(), upsert=True)
+                repo.kzhang21_ryuc_zui_sarms.food_violations.replace_one({"_id": row["_id"]}, row.to_dict(),
+                                                                         upsert=True)
 
-        
         log.debug("Push data into mongoDB")
 
         repo.dropCollection("food_violations")
@@ -57,37 +49,42 @@ class yelp_longLat(dml.Algorithm):
 
         endTime = datetime.datetime.now()
 
-        return {"start":startTime, "end":endTime}
-    
+        return {"start": startTime, "end": endTime}
+
     @staticmethod
-    def provenance(doc = prov.model.ProvDocument(), startTime = None, endTime = None):
+    def provenance(doc=prov.model.ProvDocument(), startTime=None, endTime=None):
 
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate('kzhang21_ryuc_zui_sarms', 'kzhang21_ryuc_zui_sarms')
-        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/') # The scripts are in <folder>#<filename> format.
-        doc.add_namespace('dat', 'http://datamechanics.io/data/') # The data sets are in <user>#<collection> format.
-        doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
-        doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
+        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')  # The scripts are in <folder>#<filename> format.
+        doc.add_namespace('dat', 'http://datamechanics.io/data/')  # The data sets are in <user>#<collection> format.
+        doc.add_namespace('ont',
+                          'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
+        doc.add_namespace('log', 'http://datamechanics.io/log/')  # The event log.
         doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
 
-        this_script = doc.agent('alg:kzhang21_ryuc_zui_sarms#yelp_longLat', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        resource = doc.entity('bdp:business.json', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
-        get_business = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        this_script = doc.agent('alg:kzhang21_ryuc_zui_sarms#yelp_longLat',
+                                {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
+        resource = doc.entity('bdp:business.json',
+                              {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource',
+                               'ont:Extension': 'json'})
+        get_business = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(get_business, this_script)
         doc.usage(get_business, resource, startTime, None,
-                  {prov.model.PROV_TYPE:'ont:Retrieval'
-                  }
+                  {prov.model.PROV_TYPE: 'ont:Retrieval'
+                   }
                   )
 
-        yelp_longLat = doc.entity('dat:kzhang21_ryuc_zui_sarms#yelp_longLat', {prov.model.PROV_LABEL:'Yelp Long Lat', prov.model.PROV_TYPE:'ont:DataSet'})
+        yelp_longLat = doc.entity('dat:kzhang21_ryuc_zui_sarms#yelp_longLat',
+                                  {prov.model.PROV_LABEL: 'Yelp Long Lat', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(yelp_longLat, this_script)
         doc.wasGeneratedBy(yelp_longLat, get_business, endTime)
         doc.wasDerivedFrom(yelp_longLat, resource, get_business, get_business, get_business)
 
         repo.logout()
-                  
+
         return doc
 
 
@@ -122,7 +119,4 @@ def geocoding(address):
         log.error("Error in Geocoding %s", address)
         return (address, -1, -1)
 
-# yelp_longLat.execute()
-# doc = yelp_longLat.provenance()
-# print(doc.get_provn())
-# print(json.dumps(json.loads(doc.serialize()), indent=4))
+# eof
