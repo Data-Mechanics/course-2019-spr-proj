@@ -25,15 +25,15 @@ class ballot_questions(dml.Algorithm):
         repo = client.repo
         repo.authenticate('stathisk_simonwu_nathanmo_nikm', 'stathisk_simonwu_nathanmo_nikm')
 
-        data = pandas.read_excel(r'/Users/nikhileshm/Desktop/BallotQuestions.xlsx')
-        #print(data)
+        data = pandas.read_excel('http://datamechanics.io/data/BallotQuestionsScores.xlsx')
+
 
         df = pandas.DataFrame(data, columns=['year', 'number', 'question_long', 'Progressive/Conservative'])
-        df.rename(columns={"year":"Year", "number":"Qnumber", "question_long": "Question", "Progressive/Conservative":"YesScore"}, inplace=True)
+        df.rename(columns={"year": "Year", "number": "Qnumber", "question_long": "Question",
+                           "Progressive/Conservative": "YesScore"}, inplace=True)
         df['NoScore'] = df.apply(lambda t: end_score - (t.YesScore - start_score), axis=1)
-        print(df)
 
-        #df.to_excel("../BallotQuestionsOutput.xlsx")
+        # df.to_excel("../BallotQuestionsOutput.xlsx")
         collection = 'stathisk_simonwu_nathanmo_nikm.scores'
         repo[collection].insert_many(json.loads(df.to_json(orient='records')))
         repo[collection].metadata({'complete': True})
@@ -78,6 +78,6 @@ class ballot_questions(dml.Algorithm):
         return doc
 
 ballot_questions.execute(True)
-doc = ballot_questions.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
+# doc = ballot_questions.provenance()
+# print(doc.get_provn())
+# print(json.dumps(json.loads(doc.serialize()), indent=4))

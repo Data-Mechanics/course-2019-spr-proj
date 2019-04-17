@@ -81,7 +81,7 @@ class questionsAggr(dml.Algorithm):
             combined = union(combined, res)
         final = koalas.DataFrame(data=project(aggregate(combined, multipleAverages), unzipper),
                                  columns=['Locality', 'Yes', 'No', 'Blanks', 'Total Votes Cast'])
-        print(final)
+
         repo['avgAnswers'].insert_many(json.loads(final.to_json(orient='records')))
         repo['avgAnswers'].metadata({'complete': True})
 
@@ -161,8 +161,8 @@ class questionsAggr(dml.Algorithm):
         repo.logout()
         return doc
 
-
-questionsAggr.execute()
-doc = questionsAggr.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
+#
+# questionsAggr.execute()
+# doc = questionsAggr.provenance()
+# print(doc.get_provn())
+# print(json.dumps(json.loads(doc.serialize()), indent=4))
