@@ -237,7 +237,11 @@ class example(dml.Algorithm):
 
         # ('Bus Stop'), append city state to bus stops
         t16 = project(r1, lambda t: (t[r1School], t[r1BusStop] + ', Natick, MA'))
-       
+
+        # ('lat', 'lng', 'og') of homes r8
+        t17 = project(r8, lambda t: (t['lat'], t['long']))
+        # ('lat', 'lng', 'og') of stops r9
+        t18 = project(r9, lambda t: (t['lat'], t['long']))
         
         #separate student addresses by school attended - these will be the points in k-means
         POINTS_OG = []
@@ -270,7 +274,7 @@ class example(dml.Algorithm):
                     lat = f[0]['geometry']['location']['lat']
                     lng = f[0]['geometry']['location']['lng']
                     POINTS_NEW[i][j] = tuple([lat,lng])
-        '''
+        
                    
         temp = []
         tswitch = False
@@ -285,6 +289,8 @@ class example(dml.Algorithm):
                 elif not tswitch:
                     tswitch = True
         tswitch = False
+        '''
+        temp = t17
 
         POINTS_NEW = []  
         count = 0
@@ -345,7 +351,7 @@ class example(dml.Algorithm):
                         STOPS_NEW[i][j] = tuple([lat,lng])
                         print("Error! ", "stop ", i, " ", j, ": ", STOPS_NEW[i][j])
                     writer.writerow({'lat': lat, 'lng': lng, 'og': og})
-        '''
+        
         #read the lat/lng from the csv file
         temp = []
         tswitch = False
@@ -359,7 +365,9 @@ class example(dml.Algorithm):
                     temp.append(tuple([float(lat), float(lng)]))
                 elif not tswitch:
                     tswitch = True
-
+        '''
+        
+        temp = t18
         #make a new structure, & eliminate elements that are not floats (where the geocode api failed to convert)
         STOPS_NEW = []
         count = 0
