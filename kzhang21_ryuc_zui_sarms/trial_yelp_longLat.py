@@ -19,10 +19,10 @@ from urllib.parse import quote
 log = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
-class yelp_longLat(dml.Algorithm):
+class trial_yelp_longLat(dml.Algorithm):
     contributor = 'kzhang21_ryuc_zui_sarms'
     reads = ['kzhang21_ryuc_zui_sarms.food_violations', 'kzhang21_ryuc_zui_sarms.yelp_business']
-    writes = ['kzhang21_ryuc_zui_sarms.yelp_longLat']
+    writes = ['kzhang21_ryuc_zui_sarms._trial_viol_longLat']
 
     @staticmethod
     def execute(trial = False):
@@ -36,7 +36,10 @@ class yelp_longLat(dml.Algorithm):
 
         violationData = pd.DataFrame(repo.kzhang21_ryuc_zui_sarms.food_violations.find({"location": float("nan")}))
         
-        for index,row in violationData.iterrows():
+        #keep only the first 100 violation data
+        miniViolation = violationData.head(100)
+
+        for index,row in miniViolation.iterrows():
             if pd.isnull(row['location']) or row['location'] is None:
                 address = row['address'] + ", " + row['city'] + ", " + row['state']
                 address =' '.join(address.split())
@@ -51,8 +54,8 @@ class yelp_longLat(dml.Algorithm):
         
         log.debug("Push data into mongoDB")
 
-        repo.dropCollection("food_violations")
-        repo.createCollection("food_violations")
+        repo.dropCollection("trial_food_violations")
+        repo.createCollection("trial_food_violations")
         repo.logout()
 
         endTime = datetime.datetime.now()
@@ -72,7 +75,7 @@ class yelp_longLat(dml.Algorithm):
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
         doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
 
-        this_script = doc.agent('alg:kzhang21_ryuc_zui_sarms#yelp_longLat', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        this_script = doc.agent('alg:kzhang21_ryuc_zui_sarms#trial_yelp_longLat', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
         resource = doc.entity('bdp:business.json', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
         get_business = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(get_business, this_script)
@@ -81,7 +84,7 @@ class yelp_longLat(dml.Algorithm):
                   }
                   )
 
-        yelp_longLat = doc.entity('dat:kzhang21_ryuc_zui_sarms#yelp_longLat', {prov.model.PROV_LABEL:'Yelp Long Lat', prov.model.PROV_TYPE:'ont:DataSet'})
+        yelp_longLat = doc.entity('dat:kzhang21_ryuc_zui_sarms#trial_yelp_longLat', {prov.model.PROV_LABEL:'Yelp Long Lat Trial Mode', prov.model.PROV_TYPE:'ont:DataSet'})
         doc.wasAttributedTo(yelp_longLat, this_script)
         doc.wasGeneratedBy(yelp_longLat, get_business, endTime)
         doc.wasDerivedFrom(yelp_longLat, resource, get_business, get_business, get_business)
@@ -122,7 +125,7 @@ def geocoding(address):
         log.error("Error in Geocoding %s", address)
         return (address, -1, -1)
 
-# viola_longLat.execute()
-# doc = viola_longLat.provenance()
-# print(doc.get_provn())
-# print(json.dumps(json.loads(doc.serialize()), indent=4))
+trial_yelp_longLat.execute()
+doc = trial_yelp_longLat.provenance()
+print(doc.get_provn())
+print(json.dumps(json.loads(doc.serialize()), indent=4))
