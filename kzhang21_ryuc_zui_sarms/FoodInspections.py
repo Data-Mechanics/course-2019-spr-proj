@@ -28,7 +28,7 @@ URL = "https://data.boston.gov/dataset/03693648-2c62-4a2c-a4ec-48de2ee14e18/reso
 class FoodInspections(dml.Algorithm):
     contributor = 'kzhang21_ryuc_zui_sarms'
     reads = []
-    writes = ['kzhang21_ryuc_zui_sarms.food_inspections']
+    writes = ['kzhang21_ryuc_zui_sarms.food_inspections', "kzhang21_ryuc_zui_sarms.food_inspections_squished"]
 
     @staticmethod
     def execute(trial=False):
