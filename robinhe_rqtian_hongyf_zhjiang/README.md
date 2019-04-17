@@ -64,13 +64,16 @@ Solution:
     We abstract this real world problem to a mathematical model. To simplify the problem, we divide the map
     into grid map and calculate the car accidents happened in each grid. Then we use a slide window to
     go throw the grids and find the grid where car accidents are most likely to happen. For example n=5, then
-    we have C1,C2,C3,C4,C5 for 5 positions of the slide window.\n
-    System states S = {grid in this grid map}^n\n
+    we have C1,C2,C3,C4,C5 for 5 positions of the slide window.  
+    
+    System states S = {grid in this grid map}^n  
+    
     then the constraints are:
     1, the grid map is 100*100
     2, the slide window slides inside the region, the stride is 1 and the window size is 3, it should also be
     a square window.
-    3, Ci and Cj can not overlap each other, which means if the slide window overlaps, we only keep the bigger one.\n
+    3, Ci and Cj can not overlap each other, which means if the slide window overlaps, we only keep the bigger one.  
+    
     the metric is:
     1, C = C1 +C2 + ... + C5, we need to find a state in S which maximize C 
 

@@ -2,9 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7ba2df39-ef6b-47e2-9c2e-bb52af9a986d" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/robinhe_rqtian_hongyf_zhjiang/crashSpots.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alice_bob/example.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/config.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/robinhe_rqtian_hongyf_zhjiang/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/robinhe_rqtian_hongyf_zhjiang/README.md" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -67,8 +64,8 @@
         <entry file="file://$PROJECT_DIR$/robinhe_rqtian_hongyf_zhjiang/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="348">
-                <caret line="47" column="123" selection-start-line="47" selection-start-column="123" selection-end-line="47" selection-end-column="123" />
+              <first_editor relative-caret-position="411">
+                <caret line="74" column="117" selection-start-line="74" selection-start-column="117" selection-end-line="74" selection-end-column="117" />
               </first_editor>
               <second_editor />
             </state>
@@ -126,6 +123,7 @@
       <find>client</find>
       <find>derivation</find>
       <find>revere</find>
+      <find>\n</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -195,6 +193,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/robinhe_rqtian_hongyf_zhjiang" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
@@ -353,12 +352,12 @@
       <option name="presentableId" value="Default" />
       <updated>1555349378216</updated>
       <workItem from="1555349380688" duration="7827000" />
-      <workItem from="1555423739573" duration="37696000" />
+      <workItem from="1555423739573" duration="37907000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="45523000" />
+    <option name="totallyTimeSpent" value="45734000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -604,8 +603,8 @@
     <entry file="file://$PROJECT_DIR$/robinhe_rqtian_hongyf_zhjiang/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="348">
-            <caret line="47" column="123" selection-start-line="47" selection-start-column="123" selection-end-line="47" selection-end-column="123" />
+          <first_editor relative-caret-position="411">
+            <caret line="74" column="117" selection-start-line="74" selection-start-column="117" selection-end-line="74" selection-end-column="117" />
           </first_editor>
           <second_editor />
         </state>
