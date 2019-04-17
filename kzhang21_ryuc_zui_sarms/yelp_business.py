@@ -111,7 +111,7 @@ class yelp_business(dml.Algorithm):
                                {'prov:label': 'Food Inspections', prov.model.PROV_TYPE: 'ont:DataSet'})
         resource2 = doc.entity('dat:kzhang21_ryuc_zui_sarms#food_violations',
                                {'prov:label': 'Food Violations', prov.model.PROV_TYPE: 'ont:DataSet'})
-        resource3 = doc.entity('yelp:api', {'prov:label': 'Yelp Businesses', prov.model.PROV_TYPE: 'ont:DataResource',
+        resource3 = doc.entity('dat:yelp_api', {'prov:label': 'Yelp Businesses', prov.model.PROV_TYPE: 'ont:DataResource',
                                             'ont:Extension': 'json'})
 
         get_business = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)

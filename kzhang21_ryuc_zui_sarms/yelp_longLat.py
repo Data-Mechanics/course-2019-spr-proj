@@ -27,7 +27,9 @@ class yelp_longLat(dml.Algorithm):
         repo = client.repo
         repo.authenticate('kzhang21_ryuc_zui_sarms', 'kzhang21_ryuc_zui_sarms')
 
-        violationData = pd.DataFrame(repo.kzhang21_ryuc_zui_sarms.food_violations.find({"location": float("nan")}))
+        log.info(repo.kzhang21_ryuc_zui_sarms.food_violations.find_one({"location": float("nan")}))
+
+        violationData = pd.DataFrame(list(repo.kzhang21_ryuc_zui_sarms.food_violations.find({"location": float("nan")})))
 
         for index, row in violationData.iterrows():
             if pd.isnull(row['location']) or row['location'] is None:

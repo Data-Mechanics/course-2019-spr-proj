@@ -6,6 +6,7 @@ import dml
 import prov.model
 import z3
 from geopy.distance import geodesic
+import uuid
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
