@@ -27,14 +27,14 @@ http://bostonopendata-boston.opendata.arcgis.com/datasets/fire-hydrants
 https://www.ncdc.noaa.gov/cdo-web/datasets/GHCND/stations/GHCND:USW00014739/detail
 
 # Package Dependency
+Please use following commands to install packages
+  ```
+    pip install -r requirements.txt
+  ```
 * Pandas: Provide interface to load the data.
-  ```
-    pip install pandas
-  ```
 * Numpy: Provide interface to calculate on the data.
-  ```
-    pip install numpy
-  ```
+* Scikit-learn: Provdie interface for data preprocessing and machine learning
+
 # Data Document
 ## boston_fire_facility_transformation.py
 * facility_type: The type of the facility.<br>

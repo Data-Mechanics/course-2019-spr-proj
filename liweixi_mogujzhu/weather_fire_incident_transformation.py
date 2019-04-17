@@ -75,9 +75,9 @@ class weather_fire_incident_transformation(dml.Algorithm):
         repo.createCollection("weather_fire_incident_transformation")
         data_list = ['liweixi_mogujzhu.weather', 'liweixi_mogujzhu.fire_incident_report']
         data = weather_fire_incident_transformation.merge_data(data_list, repo)
-        repo['weather_fire_incident_transformation'].insert_many(data)
-        repo['weather_fire_incident_transformation'].metadata({'complete': True})
-        print(repo['weather_fire_incident_transformation'].metadata())
+        repo['liweixi_mogujzhu.weather_fire_incident_transformation'].insert_many(data)
+        repo['liweixi_mogujzhu.weather_fire_incident_transformation'].metadata({'complete': True})
+        print(repo['liweixi_mogujzhu.weather_fire_incident_transformation'].metadata())
 
         repo.logout()
 
