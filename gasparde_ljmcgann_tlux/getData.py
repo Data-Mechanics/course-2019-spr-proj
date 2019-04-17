@@ -1,13 +1,10 @@
+import datetime
+import json
 import urllib.request
-import json
-from shapely.geometry import Polygon
-import json
+import uuid
+
 import dml
 import prov.model
-import datetime
-import csv
-import codecs
-import uuid
 
 
 class getData(dml.Algorithm):

@@ -1,14 +1,12 @@
-import json
-from shapely.geometry import Polygon, Point
-import json
+import datetime
+import uuid
+
 import dml
 import prov.model
-import datetime
-import codecs
-import uuid
 from math import *
-from tqdm import tqdm
 from rtree import index
+from shapely.geometry import Polygon
+from tqdm import tqdm
 
 
 class combineData(dml.Algorithm):

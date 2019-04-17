@@ -1,12 +1,10 @@
-from shapely.geometry import Polygon, Point
+import datetime
+import uuid
+
 import dml
 import prov.model
-import datetime
-import codecs
-import uuid
-import random
 from scipy.cluster.vq import kmeans
-import matplotlib.pyplot as pyplt
+from shapely.geometry import Polygon
 
 
 class optimize(dml.Algorithm):
@@ -112,6 +110,8 @@ class optimize(dml.Algorithm):
                     {"Neighborhood": name, "metric": "health", "means": health_output})
 
         repo[optimize.contributor + ".KMeans"].metadata({'complete': True})
+
+        endTime = datetime.datetime.now()
 
     @staticmethod
     def provenance(doc=prov.model.ProvDocument(), startTime=None, endTime=None):
