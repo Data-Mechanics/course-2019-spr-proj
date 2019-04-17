@@ -232,8 +232,27 @@ class example(dml.Algorithm):
                     POINTS_NEW[i][j] = tuple([lat,lng])
         '''
                     
+        temp = []
+        tswitch = False
+        with open('HomesLatLng.csv', mode='r') as csv_file:
+            csv_reader = csv.reader(csv_file, delimiter=',')
+            # final format: POINTS_NEW[i][j] = tuple([lat,lng])
+            for row in csv_reader:
+                if row and tswitch:
+                    lat = row[0]
+                    lng = row[1]
+                    temp.append(tuple([float(lat), float(lng)]))
+                elif not tswitch:
+                    tswitch = True
+        tswitch = False
 
-                
+        POINTS_NEW = POINTS_OG  
+        count = 0
+        for i in range(len(POINTS_OG)):            
+            lenStops = len(POINTS_OG[i])-5
+            for j in range(lenStops):
+                POINTS_NEW[i][j] = temp[count]
+                count += 1                
         
         #the stops are the means for k-means - converted to sets and back to remove duplicates
         STOPS_OG = []
@@ -251,14 +270,7 @@ class example(dml.Algorithm):
         STOPS_OG.append(tBESStops)
         STOPS_OG.append(tBHESStops)
         
-        with open('StopsLatLng.csv', mode='w') as csv_file:
-            fieldnames = ['lat', 'long', 'og']
-            writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-
-            writer.writeheader()            
-
-
-
+        '''
             STOPS_NEW = STOPS_OG      
             for i in range(len(STOPS_OG)):
                 lenStops = len(STOPS_OG[i])
@@ -271,10 +283,31 @@ class example(dml.Algorithm):
                         lat = f[0]['geometry']['location']['lat']
                         lng = f[0]['geometry']['location']['lng']
                         STOPS_NEW[i][j] = tuple([lat,lng])
-
-                        writer.writerow({'lat': lat, 'long': lng, 'og': STOPS_OG[i][j]})
                     else :
                         print("Error!")
+        '''
+        temp = []
+        tswitch = False
+        with open('StopsLatLng.csv', mode='r') as csv_file:
+            csv_reader = csv.reader(csv_file, delimiter=',')
+            # final format: STOPS_NEW[i][j] = tuple([lat,lng])
+            for row in csv_reader:
+                if row and tswitch:
+                    lat = row[0]
+                    lng = row[1]
+                    temp.append(tuple([float(lat), float(lng)]))
+                elif not tswitch:
+                    tswitch = True
+
+        STOPS_NEW = STOPS_OG  
+        count = 0
+        for i in range(len(STOPS_OG)):            
+            lenStops = len(STOPS_OG[i])-5
+            for j in range(lenStops):
+                STOPS_NEW[i][j] = temp[count]
+                count += 1
+
+
         
         #implementation of k-means, with md.time as the distance function
         #todo: set a departure time in md.time
@@ -298,6 +331,7 @@ class example(dml.Algorithm):
 
                 PD = aggregate(PDs, min)
                 MP = [(m, p) for ((m,p,d), (p2,d2)) in product(MPD, PD) if p==p2 and d==d2]
+                print("MP: ", MP)
                 MT = aggregate(MP, plus)
                 
                 M1 = [(m, 1) for (m, _) in MP]
