@@ -1,9 +1,10 @@
-import dml
-import prov.model
 import datetime
 import uuid
-from scipy.stats import pearsonr
 from statistics import mean, stdev
+
+import dml
+import prov.model
+from scipy.stats import pearsonr
 
 
 class getStatistics(dml.Algorithm):
@@ -13,6 +14,7 @@ class getStatistics(dml.Algorithm):
 
     @staticmethod
     def execute(trial=False):
+        startTime = datetime.datetime.now()
 
         client = dml.pymongo.MongoClient()
         repo = client.repo
@@ -59,6 +61,9 @@ class getStatistics(dml.Algorithm):
                 repo[getStatistics.contributor + ".Statistics"].insert_one(
                     {"Neighborhood": name, "variable": "distance_score",
                      "statistic": "std_dev", "value": stdev(x, m)})
+
+        endTime = datetime.datetime.now()
+        return {"start": startTime, "end": endTime}
 
     @staticmethod
     def provenance(doc=prov.model.ProvDocument(), startTime=None, endTime=None):

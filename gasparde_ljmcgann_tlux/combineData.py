@@ -1,14 +1,12 @@
-import json
-from shapely.geometry import Polygon, Point
-import json
+import datetime
+import uuid
+
 import dml
 import prov.model
-import datetime
-import codecs
-import uuid
 from math import *
-from tqdm import tqdm
 from rtree import index
+from shapely.geometry import Polygon
+from tqdm import tqdm
 
 
 class combineData(dml.Algorithm):
@@ -297,7 +295,6 @@ class combineData(dml.Algorithm):
 
     @staticmethod
     def provenance(doc=prov.model.ProvDocument(), startTime=None, endTime=None):
-
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')  # The scripts are in <folder>#<filename> format.
         doc.add_namespace('dat', 'http://datamechanics.io/data/')  # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont',

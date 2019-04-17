@@ -1,13 +1,10 @@
+import datetime
+import json
 import urllib.request
-import json
-from shapely.geometry import Polygon
-import json
+import uuid
+
 import dml
 import prov.model
-import datetime
-import csv
-import codecs
-import uuid
 
 
 class getData(dml.Algorithm):
@@ -143,9 +140,6 @@ class getData(dml.Algorithm):
 
     @staticmethod
     def provenance(doc=prov.model.ProvDocument(), startTime=None, endTime=None):
-        client = dml.pymongo.MongoClient()
-        repo = client.repo
-        repo.authenticate('gasparde_ljmcgann_tlux', 'gasparde_ljmcgann_tlux')
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')  # The scripts are in <folder>#<filename> format.
         doc.add_namespace('dat', 'http://datamechanics.io/data/')  # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont',
@@ -267,7 +261,4 @@ class getData(dml.Algorithm):
         doc.wasGeneratedBy(ParcelAssessments, get_ParcelAssessments, endTime)
         doc.wasDerivedFrom(ParcelAssessments, pas_resource, get_ParcelAssessments, get_ParcelAssessments,
                            get_ParcelAssessments)
-
-        repo.logout()
-
         return doc
