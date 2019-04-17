@@ -8,6 +8,7 @@ import dml
 import pandas as pd
 import prov.model
 import requests
+import random
 
 log = logging.getLogger(__name__)
 
@@ -40,8 +41,8 @@ class yelp_business(dml.Algorithm):
         repo = client.repo
         repo.authenticate('kzhang21_ryuc_zui_sarms', 'kzhang21_ryuc_zui_sarms')
 
-        # repo.dropCollection("yelp_business")
-        # repo.createCollection("yelp_business")
+        repo.dropCollection("yelp_business")
+        repo.createCollection("yelp_business")
 
         zip_codes = {'02108', '02109', '02110', '02111', '02113', '02114', '02115', '02116', '02118', '02119', '02120',
                      '02121', '02122', '02124', '02125', '02126', '02127', '02128', '02129', '02130', '02131', '02132',
@@ -55,6 +56,7 @@ class yelp_business(dml.Algorithm):
         food_violations = repo['kzhang21_ryuc_zui_sarms.food_violations']
 
         ## for each entry in violation get data
+        ## Once FoodInspections is in trial mode so is yelp_business
         for index, row in df_inspections.iterrows():
             term = row["businessname"]
             location = row["address"] + ', Boston, MA'
@@ -96,20 +98,25 @@ class yelp_business(dml.Algorithm):
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
         doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
-
+        # ['', '']
         this_script = doc.agent('alg:kzhang21_ryuc_zui_sarms#yelp_business', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        resource = doc.entity('bdp:business.json', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        resource1 = doc.entity('dat:kzhang21_ryuc_zui_sarms#food_inspections_squished', {'prov:label':'Food Inspections', prov.model.PROV_TYPE:'ont:DataSet'})
+        resource2 = doc.entity('dat:kzhang21_ryuc_zui_sarms#food_violations', {'prov:label':'Food Violations', prov.model.PROV_TYPE:'ont:DataSet'})
+        resource3 = doc.entity('yelp:api',{'prov:label':'Yelp Businesses',prov.model.PROV_TYPE:'ont:DataResource','ont:Extension':'json'})
+        
         get_business = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        
         doc.wasAssociatedWith(get_business, this_script)
-        doc.usage(get_business, resource, startTime, None,
-                  {prov.model.PROV_TYPE:'ont:Retrieval'
-                  }
-                  )
+        doc.usage(get_business, resource1, startTime, None, {prov.model.PROV_TYPE:'ont:Retrieval'})
+        doc.usage(get_business, resource2, startTime, None, {prov.model.PROV_TYPE: 'ont:Retrieval'})
+        doc.usage(get_business, resource3, startTime, None, {prov.model.PROV_TYPE: 'ont:Retrieval'})
 
         yelp_business = doc.entity('dat:kzhang21_ryuc_zui_sarms#yelp_business', {prov.model.PROV_LABEL:'Yelp Businesses', prov.model.PROV_TYPE:'ont:DataSet'})
         doc.wasAttributedTo(yelp_business, this_script)
         doc.wasGeneratedBy(yelp_business, get_business, endTime)
-        doc.wasDerivedFrom(yelp_business, resource, get_business, get_business, get_business)
+        doc.wasDerivedFrom(yelp_business, resource1, get_business)
+        doc.wasDerivedFrom(yelp_business, resource2, get_business)
+        doc.wasDerivedFrom(yelp_business, resource3, get_business)
 
         repo.logout()
                   
