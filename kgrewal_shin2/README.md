@@ -1,14 +1,13 @@
 Kerin Grewal and Stephanie Shin 
 
 
-
 <b> INSTRUCTIONS: </b>
 
 Run execute.py to run all data collection, transformations, and provenances, 
 by running python3.7 execute.py kgrewal_shin2 in the root project folder. 
 
  
- 
+
 <b> DATASETS USED: </b>
 
 1. Boston Street Names 
@@ -74,3 +73,4 @@ roads are more likely to be "major roads" and this would tell us if we are selec
 mostly major roads or mostly less-significant roads. We found no correlation between length
 and therefore we have chosen a balance between long and short streets which will mean the streets
 we have narrowed our list down to will have plenty of significant suggestions.
+
