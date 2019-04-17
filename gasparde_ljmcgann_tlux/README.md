@@ -1,4 +1,5 @@
-# Project 2
+Project 2
+================================================================================
 In this project, we aim to try to find the best places to add
 new parks in each of the neighborhoods in Boston based on various
 health statistics as well as access to open spaces. 
@@ -13,7 +14,28 @@ health statistics as well as access to open spaces.
     - [Health survey data in Boston](https://chronicdata.cdc.gov/resource/csmm-fdhi.json?cityname=Boston)
 3. [Data Mechanics Portal](http://datamechanics.io/)
     - [Census Tracks Geojson](http://datamechanics.io/data/gasparde_ljmcgann_tlux/boston_census_track.json)
+### Dependencies
+Besides the dependencies needed by **execute.py** Packages needed to run this project are:
 
+**Shapely**
+```
+pip install Shapely 
+```
+On Windows you need to download and install the wheel file which can be found here:  [Shapely.whl](http://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely)
+
+**Scipy**
+````
+pip install scipy
+````
+
+**Rtree**
+
+Follow instructions found [here](http://toblerity.org/rtree/install.html#)
+
+**tqdm**
+````
+pip intall tqdm
+````
 ###Description
 In **getData.py**, we make get requests to each of the six different datasets
 to retrieve the datasets. The only unique data retrieval case was for the parcel
@@ -23,9 +45,8 @@ this method will produce an HTTP error, probably a result of making to many requ
 so if this error occurs just rerun because this error rarely occurs.
 After retrieving the datasets, we combine all of with **combineData.py**. 
 The data is combined in the following order: 
-1. First, we put into a dictionary where each key corresponds to each neighborhood in Boston the list of open spaces
-that overlaps (is partially or fully contained) said neighborhood using Shapely.
-2 Combine parcel geojson shape with certain assessment value like square footage and total land value by 
+1. We put it into a dictionary where each key corresponds to each neighborhood in Boston, and the value is the list of open spaces that overlaps (is partially or fully contained) said neighborhood using Shapely.
+2. Combine parcel geojson shape with certain assessment value like square footage and total land value by 
 their PID (parcel id).
 3. In the CDC health survey data, the surveys are asked in each census tract in Boston. Therefore, we merge by
 Census Tract Numbers the shape and health statistics of each tract. The certain health statistics that we 
@@ -67,3 +88,13 @@ be justified to favor unhealthy areas as possible locations for new parks/open s
 In the trial mode, instead of running through each neighborhood, we focus on
 parcels in Allston. We also limit the number of parcels we are looking at so that the algorithm will run faster.
 The statistics and k-means will also only be computed for Allston.
+
+## Run
+To run simply enter:
+```
+python execute.py gasparde_ljmcgann_tlux
+```
+and to run using trial mode enter:
+```
+python execute.py gasparde_ljmcgann_tlux --trial
+```
