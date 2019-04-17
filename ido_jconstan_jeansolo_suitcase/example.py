@@ -220,8 +220,9 @@ class example(dml.Algorithm):
         for i in range(len(POINTS_OG)):
             for j in range(5):
                 print("point ", i, " ", j)
-                POINTS_NEW[i][j] = json.loads(str(md.toLatLong(POINTS_OG[i][j])))
-                print("POINTS_NEW[",i,"][",j,"] = ", POINTS_NEW[i][j])
+                POINTS_NEW[i][j] = json.loads(json.dumps(md.toLatLong(POINTS_OG[i][j])))
+                print("POINTS_NEW[",i,"][",j,"] = ", POINTS_NEW[i][j][0]['geometry'])
+                print("POINTS_NEW[",i,"][",j,"] = ", POINTS_NEW[i][j][0]['geometry']['location'])
                 
         
         #the stops are the means for k-means - converted to sets and back to remove duplicates
@@ -245,7 +246,7 @@ class example(dml.Algorithm):
             for j in range(5):
                 print("stop ", i, " ", j)
                 STOPS_NEW[i][j] = md.toLatLong(STOPS_OG[i][j])
-                STOPS_NEW[i][j]
+                
         
         #implementation of k-means, with md.time as the distance function
         #todo: set a departure time in md.time
