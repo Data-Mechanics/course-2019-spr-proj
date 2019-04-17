@@ -91,7 +91,7 @@ class Get_Boston_Calendar(dml.Algorithm):
 
 # This is example code you might use for debugging this module.
 # Please remove all top-level function calls before submitting.
-Get_Boston_Calendar.execute()
+# Get_Boston_Calendar.execute()
 # doc = bostoncalendar.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))
