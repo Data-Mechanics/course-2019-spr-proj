@@ -61,7 +61,7 @@ The idea of this project was to categorize the airbnb houses based on reviews an
 We used Google Map API in KMEANS.py to plot googlemap and the api key is required.
 
 ## Trial mode
-For trial mode, we used 100 Boston Airbnb Listings data, 36500 Boston Airbnb Calendar data and 500 Boston Airbnb Reviews data. Since Boston Landmarks and US Holidays is quite small, we used all the data of these two dataset.
+For trial mode, we used 100 Boston Airbnb Listings data, 36500 Boston Airbnb Calendar data and 500 Boston Airbnb Reviews data. Since Boston Landmarks and US Holidays are quite small, we used all the data of these two dataset.
 
 ## Data Transformation
 This part was implemented in id_month_price_score_lat_long.py
