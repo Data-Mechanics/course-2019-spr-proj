@@ -132,21 +132,47 @@ class combineData(dml.Algorithm):
         neighborhoods = [list(repo[combineData.contributor + ".Neighborhoods"].find())[24]] if trial \
                         else list(repo[combineData.contributor + ".Neighborhoods"].find())
 
-        open_spaces_by_neighborhood = combineData.create_neighborhood_dict(neighborhoods)
-        for open_space in tqdm(open_spaces):
-            for neighborhood in neighborhoods:
-                found = False
-                neighborhood_shapely = combineData.geojson_to_polygon(neighborhood["geometry"])
-                op_s_shapely = combineData.geojson_to_polygon(open_space["geometry"])
-                for op_s_shape in op_s_shapely:
-                    for neighborhood_shape in neighborhood_shapely:
-                        if op_s_shape.intersects(neighborhood_shape):
-                            open_spaces_by_neighborhood[neighborhood['properties']['Name']].append(open_space)
-                            found = True
-                            break
-                        if found:
-                            break
+        # open_spaces_by_neighborhood = combineData.create_neighborhood_dict(neighborhoods)
+        # for open_space in tqdm(open_spaces):
+        #     for neighborhood in neighborhoods:
+        #         found = False
+        #         neighborhood_shapely = combineData.geojson_to_polygon(neighborhood["geometry"])
+        #         op_s_shapely = combineData.geojson_to_polygon(neighborhood["geometry"])
+        #         for op_s_shape in op_s_shapely:
+        #             for neighborhood_shape in neighborhood_shapely:
+        #                 if op_s_shape.intersects(neighborhood_shape):
+        #                     open_spaces_by_neighborhood[neighborhood['properties']['Name']].append(open_space)
+        #                     found = True
+        #                     break
+        #             if found:
+        #                 break
+        open_space_index = index.Index()
 
+        # some open spaces are multipolygons, so we are turning the list of open spaces into
+        # a list of single polygons where we break up the multipolygons so that we can insert
+        # into a rtree
+        open_spaces_flattened = []
+        for open_space in open_spaces:
+            geom = open_space["geometry"]
+            if geom['type'] == 'Polygon':
+                shape = []
+                coords = geom['coordinates']
+                for i in coords[0]:
+                    shape.append((i[0], i[1]))
+                open_spaces_flattened.append([shape, open_space["properties"]["OBJECTID"]])
+            if geom['type'] == 'MultiPolygon':
+                coords = geom['coordinates']
+                for i in coords:
+                    shape = []
+                    for j in i:
+                        for k in j:
+                            # need to change list type to tuple so that shapely can read it
+                            shape.append((k[0], k[1]))
+                    open_spaces_flattened.append([shape, open_space["properties"]["OBJECTID"]])
+
+        for i in range(len(open_spaces_flattened)):
+            open_space_shapely = Polygon(open_spaces_flattened[i][0])
+            open_space_index.insert(i, open_space_shapely.bounds)
         ###############################################################
 
         # put parcel shapes together with its parcel assessment
@@ -156,7 +182,7 @@ class combineData(dml.Algorithm):
 
         parcel_shape_assessment = []
         # PID LONG
-        print("Combining Parcels Shapae with their Assessments:")
+        print("Combining Parcels Shape with their Assessments:")
         for i in tqdm(range(len(parcel_geo))):
             PID = parcel_geo[i]["properties"]["PID_LONG"]
             assessment = parcel_assessments.find_one({"_id":PID})
@@ -246,14 +272,13 @@ class combineData(dml.Algorithm):
                 open_space_id = None
                 data = parcels_by_neighborhood[neighborhood][i]
                 parcel_shapely = combineData.geojson_to_polygon(data["geometry"])[0]
-                for open_space in open_spaces_by_neighborhood[neighborhood]:
-                    op_s_shapely = combineData.geojson_to_polygon(open_space["geometry"])
-                    for shape in op_s_shapely:
-                        distance = parcel_shapely.distance(shape)
-                        if distance < min_distance:
-                            min_distance = distance
-                            min_open_space = shape
-                            open_space_id = open_space["properties"]["OBJECTID"]
+                for op_i in [j for j in open_space_index.nearest(parcel_shapely.bounds, 5)]:
+                    op_s_shapely = Polygon(open_spaces_flattened[op_i][0])
+                    distance = parcel_shapely.distance(op_s_shapely)
+                    if distance < min_distance:
+                        min_distance = distance
+                        min_open_space = op_s_shapely
+                        open_space_id = open_spaces_flattened[op_i][1]
                 if min_open_space is not None:
                     min_distance_km = combineData.geo_distance(parcel_shapely.centroid, min_open_space)
                 else:
@@ -281,3 +306,5 @@ class combineData(dml.Algorithm):
     @staticmethod
     def provenance(doc=prov.model.ProvDocument(), startTime=None, endTime=None):
         return 0
+
+combineData.execute(True)
