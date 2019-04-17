@@ -6,6 +6,8 @@ import dml
 import prov.model
 import datetime
 import uuid
+import numpy
+import pandas as pd
 
 from random import shuffle
 from math import sqrt
@@ -32,17 +34,26 @@ class statistical_analysis_weather_incident(dml.Algorithm):
         
         # create the dataset of different weather features and fire incident
         data_name = 'liweixi_mogujzhu.weather_fire_incident_transformation'
+        # retrieve all the data
+        data = pd.DataFrame(list(repo[data_name].find()))
+        print(data.shape)
+
+        # if trial mode, use half of the data for analysis
+        if trial:
+            data = data[:data.shape[0]//2]
 
         # TMAX and fire incident
-        
-        data_ = [(18, 28), (24, 18), (27, 31), (14, 15), (46, 23),
-        (36, 19), (27, 10), (34, 25), (19, 15), (13, 13),
-        (4, 2), (17, 20), (28, 12), (36, 11), (26, 14),
-        (19, 19), (24, 13), (25, 6), (20, 8), (17, 22),
-        (18, 8), (25, 12), (28, 27), (31, 28), (35, 22),
-        (17, 8), (19, 19), (23, 23), (22, 11)]
-        x = [xi for (xi, yi) in data]
-        y = [yi for (xi, yi) in data]
+        data1 = [(x, y) for x in data['TMAX'] ]
+
+        print(NINCIDENT)
+        # data_ = [(18, 28), (24, 18), (27, 31), (14, 15), (46, 23),
+        # (36, 19), (27, 10), (34, 25), (19, 15), (13, 13),
+        # (4, 2), (17, 20), (28, 12), (36, 11), (26, 14),
+        # (19, 19), (24, 13), (25, 6), (20, 8), (17, 22),
+        # (18, 8), (25, 12), (28, 27), (31, 28), (35, 22),
+        # (17, 8), (19, 19), (23, 23), (22, 11)]
+        # x = [xi for (xi, yi) in data]
+        # y = [yi for (xi, yi) in data]
         
 
 
