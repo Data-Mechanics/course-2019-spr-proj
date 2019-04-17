@@ -67,7 +67,7 @@ class getStatistics(dml.Algorithm):
         doc.add_namespace('ont',
                           'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/')  # The event log.
-        this_script = doc.agent('alg:gasparde_ljmcgann_tlux#collect',
+        this_script = doc.agent('alg:gasparde_ljmcgann_tlux#getStatistics',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'],
                                  'ont:Extension': 'py'})
 
