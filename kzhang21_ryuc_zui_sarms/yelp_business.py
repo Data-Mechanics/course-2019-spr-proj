@@ -100,22 +100,23 @@ class yelp_business(dml.Algorithm):
         doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
         # ['', '']
         this_script = doc.agent('alg:kzhang21_ryuc_zui_sarms#yelp_business', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        resource1 = doc.entity('dat:kzhang21_ryuc_zui_sarms#food_inspections_squished', {'prov:label':'Food Inspections', prov.model.PROV_TYPE:'ont:DataSet', 'ont:Extension':'json'})
-        resource2 = doc.entity('dat:kzhang21_ryuc_zui_sarms$food_violations', {'prov:label':'Food Violations', prov.model.PROV_TYPE:'ont:DataSet', 'ont:Extension':'json'}))
+        resource1 = doc.entity('dat:kzhang21_ryuc_zui_sarms#food_inspections_squished', {'prov:label':'Food Inspections', prov.model.PROV_TYPE:'ont:DataSet'})
+        resource2 = doc.entity('dat:kzhang21_ryuc_zui_sarms#food_violations', {'prov:label':'Food Violations', prov.model.PROV_TYPE:'ont:DataSet'})
         resource3 = doc.entity('yelp:api',{'prov:label':'Yelp Businesses',prov.model.PROV_TYPE:'ont:DataResource','ont:Extension':'json'})
         
         get_business = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         
         doc.wasAssociatedWith(get_business, this_script)
-        doc.usage(get_business, resource, startTime, None,
-                  {prov.model.PROV_TYPE:'ont:Retrieval'
-                  }
-                  )
+        doc.usage(get_business, resource1, startTime, None, {prov.model.PROV_TYPE:'ont:Retrieval'})
+        doc.usage(get_business, resource2, startTime, None, {prov.model.PROV_TYPE: 'ont:Retrieval'})
+        doc.usage(get_business, resource3, startTime, None, {prov.model.PROV_TYPE: 'ont:Retrieval'})
 
         yelp_business = doc.entity('dat:kzhang21_ryuc_zui_sarms#yelp_business', {prov.model.PROV_LABEL:'Yelp Businesses', prov.model.PROV_TYPE:'ont:DataSet'})
         doc.wasAttributedTo(yelp_business, this_script)
         doc.wasGeneratedBy(yelp_business, get_business, endTime)
-        doc.wasDerivedFrom(yelp_business, resource, get_business, get_business, get_business)
+        doc.wasDerivedFrom(yelp_business, resource1, get_business)
+        doc.wasDerivedFrom(yelp_business, resource2, get_business)
+        doc.wasDerivedFrom(yelp_business, resource3, get_business)
 
         repo.logout()
                   
