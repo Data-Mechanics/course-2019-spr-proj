@@ -40,24 +40,23 @@ class boston_crime_clusters(dml.Algorithm):
         num_clusters = 11
         incident_locs_np = np.array(incident_locs)
         res = kmeans(incident_locs_np, num_clusters)
-
+        
         #Create kml file (for google maps)
-        with open('clusters.kml', 'w') as f:
-            f.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
-            f.write("<kml xmlns=\"http://www.opengis.net/kml/2.2\">\n")
-            f.write("<Document>\n")
+        d = ''
+        d += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+        d += "<kml xmlns=\"http://www.opengis.net/kml/2.2\">\n"
+        d += "<Document>\n"
+        for r in res[0]:
+            d += "<Placemark>\n"
+            d += "<Point>\n"
+            d += "<coordinates>" + str(r[1]) + "," + str(r[0]) + ",0</coordinates>"
+            d += "</Point>\n"
+            d += "</Placemark>\n"
+        d += "</Document>\n"
+        d += "</kml>"
 
-            for r in res[0]:
-                f.write("<Placemark>\n")
-                f.write("<Point>\n")
-                f.write("<coordinates>" + str(r[1]) + "," + str(r[0]) + ",0</coordinates>")
-                f.write("</Point>\n")
-                f.write("</Placemark>\n")
-                
-            f.write("</Document>\n")
-            f.write("</kml>")
-            
-        repo['hek_kquirk.boston_crime_clusters'].insert_many(res[0])
+        doc = {"_id": "boston_crime_clusters.kml", "contents": d}
+        repo['hek_kquirk.boston_crime_clusters'].insert(doc)
 
         repo['hek_kquirk.boston_crime_clusters'].metadata({'complete':True})
         print(repo['hek_kquirk.boston_crime_clusters'].metadata())
