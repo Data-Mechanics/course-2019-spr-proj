@@ -10,60 +10,45 @@ from pprint import pprint
 """
 Finds average point (lat, long) for each street in each district where crimes existed.
 This is for finding the "middle" of the street - used in findCrimeStats.
-Yields the form {DISTRICT: {"street1": {Lat: #, Long: #}, "street2": {Lat: #, Long: #} ...}, DISTRICT2:...}
-- Filters out empty entries
+
 """
 
 
-
-
-class sortCorrelation(dml.Algorithm):
+class pairwiseCorrelation(dml.Algorithm):
     contributor = 'nhuang54_tkixi_wud'
-    reads = ['nhuang54_tkixi_wud.trafficlight_collisions']
+    reads = ['nhuang54_tkixi_wud.streetlight_collisions']
     writes = ['nhuang54_tkixi_wud.coorelation']
 
 
     @staticmethod
     def execute(trial = False):
-        '''Retrieve some data sets (not using the API here for the sake of simplicity).'''
         startTime = datetime.datetime.now()
 
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
 
-        # Get Crime data and neighborhood data
-        # street light data borrowed from ferrys
-
-        client = dml.pymongo.MongoClient()
-        repo = client.repo
-
         repo.authenticate('nhuang54_tkixi_wud', 'nhuang54_tkixi_wud')
-        # df = list(repo.tkixi.sortedNeighborhoods.find())
         
-        tc = repo.nhuang54_tkixi_wud.trafficlight_collisions.find() 
-        pprint(tc)
-        items = []
+        tc = repo.nhuang54_tkixi_wud.streetlight_collisions.find() 
+        data = []
         for item in tc:
-            pprint(item)
-            print(type(item.get('bike_collisions')))
-            items.append({'bike_collisions':item.get('bike_collisions'),
-                            'intersection':item.get('intersection')})
-            break
-        	# items.append(item.get('data'))
-        items = pd.DataFrame(items)
-        print('printing')
-        pprint(items)
-        print('done')
-        # pprint(items)
-        # @staticmethod
+            data.append({'streetlight':item.get('streetlight'),
+                            'collisions':item.get('collisions')})
+            
+        data = pd.DataFrame(data) # constructs DataFrame with data
+        # print('printing')
+        # pprint(data)
+        # print('done')
 
-        corr = pd.DataFrame(items.corr())
+        corr = pd.DataFrame(data.corr()) # Compute pairwise correlation of columns
+        pprint(corr)
 
         repo.dropCollection("coorelations")
         repo.createCollection("coorelations")
 
-        r = {'field1': 'bike_collisions', 'field2': 'intersection', 'value': corr['bike_collisions']['intersection']}
+        r = {'field1': 'streetlight', 'field2': 'collisions', 'value': corr['streetlight']['collisions']}
+        pprint(r)
         repo['nhuang54_tkixi_wud.coorelations'].insert(r)
         repo['nhuang54_tkixi_wud.coorelations'].metadata({'complete':True})
         print(repo['nhuang54_tkixi_wud.coorelations'].metadata())
@@ -93,7 +78,7 @@ class sortCorrelation(dml.Algorithm):
 
         
         # Agent, entity, activity
-        this_script = doc.agent('alg:nhuang54_tkixi_wud#sortCorrelations', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        this_script = doc.agent('alg:nhuang54_tkixi_wud#pairwiseCorrelation', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
         
         # Resource = crimesData
         resource1 = doc.entity('dat:ferrys#streetlights', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
@@ -124,3 +109,6 @@ class sortCorrelation(dml.Algorithm):
         repo.logout()
                   
         return doc
+
+pairwiseCorrelation.execute()
+

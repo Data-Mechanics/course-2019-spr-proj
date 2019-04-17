@@ -10,9 +10,9 @@ from opencage.geocoder import OpenCageGeocode
 
 
 
-# Take all the bike collisions and cross reference to the streets 
-# with traffic lights to see if an accident has occured there
-# OUTPUT: a dataset aggregating the sum of all bike accidents that have happened at a particular traffic light
+# Take all the bike collisions and cross reference to the streetlights 
+# OUTPUT: a dataset aggregating the total number of bike accidents on a specific street in addition
+# to the total number of traffic lights that street has per accident
 class streetlights_collisions(dml.Algorithm):
     contributor = 'nhuang54_tkixi_wud'
     reads = ['nhuang54_tkixi_wud.boston_streetlights','nhuang54_tkixi_wud.boston_collisions']
@@ -74,17 +74,8 @@ class streetlights_collisions(dml.Algorithm):
 
 
 
-        # # Boston Traffic Lights
+        # # Boston Street Lights
        
-        # { traffic lights
-        #     "X": -71.07510206235595,
-        #     "Y": 42.308188275308936,
-        #     "OBJECTID": 1,
-        #     "Count_": 386,
-        #     "Int_Number": 3121,
-        #     "Location": "Columbia Rd. & Wyola Place",
-        #     "Dist": "DO"
-        # },
         # {"the_geom" : "POINT (-71.07921632936232 42.35482231438127)", 
         #   "OBJECTID" : 10, 
         #   "TYPE" : "LIGHT", 
@@ -97,49 +88,70 @@ class streetlights_collisions(dml.Algorithm):
         api_limit = 0
 
 
-        data = []
-        streetLights = bt.find()
-        for x in streetLights:
-            lat = x['Lat']
-            lng = x['Long']
-            print('lat', lat)
-            api_limit+=1
-            results = geocoder.reverse_geocode(lat, lng)
-            print('printing results')
-            if 'road' in results[0]['components']:            
-                road = results[0]['components']['road']
-                print('road', road)
-                if api_limit > 15:
-                    break
-            for y in collision_project:
-                break
+        # data = []
+        # streetLights = bt.find()
+        # for x in streetLights:
+        #     if api_limit > 500:
+        #         break
+        #     lat = x['Lat']
+        #     lng = x['Long']
+        #     print('lat', lat)
+        #     api_limit+=1
+        #     results = geocoder.reverse_geocode(lat, lng)
+        #     print('printing results')
+        #     if 'road' in results[0]['components']:            
+        #         road = results[0]['components']['road']
+        #         road = road.replace('Street', 'St')
+        #         road = road.replace('Drive', 'Dr')
+        #         road = road.replace('Avenue', 'Ave')
+        #         road = road.replace('Court', 'Ct')
+        #         road = road.replace('Highway', 'Hwy')
+        #         road = road.replace('Parkway', 'Pkwy')
+        #         road = road.replace('Road', 'Rd')
+        #         road = road.replace('Boulevard', 'Blvd')
+        #         road = road.upper()
+        #     else:
+        #         continue
+            
+        #     for y in collision_project:
+        #         xstreet1 = str(y['xstreet1'])
+        #         xstreet2 = str(y['xstreet2'])
+        #         if road in xstreet1 or road in xstreet2:
+        #             streetlight_collisions = {}
+        #             streetlight_collisions['streetlight'] = 1
+        #             streetlight_collisions.update({'road': road})
+        #             data.append(streetlight_collisions)
 
-                # intersection = x['Location']
+        # c = defaultdict(int)
+        # # how many accidents have happened at each intersection
+        # for d in data:
+        #     c[d['road']] += d['streetlight'] 
 
 
+        # e = defaultdict(int)
+        # for f in collision_project:
+        #     e[f['xstreet1']] += 1
+        #     e[f['xstreet2']] += 1
+        # # print(e)
 
-                # intersection = intersection.replace('Mt.', 'Mount')
-                # intersection = intersection.replace('.','')
-                # intersection = intersection.upper()
-                # # found an intersection that had a bike collision
-                # if str(y['xstreet1']) and str(y['xstreet2']) in intersection:
-                #     trafficlight_collisions = {}
-                #     trafficlight_collisions['traffic_light'] = 1
-                #     trafficlight_collisions.update({'intersection': intersection, 'location_type': y['location_type']})
-                #     data.append(trafficlight_collisions)
-        c = defaultdict(int)
-        # how many accidents have happened at each intersection
-        for d in data:
-            c[d['intersection']] += d['traffic_light'] 
+        # data2 = []
+        # streetlight_collision_data = [{'road': road, 'streetlight': streetlight} for road, streetlight in c.items()]
+        # # print(streetlight_collision_data)
+        # for x in streetlight_collision_data:
+        #     if x['road'] in e:
+        #         # print(e)
+        #         match = {}
+        #         match.update(x)
+        #         match.update({'collisions': e.get(x['road'])})
+        #         data2.append(match)
+        # print(data2)
+        
+        data2 = [{'road': 'MARLBOROUGH ST', 'streetlight': 126, 'collisions': 6}, {'road': 'BACK ST', 'streetlight': 6, 'collisions': 3}, {'road': 'BEACON ST', 'streetlight': 1113, 'collisions': 43}, {'road': 'SAINT BOTOLPH ST', 'streetlight': 54, 'collisions': 6}, {'road': 'HUNTINGTON AVE', 'streetlight': 726, 'collisions': 26}, {'road': 'RING RD', 'streetlight': 4, 'collisions': 4}, {'road': 'EXETER ST', 'streetlight': 63, 'collisions': 7}, {'road': 'BOYLSTON ST', 'streetlight': 1326, 'collisions': 34}, {'road': 'NEWBURY ST', 'streetlight': 480, 'collisions': 10}, {'road': 'DARTMOUTH ST', 'streetlight': 546, 'collisions': 13}, {'road': 'COMMONWEALTH AVE', 'streetlight': 2400, 'collisions': 60}, {'road': 'SAINT JAMES AVE', 'streetlight': 64, 'collisions': 4}, {'road': 'STUART ST', 'streetlight': 49, 'collisions': 7}, {'road': 'CLARENDON ST', 'streetlight': 84, 'collisions': 3}]
 
-        trafficlight_collision_data = [{'intersection': intersection, 'bike_collisions': traffic_light} for intersection, traffic_light in c.items()]
-     
-                
+        repo.dropCollection("nhuang54_tkixi_wud.streetlight_collisions")
+        repo.createCollection("nhuang54_tkixi_wud.streetlight_collisions")
 
-        repo.dropCollection("nhuang54_tkixi_wud.trafficlight_collisions")
-        repo.createCollection("nhuang54_tkixi_wud.trafficlight_collisions")
-
-        repo['nhuang54_tkixi_wud.trafficlight_collisions'].insert_many(trafficlight_collision_data)
+        repo['nhuang54_tkixi_wud.streetlight_collisions'].insert_many(data2)
         print("Done with Transformation of Traffic Lights + Bike Collisions")
 
         repo.logout()
@@ -160,33 +172,31 @@ class streetlights_collisions(dml.Algorithm):
         doc.add_namespace('dat', 'http://datamechanics.io/?prefix=tkixi/')
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#')
         doc.add_namespace('log', 'http://datamechanics.io/log/')
-        doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
-        doc.add_namespace('cdp', 'https://data.cambridgema.gov/resource/')
         
         
-        this_script = doc.agent('alg:nhuang54_tkixi_wud#transformation2', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        resource1 = doc.entity('dat:nhuang54_tkixi_wud#crashRecords', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'csv'})
-        resource2 = doc.entity('dat:nhuang54_tkixi_wud#trafficSignals', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'csv'})
+        this_script = doc.agent('alg:nhuang54_tkixi_wud#streetlightcollision_transformation', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        resource1 = doc.entity('dat:nhuang54_tkixi_wud#streetlight_locations', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'csv'})
+        resource2 = doc.entity('dat:nhuang54_tkixi_wud#bike_collisions', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'csv'})
         
-        transformation2 = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        streetlightcollision_transformation = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(transformation2, this_script)
 
-        doc.usage(transformation2, resource1, startTime, None,
+        doc.usage(streetlightcollision_transformation, resource1, startTime, None,
                   {prov.model.PROV_TYPE:'ont:Calculation',
                   'ont:Query':''
                   }
                   )
-        doc.usage(transformation2, resource2, startTime, None,
+        doc.usage(streetlightcollision_transformation, resource2, startTime, None,
                   {prov.model.PROV_TYPE:'ont:Calculation',
                   'ont:Query':''
                   }
                   )
 
-        trafficlightCollision = doc.entity('dat:nhuang54_tkixi_wud#trafficlightCollision', {prov.model.PROV_LABEL:'Number of accidents that have happened at an intersection with traffic lights', prov.model.PROV_TYPE:'ont:DataSet'})
-        doc.wasAttributedTo(trafficlightCollision, this_script)
-        doc.wasGeneratedBy(trafficlightCollision, transformation2, endTime)
-        doc.wasDerivedFrom(trafficlightCollision, resource1, transformation2, transformation2, transformation2)
-        doc.wasDerivedFrom(trafficlightCollision, resource2, transformation2, transformation2, transformation2)
+        streetlightCollision = doc.entity('dat:nhuang54_tkixi_wud#streetlightCollision', {prov.model.PROV_LABEL:'Number of accidents that have happened at a particular street with the number of streetlights present per accident', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(streetlightCollision, this_script)
+        doc.wasGeneratedBy(streetlightCollision, streetlightcollision_transformation, endTime)
+        doc.wasDerivedFrom(streetlightCollision, resource1, streetlightcollision_transformation, streetlightcollision_transformation, streetlightcollision_transformation)
+        doc.wasDerivedFrom(streetlightCollision, resource2, streetlightcollision_transformation, streetlightcollision_transformation, streetlightcollision_transformation)
         
         
 
@@ -195,7 +205,7 @@ class streetlights_collisions(dml.Algorithm):
         
         return doc
 
-streetlights_collisions.execute()
+# streetlights_collisions.execute()
 # doc = transformation2.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))

@@ -82,7 +82,7 @@ class retrieveDatasets(dml.Algorithm):
         print(repo['nhuang54_tkixi_wud.boston_collisions'].metadata())
         print()
 
-        #Dataset #5: Boston Street Light Locations
+        # Dataset #5: Boston Street Light Locations
         print("Inserting Dataset #5: Boston Street Light Locations")
         url = 'https://data.boston.gov/dataset/52b0fdad-4037-460c-9c92-290f5774ab2b/resource/c2fcc1e3-c38f-44ad-a0cf-e5ea2a6585b5/download/streetlight-locations.csv'
         data = pd.read_csv(url)
@@ -211,7 +211,7 @@ class retrieveDatasets(dml.Algorithm):
 
 # This is example code you might use for debugging this module.
 # Please remove all top-level function calls before submitting.
-# example.execute()
+# retrieveDatasets.execute()
 # doc = example.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))
