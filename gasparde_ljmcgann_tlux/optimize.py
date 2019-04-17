@@ -111,7 +111,52 @@ class optimize(dml.Algorithm):
 
     @staticmethod
     def provenance(doc=prov.model.ProvDocument(), startTime=None, endTime=None):
-        return 0
+        client = dml.pymongo.MongoClient()
+        repo = client.repo
+        repo.authenticate('gasparde_ljmcgann_tlux', 'gasparde_ljmcgann_tlux')
+        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')  # The scripts are in <folder>#<filename> format.
+        doc.add_namespace('dat', 'http://datamechanics.io/data/')  # The data sets are in <user>#<collection> format.
+        doc.add_namespace('ont',
+                          'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
+        doc.add_namespace('log', 'http://datamechanics.io/log/')  # The event log.
+        this_script = doc.agent('alg:gasparde_ljmcgann_tlux#collect',
+                                {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'],
+                                 'ont:Extension': 'py'})
+
+        Neighborhoods = doc.entity('dat:gasparde_ljmcgann_tlux#Neighborhoods',
+                                   {prov.model.PROV_LABEL: 'Shape of Boston Neighborhoods',
+                                    prov.model.PROV_TYPE: 'ont:DataSet'})
+        ParcelsCombined = doc.entity('dat:gasparde_ljmcgann_tlux#ParcelCombined',
+                                     {prov.model.PROV_LABEL: 'Final Dataset Produced for Optimization and Analysis',
+                                      prov.model.PROV_TYPE: 'ont:DataSet'})
+        Stats = doc.entity('dat:gasparde_ljmcgann_tlux#Statistics',
+                           {prov.model.PROV_LABEL: 'Various Statistics on Health and Open Space Data',
+                            prov.model.PROV_TYPE: 'ont:DataSet'})
+
+        getOptimization = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+
+        doc.wasAssociatedWith(getOptimization, this_script)
+        doc.usage(getOptimization, Neighborhoods, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:Retrieval'})
+        doc.usage(getOptimization, ParcelsCombined, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:Retrieval'})
+        doc.usage(getOptimization, Stats, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:Retrieval'})
+
+        Optimization = doc.entity('dat:gasparde_ljmcgann_tlux#KMeans',
+                           {prov.model.PROV_LABEL: 'Performs K-Means on Distance and Health Metrics',
+                            prov.model.PROV_TYPE: 'ont:DataSet'})
+
+        doc.wasAttributedTo(Optimization, this_script)
+
+        doc.wasGeneratedBy(Optimization, getOptimization, endTime)
+
+        doc.wasDerivedFrom(Optimization, Neighborhoods, getOptimization, getOptimization,
+                           getOptimization)
+        doc.wasDerivedFrom(Optimization, ParcelsCombined, getOptimization, getOptimization,
+                           getOptimization)
+        doc.wasDerivedFrom(Optimization, Stats, getOptimization, getOptimization,
+                           getOptimization)
 
 
 optimize.execute(True)
