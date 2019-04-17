@@ -141,12 +141,12 @@ class KMEANS(dml.Algorithm):
 
         gmap.apikey = "Your Google API Key"
 
-        gmap.scatter(lat0+lat1+lat2+lat3, long0+long1+long2+long3, 'FF0000', size=30, marker=False)
-        #gmap.scatter(lat_all[firstindex], long_all[firstindex], '#FF0000', size=30, marker=False)
-        #gmap.scatter(lat_all[secondindex], long_all[secondindex], '#B8860B', size=30, marker=False)
-        #gmap.scatter(lat_all[thirdindex], long_all[thirdindex], '#0000FF', size=30, marker=False)
-        #gmap.scatter(lat_all[fourthindex], long_all[fourthindex], '#556B2F', size=30, marker=False)
-        #gmap.heatmap(lat0+lat1+lat2+lat3, long0+long1+long2+long3)
+        #gmap.scatter(lat0+lat1+lat2+lat3, long0+long1+long2+long3, 'FF0000', size=30, marker=False)
+        gmap.scatter(lat_all[firstindex], long_all[firstindex], '#FF0000', size=30, marker=False)
+        gmap.scatter(lat_all[secondindex], long_all[secondindex], '#B8860B', size=30, marker=False)
+        gmap.scatter(lat_all[thirdindex], long_all[thirdindex], '#0000FF', size=30, marker=False)
+        gmap.scatter(lat_all[fourthindex], long_all[fourthindex], '#556B2F', size=30, marker=False)
+        gmap.heatmap(lat0+lat1+lat2+lat3, long0+long1+long2+long3)
         # Show clustered google map with HTML format.
         gmap.draw("gmap.html")
         #plt.show()
