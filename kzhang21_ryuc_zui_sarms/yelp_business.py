@@ -96,10 +96,14 @@ class yelp_business(dml.Algorithm):
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
         doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
-
+        # ['', '']
         this_script = doc.agent('alg:kzhang21_ryuc_zui_sarms#yelp_business', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        resource = doc.entity('bdp:business.json', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        resource1 = doc.entity('dat:kzhang21_ryuc_zui_sarms#food_inspections_squished', {'prov:label':'Food Inspections', prov.model.PROV_TYPE:'ont:DataSet', 'ont:Extension':'json'})
+        resource2 = doc.entity('dat:kzhang21_ryuc_zui_sarms$food_violations', {'prov:label':'Food Violations', prov.model.PROV_TYPE:'ont:DataSet', 'ont:Extension':'json'}))
+        resource3 = doc.entity('yelp:api',{'prov:label':'Yelp Businesses',prov.model.PROV_TYPE:'ont:DataResource','ont:Extension':'json'})
+        
         get_business = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        
         doc.wasAssociatedWith(get_business, this_script)
         doc.usage(get_business, resource, startTime, None,
                   {prov.model.PROV_TYPE:'ont:Retrieval'
