@@ -8,10 +8,18 @@ import pandas as pd
 import numpy as np
 from scipy import stats
 
+from random import shuffle
+from math import sqrt
+
+import logging
+
+log = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
+
 class stats_analysis(dml.Algorithm):
     contributor = 'kzhang21_ryuc_zui_sarms'
     reads = ['kzhang21_ryuc_zui_sarms.yelp_business']
-    writes = []
+    writes = ['kzhang21_ryuc_zui_sarms.statistics']
 
     @staticmethod
     def execute(trial=False):
@@ -23,17 +31,69 @@ class stats_analysis(dml.Algorithm):
         repo = client.repo
         repo.authenticate('kzhang21_ryuc_zui_sarms', 'kzhang21_ryuc_zui_sarms')
 
+        repo.dropCollection("statistics")
+        repo.createCollection("statistics")
+
         yelp_business = repo['kzhang21_ryuc_zui_sarms.yelp_business']
+        stats_variables = repo['kzhang21_ryuc_zui_sarms.statistics']
 
-        df_yelp = pd.DataFrame(list(yelp_business.find()))
-        new_df = pd.DataFrame()
+        yelp_files = list(yelp_business.find({}, {"price": 1, "rating": 1, "violation_rate": 1, "review_count": 1, "_id": 0}))
 
-        ## CORRELATION between review and rating
-        corr_coef = np.corrcoef(df_yelp['review_count'], df_yelp['rating'])
-        p_value = stats.pearsonr(df_yelp['review_count'], df_yelp['rating'])
+        log.info('One example: %s', yelp_files[0])
 
-        print(p_value)
-        print(corr_coef)
+        ## New data
+        for row in yelp_files:
+            if 'price' in row.keys():
+                row['price'] = len(row['price'])
+            else:
+                row['price'] = None
+
+        log.info('One example: %s', yelp_files[0])
+
+        ## Helper functions
+        def permute(x):
+            shuffled = [xi for xi in x]
+            shuffle(shuffled)
+            return shuffled
+
+        def avg(x):  # Average
+            return sum(x) / len(x)
+
+        def stddev(x):  # Standard deviation.
+            m = avg(x)
+            return sqrt(sum([(xi - m) ** 2 for xi in x]) / len(x))
+
+        def cov(x, y):  # Covariance.
+            return sum([(xi - avg(x)) * (yi - avg(y)) for (xi, yi) in zip(x, y)]) / len(x)
+
+        def corr(x, y):  # Correlation coefficient.
+            if stddev(x) * stddev(y) != 0:
+                return cov(x, y) / (stddev(x) * stddev(y))
+
+        def p(x, y):
+            c0 = corr(x, y)
+            corrs = []
+
+            for k in range(0, 2000):
+                y_permuted = permute(y)
+                corrs.append(corr(x, y_permuted))
+            return len([c for c in corrs if abs(c) >= abs(c0)]) / len(corrs)
+
+        df_yelp = pd.DataFrame(yelp_files).apply(pd.Series)
+        def getStats(one, two):
+            x = df_yelp[one]
+            y = df_yelp[two]
+
+            log.info('%s and %s statistics', one, two)
+            (corr_1, p_value_1) = stats.pearsonr(x, y)
+            log.info('correlation: %.4f, p-value: %.4f', corr_1, p_value_1)
+
+        getStats("review_count", "rating")
+        getStats("review_count", "price")
+        getStats("review_count", "violation_rate")
+        getStats("rating", "price")
+        getStats("rating", "violation_rate")
+        getStats("price", "violation_rate")
 
         repo.logout()
 
