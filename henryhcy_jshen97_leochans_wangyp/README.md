@@ -53,13 +53,13 @@ The project is divided into two tasks:
 
            3. For further analsis, we plot the following histograms. It is interesting that there are around 16 pairs of CVS and Walgreen right next to each other which is consistent with our intuition.   It is reasonable to believe that density of CVS and Walgreen stores is proportional with the density of population. Hopefully, we can have further investigation about the location selction in next part of the project. 
 
-               ![](/Users/yuanpei/Desktop/Screen Shot 2019-04-17 at 12.18.21 AM.png)
+               ![](/Users/yuanpei/Desktop/cs504/course-2019-spr-proj/henryhcy_jshen97_leochans_wangyp/Screen Shot 2019-04-17 at 12.18.21 AM.png)
 
-               ![](/Users/yuanpei/Desktop/Screen Shot 2019-04-17 at 12.18.25 AM.png)
+               ![](/Users/yuanpei/Desktop/cs504/course-2019-spr-proj/henryhcy_jshen97_leochans_wangyp/Screen Shot 2019-04-17 at 12.18.25 AM.png)
 
-               ![](/Users/yuanpei/Desktop/Screen Shot 2019-04-17 at 12.18.30 AM.png)
+               ![](/Users/yuanpei/Desktop/cs504/course-2019-spr-proj/henryhcy_jshen97_leochans_wangyp/Screen Shot 2019-04-17 at 12.18.30 AM.png)
 
-               ![](/Users/yuanpei/Desktop/Screen Shot 2019-04-17 at 12.18.33 AM.png)
+               ![](/Users/yuanpei/Desktop/cs504/course-2019-spr-proj/henryhcy_jshen97_leochans_wangyp/Screen Shot 2019-04-17 at 12.18.33 AM.png)
 
                
 
