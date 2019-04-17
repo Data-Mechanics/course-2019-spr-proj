@@ -79,11 +79,15 @@ Shape: [latitude, longitude]
 * Building Violation Number: The number of building violations that happen on a street
 
 ## prediction_weather_incident.py
+### All data below are of the test set which is shuffled for testing purpose
 * DATE: The date
 * LOW_PROB: The probability of occurring low level fire incidents that our machine learning model predicts
 * MID_PROB: The probability of occurring medium level fire incidents that our machine learning model predicts
 * HIGH_PROB: The probability of occurring high level fire incidents that our machine learning model predicts
-* TRUELABEL: The actual level of fire incident of that day
+* TRUE_LABEL: The actual label of fire incident of that day
+* PRED_LABEL: The predict label by the model
+* TRUE_VALUE: The true normalized incident number of the day
+ 
 
 ## statistical_analysis_weather_incident.py
 * FEATURE: The name of weather feature
