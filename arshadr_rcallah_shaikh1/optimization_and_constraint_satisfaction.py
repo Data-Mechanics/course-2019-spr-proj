@@ -118,49 +118,36 @@ class optimization_and_constraint_satisfaction(dml.Algorithm):
         doc.add_namespace('dat', 'http://datamechanics.io/data/') # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
-        doc.add_namespace('zlo', 'https://www.zillow.com/')
-        doc.add_namespace('chl', 'https://www.chelseama.gov/assessor/pages/')
+        doc.add_namespace('inc', 'income_data')
+        doc.add_namespace('ocs', 'optimization_and_constraint_satisfaction')
 
         this_script = doc.agent('alg:arshadr_rcallah_shaikh1#example', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        resource = doc.entity('zlo:research/data/', { prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
-        resource = doc.entity('zlo:research/data/', { prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
-        resource = doc.entity('chl:chelsea-property-data', { prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
-        get_rent = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
-        get_buying = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
-        get_property = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(get_rent, this_script)
-        doc.wasAssociatedWith(get_buying, this_script)
-        doc.wasAssociatedWith(get_property, this_script)
-        doc.usage(get_rent, resource, startTime, None,
+        resource = doc.entity('inc:income-data', { prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'xls'})
+        resource = doc.entity('ocs:optimization_and_constraint_satisfaction', { prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        get_income = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        get_distr = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(get_income, this_script)
+        doc.wasAssociatedWith(get_distr, this_script)
+        doc.usage(get_income, resource, startTime, None,
                   {prov.model.PROV_TYPE:'ont:Retrieval',
                    'ont:Retrieval':''
                    }
                   )
-        doc.usage(get_buying, resource, startTime, None,
-                  {prov.model.PROV_TYPE:'ont:Retrieval',
-                   'ont:Retrieval':''
-                   }
-                  )
-        doc.usage(get_property, resource, startTime, None,
+        doc.usage(get_distr, resource, startTime, None,
                   {prov.model.PROV_TYPE:'ont:Retrieval',
                    'ont:Retrieval':''
                    }
                   )
 
-        rent = doc.entity('zlo:research/data/', {prov.model.PROV_LABEL:'Rent Prices', prov.model.PROV_TYPE:'ont:DataSet'})
-        doc.wasAttributedTo(rent, this_script)
-        doc.wasGeneratedBy(rent, get_rent, endTime)
-        doc.wasDerivedFrom(rent, resource, get_rent, get_rent, get_rent)
+        income = doc.entity('inc:research/data/', {prov.model.PROV_LABEL:'Select From Excel', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(income, this_script)
+        doc.wasGeneratedBy(income, get_income, endTime)
+        doc.wasDerivedFrom(income, resource, get_income, get_income, get_income)
 
-        buying = doc.entity('zlo:research/data/', {prov.model.PROV_LABEL:'Buying Prices', prov.model.PROV_TYPE:'ont:DataSet'})
-        doc.wasAttributedTo(buying, this_script)
-        doc.wasGeneratedBy(buying, get_buying, endTime)
-        doc.wasDerivedFrom(buying, resource, get_buying, get_buying, get_buying)
-
-        property = doc.entity('chl:chelsea-property-data', {prov.model.PROV_LABEL:'Property Data', prov.model.PROV_TYPE:'ont:DataSet'})
-        doc.wasAttributedTo(property, this_script)
-        doc.wasGeneratedBy(property, get_property, endTime)
-        doc.wasDerivedFrom(property, resource, get_property, get_property, get_property)
+        distr = doc.entity('ocs:research/data/', {prov.model.PROV_LABEL:'Distribution Projection', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(distr, this_script)
+        doc.wasGeneratedBy(distr, get_distr, endTime)
+        doc.wasDerivedFrom(distr, resource, get_distr, get_distr, get_distr)
 
 
         repo.logout()
