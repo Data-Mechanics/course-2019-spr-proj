@@ -94,10 +94,9 @@ class statistics(dml.Algorithm):
         doc.usage(getStatistics, ParcelsCombined, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:Retrieval'})
 
-
         Stats = doc.entity('dat:gasparde_ljmcgann_tlux#Statistics',
-                                     {prov.model.PROV_LABEL: 'Various Statistics on Health and Open Space Data',
-                                      prov.model.PROV_TYPE: 'ont:DataSet'})
+                           {prov.model.PROV_LABEL: 'Various Statistics on Health and Open Space Data',
+                            prov.model.PROV_TYPE: 'ont:DataSet'})
 
         doc.wasAttributedTo(Stats, this_script)
 
@@ -107,7 +106,6 @@ class statistics(dml.Algorithm):
                            getStatistics)
         doc.wasDerivedFrom(Stats, ParcelsCombined, getStatistics, getStatistics,
                            getStatistics)
-
 
 
 statistics.execute()
