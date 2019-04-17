@@ -58,7 +58,7 @@ We believe that there are still other spots which we can not discover simply by 
 accidents.So we decided to build up a model about this problem, using the Optimization Techniques to solve
 this problem.
 
-![image](https://github.com/TTTheo/course-2019-spr-proj/tree/master/robinhe_rqtian_hongyf_zhjiang/heatmap.png) 
+![image](https://github.com/TTTheo/course-2019-spr-proj/raw/master/robinhe_rqtian_hongyf_zhjiang/heatmap.png) 
 
 #### The problem is about:
 
