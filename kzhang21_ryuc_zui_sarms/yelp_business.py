@@ -1,34 +1,21 @@
-import urllib.request
-import json
-import dml
-import logging
-import prov.model
 import datetime
-import uuid
-import pandas as pd
-<<<<<<< HEAD
-import random
-
-=======
-import logging
-import argparse
->>>>>>> 074f6844a3887d0998a9beeac171bc6181a1f543
 import json
-import requests
+import logging
+import uuid
 from urllib.parse import quote
 
+import dml
+import pandas as pd
+import prov.model
+import requests
+
 log = logging.getLogger(__name__)
-<<<<<<< HEAD
+
 logging.basicConfig(level=logging.INFO)
 
 AUTH = json.loads(open("auth.json").read())
 
 API_KEY = AUTH["services"]["Yelp"]["token"]
-=======
-logging.basicConfig(level=logging.DEBUG)
-
-API_KEY = 'qtpGY7-Tf1AxOXvUBgVpouLaPW_s-A_7wckLvoGujK3AAaSfDheyfbMkK4tszEYH_jJ1byrvpuRJ5VxblOwT_xqtiXfXXUTl8HHzUDwJ9QPU71O0cs9YA9RFiycFWXYx'
->>>>>>> 074f6844a3887d0998a9beeac171bc6181a1f543
 
 API_HOST = 'https://api.yelp.com'
 SEARCH_PATH = '/v3/businesses/search'
