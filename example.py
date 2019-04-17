@@ -44,6 +44,7 @@ class example(dml.Algorithm):
         endTime = datetime.datetime.now()
 
         return {"start": startTime, "end": endTime}
+
     @staticmethod
     def provenance(doc = prov.model.ProvDocument(), startTime= None, endTime= None):
         '''
@@ -90,6 +91,7 @@ class example(dml.Algorithm):
         doc.wasDerivedFrom(found, resource, get_found, get_found, get_found)
 
         repo.logout()
+
         return doc
 
 
