@@ -63,6 +63,7 @@ class getStatistics(dml.Algorithm):
                      "statistic": "std_dev", "value": stdev(x, m)})
 
         endTime = datetime.datetime.now()
+        return {"start": startTime, "end": endTime}
 
     @staticmethod
     def provenance(doc=prov.model.ProvDocument(), startTime=None, endTime=None):

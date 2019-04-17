@@ -112,6 +112,7 @@ class optimize(dml.Algorithm):
         repo[optimize.contributor + ".KMeans"].metadata({'complete': True})
 
         endTime = datetime.datetime.now()
+        return {"start": startTime, "end": endTime}
 
     @staticmethod
     def provenance(doc=prov.model.ProvDocument(), startTime=None, endTime=None):
