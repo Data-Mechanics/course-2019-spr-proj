@@ -300,7 +300,9 @@ class example(dml.Algorithm):
                 elif not tswitch:
                     tswitch = True
 
-        STOPS_NEW = STOPS_OG  
+        #STOPS_NEW = STOPS_OG  
+        
+
         count = 0
         for i in range(len(STOPS_OG)):            
             lenStops = len(STOPS_OG[i])-5
@@ -312,7 +314,7 @@ class example(dml.Algorithm):
         
         #implementation of k-means, with md.time as the distance function
         #todo: set a departure time in md.time
-        print('\n\nSTOPS NEW: ',STOPS_NEW ,'\n\n')
+        #print('\n\nSTOPS NEW: ',STOPS_NEW ,'\n\n')
         testLen = 5
         #done for every school separately
         #for x in range(len(STOPS_OG)):
@@ -329,10 +331,10 @@ class example(dml.Algorithm):
             #MEANS = [(2,2), (10,10)]
             #POINTSC = [(1,1),(3,4),(9,8)]
             #print("\nMeans: ",MEANS, "\n")
-            
             while not isClose(MEANS, OLD):
+                #print("\n\n\n\n\n\n")
                 OLD = MEANS
-
+                #print("MEANS1", MEANS)
                 #MPD = [(m, p, md.walk_time_url(m,p)) for (m, p) in product(MEANS, POINTSC)]
                 #PDs = [(p, md.walk_time_url(m,p)) for (m, p, d) in MPD]
 
@@ -348,7 +350,7 @@ class example(dml.Algorithm):
                 MC = aggregate(M1, sum)
 
                 MEANS = [scale(t,c) for ((m,t),(m2,c)) in product(MT, MC) if m == m2]
-                
+                #print("MEANS1", MEANS)
                 print("\n old: ", OLD)
                 print("\n means: ", MEANS, "\n")
                 
