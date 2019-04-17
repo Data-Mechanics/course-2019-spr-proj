@@ -33,6 +33,10 @@ class totalSchool(dml.Algorithm):
     
     
         total = private_school+public_school
+        
+        print(private_school)
+        print (public_school)
+        
 
         s=[]
         keys = {r['zipcode'] for r in total}
@@ -43,7 +47,7 @@ class totalSchool(dml.Algorithm):
                 if r['zipcode'] == k:
                     sum+=r['num_school']
             dic['zipcode'] = k
-            dic['total_school'] = sum
+            dic['count'] = sum
             s.append(dic)
 
 

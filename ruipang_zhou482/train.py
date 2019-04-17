@@ -29,7 +29,9 @@ class train(dml.Algorithm):
 
 		privateSchool = {}
 		for i in repo['ruipang_zhou482.privateSchool'].find():
+			print(i)
 			privateSchool[i["zipcode"]] = i["num_school"]
+        
 		publicSchool = {}
 		for i in repo['ruipang_zhou482.publicSchool'].find():
 			publicSchool[i["zipcode"]] = i["num_school"]

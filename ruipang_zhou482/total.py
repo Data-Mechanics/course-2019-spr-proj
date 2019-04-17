@@ -28,7 +28,7 @@ class total(dml.Algorithm):
 
 		school = []
 		for i in repo['ruipang_zhou482.totalSchool'].find():
-			school.append({"zipcode": i["zipcode"], "count": i["total_school"]})
+			school.append({"zipcode": i["zipcode"], "count": i["count"]})
 		facilities = []
 		for i in repo['ruipang_zhou482.facilities'].find():
 			facilities.append(i)
