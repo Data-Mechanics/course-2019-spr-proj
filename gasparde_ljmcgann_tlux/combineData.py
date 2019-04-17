@@ -13,9 +13,9 @@ from rtree import index
 
 class combineData(dml.Algorithm):
     contributor = 'gasparde_ljmcgann_tlux'
-    reads = [ contributor + ".CensusTractShape", contributor + ".CensusTractHealth",
-              contributor + ".Neighborhoods", contributor + ".ParcelAssessments",
-              contributor + ".ParcelGeo", contributor + ".OpenSpaces"]
+    reads = [contributor + ".CensusTractShape", contributor + ".CensusTractHealth",
+             contributor + ".Neighborhoods", contributor + ".ParcelAssessments",
+             contributor + ".ParcelGeo", contributor + ".OpenSpaces"]
     writes = [contributor + ".ParcelsCombined"]
 
     @staticmethod
@@ -102,7 +102,7 @@ class combineData(dml.Algorithm):
             parcel_index.insert(i, parcel_bounds)
 
         for i in tqdm(range(len(data))):
-            score= 0
+            score = 0
             new_park = combineData.geojson_to_polygon(data[i]["geometry"])[0]
             for other_parcel in [j for j in parcel_index.nearest(new_park.bounds, 50)]:
                 score += data[other_parcel]["min_distance_km"]
@@ -120,7 +120,6 @@ class combineData(dml.Algorithm):
         repo = client.repo
         repo.authenticate(combineData.contributor, combineData.contributor)
 
-
         ####################################################################
 
         # putting opens spaces into their respective neighborhoods
@@ -130,7 +129,7 @@ class combineData(dml.Algorithm):
         open_spaces = list(repo[combineData.contributor + ".OpenSpaces"].find())
 
         neighborhoods = [list(repo[combineData.contributor + ".Neighborhoods"].find())[24]] if trial \
-                        else list(repo[combineData.contributor + ".Neighborhoods"].find())
+            else list(repo[combineData.contributor + ".Neighborhoods"].find())
 
         # open_spaces_by_neighborhood = combineData.create_neighborhood_dict(neighborhoods)
         # for open_space in tqdm(open_spaces):
@@ -177,7 +176,7 @@ class combineData(dml.Algorithm):
 
         # put parcel shapes together with its parcel assessment
         parcel_geo = list(repo[combineData.contributor + ".ParcelGeo"].find())[:10000] if trial \
-                     else list(repo[combineData.contributor + ".ParcelGeo"].find())
+            else list(repo[combineData.contributor + ".ParcelGeo"].find())
         parcel_assessments = repo[combineData.contributor + ".ParcelAssessments"]
 
         parcel_shape_assessment = []
@@ -185,12 +184,12 @@ class combineData(dml.Algorithm):
         print("Combining Parcels Shape with their Assessments:")
         for i in tqdm(range(len(parcel_geo))):
             PID = parcel_geo[i]["properties"]["PID_LONG"]
-            assessment = parcel_assessments.find_one({"_id":PID})
+            assessment = parcel_assessments.find_one({"_id": PID})
             parcel_shape = parcel_geo[i]["geometry"]
             if assessment is not None:
-                parcel_shape_assessment.append({**assessment, **{"geometry":parcel_shape}})
-        #print(len(parcel_shape_assessment))
-        #print(parcel_shape_assessment)
+                parcel_shape_assessment.append({**assessment, **{"geometry": parcel_shape}})
+        # print(len(parcel_shape_assessment))
+        # print(parcel_shape_assessment)
 
         ###############################################################
 
@@ -199,13 +198,12 @@ class combineData(dml.Algorithm):
         census_tract_health = repo[combineData.contributor + ".CensusTractHealth"]
         census_tract_shape = list(repo[combineData.contributor + ".CensusTractShape"].find())
 
-
         c_t_health_shape = []
         for i in range(len(census_tract_shape)):
             tract = census_tract_shape[i]["Census Tract"]
-            health = census_tract_health.find_one({"_id":tract})
-            shape = {"geometry": {"type":census_tract_shape[i]["type"],
-                                  "coordinates":census_tract_shape[i]["coordinates"]}}
+            health = census_tract_health.find_one({"_id": tract})
+            shape = {"geometry": {"type": census_tract_shape[i]["type"],
+                                  "coordinates": census_tract_shape[i]["coordinates"]}}
             if health is not None:
                 c_t_health_shape.append({**health, **shape})
 
@@ -216,10 +214,8 @@ class combineData(dml.Algorithm):
         # rtree for tracts
         tract_index = index.Index()
         for i in range(len(c_t_health_shape)):
-
             tract_shapely = combineData.geojson_to_polygon(c_t_health_shape[i]["geometry"])
             tract_index.insert(i, tract_shapely[0].bounds)
-
 
         print("Combining Parcel with Tracts")
         parcels_with_health = []
@@ -230,20 +226,22 @@ class combineData(dml.Algorithm):
                 tract_shapely = combineData.geojson_to_polygon(c_t_health_shape[ti]["geometry"])
                 for shape in tract_shapely:
                     if shape.contains(parcel_shapely):
-                        tract_data = {"asthma":c_t_health_shape[ti]["asthma"], "low_phys":c_t_health_shape[ti]["low_phys"],
-                                      "obesity":c_t_health_shape[ti]["obesity"], "Census Tract":c_t_health_shape[ti]["_id"]}
+                        tract_data = {"asthma": c_t_health_shape[ti]["asthma"],
+                                      "low_phys": c_t_health_shape[ti]["low_phys"],
+                                      "obesity": c_t_health_shape[ti]["obesity"],
+                                      "Census Tract": c_t_health_shape[ti]["_id"]}
                         data = {**parcel_shape_assessment[i], **tract_data}
                         parcels_with_health.append(data)
                         found = True
                         break
                 if found:
                     break
-        #print(parcel_shape_assessment)
-        #print(len(parcel_shape_assessment))
+        # print(parcel_shape_assessment)
+        # print(len(parcel_shape_assessment))
 
         ###############################################################
 
-        #add parcels to neighborhoods
+        # add parcels to neighborhoods
         parcels_by_neighborhood = combineData.create_neighborhood_dict(neighborhoods)
         print("Adding Parcels to Neighborhoods")
         for i in tqdm(range(len(parcels_with_health))):
@@ -302,10 +300,74 @@ class combineData(dml.Algorithm):
 
         return {"start": startTime, "end": endTime}
 
-
     @staticmethod
     def provenance(doc=prov.model.ProvDocument(), startTime=None, endTime=None):
+        client = dml.pymongo.MongoClient()
+        repo = client.repo
+        repo.authenticate('gasparde_ljmcgann_tlux', 'gasparde_ljmcgann_tlux')
+        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')  # The scripts are in <folder>#<filename> format.
+        doc.add_namespace('dat', 'http://datamechanics.io/data/')  # The data sets are in <user>#<collection> format.
+        doc.add_namespace('ont',
+                          'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
+        doc.add_namespace('log', 'http://datamechanics.io/log/')  # The event log.
+        this_script = doc.agent('alg:gasparde_ljmcgann_tlux#collect',
+                                {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'],
+                                 'ont:Extension': 'py'})
 
-        return 0
+        CensusTractShape = doc.entity('dat:gasparde_ljmcgann_tlux#CensusTractShape',
+                                      {prov.model.PROV_LABEL: 'Boston Census Tract Shape',
+                                       prov.model.PROV_TYPE: 'ont:DataSet'})
+        CensusTractHealth = doc.entity('dat:gasparde_ljmcgann_tlux#CensusTractHealth',
+                                       {prov.model.PROV_LABEL: 'Boston Census Tract Health Statistics',
+                                        prov.model.PROV_TYPE: 'ont:DataSet'})
+        Neighborhoods = doc.entity('dat:gasparde_ljmcgann_tlux#Neighborhoods',
+                                   {prov.model.PROV_LABEL: 'Shape of Boston Neighborhoods',
+                                    prov.model.PROV_TYPE: 'ont:DataSet'})
+        OpenSpaces = doc.entity('dat:gasparde_ljmcgann_tlux#OpenSpaces',
+                                {prov.model.PROV_LABEL: 'Open Spaces in Boston that can be Parks',
+                                 prov.model.PROV_TYPE: 'ont:DataSet'})
+        ParcelGeo = doc.entity('dat:gasparde_ljmcgann_tlux#ParcelGeo',
+                               {prov.model.PROV_LABEL: 'The Shape of the Parcels', prov.model.PROV_TYPE: 'ont:DataSet'})
+        ParcelAssessments = doc.entity('dat:gasparde_ljmcgann_tlux#ParcelAssessments',
+                                       {prov.model.PROV_LABEL: 'Assessment Value of Parcels',
+                                        prov.model.PROV_TYPE: 'ont:DataSet'})
+
+        getParcelsCombined = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+
+        doc.wasAssociatedWith(getParcelsCombined, this_script)
+        doc.usage(getParcelsCombined, CensusTractShape, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:Retrieval'})
+        doc.usage(getParcelsCombined, CensusTractHealth, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:Retrieval'})
+        doc.usage(getParcelsCombined, Neighborhoods, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:Retrieval'})
+        doc.usage(getParcelsCombined, OpenSpaces, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:Retrieval'})
+        doc.usage(getParcelsCombined, ParcelGeo, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:Retrieval'})
+        doc.usage(getParcelsCombined, ParcelAssessments, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:Retrieval'})
+
+        ParcelsCombined = doc.entity('dat:gasparde_ljmcgann_tlux#ParcelCombined',
+                                     {prov.model.PROV_LABEL: 'Final Dataset Produced for Optimization and Analysis',
+                                      prov.model.PROV_TYPE: 'ont:DataSet'})
+
+        doc.wasAttributedTo(ParcelsCombined, this_script)
+
+        doc.wasGeneratedBy(ParcelsCombined, getParcelsCombined, endTime)
+
+        doc.wasDerivedFrom(ParcelsCombined, CensusTractHealth, getParcelsCombined, getParcelsCombined,
+                           getParcelsCombined)
+        doc.wasDerivedFrom(ParcelsCombined, CensusTractShape, getParcelsCombined, getParcelsCombined,
+                           getParcelsCombined)
+        doc.wasDerivedFrom(ParcelsCombined, Neighborhoods, getParcelsCombined, getParcelsCombined,
+                           getParcelsCombined)
+        doc.wasDerivedFrom(ParcelsCombined, OpenSpaces, getParcelsCombined, getParcelsCombined,
+                           getParcelsCombined)
+        doc.wasDerivedFrom(ParcelsCombined, ParcelGeo, getParcelsCombined, getParcelsCombined,
+                           getParcelsCombined)
+        doc.wasDerivedFrom(ParcelsCombined, ParcelAssessments, getParcelsCombined, getParcelsCombined,
+                           getParcelsCombined)
+
 
 combineData.execute(True)

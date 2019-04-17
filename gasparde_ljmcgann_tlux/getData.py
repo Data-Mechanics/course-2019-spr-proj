@@ -212,16 +212,16 @@ class getData(dml.Algorithm):
                                    prov.model.PROV_TYPE: 'ont:DataResource',
                                    'ont:Extension': 'geojson'})
 
-        get_Neighborhoods = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(get_Neighborhoods, this_script)
-        doc.usage(get_Neighborhoods, bnh_resource, startTime, None,
+        getNeighborhoods = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(getNeighborhoods, this_script)
+        doc.usage(getNeighborhoods, bnh_resource, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:Retrieval'})
 
         Neighborhoods = doc.entity('dat:gasparde_ljmcgann_tlux#Neighborhoods',
                                    {prov.model.PROV_LABEL: 'Shape of Boston Neighborhoods', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(Neighborhoods, this_script)
-        doc.wasGeneratedBy(Neighborhoods, get_Neighborhoods, endTime)
-        doc.wasDerivedFrom(Neighborhoods, bnh_resource, get_Neighborhoods, get_Neighborhoods, get_Neighborhoods)
+        doc.wasGeneratedBy(Neighborhoods, getNeighborhoods, endTime)
+        doc.wasDerivedFrom(Neighborhoods, bnh_resource, getNeighborhoods, getNeighborhoods, getNeighborhoods)
 
         # Parcel Geoson Data
 
@@ -230,16 +230,16 @@ class getData(dml.Algorithm):
                                    prov.model.PROV_TYPE: 'ont:DataResource',
                                    'ont:Extension': 'geojson'})
 
-        get_ParcelGeo = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(get_ParcelGeo, this_script)
-        doc.usage(get_ParcelGeo, pgd_resource, startTime, None,
+        getParcelGeo = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(getParcelGeo, this_script)
+        doc.usage(getParcelGeo, pgd_resource, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:Retrieval'})
 
         ParcelGeo = doc.entity('dat:gasparde_ljmcgann_tlux#ParcelGeo',
                                {prov.model.PROV_LABEL: 'The Shape of the Parcels', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(ParcelGeo, this_script)
-        doc.wasGeneratedBy(ParcelGeo, get_ParcelGeo, endTime)
-        doc.wasDerivedFrom(ParcelGeo, pgd_resource, get_ParcelGeo, get_ParcelGeo, get_ParcelGeo)
+        doc.wasGeneratedBy(ParcelGeo, getParcelGeo, endTime)
+        doc.wasDerivedFrom(ParcelGeo, pgd_resource, getParcelGeo, getParcelGeo, getParcelGeo)
 
         # Parcel Assessment
 
@@ -247,17 +247,17 @@ class getData(dml.Algorithm):
                                   {'prov:label': 'Collect Boston Parcel Assessment Value',
                                    prov.model.PROV_TYPE: 'ont:DataResource',
                                    'ont:Extension': 'json'})
-        get_ParcelAssessments = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(get_ParcelAssessments, this_script)
-        doc.usage(get_ParcelAssessments, pas_resource, startTime, None,
+        getParcelAssessments = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(getParcelAssessments, this_script)
+        doc.usage(getParcelAssessments, pas_resource, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:Retrieval'})
 
         ParcelAssessments = doc.entity('dat:gasparde_ljmcgann_tlux#ParcelAssessments',
                                        {prov.model.PROV_LABEL: 'Assessment Value of Parcels', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(ParcelAssessments, this_script)
-        doc.wasGeneratedBy(ParcelAssessments, get_ParcelAssessments, endTime)
-        doc.wasDerivedFrom(ParcelAssessments, pas_resource, get_ParcelAssessments, get_ParcelAssessments,
-                           get_ParcelAssessments)
+        doc.wasGeneratedBy(ParcelAssessments, getParcelAssessments, endTime)
+        doc.wasDerivedFrom(ParcelAssessments, pas_resource, getParcelAssessments, getParcelAssessments,
+                           getParcelAssessments)
 
         repo.logout()
 
