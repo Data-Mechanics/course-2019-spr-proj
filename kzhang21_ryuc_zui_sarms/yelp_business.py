@@ -1,6 +1,7 @@
 import urllib.request
 import json
 import dml
+import logging
 import prov.model
 import datetime
 import uuid
@@ -15,7 +16,12 @@ import os
 from urllib.error import HTTPError
 from urllib.parse import quote
 
-API_KEY = 'qtpGY7-Tf1AxOXvUBgVpouLaPW_s-A_7wckLvoGujK3AAaSfDheyfbMkK4tszEYH_jJ1byrvpuRJ5VxblOwT_xqtiXfXXUTl8HHzUDwJ9QPU71O0cs9YA9RFiycFWXYx'
+log = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
+
+AUTH = json.loads(open("auth.json").read())
+
+API_KEY = AUTH["services"]["Yelp"]["token"]
 
 API_HOST = 'https://api.yelp.com'
 SEARCH_PATH = '/v3/businesses/search'
@@ -52,42 +58,38 @@ class yelp_business(dml.Algorithm):
         food_violations = repo['kzhang21_ryuc_zui_sarms.food_violations']
         df_violations = pd.DataFrame(list(food_violations.find()))
 
-        parser = argparse.ArgumentParser()
+
         ## for each entry in violation get data
         print('HERE: lets get this business')
-        for index, row in df_violations.iterrows():
+        # for index, row in df_violations.iterrows():
+        #
+        #     term = row["businessname"]
+        #     location =  row["address"] + ', ' + row["city"] + ', ' + row["state"] + ', ' + row["zip"]
+        #
+        #
+        #     try:
+        #         result = query_api(input_values.term, input_values.location)
+        #         if result["location"]["zip_code"] in zip_codes:
+        #             print(row["businessname"])
+        #             result["violation_rate"] = row["violationRate"]
+        #             repo['kzhang21_ryuc_zui_sarms.yelp_business'].insert(result)
+        #     except HTTPError as error:
+        #         sys.exit(
+        #             'Encountered HTTP error {0} on {1}:\n {2}\nAbort program.'.format(
+        #                 error.code,
+        #                 error.url,
+        #                 error.read(),
+        #             )
+        #         )
+        #
+        # repo['kzhang21_ryuc_zui_sarms.yelp_business'].metadata({'complete':True})
+        #
+        # print(repo['kzhang21_ryuc_zui_sarms.yelp_business'].metadata())
+        #
+        # repo.logout()
+        #
 
-            term = row["businessname"]
-            location =  row["address"] + ', ' + row["city"] + ', ' + row["state"] + ', ' + row["zip"]
-
-            parser.add_argument('-q', '--term', dest='term', default=term,
-                                type=str, help='Search term (default: %(default)s)')
-            parser.add_argument('-l', '--location', dest='location',
-                                default=location, type=str,
-                                help='Search location (default: %(default)s)')
-
-            input_values = parser.parse_args()
-
-            try:
-                result = query_api(input_values.term, input_values.location)
-                if result["location"]["zip_code"] in zip_codes:
-                    print(row["businessname"])
-                    result["violation_rate"] = row["violationRate"]
-                    repo['kzhang21_ryuc_zui_sarms.yelp_business'].insert(result)
-            except HTTPError as error:
-                sys.exit(
-                    'Encountered HTTP error {0} on {1}:\n {2}\nAbort program.'.format(
-                        error.code,
-                        error.url,
-                        error.read(),
-                    )
-                )
-
-        repo['kzhang21_ryuc_zui_sarms.yelp_business'].metadata({'complete':True})
-
-        print(repo['kzhang21_ryuc_zui_sarms.yelp_business'].metadata())
-
-        repo.logout()
+        log.debug("Finishing %s", __name__)
 
         endTime = datetime.datetime.now()
 
