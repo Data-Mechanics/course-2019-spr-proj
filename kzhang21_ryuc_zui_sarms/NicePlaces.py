@@ -8,6 +8,7 @@ import z3
 import math
 import logging
 import datetime
+from geopy.distance import geodesic
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
@@ -44,7 +45,7 @@ class NicePlaces(dml.Algorithm):
         MAX_DIST = 100
 
         # What is the least amount of distance you would like to go
-        MIN_DIST = 0.12
+        MIN_DIST = 10
 
         # What is the average rating of the places you would like to go to
         AVG_RATE = 4
@@ -118,7 +119,9 @@ class NicePlaces(dml.Algorithm):
         return None
 
 def dist(a, b):
-    lat_a, lgn_a = a
-    lat_b, lgn_b = b
+    # lat_a, lgn_a = a
+    
+    # lat_b, lgn_b = b
+    
 
-    return math.sqrt((lat_a-lat_b)**2 + (lgn_a-lgn_b)**2)
+    return geodesic(a, b).miles
