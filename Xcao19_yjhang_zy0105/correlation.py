@@ -10,7 +10,10 @@ from random import shuffle
 from math import sqrt
 
 class correlation(dml.Algorithm):
-    contributor = 'Jinghang_Yuan'
+    # contributor = 'Jinghang_Yuan'
+
+    #project 2 contributors:
+    contributor = 'xcao19_yjhang_zy0105'
     reads = ['Jinghang_Yuan.ZIPCounter']
     writes = ['Jinghang_Yuan.correlation']
 
@@ -108,33 +111,36 @@ class correlation(dml.Algorithm):
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate('Jinghang_Yuan', 'Jinghang_Yuan')
-        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')
-        doc.add_namespace('dat', 'http://datamechanics.io/data/')
+        doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')  # The scripts are in <folder>#<filename> format.
+        doc.add_namespace('dat', 'http://datamechanics.io/data/')  # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont',
-                          'http://datamechanics.io/ontology#')
-        doc.add_namespace('log', 'http://datamechanics.io/log/')
+                          'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
+        doc.add_namespace('log', 'http://datamechanics.io/log/')  # The event log.
         doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
 
-        this_script = doc.agent('alg:Jinghang_Yuan#school',
+
+        #---entities---
+        resource = doc.entity('dat: Jinghang_Yuan#Jinghang_Yuan.ZIPCounter', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        res = doc.entity('dat:Jinghang_Yuan#Jinghang_Yuan.correlation',
+                            {prov.model.PROV_LABEL: 'result', prov.model.PROV_TYPE: 'ont:DataSet'})
+        #---agents---
+        this_script = doc.agent('alg:Xcao19_yjhang_zy0105#correlation',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
-        resource = doc.entity('bdp:wc8w-nujj',
-                              {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource',
-                               'ont:Extension': 'json'})
-        get_school = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(get_school, this_script)
-        doc.usage(get_school, resource, startTime, None,
+        #---algs/activities---
+        get_correlation = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+
+        doc.usage(get_correlation, resource, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:Retrieval',
-                   'ont:Query': 'X,Y,OBJECTID_1,OBJECTID,SCHID,NAME,ADDRESS,TOWN_MAIL,TOWN,STATE,ZIP,PRINCIPAL,PHONE,FAX,GRADES,TYPE'
+                   'ont:Query': '.find({}, {val_avg:1, centerNum: 1, centerPoolNum: 1, policeStationNum: 1, schoolNum: 1, _id:0})'
                    }
                   )
-        school = doc.entity('dat:Jinghang_Yuan#school',
-                            {prov.model.PROV_LABEL: 'school', prov.model.PROV_TYPE: 'ont:DataSet'})
-        doc.wasAttributedTo(school, this_script)
-        doc.wasGeneratedBy(school, get_school, endTime)
-        doc.wasDerivedFrom(resource, school, get_school, get_school, get_school)
 
+        doc.wasAttributedTo(res, this_script)
+        doc.wasGeneratedBy(res, get_correlation, endTime)
+        doc.wasDerivedFrom(res, resource, get_correlation, get_correlation, get_correlation)
+        doc.wasAssociatedWith(get_correlation, this_script)
         repo.logout()
 
         return doc
 
-correlation.execute()
+# correlation.execute()
