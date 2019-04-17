@@ -171,6 +171,7 @@ class optimizationCrashSpot(dml.Algorithm):
         url = 'http://datamechanics.io/data/robinhe_rqtian_hongyf_zhjiang/crashSpots.json'
         response = urllib.request.urlopen(url).read().decode("utf-8")
         data = json.loads(response)
+
         locations = []
         for item in data.values():
             if item['lon'] > -71.035 and item['lon'] < -70.958 and item['lat'] < 42.450 and item['lat'] > 42.390:
@@ -178,6 +179,9 @@ class optimizationCrashSpot(dml.Algorithm):
 
         self = optimizationCrashSpot()
         # locations = self.readJSON()
+        if trial:
+            locations = locations[:1000]
+        # print(len(locations))
         min_lat, min_lon, unit_lat, unit_lon, grid = self.generateGrid(100, locations)
         maxs = self.slide_window(3, 1, grid, n)
         latlon = self.grid2Coordiante(maxs, min_lat, min_lon, unit_lat, unit_lon)
@@ -245,7 +249,7 @@ class optimizationCrashSpot(dml.Algorithm):
         return doc
 
 
-# optimizationCrashSpot.execute(5)
+optimizationCrashSpot.execute(5,False)
 # doc = optimizationCrashSpot.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))

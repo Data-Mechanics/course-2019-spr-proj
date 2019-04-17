@@ -13,6 +13,7 @@ Problem:
 
 '''
 import numpy as np
+import math
 import urllib.request
 import json
 import dml
@@ -70,13 +71,20 @@ class statistics(dml.Algorithm):
         repo = client.repo
         repo.authenticate('robinhe_rqtian_hongyf_zhjiang', 'robinhe_rqtian_hongyf_zhjiang')
 
+        print("loading data")
         url = 'http://datamechanics.io/data/robinhe_rqtian_hongyf_zhjiang/crash_data_01_19.json'
         response = urllib.request.urlopen(url).read().decode("utf-8")
         r = json.loads(response)
+        print("data loaded, calculating")
 
         output = []
         inter = []
-        for item in r:
+        if trial:
+            length = round(len(r)/10)
+        else:
+            length = len(r)
+        for idx in range(0,length):
+            item = r[idx]
             try:
                 inter.append([int(item['Number of NonFatal Injuries']),
                 int(item['Number of Fatal Injuries']),
@@ -173,7 +181,7 @@ class statistics(dml.Algorithm):
 
 # This is example code you might use for debugging this module.
 # Please remove all top-level function calls before submitting.
-# statistics.execute()
+# statistics.execute(False)
 # doc = statistics.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))
