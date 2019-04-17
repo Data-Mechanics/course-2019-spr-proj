@@ -10,6 +10,7 @@ import argparse
 import json
 import requests
 import sys
+import os
 
 from urllib.error import HTTPError
 from urllib.parse import quote
