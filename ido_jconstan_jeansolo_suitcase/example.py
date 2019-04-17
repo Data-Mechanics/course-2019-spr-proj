@@ -393,6 +393,27 @@ class example(dml.Algorithm):
         #STOPS_NEW = 
         #POINTS_NEW = 
         
+        # read new stops from csv
+        new_stops = []
+        tswitch = False
+        strName = ''
+        for i in range(5):
+            strName = 'k_means_school_' + str(i) + '.csv'
+
+            with open(strName, mode='r') as csv_file:
+                csv_reader = csv.reader(csv_file, delimiter=',')
+                for row in csv_reader:
+                    if row and tswitch:
+                        stop = row
+                        new_stops.append(row)
+                    elif not tswitch:
+                        tswitch = True
+
+        print("new_stops: ", new_stops)
+
+
+
+
         print("Before loop")
         for x in range(len(STOPS_NEW)):
             print("STOPS_NEW[",x,"]")
@@ -407,43 +428,48 @@ class example(dml.Algorithm):
             for i in range(len(POINTS_NEW[x])):
                 POINTSC.append(POINTS_NEW[x][i])
 
-            M = MEANS
-            P = POINTSC
+            M = MEANS # bus stops
+            print('MEANS',M)
+            P = POINTSC # student addresses
             MPD = [(m, p, dist(m,p)) for (m, p) in product(M, P)]
             PDs = [(p, dist(m,p)) for (m, p, d) in MPD]
             PD = aggregate(PDs, min)
-            MP = [(m, p) for ((m,p,d), (p2,d2)) in product(MPD, PD) if p==p2 and d==d2]
-            avg(MP)
+            MP = [(d) for ((m,p,d), (p2,d2)) in product(MPD, PD) if p==p2 and d==d2]
+            count = 0
+            for d in MP:
+                count += d 
+            average = count/len(POINTSC)
+            print('avg', average)
 
             
-            with open(strFileName, mode='w') as csv_file:
-                fieldnames = ['new_stop']
-                writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-                writer.writeheader()
+            # with open(strFileName, mode='w') as csv_file:
+            #     fieldnames = ['new_stop']
+            #     writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+            #     writer.writeheader()
 
-                while sorted(OLD) != sorted(MEANS):
-                    print("iteration")
+            #     while sorted(OLD) != sorted(MEANS):
+            #         print("iteration")
                     
-                    OLD = MEANS
+            #         OLD = MEANS
                     
-                    MPD = [(m, p, dist(m,p)) for (m, p) in product(MEANS, POINTSC)]
-                    PDs = [(p, d) for (m, p, d) in MPD]
+            #         MPD = [(m, p, dist(m,p)) for (m, p) in product(MEANS, POINTSC)]
+            #         PDs = [(p, d) for (m, p, d) in MPD]
                     
-                    PD = aggregate(PDs, min)
-                    MP = [(m, p) for ((m,p,d), (p2,d2)) in product(MPD, PD) if p==p2 and d==d2]
+            #         PD = aggregate(PDs, min)
+            #         MP = [(m, p) for ((m,p,d), (p2,d2)) in product(MPD, PD) if p==p2 and d==d2]
                     
-                    MT = aggregate(MP, plus)
+            #         MT = aggregate(MP, plus)
                     
-                    M1 = [(m, 1) for (m, _) in MP]
-                    MC = aggregate(M1, sum)
+            #         M1 = [(m, 1) for (m, _) in MP]
+            #         MC = aggregate(M1, sum)
                     
-                    MEANS = [scale(t,c) for ((m,t),(m2,c)) in product(MT, MC) if m == m2]
+            #         MEANS = [scale(t,c) for ((m,t),(m2,c)) in product(MT, MC) if m == m2]
 
-                # write MEANS to file
-                for i in MEANS:
-                    writer.writerow({'new_stop': i})
+            #     # write MEANS to file
+            #     for i in MEANS:
+            #         writer.writerow({'new_stop': i})
 
-                print("\n\nOLD = MEANS WOOHOO\n\n")
+            #     print("\n\nOLD = MEANS WOOHOO\n\n")
         
         
         repo.logout()
