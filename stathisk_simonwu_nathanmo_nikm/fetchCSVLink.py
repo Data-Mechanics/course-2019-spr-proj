@@ -11,7 +11,7 @@ from lxml import etree
 from io import StringIO
 
 
-def scrape_csv_url():
+def scrape_csv_url(trial):
     systype = sys.getfilesystemencoding()
     base_url = "http://electionstats.state.ma.us"
 
@@ -54,7 +54,12 @@ def scrape_csv_url():
     question_pages_url = list(set(question_pages_url))
 
     all_csv_links = []
-    for page_url in question_pages_url:
+    count, bottleneck = 0, len(question_pages_url)
+    if trial:
+        bottleneck = 5
+
+    for i in range(bottleneck):
+        page_url = question_pages_url[i]
         req = ur.Request(page_url, headers=headers)
         response = ur.urlopen(req)
         contents = response.read()
@@ -88,7 +93,7 @@ class fetchCSVLink(dml.Algorithm):
         tag = 'links'
 
         # 24 links of csv
-        links = scrape_csv_url()
+        links = scrape_csv_url(trial)
         df = pd.DataFrame(data={'link': links})
         json_mat = df.to_json(orient='records')
         repo.dropCollection(tag)

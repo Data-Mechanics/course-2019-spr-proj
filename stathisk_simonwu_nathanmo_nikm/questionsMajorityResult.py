@@ -165,7 +165,7 @@ class questionsMajorityResult(dml.Algorithm):
 
 
         majorityC = koalas.DataFrame(data=project(combined, average), columns=['Locality', 'Result'])
-        print(majorityC)
+        # print(majorityC)
         repo['stathisk_simonwu_nathanmo_nikm.majority'].drop()
         repo['stathisk_simonwu_nathanmo_nikm.majority'].insert_many(json.loads(majorityC.to_json(orient='records')))
         repo['stathisk_simonwu_nathanmo_nikm.majority'].metadata({'complete': True})

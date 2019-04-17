@@ -7,7 +7,7 @@ from math import sqrt
 from io import StringIO
 import pandas as pd
 
-class transformGeneral(dml.Algorithm):
+class correlationCoeff(dml.Algorithm):
     contributor = 'stathisk_simonwu_nathanmo_nikm'
     reads = ['stathisk_simonwu_nathanmo_nikm.weighted', 'stathisk_simonwu_nathanmo_nikm.majority']
     writes = ['stathisk_simonwu_nathanmo_nikm.correlationCoeff']
@@ -29,17 +29,17 @@ class transformGeneral(dml.Algorithm):
 
     @staticmethod
     def stddev(x):  # Standard deviation.
-        m = avg(x)
+        m = correlationCoeff.avg(x)
         return sqrt(sum([(xi - m) ** 2 for xi in x]) / len(x))
 
     @staticmethod
     def cov(x, y):  # Covariance.
-        return sum([(xi - avg(x)) * (yi - avg(y)) for (xi, yi) in zip(x, y)]) / len(x)
+        return sum([(xi - correlationCoeff.avg(x)) * (yi - correlationCoeff.avg(y)) for (xi, yi) in zip(x, y)]) / len(x)
 
     @staticmethod
     def corr(x, y):  # Correlation coefficient.
-        if stddev(x) * stddev(y) != 0:
-            return cov(x, y) / (stddev(x) * stddev(y))
+        if correlationCoeff.stddev(x) * correlationCoeff.stddev(y) != 0:
+            return correlationCoeff.cov(x, y) / (correlationCoeff.stddev(x) * correlationCoeff.stddev(y))
 
 
 
@@ -63,7 +63,7 @@ class transformGeneral(dml.Algorithm):
         for row in majority:
             majorityResults.append(row['Result'])
 
-        cc = corr(majorityResults, weightedResults)
+        cc = correlationCoeff.corr(majorityResults, weightedResults)
         d = {}
         d['weightedMajority'] = cc
 

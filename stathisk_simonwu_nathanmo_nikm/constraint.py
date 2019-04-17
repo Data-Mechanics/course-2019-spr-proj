@@ -41,24 +41,27 @@ class constraint(dml.Algorithm):
         repo.dropCollection(constraint1)
         repo.createCollection(constraint1)
         dataC1 = df[df['Yes'] > df['No']]
-        repo[constraint1].insert_many(json.loads(dataC1.to_json(orient='records')))
-        repo[constraint1].metadata({'complete': True})
+        if len(dataC1) > 0:
+            repo[constraint1].insert_many(json.loads(dataC1.to_json(orient='records')))
+            repo[constraint1].metadata({'complete': True})
 
         # # c2
         global constraint2
         repo.dropCollection(constraint2)
         repo.createCollection(constraint2)
         dataC2 = df[df['Yes'] > 1.5 * df['No']]
-        repo[constraint2].insert_many(json.loads(dataC2.to_json(orient='records')))
-        repo[constraint2].metadata({'complete': True})
+        if len(dataC2) > 0:
+            repo[constraint2].insert_many(json.loads(dataC2.to_json(orient='records')))
+            repo[constraint2].metadata({'complete': True})
 
         # # c3
         global constraint3
         repo.dropCollection(constraint3)
         repo.createCollection(constraint3)
         dataC3 = df[df['Yes'] + df['No'] > 2 * df['Blanks']]
-        repo[constraint3].insert_many(json.loads(dataC3.to_json(orient='records')))
-        repo[constraint3].metadata({'complete': True})
+        if len(dataC3) > 0:
+            repo[constraint3].insert_many(json.loads(dataC3.to_json(orient='records')))
+            repo[constraint3].metadata({'complete': True})
 
         repo.logout()
         endTime = datetime.datetime.now()
