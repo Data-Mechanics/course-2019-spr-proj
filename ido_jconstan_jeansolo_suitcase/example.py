@@ -307,7 +307,7 @@ class example(dml.Algorithm):
                         print("Error! ", "stop ", i, " ", j, ": ", STOPS_NEW[i][j])
                     writer.writerow({'lat': lat, 'lng': lng, 'og': og})
         '''
-        
+        #read the lat/lng from the csv file
         temp = []
         tswitch = False
         with open('StopsLatLng.csv', mode='r') as csv_file:
@@ -321,7 +321,7 @@ class example(dml.Algorithm):
                 elif not tswitch:
                     tswitch = True
 
-
+        #make a new structure, & eliminate elements that are not floats (where the geocode api failed to convert)
         STOPS_NEW = []
         count = 0
         for i in range(len(STOPS_OG)):   
@@ -338,20 +338,20 @@ class example(dml.Algorithm):
         #implementation of k-means, with md.time as the distance function
         #todo: set a departure time in md.time
         #print('\n\nSTOPS NEW: ',STOPS_NEW ,'\n\n')
-        testLen = 5
+        #testLen = 5
         #done for every school separately
         #for x in range(len(STOPS_OG)):
         #STOPS_NEW = 
         #POINTS_NEW = 
      
-        for x in range(len(STOPS_NEW)):
+        for x in range(len([0,0,0,0,0])):
             MEANS = []
             POINTSC = []
             OLD = []
             
-            for i in range(len(STOPS_NEW[x])):
+            for i in range(len([0,0,0,0,0])):
                 MEANS.append(STOPS_NEW[x][i])
-            for i in range(len(POINTS_NEW[x])):
+            for i in range(len([0,0,0,0,0])):
                 POINTSC.append(POINTS_NEW[x][i])
             #MEANS = [(2,2), (10,10)]
             #POINTSC = [(1,1),(3,4),(9,8)]
@@ -359,7 +359,7 @@ class example(dml.Algorithm):
             #print("len(MEANS", len(MEANS))
             #print("len(MEANS[0])", len(MEANS[0]))
             #while not isClose(MEANS, sorted(OLD)):
-            while sorted(MEANS) != sorted(OLD)):
+            while sorted(MEANS) != sorted(OLD):
                 OLD = MEANS
                 #print("MEANS1", MEANS)
                 #MPD = [(m, p, md.walk_time_url(m,p)) for (m, p) in product(MEANS, POINTSC)]
