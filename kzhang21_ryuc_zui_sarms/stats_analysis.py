@@ -48,45 +48,18 @@ class stats_analysis(dml.Algorithm):
             else:
                 row['price'] = None
 
-        log.info('One example: %s', yelp_files[0])
-
-        ## Helper functions
-        def permute(x):
-            shuffled = [xi for xi in x]
-            shuffle(shuffled)
-            return shuffled
-
-        def avg(x):  # Average
-            return sum(x) / len(x)
-
-        def stddev(x):  # Standard deviation.
-            m = avg(x)
-            return sqrt(sum([(xi - m) ** 2 for xi in x]) / len(x))
-
-        def cov(x, y):  # Covariance.
-            return sum([(xi - avg(x)) * (yi - avg(y)) for (xi, yi) in zip(x, y)]) / len(x)
-
-        def corr(x, y):  # Correlation coefficient.
-            if stddev(x) * stddev(y) != 0:
-                return cov(x, y) / (stddev(x) * stddev(y))
-
-        def p(x, y):
-            c0 = corr(x, y)
-            corrs = []
-
-            for k in range(0, 2000):
-                y_permuted = permute(y)
-                corrs.append(corr(x, y_permuted))
-            return len([c for c in corrs if abs(c) >= abs(c0)]) / len(corrs)
-
         df_yelp = pd.DataFrame(yelp_files).apply(pd.Series)
         def getStats(one, two):
-            x = df_yelp[one]
-            y = df_yelp[two]
+            filtered_df = df_yelp[df_yelp[one].notnull() & df_yelp[two].notnull()]
+            x = filtered_df[one]
+            y = filtered_df[two]
 
             log.info('%s and %s statistics', one, two)
             (corr_1, p_value_1) = stats.pearsonr(x, y)
             log.info('correlation: %.4f, p-value: %.4f', corr_1, p_value_1)
+
+            append = {'x': one, 'y': two, 'correlation': corr_1, 'p_value': p_value_1}
+            stats_variables.insert_one(append)
 
         getStats("review_count", "rating")
         getStats("review_count", "price")
@@ -95,6 +68,7 @@ class stats_analysis(dml.Algorithm):
         getStats("rating", "violation_rate")
         getStats("price", "violation_rate")
 
+        stats_variables.metadata({'complete': True})
         repo.logout()
 
         endTime = datetime.datetime.now()
@@ -116,21 +90,21 @@ class stats_analysis(dml.Algorithm):
 
         this_script = doc.agent('alg:kzhang21_ryuc_zui_sarms#yelp_business',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
-        resource = doc.entity('bdp:business.json',
-                              {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource',
-                               'ont:Extension': 'json'})
-        get_business = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(get_business, this_script)
-        doc.usage(get_business, resource, startTime, None,
+        yelp_business = doc.entity('dat:kzhang21_ryuc_zui_sarms#yelp_business',
+                              {'prov:label': 'yelp data', prov.model.PROV_TYPE: 'ont:DataSet'})
+        get_stats = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+        statistics = doc.entity('dat:kzhang21_ryuc_zui_sarms#statistics',
+                              {'prov:label': 'statistics data', prov.model.PROV_TYPE: 'ont:DataSet'})
+
+        doc.wasAssociatedWith(get_stats, this_script)
+        doc.usage(get_stats, yelp_business, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:Retrieval'
                    }
                   )
 
-        yelp_business = doc.entity('dat:kzhang21_ryuc_zui_sarms#yelp_business',
-                                   {prov.model.PROV_LABEL: 'Yelp Businesses', prov.model.PROV_TYPE: 'ont:DataSet'})
-        doc.wasAttributedTo(yelp_business, this_script)
-        doc.wasGeneratedBy(yelp_business, get_business, endTime)
-        doc.wasDerivedFrom(yelp_business, resource, get_business, get_business, get_business)
+        doc.wasAttributedTo(statistics, this_script)
+        doc.wasGeneratedBy(statistics, get_stats, endTime)
+        doc.wasDerivedFrom(yelp_business, statistics, get_stats, get_stats, get_stats)
 
         repo.logout()
 

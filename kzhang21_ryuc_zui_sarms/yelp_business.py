@@ -8,6 +8,7 @@ import dml
 import pandas as pd
 import prov.model
 import requests
+import random
 
 log = logging.getLogger(__name__)
 
@@ -40,8 +41,8 @@ class yelp_business(dml.Algorithm):
         repo = client.repo
         repo.authenticate('kzhang21_ryuc_zui_sarms', 'kzhang21_ryuc_zui_sarms')
 
-        # repo.dropCollection("yelp_business")
-        # repo.createCollection("yelp_business")
+        repo.dropCollection("yelp_business")
+        repo.createCollection("yelp_business")
 
         zip_codes = {'02108', '02109', '02110', '02111', '02113', '02114', '02115', '02116', '02118', '02119', '02120',
                      '02121', '02122', '02124', '02125', '02126', '02127', '02128', '02129', '02130', '02131', '02132',
@@ -55,6 +56,7 @@ class yelp_business(dml.Algorithm):
         food_violations = repo['kzhang21_ryuc_zui_sarms.food_violations']
 
         ## for each entry in violation get data
+        ## Once FoodInspections is in trial mode so is yelp_business
         for index, row in df_inspections.iterrows():
             term = row["businessname"]
             location = row["address"] + ', Boston, MA'
