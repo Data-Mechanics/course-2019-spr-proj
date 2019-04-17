@@ -2,7 +2,6 @@ import datetime
 import json
 import urllib.request
 import uuid
-
 import dml
 import prov.model
 
@@ -42,7 +41,6 @@ class getData(dml.Algorithm):
         url = 'https://chronicdata.cdc.gov/resource/47z2-4wuh.json?placename=Boston'
         response = urllib.request.urlopen(url).read().decode("utf-8")
         cdcData = json.loads(response)
-        # print(cdcData)
         # only want to keep these three statistics
         for i in range(len(cdcData)):
             d = {"_id": cdcData[i]["tractfips"],
@@ -61,6 +59,7 @@ class getData(dml.Algorithm):
         url = 'http://bostonopendata-boston.opendata.arcgis.com/datasets/3525b0ee6e6b427f9aab5d0a1d0a1a28_0.geojson'
         response = urllib.request.urlopen(url).read().decode("utf-8")
         neighborhoods = json.loads(response)
+
         # neighborhoods we don't want because of lack of open spaces/parcels
         # also some neighborhoods it woul make no sense to put and additional
         # park into
@@ -80,7 +79,8 @@ class getData(dml.Algorithm):
         # Parcels with their assessment value and type
         All_Assessments = []
         for i in range(9):
-            # need to iterate because we api request only brings max 20000 parcels
+            # need to iterate because we api request only brings max 32000 parcels
+            # 20000 is a good number so we don't pull in more than maximum getting duplicates
             skip = 20000 * (i)
             url1 = "https://data.boston.gov/datastore/odata3.0/fd351943-c2c6-4630-992d-3f895360febd?$top=20000&$format=json&$skip=" + str(
                 skip)
@@ -91,7 +91,6 @@ class getData(dml.Algorithm):
 
         # this loop is to remove duplicates that would cause problems inserting into mongo
         ids = set()
-        # print(All_Assessments)
         unique_pid = []
         for assess in All_Assessments:
             if assess["PID"] not in ids:
@@ -123,10 +122,10 @@ class getData(dml.Algorithm):
 
         # open spaces in boston
         url = "http://bostonopendata-boston.opendata.arcgis.com/datasets/2868d370c55d4d458d4ae2224ef8cddd_7.geojson"
+        # these are only types we want to keep, for example not counting cemeteries
         wanted_types = ["Parkways, Reservations & Beaches", "Parks, Playgrounds & Athletic Fields",
                         "Urban Wilds & Natural Areas", "Community Gardens"]
         open_spaces = json.loads(urllib.request.urlopen(url).read())["features"]
-        # print(open_spaces)
         open_spaces = [i for i in open_spaces if i['properties']['TypeLong'] in wanted_types]
         repo.dropCollection(getData.contributor + ".OpenSpaces")
         repo.createCollection(getData.contributor + ".OpenSpaces")
@@ -152,9 +151,9 @@ class getData(dml.Algorithm):
 
         # Data Mechanics Portal
 
-        doc.add_namespace('bct', 'http://datamechanics.io/data/gasparde_ljmcgann_tlux/')
+        doc.add_namespace('dmp', 'http://datamechanics.io/data/gasparde_ljmcgann_tlux/')
 
-        bct_resource = doc.entity('bct:boston_census_track',
+        bct_resource = doc.entity('dmp:boston_census_track',
                                   {'prov:label': 'Collect Boston Census Tract Shapes',
                                    prov.model.PROV_TYPE: 'ont:DataResource',
                                    'ont:Extension': 'json'})

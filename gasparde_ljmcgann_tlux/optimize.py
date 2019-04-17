@@ -15,6 +15,9 @@ class optimize(dml.Algorithm):
     @staticmethod
     def health_score(row):
         average = (float(row["obesity"]) + float(row["low_phys"]) + float(row["asthma"])) // 3
+        # we implement this scale to exagerate weights
+        # in the future should implement method to change how
+        # we weight
         if average > 20:
             return 100
         elif average > 15:
@@ -88,8 +91,8 @@ class optimize(dml.Algorithm):
                     shape = optimize.geojson_to_polygon(neighborhood[j]["geometry"])[0]
                     # out of order, want [latitude, longitude]
                     coords = [shape.centroid.coords[0][1], shape.centroid.coords[0][0]]
-                    # do weighted kmeans by adding additional points
 
+                    # do weighted kmeans by adding additional points based on weights
                     dist_weight = optimize.distance_score(neighborhood[j]["distance_score"], dist_stdev, dist_mean)
                     health_weight = optimize.health_score(neighborhood[j])
                     for _ in range(dist_weight):
@@ -139,11 +142,11 @@ class optimize(dml.Algorithm):
 
         doc.wasAssociatedWith(getOptimization, this_script)
         doc.usage(getOptimization, Neighborhoods, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:Retrieval'})
+                  {prov.model.PROV_TYPE: 'ont:Computation'})
         doc.usage(getOptimization, ParcelsCombined, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:Retrieval'})
+                  {prov.model.PROV_TYPE: 'ont:Computation'})
         doc.usage(getOptimization, Stats, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:Retrieval'})
+                  {prov.model.PROV_TYPE: 'ont:Computation'})
 
         Optimization = doc.entity('dat:gasparde_ljmcgann_tlux#KMeans',
                                   {prov.model.PROV_LABEL: 'Performs K-Means on Distance and Health Metrics',

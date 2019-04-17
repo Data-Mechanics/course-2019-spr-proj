@@ -1,6 +1,5 @@
 import datetime
 import uuid
-
 import dml
 import prov.model
 from math import *
@@ -22,7 +21,7 @@ class combineData(dml.Algorithm):
         computes correct distance between two points given
         :param point1:
         :param point2:
-        :return:
+        :return: the geometrical distance in kilometers
         """
         lon1 = point1[1]
         lon2 = point2[1]
@@ -44,23 +43,20 @@ class combineData(dml.Algorithm):
     @staticmethod
     def geo_distance(point, poly2):
         min_distance = 1000
+        # to find geo distance between a point and a polygon just
+        # iterate through each point that makes up the polygon and
+        # return the minimum distance from the point to one of the
+        # points in the polygon
         for other_point in list(poly2.exterior.coords):
             min_distance = min(min_distance, combineData.haversine((point.x, point.y), other_point))
         return min_distance
-
-    @staticmethod
-    def score(neighborhood):
-        score = 0
-        for i in neighborhood:
-            score += i["min_distance"]
-        return score
 
     @staticmethod
     def create_neighborhood_dict(neighborhoods):
         """
         returns dictionary with keys of neighborhoods whose value is an
         empty list
-        :return:
+        :return: dictionary
         """
         val = {}
         for neighborhood in neighborhoods:
@@ -70,8 +66,8 @@ class combineData(dml.Algorithm):
     @staticmethod
     def geojson_to_polygon(geom):
         """
-
-        :return: list of shapely polygons corresponding to the geojson object
+        take geojson geometry and turns into a shapely object
+        :return: shapely object
         """
         polys = []
         if geom['type'] == 'Polygon':
@@ -326,17 +322,17 @@ class combineData(dml.Algorithm):
 
         doc.wasAssociatedWith(getParcelsCombined, this_script)
         doc.usage(getParcelsCombined, CensusTractShape, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:Retrieval'})
+                  {prov.model.PROV_TYPE: 'ont:Computation'})
         doc.usage(getParcelsCombined, CensusTractHealth, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:Retrieval'})
+                  {prov.model.PROV_TYPE: 'ont:Computation'})
         doc.usage(getParcelsCombined, Neighborhoods, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:Retrieval'})
+                  {prov.model.PROV_TYPE: 'ont:Computation'})
         doc.usage(getParcelsCombined, OpenSpaces, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:Retrieval'})
+                  {prov.model.PROV_TYPE: 'ont:Computation'})
         doc.usage(getParcelsCombined, ParcelGeo, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:Retrieval'})
+                  {prov.model.PROV_TYPE: 'ont:Computation'})
         doc.usage(getParcelsCombined, ParcelAssessments, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:Retrieval'})
+                  {prov.model.PROV_TYPE: 'ont:Computation'})
 
         ParcelsCombined = doc.entity('dat:gasparde_ljmcgann_tlux#ParcelCombined',
                                      {prov.model.PROV_LABEL: 'Final Dataset Produced for Optimization and Analysis',

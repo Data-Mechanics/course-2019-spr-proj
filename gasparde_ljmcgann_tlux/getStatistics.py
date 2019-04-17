@@ -1,7 +1,6 @@
 import datetime
 import uuid
 from statistics import mean, stdev
-
 import dml
 import prov.model
 from scipy.stats import pearsonr
@@ -19,6 +18,7 @@ class getStatistics(dml.Algorithm):
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate(getStatistics.contributor, getStatistics.contributor)
+
         parcels = repo[getStatistics.contributor + ".ParcelsCombined"]
         neighborhoods = list(repo[getStatistics.contributor + ".Neighborhoods"].find())
 
@@ -28,13 +28,15 @@ class getStatistics(dml.Algorithm):
             name = neighborhoods[i]["properties"]["Name"]
             data = list(parcels.find({"Neighborhood": name}))
             if len(data) > 0:
+                # these are the three health statistics
                 for category in ["obesity", "asthma", "low_phys"]:
                     x = []
                     y = []
                     for i in range(len(data)):
                         y.append(float(data[i][category]))
                         x.append(float(data[i]["distance_score"]))
-
+                    # find r values and their p-value for the correlation
+                    # between distance scores and a health catagory
                     corr = pearsonr(x, y)
                     repo[getStatistics.contributor + ".Statistics"].insert_one(
                         {"Neighborhood": name, "variable": category,
@@ -47,6 +49,7 @@ class getStatistics(dml.Algorithm):
                         {"Neighborhood": name, "variable": category,
                          "statistic": "std_dev", "val": stdev(y, m)})
 
+        # compute mean and std_dev of distance scores
         for i in range(len(neighborhoods)):
             name = neighborhoods[i]["properties"]["Name"]
             data = list(parcels.find({"Neighborhood": name}))
@@ -87,9 +90,9 @@ class getStatistics(dml.Algorithm):
 
         doc.wasAssociatedWith(getStatistics, this_script)
         doc.usage(getStatistics, Neighborhoods, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:Retrieval'})
+                  {prov.model.PROV_TYPE: 'ont:Computation'})
         doc.usage(getStatistics, ParcelsCombined, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:Retrieval'})
+                  {prov.model.PROV_TYPE: 'ont:Computation'})
 
         Stats = doc.entity('dat:gasparde_ljmcgann_tlux#Statistics',
                            {prov.model.PROV_LABEL: 'Various Statistics on Health and Open Space Data',
