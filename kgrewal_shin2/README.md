@@ -59,6 +59,7 @@ transformation3.py - locating areas of boston where ubers travel most frequently
 
 transformation4.py - combines the streets without landmarks and the streets without schools to find the unclaimed streets
 
+
 <br></br>
 <b>Project 2:</b> 
 
@@ -66,21 +67,7 @@ kmeans.py - We preformed kmeans clustering on the data to find the areas where u
 to find how many streets were exist in each cluster. We plan to map this data and use it to spread out the locations where we 
 suggest street names should be changed.
 
-<br></br>
-<b>Project 2:</b> 
-
-We preformed kmeans clustering on the data to find the areas where unclaimed streets are common. We then did a count 
-to find how many streets were exist in each cluster. We plan to map this data and use it to spread out the locations where we 
-suggest street names should be changed.
-
 statistics.py - We also took the street lengths and calculated the correlation coefficients to see if 
-there is a connection between the lengths of our unclaimed streets. We decided that longer
-roads are more likely to be "major roads" and this would tell us if we are selecting 
-mostly major roads or mostly less-significant roads. We found no correlation between length
-and therefore we have chosen a balance between long and short streets which will mean the streets
-we have narrowed our list down to will have plenty of significant suggestions.
-
-We also took the street lengths and calculated the correlation coefficients to see if 
 there is a connection between the lengths of our unclaimed streets. We decided that longer
 roads are more likely to be "major roads" and this would tell us if we are selecting 
 mostly major roads or mostly less-significant roads. We found no correlation between length
