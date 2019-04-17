@@ -5,7 +5,7 @@ import prov.model
 import datetime
 import uuid
 import pandas as pd
-
+import logging
 import argparse
 import json
 import requests
@@ -27,7 +27,6 @@ BUSINESS_PATH = '/v3/businesses/'  # Business ID will come after slash.
 DEFAULT_TERM = 'dinner'
 DEFAULT_LOCATION = 'Boston, MA'
 SEARCH_LIMIT = 1
-
 class yelp_business(dml.Algorithm):
     contributor = 'kzhang21_ryuc_zui_sarms'
     reads = ['kzhang21_ryuc_zui_sarms.food_violations']
@@ -37,7 +36,8 @@ class yelp_business(dml.Algorithm):
     def execute(trial = False):
 
         startTime = datetime.datetime.now()
-
+        log.debug("Running %s", __name__)
+        
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
