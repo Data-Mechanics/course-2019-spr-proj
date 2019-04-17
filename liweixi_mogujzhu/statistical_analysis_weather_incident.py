@@ -43,6 +43,7 @@ class statistical_analysis_weather_incident(dml.Algorithm):
             data = data[:data.shape[0]//2]
 
         # TMAX and fire incident
+        
         data1 = [(x, y) for x in data['TMAX'] ]
 
         print(NINCIDENT)

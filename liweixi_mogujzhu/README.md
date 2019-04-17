@@ -25,7 +25,10 @@ best predict the daily fire incident risk probabilities.
 Finally on average the Support Vector Machine Classifier model got the best result, with 50% accuracy to predict
  3 classes (where baseline is 33%). We then output the parameter of the SVC models and the weight of each features 
  after training.
-
+For the statistical analysis part, we compute corelation coefficient and p-value between weather features and 
+fire incidents to find which weather features influence the fire incidents the most. Finally, we find although
+every single feature has less influence on fire incidents, when they are combined together in our SVM machine 
+learning model, they as a union show a great influence on fire incidents.
 
 
 # Dataset
@@ -74,3 +77,13 @@ Shape: [latitude, longitude]
 * Street Name: The name of the street which happens fire incident or building violation
 * Fire Incident Number: The number of fire incidents that happen on a street
 * Building Violation Number: The number of building violations that happen on a street
+
+## prediction_weather_incident.py
+* DATE: The date
+* LOW_PROB: The probability of occurring low level fire incidents that our machine learning model predicts
+* MID_PROB: The probability of occurring medium level fire incidents that our machine learning model predicts
+* HIGH_PROB: The probability of occurring high level fire incidents that our machine learning model predicts
+* TRUELABEL: The actual level of fire incident of that day
+
+## statistical_analysis_weather_incident.py
+* 
