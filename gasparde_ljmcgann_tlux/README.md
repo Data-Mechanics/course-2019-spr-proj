@@ -18,7 +18,9 @@ health statistics as well as access to open spaces.
 In **getData.py**, we make get requests to each of the six different datasets
 to retrieve the datasets. The only unique data retrieval case was for the parcel
 assessment data, where we had to make repeated queries to the api as it didn't
-allow for more than 32,000 of the over 170,000 rows to be pulled in one request.
+allow for more than 32,000 of the over 170,000 rows to be pulled in one request. Sometimes
+this method will produce an HTTP error, probably a result of making to many request,
+so if this error occurs just rerun because this error rarely occurs.
 After retrieving the datasets, we combine all of with **combineData.py**. 
 The data is combined in the following order: 
 1. First, we put into a dictionary where each key corresponds to each neighborhood in Boston the list of open spaces
@@ -48,9 +50,9 @@ computed two metrics. The first metric was distance_scores, and we did this base
 a parcels distance_score was from the mean. The second metric was based on the three health statistics, which were the 
 percentage of people who suffered from obesity, asthma, and low physical activity. We took an average of these values
 and depend on this average was assigned a weight accordingly. The important thing to note is that the higher the average,
-the more unhealthy an area was, and so this corresponded to a higher weight. Our goal of this optimization was to compute the 
-best five potential locations in each neighborhood where we favored spots that weren't close to any open spaces
-relative to other parcels in the area or areas with lower levels of health.
+the more unhealthy an area was, and so this corresponded to a higher weight. In our first k means with the distance score 
+metric, we looked to favor areas will less access to open spaces as the optimal places for new parks. In the second
+k means we used health statistics to favor more unhealthy areas to put our new parks.
 
 ### Statistics
 For the statistics portion of this project, we first computed the mean and standard deviations
@@ -62,6 +64,6 @@ find high correlation between any of these statistics this would give some evide
 be justified to favor unhealthy areas as possible locations for new parks/open spaces.
 
 ### Trial Mode
-We also have implemented a trial mode. Here, instead of running through each neighborhood, we focus on
-parcels in Boston. We also limit the number of parcels we are looking at so that the algorithm will run faster.
+In the trial mode, instead of running through each neighborhood, we focus on
+parcels in Allston. We also limit the number of parcels we are looking at so that the algorithm will run faster.
 The statistics and k-means will also only be computed for Allston.

@@ -64,9 +64,18 @@ class getData(dml.Algorithm):
         url = 'http://bostonopendata-boston.opendata.arcgis.com/datasets/3525b0ee6e6b427f9aab5d0a1d0a1a28_0.geojson'
         response = urllib.request.urlopen(url).read().decode("utf-8")
         neighborhoods = json.loads(response)
+        # neighborhoods we don't want because of lack of open spaces/parcels
+        # also some neighborhoods it woul make no sense to put and additional
+        # park into
+        unwanted_neighborhoods = ["Leather District", "Longwood", "Harbor Islands", "West End"]
+        wanted_neighborhoods = []
+        for neighborhood in neighborhoods["features"]:
+            if neighborhood["properties"]["Name"] not in unwanted_neighborhoods:
+                wanted_neighborhoods.append(neighborhood)
+
         repo.dropCollection(getData.contributor + ".Neighborhoods")
         repo.createCollection(getData.contributor + ".Neighborhoods")
-        repo[getData.contributor + ".Neighborhoods"].insert_many(neighborhoods["features"])
+        repo[getData.contributor + ".Neighborhoods"].insert_many(wanted_neighborhoods)
         repo[getData.contributor + ".Neighborhoods"].metadata({'complete': True})
 
         ##########################################################
