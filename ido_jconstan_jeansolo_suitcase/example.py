@@ -232,7 +232,7 @@ class example(dml.Algorithm):
                     lng = f[0]['geometry']['location']['lng']
                     POINTS_NEW[i][j] = tuple([lat,lng])
         '''
-        '''            
+                   
         temp = []
         tswitch = False
         with open('HomesLatLng.csv', mode='r') as csv_file:
@@ -247,15 +247,18 @@ class example(dml.Algorithm):
                     tswitch = True
         tswitch = False
 
-        POINTS_NEW = POINTS_OG  
+        POINTS_NEW = []  
         count = 0
-        for i in range(len(POINTS_OG)):            
+        for i in range(len(POINTS_OG)):   
+            POINTS_NEW.append([])         
             lenStops = len(POINTS_OG[i])-5
             for j in range(lenStops):
-                POINTS_NEW[i][j] = temp[count]
-                count += 1     
+                x, y = temp[count]
+                if (type(x) == float):
+                    POINTS_NEW[i].append(temp[count])
+                    count += 1     
 
-        '''           
+                 
         
         #the stops are the means for k-means - converted to sets and back to remove duplicates
         STOPS_OG = []
@@ -273,7 +276,7 @@ class example(dml.Algorithm):
         STOPS_OG.append(tBESStops)
         STOPS_OG.append(tBHESStops)
         
-
+        '''
         temp = []
         ogHolder = ""
         with open('StopsLatLng.csv', mode='w') as csv_file:
@@ -304,6 +307,7 @@ class example(dml.Algorithm):
                         print("Error! ", "stop ", i, " ", j, ": ", STOPS_NEW[i][j])
                     writer.writerow({'lat': lat, 'lng': lng, 'og': og})
         '''
+        
         temp = []
         tswitch = False
         with open('StopsLatLng.csv', mode='r') as csv_file:
@@ -317,15 +321,18 @@ class example(dml.Algorithm):
                 elif not tswitch:
                     tswitch = True
 
-        STOPS_NEW = STOPS_OG  
+        STOPS_NEW = []  
         count = 0
-        for i in range(len(STOPS_OG)):            
+        for i in range(len(STOPS_OG)):   
+            STOPS_NEW.append([])         
             lenStops = len(STOPS_OG[i])-5
-            for j in range(lenStops):
-                STOPS_NEW[i][j] = temp[count]
-                count += 1
 
-        '''
+            for j in range(lenStops):
+                x,y = temp[count]
+                if (type(x) == int):
+                    STOPS_NEW[i].append(temp[count])
+                    count += 1
+
         
         #implementation of k-means, with md.time as the distance function
         #todo: set a departure time in md.time
