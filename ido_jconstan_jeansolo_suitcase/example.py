@@ -321,7 +321,8 @@ class example(dml.Algorithm):
                 elif not tswitch:
                     tswitch = True
 
-        STOPS_NEW = []  
+
+        STOPS_NEW = []
         count = 0
         for i in range(len(STOPS_OG)):   
             STOPS_NEW.append([])         
@@ -333,30 +334,34 @@ class example(dml.Algorithm):
                     STOPS_NEW[i].append(temp[count])
                     count += 1
 
-        
+        #print("\nSTOPS_NEW: ", STOPS_NEW, "\n")
         #implementation of k-means, with md.time as the distance function
         #todo: set a departure time in md.time
-        print('\n\nSTOPS NEW: ',STOPS_NEW ,'\n\n')
+        #print('\n\nSTOPS NEW: ',STOPS_NEW ,'\n\n')
         testLen = 5
         #done for every school separately
         #for x in range(len(STOPS_OG)):
         #STOPS_NEW = 
         #POINTS_NEW = 
-        for x in range(5):
+     
+        for x in range(len(STOPS_NEW)):
             MEANS = []
             POINTSC = []
             OLD = []
-
-            for i in range(testLen):
+            
+            for i in range(len(STOPS_NEW[x])):
                 MEANS.append(STOPS_NEW[x][i])
+            for i in range(len(POINTS_NEW[x])):
                 POINTSC.append(POINTS_NEW[x][i])
             #MEANS = [(2,2), (10,10)]
             #POINTSC = [(1,1),(3,4),(9,8)]
             #print("\nMeans: ",MEANS, "\n")
-            
-            while not isClose(MEANS, OLD):
+            #print("len(MEANS", len(MEANS))
+            #print("len(MEANS[0])", len(MEANS[0]))
+            while not isClose(MEANS, sorted(OLD)):
+                #print("\n\n\n\n\n\n")
                 OLD = MEANS
-
+                #print("MEANS1", MEANS)
                 #MPD = [(m, p, md.walk_time_url(m,p)) for (m, p) in product(MEANS, POINTSC)]
                 #PDs = [(p, md.walk_time_url(m,p)) for (m, p, d) in MPD]
 
@@ -372,7 +377,7 @@ class example(dml.Algorithm):
                 MC = aggregate(M1, sum)
 
                 MEANS = [scale(t,c) for ((m,t),(m2,c)) in product(MT, MC) if m == m2]
-                
+                #print("MEANS1", MEANS)
                 print("\n old: ", OLD)
                 print("\n means: ", MEANS, "\n")
                 
@@ -587,8 +592,8 @@ def isClose(MEANS, OLD):
     for x in range(len(MEANS)):
         a = MEANS[x]
         b = OLD[x]
-        res = math.isclose(a[0],b[0],abs_tol=.00001) #check lat/long to see if this is a good tolerance
-        res2 = math.isclose(a[1],b[1],abs_tol=.00001)
+        res = math.isclose(a[0],b[0],abs_tol=.0000001) #check lat/long to see if this is a good tolerance
+        res2 = math.isclose(a[1],b[1],abs_tol=.0000001)
         if not res or not res2:
             return False
     return True
