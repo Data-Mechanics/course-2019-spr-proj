@@ -89,6 +89,8 @@ In the trial mode, instead of running through each neighborhood, we focus on
 parcels in Allston. We also limit the number of parcels we are looking at so that the algorithm will run faster.
 The statistics and k-means will also only be computed for Allston.
 
+Note: Trial Mode may take more than few seconds to retrieve data from the portals but all the computational algorithms run quickly.
+
 ## Run
 To run simply enter:
 ```
