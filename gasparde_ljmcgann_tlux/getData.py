@@ -209,7 +209,7 @@ class getData(dml.Algorithm):
         doc.wasGeneratedBy(OpenSpaces, getOpenSpaces, endTime)
         doc.wasDerivedFrom(OpenSpaces, osb_resource, getOpenSpaces, getOpenSpaces, getOpenSpaces)
 
-        bnh_resource = doc.entity('bod:47z2-4wuh',
+        bnh_resource = doc.entity('bod:3525b0ee6e6b427f9aab5d0a1d0a1a28_0',
                                   {'prov:label': 'Collect Boston Neighborhoods',
                                    prov.model.PROV_TYPE: 'ont:DataResource',
                                    'ont:Extension': 'geojson'})
