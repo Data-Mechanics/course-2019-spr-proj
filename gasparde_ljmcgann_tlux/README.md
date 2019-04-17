@@ -20,4 +20,17 @@ to retrieve the datasets. The only unique data retrieval case was for the parcel
 assessment data, where we had to make repeated queries to the api as it didn't
 allow for more than 32,000 of the over 170,000 rows to be pulled in one request.
 After retrieving the datasets, we combine all of with **combineData.py**. 
-The data is combined in the following order
+The data is combined in the following order: 
+1. First, we put into a dictionary where each key corresponds to each neighborhood in Boston the list of open spaces
+that overlaps (is partially or fully contained) said neighborhood using Shapely.
+2 Combine parcel geojson shape with certain assessment value like square footage and total land value by 
+their PID (parcel id).
+3. In the CDC health survey data, the surveys are asked in each census tract in Boston. Therefore, we merge by
+Census Tract Numbers the shape and health statistics of each tract. The certain health statistics that we 
+are focusing in on are obesity, asthma, and low physical activity as these logically might be related someones
+access or proximity to open spaces.
+4. Then, using Shapely, we determine for each parcel which Census Tract it lies in, and assigning to it the
+Census Tract's health statistics.
+5. Since most Census Tracts don't lie perfectly in a neighborhood, we instead then put each parcels into each neighborhood,
+store into a dictionary where each key is a neighborhood and the value is the list of parcels in each neighborhood.
+

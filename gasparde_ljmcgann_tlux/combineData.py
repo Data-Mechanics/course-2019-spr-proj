@@ -131,20 +131,6 @@ class combineData(dml.Algorithm):
         neighborhoods = [list(repo[combineData.contributor + ".Neighborhoods"].find())[24]] if trial \
             else list(repo[combineData.contributor + ".Neighborhoods"].find())
 
-        # open_spaces_by_neighborhood = combineData.create_neighborhood_dict(neighborhoods)
-        # for open_space in tqdm(open_spaces):
-        #     for neighborhood in neighborhoods:
-        #         found = False
-        #         neighborhood_shapely = combineData.geojson_to_polygon(neighborhood["geometry"])
-        #         op_s_shapely = combineData.geojson_to_polygon(neighborhood["geometry"])
-        #         for op_s_shape in op_s_shapely:
-        #             for neighborhood_shape in neighborhood_shapely:
-        #                 if op_s_shape.intersects(neighborhood_shape):
-        #                     open_spaces_by_neighborhood[neighborhood['properties']['Name']].append(open_space)
-        #                     found = True
-        #                     break
-        #             if found:
-        #                 break
         open_space_index = index.Index()
 
         # some open spaces are multipolygons, so we are turning the list of open spaces into
@@ -188,6 +174,17 @@ class combineData(dml.Algorithm):
             parcel_shape = parcel_geo[i]["geometry"]
             if assessment is not None:
                 parcel_shape_assessment.append({**assessment, **{"geometry": parcel_shape}})
+
+        ids = set()
+        unique_parc_shape_assess = []
+        for i in range(len(parcel_shape_assessment)):
+            if parcel_shape_assessment[i]["_id"] not in ids:
+                unique_parc_shape_assess.append(parcel_shape_assessment[i])
+                ids.add(parcel_shape_assessment[i]["_id"])
+            else:
+                print(parcel_shape_assessment[i]["_id"])
+
+
         # print(len(parcel_shape_assessment))
         # print(parcel_shape_assessment)
 
@@ -219,9 +216,9 @@ class combineData(dml.Algorithm):
 
         print("Combining Parcel with Tracts")
         parcels_with_health = []
-        for i in tqdm(range(len(parcel_shape_assessment))):
+        for i in tqdm(range(len(unique_parc_shape_assess))):
             found = False
-            parcel_shapely = combineData.geojson_to_polygon(parcel_shape_assessment[i]["geometry"])[0]
+            parcel_shapely = combineData.geojson_to_polygon(unique_parc_shape_assess[i]["geometry"])[0]
             for ti in [j for j in tract_index.nearest(parcel_shapely.bounds, 5)]:
                 tract_shapely = combineData.geojson_to_polygon(c_t_health_shape[ti]["geometry"])
                 for shape in tract_shapely:
@@ -230,7 +227,7 @@ class combineData(dml.Algorithm):
                                       "low_phys": c_t_health_shape[ti]["low_phys"],
                                       "obesity": c_t_health_shape[ti]["obesity"],
                                       "Census Tract": c_t_health_shape[ti]["_id"]}
-                        data = {**parcel_shape_assessment[i], **tract_data}
+                        data = {**unique_parc_shape_assess[i], **tract_data}
                         parcels_with_health.append(data)
                         found = True
                         break
@@ -292,8 +289,7 @@ class combineData(dml.Algorithm):
             print("Computing Scores for", neighborhood)
             data = parcels_by_neighborhood[neighborhood]
             parcels_by_neighborhood[neighborhood] = combineData.distance_scores(data)
-            for i in range(len(parcels_by_neighborhood[neighborhood])):
-                repo[combineData.contributor + ".ParcelsCombined"].insert_one(parcels_by_neighborhood[neighborhood][i])
+            repo[combineData.contributor + ".ParcelsCombined"].insert_many(parcels_by_neighborhood[neighborhood])
         repo[combineData.contributor + ".ParcelsCombined"].metadata({'complete': True})
 
         endTime = datetime.datetime.now()
@@ -369,5 +365,3 @@ class combineData(dml.Algorithm):
         doc.wasDerivedFrom(ParcelsCombined, ParcelAssessments, getParcelsCombined, getParcelsCombined,
                            getParcelsCombined)
 
-
-combineData.execute(True)

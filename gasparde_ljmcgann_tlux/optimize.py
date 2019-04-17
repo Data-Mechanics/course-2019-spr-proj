@@ -80,23 +80,23 @@ class optimize(dml.Algorithm):
             if stats.find_one({"Neighborhood":name, "variable": "distance_score"}) is not None:
                 dist_mean = float(stats.find_one({"Neighborhood": name, "variable": "distance_score", "statistic": "mean"})["value"])
                 dist_stdev = float(stats.find_one({"Neighborhood": name, "variable": "distance_score", "statistic": "std_dev"})["value"])
-            for j in range(len(neighborhood)):
+                for j in range(len(neighborhood)):
 
-                shape = optimize.geojson_to_polygon(neighborhood[j]["geometry"])[0]
-                # out of order, want [latitude, longitude]
-                coords = [shape.centroid.coords[0][1], shape.centroid.coords[0][0]]
-                # do weighted kmeans by adding additional points
+                    shape = optimize.geojson_to_polygon(neighborhood[j]["geometry"])[0]
+                    # out of order, want [latitude, longitude]
+                    coords = [shape.centroid.coords[0][1], shape.centroid.coords[0][0]]
+                    # do weighted kmeans by adding additional points
 
-                dist_weight = optimize.distance_score(neighborhood[j]["distance_score"], dist_stdev, dist_mean)
-                health_weight = optimize.health_score(neighborhood[j])
-                for _ in range(dist_weight):
-                    distance_kmeans.append([coords[0], coords[1]])
-                for _ in range(health_weight):
-                    #health_score_kmeans.append([coords[0], coords[1]])
-                    #this was for purpose of making our scatterplots
-                    #look nicer, not needed for kmeans to function properly
+                    dist_weight = optimize.distance_score(neighborhood[j]["distance_score"], dist_stdev, dist_mean)
+                    health_weight = optimize.health_score(neighborhood[j])
+                    for _ in range(dist_weight):
+                        distance_kmeans.append([coords[0], coords[1]])
+                    for _ in range(health_weight):
+                        #health_score_kmeans.append([coords[0], coords[1]])
+                        #this was for purpose of making our scatterplots
+                        #look nicer, not needed for kmeans to function properly
 
-                    health_score_kmeans.append([coords[0], coords[1]])
+                        health_score_kmeans.append([coords[0], coords[1]])
 
 
             if len(distance_kmeans) > 0:
@@ -112,6 +112,3 @@ class optimize(dml.Algorithm):
     @staticmethod
     def provenance(doc=prov.model.ProvDocument(), startTime=None, endTime=None):
         return 0
-
-
-optimize.execute(True)
