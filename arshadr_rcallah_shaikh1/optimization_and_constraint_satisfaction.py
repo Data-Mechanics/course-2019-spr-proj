@@ -172,7 +172,7 @@ class optimization_and_constraint_satisfaction(dml.Algorithm):
 # Please remove all top-level function calls before submitting.
 optimization_and_constraint_satisfaction.execute()
 '''
-doc = example.provenance()
+doc = optimization_and_constraint_satisfaction.provenance()
 print(doc.get_provn())
 print(json.dumps(json.loads(doc.serialize()), indent=4))
 '''

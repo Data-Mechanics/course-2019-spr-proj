@@ -119,7 +119,7 @@ class unemployment_data(dml.Algorithm):
 # Please remove all top-level function calls before submitting.
 unemployment_data.execute()
 '''
-doc = example.provenance()
+doc = unemployment_data.provenance()
 print(doc.get_provn())
 print(json.dumps(json.loads(doc.serialize()), indent=4))
 '''

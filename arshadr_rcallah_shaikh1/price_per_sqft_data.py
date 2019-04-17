@@ -133,7 +133,7 @@ class price_per_sqft_data(dml.Algorithm):
 # Please remove all top-level function calls before submitting.
 price_per_sqft_data.execute()
 '''
-doc = example.provenance()
+doc = price_per_sqft_data.provenance()
 print(doc.get_provn())
 print(json.dumps(json.loads(doc.serialize()), indent=4))
 '''

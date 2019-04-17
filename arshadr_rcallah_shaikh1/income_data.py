@@ -129,7 +129,7 @@ class income_data(dml.Algorithm):
 # Please remove all top-level function calls before submitting.
 income_data.execute()
 '''
-doc = example.provenance()
+doc = income_data.provenance()
 print(doc.get_provn())
 print(json.dumps(json.loads(doc.serialize()), indent=4))
 '''
