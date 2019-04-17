@@ -41,3 +41,6 @@ Given the datasets in project 1, we filtered unnecessary entries from Landmarks,
 
 ### Canddate_Res
 What we do in this part is calculate duplicate counts and nearby lankmarks of a given street in filtered streetbook. Then we claculate the correlation coefficient of duplicate times and nearby lankmarks and find it bearly relate to each other. Lastly, we group those streets based on their zipcode and get the one with the largest duplicate counts and least nearby lankmarks.
+
+### Streetbook_kmeans
+In this part, we combine filtered_streetbook and streetbook_alternate to obtain a dataset containing redundant street names and its own zip code. Then we use their zip codes to implement k-means algorithm to separate these streets into different clusters. We hope that street names which are renamed can be distributed in different districts as many as possible.
