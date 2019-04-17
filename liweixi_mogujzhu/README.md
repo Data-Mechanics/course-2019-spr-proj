@@ -86,4 +86,6 @@ Shape: [latitude, longitude]
 * TRUELABEL: The actual level of fire incident of that day
 
 ## statistical_analysis_weather_incident.py
-* 
+* FEATURE: The name of weather feature
+* CORR: The corelation coefficient between feature and fire incidents
+* PVALUE: The p-value of feature and fire incidents
