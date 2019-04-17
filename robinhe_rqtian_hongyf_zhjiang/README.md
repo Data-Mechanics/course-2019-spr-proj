@@ -50,7 +50,7 @@ We supplement a dataset of car crash spots and visualize it on google map, we wi
 
 ### Optimization Problem
 
-Problem:
+##Problem:
 
 
 We have the dataset of all car-crashing spots in revere city. After using google map to visualize these spots, we found that the car-crashing spots are distributed everywhere in this city. However, we still found several spots in the car accidents heat map where car accidents are most likely to happen, some spots like traffic circle.
@@ -60,7 +60,7 @@ this problem.
 
  
 
-The problem is about:
+##The problem is about:
 
 
 Find n spots in revere city where car accidents are most likely to happen. In this problem, n is a variable
@@ -68,7 +68,7 @@ you can choose yourself.
 
  
 
-Solution:
+##Solution:
 
 
 We abstract this real world problem to a mathematical model. To simplify the problem, we divide the map
@@ -82,7 +82,7 @@ System states S = {grid in this grid map}^n
 
 
 
-then the constraints are:
+#then the constraints are:
 
 
 1, the grid map is 100*100
@@ -96,12 +96,12 @@ a square window.
 
 
 
-the metric is:
+#the metric is:
 1, C = C1 +C2 + ... + C5, we need to find a state in S which maximize C 
 
 
 
-Running Example:
+#Running Example:
 
 
 {'left-up': (42.43524010097626, -71.02176294730468), 'right-up': (42.43524010097626, -71.01961702927072), 'right-bottom': (42.43691010921584, -71.01961702927072), 'left-bottom': (42.43691010921584, 42.43524010097626)}
@@ -125,7 +125,7 @@ These are top 5 areas where car accidents are most likely to happen.
 ### Statistics:
 
 
-Problem:
+##Problem:
 
 
 The number of injuries depends on the severity of the crash. Here in the dataset, we have columns of data about
@@ -133,14 +133,14 @@ injuries in every accident, non-fatal and fatal ones. We also have columns about
 accident. We want to find out if there is any relation between them.
 
 
-Problem:
+##the problem is about:
 
 
 the relation between the number of cars involved in the accident and the number of injuries.
 
 
 
-Solution:
+##Solution:
 
 
 1, calculate average and standard deviation of non-fatal injuries, fatal injuries, injuries and number of cars.
@@ -151,7 +151,7 @@ Solution:
 
 
 
-Running Examples:
+#Running Examples:
 
 
     'avg_non_fatal': 0.41782467236293974, 
