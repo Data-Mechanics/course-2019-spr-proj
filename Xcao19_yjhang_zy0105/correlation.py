@@ -29,7 +29,8 @@ class correlation(dml.Algorithm):
         repo.authenticate('Jinghang_Yuan', 'Jinghang_Yuan')
 
         data=repo['Jinghang_Yuan.ZIPCounter'].find()
-
+        if trial:
+            data = data.head(20)
         ave_val = []
         centerNum = []
         centerPoolNum = []

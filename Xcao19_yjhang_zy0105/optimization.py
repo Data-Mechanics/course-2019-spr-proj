@@ -23,7 +23,8 @@ class optimization(dml.Algorithm):
         repo.authenticate('Jinghang_Yuan', 'Jinghang_Yuan')
 
         data = list(repo['Jinghang_Yuan.ZIPCounter'].find())
-
+        if trial:
+            data = data.head(20)
         # select and project all the zip with more or one center,policeStation,centerPool and school
         # the constraint is the four number should be larger than 0
         res=[]
