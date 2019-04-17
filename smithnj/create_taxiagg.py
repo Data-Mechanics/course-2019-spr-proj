@@ -45,15 +45,15 @@ class create_taxiagg(dml.Algorithm):
             pickup_counts_temp.append((i['pickup_community_area'], 1))
         dropoff_counts = aggregate(dropoff_counts_temp, sum)
         pickup_counts = aggregate(pickup_counts_temp, sum)
-        totals = [(d, b, a) for ((d, a), (p, b)) in product(dropoff_counts, pickup_counts) if d == p]
+        totals = [(d, (b + (a*0.5))) for ((d, a), (p, b)) in product(dropoff_counts, pickup_counts) if d == p] #Dropoffs count for 1/2 since fares would only be based on entry location.
         # ---[ Send to Dict ]----------------------------------------
-        labels = lambda t: {'Community Area': t[0], 'Pickups': t[1], 'Dropoffs': t[2]}
+        labels = lambda t: {'Community Area': t[0], 'Demand Metric': t[1]}
         result = project(totals, labels)
         # ---[ MongoDB Insertion ]-----------------------------------
         df = pd.DataFrame.from_dict(result).to_json(orient="records")
         loaded = json.loads(df)
-        repo.dropCollection('taxiiagg')
-        repo.createCollection('taxiagg')
+        repo.dropCollection(repo_name)
+        repo.createCollection(repo_name)
         print('done')
         repo[repo_name].insert_many(loaded)
         repo[repo_name].metadata({'complete': True})
@@ -85,12 +85,12 @@ class create_taxiagg(dml.Algorithm):
         doc.wasAssociatedWith(transformation, this_script)
         doc.usage(transformation, resource, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:Retrieval'})
-        get_taxiagg = doc.entity('dat:smithnj#taxiagg',
+        create_taxiagg = doc.entity('dat:smithnj#taxiagg',
                                               {prov.model.PROV_LABEL: 'get_taxiagg',
                                                prov.model.PROV_TYPE: 'ont:DataSet'})
-        doc.wasAttributedTo(get_taxiagg, this_script)
-        doc.wasGeneratedBy(get_taxiagg, transformation, endTime)
-        doc.wasDerivedFrom(get_taxiagg, resource, transformation, transformation, transformation)
+        doc.wasAttributedTo(create_taxiagg, this_script)
+        doc.wasGeneratedBy(create_taxiagg, transformation, endTime)
+        doc.wasDerivedFrom(create_taxiagg, resource, transformation, transformation, transformation)
 
         repo.logout()
         return doc

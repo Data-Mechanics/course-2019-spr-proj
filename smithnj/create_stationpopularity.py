@@ -52,8 +52,8 @@ class create_stationpopularity(dml.Algorithm):
         df["VarMean"] = df["Total Ridership"] - average
         df = df.to_json(orient="records")
         loaded = json.loads(df)
-        repo.dropCollection('ctapopularity')
-        repo.createCollection('ctapopularity')
+        repo.dropCollection(repo_name)
+        repo.createCollection(repo_name)
         print('done')
         repo[repo_name].insert_many(loaded)
         repo[repo_name].metadata({'complete': True})
@@ -85,12 +85,12 @@ class create_stationpopularity(dml.Algorithm):
         doc.wasAssociatedWith(transformation, this_script)
         doc.usage(transformation, resource, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:Retrieval'})
-        get_stationpopularity = doc.entity('dat:smithnj#ctapopularity',
+        create_stationpopularity = doc.entity('dat:smithnj#ctapopularity',
                                               {prov.model.PROV_LABEL: 'get_taxiagg',
                                                prov.model.PROV_TYPE: 'ont:DataSet'})
-        doc.wasAttributedTo(get_stationpopularity, this_script)
-        doc.wasGeneratedBy(get_stationpopularity, transformation, endTime)
-        doc.wasDerivedFrom(get_stationpopularity, resource, transformation, transformation, transformation)
+        doc.wasAttributedTo(create_stationpopularity, this_script)
+        doc.wasGeneratedBy(create_stationpopularity, transformation, endTime)
+        doc.wasDerivedFrom(create_stationpopularity, resource, transformation, transformation, transformation)
 
         repo.logout()
         return doc

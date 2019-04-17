@@ -35,8 +35,8 @@ class get_taxitrips(dml.Algorithm):
         df = pd.DataFrame.from_records(results).to_json(orient="records")
         loaded = json.loads(df)
         # ---[ MongoDB Insertion ]-------------------------------------------
-        repo.dropCollection('taxistats')
-        repo.createCollection('taxistats')
+        repo.dropCollection(repo_name)
+        repo.createCollection(repo_name)
         print('done')
         repo[repo_name].insert_many(loaded)
         repo[repo_name].metadata({'complete': True})

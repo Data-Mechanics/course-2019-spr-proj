@@ -53,17 +53,17 @@ class create_stationhardship(dml.Algorithm):
                 x[0] = "-1"
             x[0] = int(x[0])
             x[1] = str(x[1])
-        merged = [(station, hardship) for ((ca, hardship), (ca_s, station)) in product(new_census, new_stations) if
+        merged = [(station, hardship, ca) for ((ca, hardship), (ca_s, station)) in product(new_census, new_stations) if
                   ca == ca_s]
         # ---[ Send to Dict ]----------------------------------------
-        labels = lambda t: {'Station ID': t[0], 'Hardship': t[1]}
+        labels = lambda t: {'Station ID': t[0], 'Hardship': t[1], 'CA': t[2]}
         result = project(merged, labels)
         print("done")
         # ---[ MongoDB Insertion ]-----------------------------------
         df = pd.DataFrame.from_dict(result).to_json(orient="records")
         loaded = json.loads(df)
-        repo.dropCollection('stationhardship')
-        repo.createCollection('stationhardship')
+        repo.dropCollection(repo_name)
+        repo.createCollection(repo_name)
         print('done')
         repo[repo_name].insert_many(loaded)
         repo[repo_name].metadata({'complete': True})
