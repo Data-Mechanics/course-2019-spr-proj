@@ -56,8 +56,8 @@ BUSINESS_PATH = '/v3/businesses/'  # Business ID will come after slash.
 
 # Defaults for our simple example.
 DEFAULT_TERM = 'coffee shop'
-DEFAULT_LOCATION = 'Boston, MA'
-SEARCH_LIMIT = 50
+DEFAULT_LOCATION = 'Commonwealth Ave and Lake St, Boston, MA 02135'
+SEARCH_LIMIT = 2
 
 
 def request(host, path, api_key, url_params=None):
@@ -145,7 +145,7 @@ def query_api(term, location):
         response = get_business(API_KEY, business_id)
 
         # print(u'Result for business "{0}" found:'.format(business_id))
-        # pprint.pprint(response, indent=2)
+        pprint.pprint(response, indent=2)
 
 
 def main():
