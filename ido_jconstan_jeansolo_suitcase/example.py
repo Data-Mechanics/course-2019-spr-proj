@@ -231,7 +231,7 @@ class example(dml.Algorithm):
                     lng = f[0]['geometry']['location']['lng']
                     POINTS_NEW[i][j] = tuple([lat,lng])
         '''
-                    
+        '''            
         temp = []
         tswitch = False
         with open('HomesLatLng.csv', mode='r') as csv_file:
@@ -252,7 +252,9 @@ class example(dml.Algorithm):
             lenStops = len(POINTS_OG[i])-5
             for j in range(lenStops):
                 POINTS_NEW[i][j] = temp[count]
-                count += 1                
+                count += 1     
+
+        '''           
         
         #the stops are the means for k-means - converted to sets and back to remove duplicates
         STOPS_OG = []
@@ -270,21 +272,36 @@ class example(dml.Algorithm):
         STOPS_OG.append(tBESStops)
         STOPS_OG.append(tBHESStops)
         
-        '''
+
+        temp = []
+        ogHolder = ""
+        with open('StopsLatLng.csv', mode='w') as csv_file:
+            fieldnames = ['lat', 'lng', 'og']
+            writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+
+            writer.writeheader()
+
             STOPS_NEW = STOPS_OG      
             for i in range(len(STOPS_OG)):
                 lenStops = len(STOPS_OG[i])
                 print("lenStops: ", lenStops)
                 for j in range(lenStops):
-                    print("stop ", i, " ", j)
+                    
+                    ogHolder = STOPS_OG[i][j]
                     f = json.loads(json.dumps(md.toLatLong(STOPS_OG[i][j])))
                     #indexed to 0, but there is only a 0th element. it shouldn't be an array but go ogle made a decision
                     if f:
                         lat = f[0]['geometry']['location']['lat']
                         lng = f[0]['geometry']['location']['lng']
                         STOPS_NEW[i][j] = tuple([lat,lng])
+                        print("stop ", i, " ", j, ": ", STOPS_NEW[i][j])
                     else :
-                        print("Error!")
+                        f = json.loads(json.dumps(md.toLatLong(STOPS_OG[i][j])))
+                        lat = f[0]['geometry']['location']['lat']
+                        lng = f[0]['geometry']['location']['lng']
+                        STOPS_NEW[i][j] = tuple([lat,lng])
+                        print("Error! ", "stop ", i, " ", j, ": ", STOPS_NEW[i][j])
+                    writer.writerow({'lat': lat, 'lng': lng, 'og': og})
         '''
         temp = []
         tswitch = False
@@ -307,7 +324,7 @@ class example(dml.Algorithm):
                 STOPS_NEW[i][j] = temp[count]
                 count += 1
 
-
+        '''
         
         #implementation of k-means, with md.time as the distance function
         #todo: set a departure time in md.time
