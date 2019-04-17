@@ -29,7 +29,6 @@ class statistics(dml.Algorithm):
         repo.createCollection(statistics.contributor + ".Statistics")
         for i in range(len(neighborhoods)):
             name = neighborhoods[i]["properties"]["Name"]
-            print(name)
             data = list(parcels.find({"Neighborhood":name}))
             if len(data) > 0:
                 for category in ["obesity", "asthma", "low_phys"]:

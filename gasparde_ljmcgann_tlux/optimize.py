@@ -6,13 +6,16 @@ import codecs
 import uuid
 import random
 from scipy.cluster.vq import kmeans
-# import matplotlib.pyplot as pyplt
+import matplotlib.pyplot as pyplt
 
 class optimize(dml.Algorithm):
     contributor = 'gasparde_ljmcgann_tlux'
     reads = [contributor + ".Neighborhoods", contributor + ".ParcelsCombined"]
     writes = [contributor + ".KMeans"]
 
+    @staticmethod
+    def health_score(row):
+        return (row["obesity"] + row["low_phys"] + row)
     @staticmethod
     def geojson_to_polygon(geom):
         """
@@ -57,10 +60,9 @@ class optimize(dml.Algorithm):
         for i in range(len(neighborhoods)):
             name = neighborhoods[i]["properties"]["Name"]
             neighborhood = list(parcels.find({"Neighborhood":name}))
-            print(neighborhood)
             M = []
-            # x = []
-            # y = []
+            x = []
+            y = []
 
             for j in range(len(neighborhood)):
 
@@ -68,31 +70,32 @@ class optimize(dml.Algorithm):
 
                 row = [shape.centroid.coords[0][1], shape.centroid.coords[0][0]]
                 # do weighted kmeans by adding additional points
-                weight = max(int(neighborhood[j]["score_improvement"]),1)
+                print(int(neighborhood[j]["distance_score"]))
+                weight = max(int(neighborhood[j]["distance_score"]),1)
                 for _ in range(weight):
                     M.append([row[0], row[1]])
 
-                    # this was for purpose of making our scatterplots
-                    # look nicer, not needed for kmeans to function properly
-                    # rand = random.random() / 10000
-                    # M.append([row[0] + rand, row[1] + rand])
-                    # x.append(row[0]+ rand)
-                    # y.append(row[1] + rand)
+                    #this was for purpose of making our scatterplots
+                    #look nicer, not needed for kmeans to function properly
+                    rand = random.random() / 10000
+                    M.append([row[0] + rand, row[1] + rand])
+                    x.append(row[0]+ rand)
+                    y.append(row[1] + rand)
 
 
-                # pyplt.scatter(x,y, s = .5)
-                # means = list(output)[0]
-                # mean_x = []
-                # mean_y = []
-                #
-                # for i in means:
-                #     mean_x.append(i[0])
-                #     mean_y.append(i[1])
-                # pyplt.scatter(mean_x, mean_y)
-                # pyplt.show()
+                pyplt.scatter(x,y, s = .5)
+
             if len(M) > 0:
                 output = kmeans(M, 5)[0].tolist()
                 repo[optimize.contributor + ".KMeans"].insert_one({"Neighborhoods": name,"means": output})
+                mean_x = []
+                mean_y = []
+                print(output)
+                for i in output:
+                    mean_x.append(i[0])
+                    mean_y.append(i[1])
+                pyplt.scatter(mean_x, mean_y)
+                pyplt.show()
         repo[optimize.contributor + ".KMeans"].metadata({'complete': True})
 
 
