@@ -405,13 +405,10 @@ class example(dml.Algorithm):
                 for row in csv_reader:
                     if row and tswitch:
                         stop = row
-                        new_stops.append(row)
+                        new_stops.append(eval(row[0]))
                     elif not tswitch:
                         tswitch = True
-
-        print("new_stops: ", new_stops)
-
-
+        print('NEW_STOPS',new_stops)
 
 
         print("Before loop")
@@ -428,18 +425,31 @@ class example(dml.Algorithm):
             for i in range(len(POINTS_NEW[x])):
                 POINTSC.append(POINTS_NEW[x][i])
 
-            M = MEANS # bus stops
-            print('MEANS',M)
+            M_OLD = MEANS # old bus stops
+            print('MEANS',M_OLD)
             P = POINTSC # student addresses
-            MPD = [(m, p, dist(m,p)) for (m, p) in product(M, P)]
-            PDs = [(p, dist(m,p)) for (m, p, d) in MPD]
-            PD = aggregate(PDs, min)
-            MP = [(d) for ((m,p,d), (p2,d2)) in product(MPD, PD) if p==p2 and d==d2]
-            count = 0
-            for d in MP:
-                count += d 
-            average = count/len(POINTSC)
-            print('avg', average)
+            MPD_OLD = [(m, p, dist(m,p)) for (m, p) in product(M_OLD, P)]
+            PDs_OLD = [(p, dist(m,p)) for (m, p, d) in MPD_OLD]
+            PD_OLD = aggregate(PDs_OLD, min)
+            MP_OLD = [(d) for ((m,p,d), (p2,d2)) in product(MPD_OLD, PD_OLD) if p==p2 and d==d2]
+            count_OLD = 0
+            for d in MP_OLD:
+                count_OLD += d 
+            average_OLD = count_OLD/len(POINTSC)
+            print('old avg', average_OLD)
+
+            M_NEW = NEW_STOPS # new bus stops
+            print('MEANS',M_NEW)
+            P = POINTSC # student addresses
+            MPD_NEW = [(m, p, dist(m,p)) for (m, p) in product(M_NEW, P)]
+            PDs_NEW = [(p, dist(m,p)) for (m, p, d) in MPD_NEW]
+            PD_NEW = aggregate(PDs_NEW, min)
+            MP_NEW = [(d) for ((m,p,d), (p2,d2)) in product(MPD_NEW, PD_NEW) if p==p2 and d==d2]
+            count_NEW = 0
+            for d in MP_NEW:
+                count_NEW += d 
+            average_NEW = count_NEW/len(POINTSC)
+            print('new avg', average_NEW)
 
             
             # with open(strFileName, mode='w') as csv_file:
