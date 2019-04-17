@@ -1,4 +1,3 @@
-import urllib.request
 import json
 import dml
 import prov.model
@@ -12,6 +11,18 @@ class kmeans(dml.Algorithm):
     contributor = 'kgrewal_shin2'
     reads = ['kgrewal_shin2.unclaimed_streets']
     writes = ['kgrewal_shin2.street_kmeans']
+
+    # Taken from https://stackoverflow.com/questions/41336756/find-the-closest-latitude-and-longitude
+    @staticmethod
+    def distance(lat1, lon1, lat2, lon2):
+        p = 0.017453292519943295
+        a = 0.5 - cos((lat2 - lat1) * p) / 2 + cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2
+        return 12742 * asin(sqrt(a))
+
+    @staticmethod
+    def closest(data, v):
+        return min(data, key=lambda p: kmeans.distance(v['lat'], v['lon'], p['lat'], p['lon']))
+
 
     @staticmethod
     def execute(trial=False):
@@ -101,17 +112,6 @@ class kmeans(dml.Algorithm):
         repo.logout()
 
         return doc
-
-    # Taken from https://stackoverflow.com/questions/41336756/find-the-closest-latitude-and-longitude
-    @staticmethod
-    def distance(lat1, lon1, lat2, lon2):
-        p = 0.017453292519943295
-        a = 0.5 - cos((lat2 - lat1) * p) / 2 + cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2
-        return 12742 * asin(sqrt(a))
-
-    @staticmethod
-    def closest(data, v):
-        return min(data, key=lambda p: kmeans.distance(v['lat'], v['lon'], p['lat'], p['lon']))
 
 
 kmeans.execute()
