@@ -42,14 +42,15 @@ class FoodInspections(dml.Algorithm):
         log.debug("Authenticating into mongoDB")
         repo.authenticate('kzhang21_ryuc_zui_sarms', 'kzhang21_ryuc_zui_sarms')
 
-        url = 'https://data.boston.gov/dataset/03693648-2c62-4a2c-a4ec-48de2ee14e18/resource/4582bec6-2b4f-4f9e-bc55-cbaa73117f4c/download/tmp77velm71.csv'
-        #r = requests.get(url)
-        #z = zipfile.ZipFile(io.BytesIO(r.content))
-        #file_path = os.path.dirname(os.path.realpath(__file__))
-        #z.extractall(file_path)
-
-        #DF = pd.read_csv('tmp77velm71.csv', low_memory=False)
-        DF = pd.read_csv(url, low_memory=False)
+        url = 'http://datamechanics.io/data/food_inspections.zip'
+        r = requests.get(url)
+        z = zipfile.ZipFile(io.BytesIO(r.content))
+        file_path = os.path.dirname(os.path.realpath(__file__))
+        f = z.read("tmp77velm71.csv")
+        csv_file = io.BytesIO(f)
+        log.debug("Extracting file ")
+        DF = pd.read_csv(csv_file, low_memory=False)
+        # (DF,_,_) = pd.read_csv(url, low_memory=False)
 
         log.debug("Fetching CSV from %s", 'tmp77velm71')
 
@@ -70,6 +71,22 @@ class FoodInspections(dml.Algorithm):
 
         repo['kzhang21_ryuc_zui_sarms.food_inspections'].insert_many(r_dict)
 
+        log.debug("Finished with the non-squished version of FI")
+
+        squished_columns = ["businessname", "licenseno", "address", "city", "state", "zip", "location"]
+
+        DF_S = DF[squished_columns].set_index("licenseno")
+        DF_S = DF_S.loc[~DF_S.index.duplicated()]
+        DF_S["_id"] = DF_S.index.values
+
+        r_dict = DF_S.to_dict(orient="record")
+
+        repo.dropCollection("food_inspections_squished")
+        repo.createCollection("food_inspections_squished")
+
+        repo['kzhang21_ryuc_zui_sarms.food_inspections_squished'].insert_many(r_dict)
+
+        log.debug("Finished with the squished version of FI")
         repo.logout()
 
         endTime = datetime.datetime.now()
