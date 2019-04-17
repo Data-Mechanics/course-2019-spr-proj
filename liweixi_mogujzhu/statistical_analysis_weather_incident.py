@@ -100,8 +100,8 @@ class statistical_analysis_weather_incident(dml.Algorithm):
 
         doc.wasAssociatedWith(get_statistical_analysis_weather_incident, this_script)
 
-        statistical_analysis_weather_incident = doc.entity('dat:liweixi_mogujzhu#weather_fire_incident_transformation',
-                          {prov.model.PROV_LABEL: 'Boston Weather and Fire Incident', prov.model.PROV_TYPE: 'ont:DataSet'})
+        statistical_analysis_weather_incident = doc.entity('dat:liweixi_mogujzhu#statistical_analysis_weather_incident',
+                          {prov.model.PROV_LABEL: 'Statistical Analysis Boston Weather and Fire Incident', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(statistical_analysis_weather_incident, this_script)
         doc.wasGeneratedBy(statistical_analysis_weather_incident, get_statistical_analysis_weather_incident, endTime)
         doc.wasDerivedFrom(statistical_analysis_weather_incident, resource1,
