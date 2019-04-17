@@ -135,5 +135,8 @@ class stats_analysis(dml.Algorithm):
         repo.logout()
 
         return doc
-
+# stats_analysis.execute()
+# doc = stats_analysis.provenance()
+# print(doc.get_provn())
+# print(json.dumps(json.loads(doc.serialize()), indent=4))
 ## eof
