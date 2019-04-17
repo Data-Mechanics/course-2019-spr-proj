@@ -307,5 +307,3 @@ class combineData(dml.Algorithm):
     def provenance(doc=prov.model.ProvDocument(), startTime=None, endTime=None):
 
         return 0
-
-combineData.execute(True)

@@ -77,8 +77,6 @@ class optimize(dml.Algorithm):
             neighborhood = list(parcels.find({"Neighborhood":name}))
             distance_kmeans = []
             health_score_kmeans = []
-            x = []
-            y = []
             if stats.find_one({"Neighborhood":name, "variable": "distance_score"}) is not None:
                 dist_mean = float(stats.find_one({"Neighborhood": name, "variable": "distance_score", "statistic": "mean"})["value"])
                 dist_stdev = float(stats.find_one({"Neighborhood": name, "variable": "distance_score", "statistic": "std_dev"})["value"])
@@ -93,9 +91,6 @@ class optimize(dml.Algorithm):
                 health_weight = optimize.health_score(neighborhood[j])
                 for _ in range(dist_weight):
                     distance_kmeans.append([coords[0], coords[1]])
-                    rand = random.random() / 10000
-                    x.append(coords[0] + rand)
-                    y.append(coords[1] + rand)
                 for _ in range(health_weight):
                     #health_score_kmeans.append([coords[0], coords[1]])
                     #this was for purpose of making our scatterplots
@@ -104,25 +99,12 @@ class optimize(dml.Algorithm):
                     health_score_kmeans.append([coords[0], coords[1]])
 
 
-
-                pyplt.scatter(x,y, s = .5)
-
             if len(distance_kmeans) > 0:
                 dist_output = kmeans(distance_kmeans, 5)[0].tolist()
                 repo[optimize.contributor + ".KMeans"].insert_one({"Neighborhood": name,"type":"distance","means": dist_output})
                 health_output = kmeans(health_score_kmeans, 5)[0].tolist()
                 repo[optimize.contributor + ".KMeans"].insert_one({"Neighborhood": name, "type": "health", "means": health_output})
 
-
-
-                mean_x = []
-                mean_y = []
-                #print(health_score_kmeans)
-                for i in dist_output:
-                    mean_x.append(i[0])
-                    mean_y.append(i[1])
-                pyplt.scatter(mean_x, mean_y)
-                pyplt.show()
         repo[optimize.contributor + ".KMeans"].metadata({'complete': True})
 
 
