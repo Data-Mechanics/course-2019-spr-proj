@@ -329,7 +329,7 @@ class example(dml.Algorithm):
 
             for j in range(lenStops):
                 x,y = temp[count]
-                if (type(x) == int):
+                if (type(x) == float):
                     STOPS_NEW[i].append(temp[count])
                     count += 1
 
