@@ -54,7 +54,6 @@ class fire_incident_report(dml.Algorithm):
         for url in urls:
             fire_incident = pd.read_csv(url)
             fire_incident = json.loads(fire_incident.to_json(orient='records'))
-            print(fire_incident[:1])
             # s = json.dumps(r, sort_keys=True, indent=2)
             repo['liweixi_mogujzhu.fire_incident_report'].insert_many(fire_incident)
             repo['liweixi_mogujzhu.fire_incident_report'].metadata({'complete': True})
