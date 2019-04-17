@@ -42,3 +42,8 @@ Statistical Analysis:
 
 
   For statistical analysis, we computed the correlation coefficient and p-value between the average income and the corresponding percent of the population of that neighborhood using the subway. We found that they were negatively correlated, seeing as our p value was greater than the coefficient. Therefore, as the average income increases, the percent of people using subway decreases. To find out whether or not this was significant, we computed the absolute value of the coefficient and compared it to our p-value. Seeing as our p-value was lower than that absolute value, our coefficient was significant. 
+  
+
+Trial Mode for Project #2:
+  
+  In kmeans_opt.py
