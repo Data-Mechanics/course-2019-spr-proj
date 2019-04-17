@@ -7,6 +7,7 @@ import uuid
 import csv
 import io
 import numpy as np
+import random
 
 class analysis(dml.Algorithm):
     contributor = 'ruipang_zhou482'
@@ -37,15 +38,23 @@ class analysis(dml.Algorithm):
         for i in repo['ruipang_zhou482.propertyAssessment'].find():
             
             prop.append(i)
+        #trial mode
+        if trial == True:
+            for i in range(int(len(prop)/2)):
+                d = random.randint(0,len(prop)-1)
+                del prop[d]
+
         police_mat = analysis.coe(prop,police)
         police_cov = 0
         school_mat = analysis.coe(prop,school)
         school_cov = -1*school_mat[0][1]
         hospital_mat = analysis.coe(prop,hospital)
         hospital_cov = hospital_mat[0][1]
-        print("police_cov:",police_cov)
-        print("school_cov:",school_cov)
-        print("hospital_cov",hospital_cov)
+        f = open("ruipang_zhou482/out.txt", "a")
+        f.write("police-property cov:"+str(police_cov)+'\n')
+        f.write("school-property cov:"+str(school_cov)+'\n')
+        f.write("hospital-property cov:"+str(hospital_cov)+'\n')
+        
 
 
     def coe(pro,feature):
@@ -77,14 +86,17 @@ class analysis(dml.Algorithm):
         resource2 = doc.entity('dat:police', {'prov:label':'police', prov.model.PROV_TYPE:'ont:DataResource'})
         resource3 = doc.entity('dat:hospital', {'prov:label':'hospital', prov.model.PROV_TYPE:'ont:DataResource'})
         resource4 = doc.entity('dat:propertyAssessment', {'prov:label':'propertyAssessment', prov.model.PROV_TYPE:'ont:DataResource'})
-        analysis = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        # analysis = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         get_analysis = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
         
         doc.wasAssociatedWith(get_analysis,this_script)
-        doc.wasGeneratedBy(analysis, get_analysis,endTime)
-        doc.wasDerivedFrom(analysis,resource4)
+        doc.wasGeneratedBy(get_analysis, get_analysis,endTime)
+        doc.wasDerivedFrom(resource1, resource2, resource3, resource4)
         repo.logout()
         return doc
+
+# analysis.execute()
+
                            
 
 

@@ -1,0 +1,45 @@
+police-property cov:0
+school-property cov:0.6962712917960485
+hospital-property cov:0.5612327094923834
+Linear Regression Coefficient:-45.382695340261655 -3.427601322216736 -0.8951540461331863 58.58269935067884
+Linear Regression Intercept:566.9236099643723
+police-property cov:0
+school-property cov:0.6962712917960485
+hospital-property cov:0.5612327094923834
+Linear Regression Coefficient:-45.382695340261655 -3.427601322216736 -0.8951540461331863 58.58269935067884
+Linear Regression Intercept:566.9236099643723
+police-property cov:0
+school-property cov:0.6962712917960485
+hospital-property cov:0.5612327094923834
+Linear Regression Coefficient:-45.382695340261655 -3.427601322216736 -0.8951540461331863 58.58269935067884
+Linear Regression Intercept:566.9236099643723
+police-property cov:0
+school-property cov:0.6962712917960485
+hospital-property cov:0.5612327094923834
+Linear Regression Coefficient:-45.382695340261655 -3.427601322216736 -0.8951540461331863 58.58269935067884
+Linear Regression Intercept:566.9236099643723
+police-property cov:0
+school-property cov:0.6962712917960485
+hospital-property cov:0.5612327094923834
+Linear Regression Coefficient:-45.382695340261655 -3.427601322216736 -0.8951540461331863 58.58269935067884
+Linear Regression Intercept:566.9236099643723
+police-property cov:0
+school-property cov:0.6962712917960485
+hospital-property cov:0.5612327094923834
+Linear Regression Coefficient:-45.382695340261655 -3.427601322216736 -0.8951540461331863 58.58269935067884
+Linear Regression Intercept:566.9236099643723
+police-property cov:0
+school-property cov:0.6962712917960485
+hospital-property cov:0.5612327094923834
+Linear Regression Coefficient:-45.382695340261655 -3.427601322216736 -0.8951540461331863 58.58269935067884
+Linear Regression Intercept:566.9236099643723
+police-property cov:0
+school-property cov:0.6962712917960485
+hospital-property cov:0.5612327094923834
+Linear Regression Coefficient:-45.382695340261655 -3.427601322216736 -0.8951540461331863 58.58269935067884
+Linear Regression Intercept:566.9236099643723
+police-property cov:0
+school-property cov:0.6962712917960485
+hospital-property cov:0.5612327094923834
+Linear Regression Coefficient:-45.382695340261655 -3.427601322216736 -0.8951540461331863 58.58269935067884
+Linear Regression Intercept:566.9236099643723
