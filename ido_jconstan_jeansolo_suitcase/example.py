@@ -207,7 +207,6 @@ class example(dml.Algorithm):
         tWMS = project(select(t15, lambda t: t[1] == 'Wilson Middle School'), lambda t: t[0])
         tBES = project(select(t15, lambda t: t[1] == 'Brown Elementary School'), lambda t: t[0])
         tBHES = project(select(t15, lambda t: t[1] == 'Bennett-Hemenway Elementary School'), lambda t: t[0])
-
         
         POINTS_OG.append(tNHS)
         POINTS_OG.append(tMES)
@@ -233,6 +232,7 @@ class example(dml.Algorithm):
                     lng = f[0]['geometry']['location']['lng']
                     POINTS_NEW[i][j] = tuple([lat,lng])
                     writer.writerow({'lat': lat, 'long': lng})
+
                 
         
         #the stops are the means for k-means - converted to sets and back to remove duplicates
@@ -278,6 +278,9 @@ class example(dml.Algorithm):
             while OLD != MEANS:
                 OLD = MEANS
 #(3,4), (3,8)
+                for (m, p) in product(MEANS[0], POINTSC[0]):
+                    print("m: ", m)
+                    print("p: ", p)
                 MPD = [(m, p, md.walk_time_url(m,p)) for (m, p) in product(MEANS, POINTSC)]
                 PDs = [(p, md.walk_time_url(m,p)) for (m, p, d) in MPD]
                 print("PDs: ", PDs)

@@ -38,7 +38,6 @@ def walk_time_url(home_addr, work_addr):
     res = r.json()
     res = res['rows'][0]['elements'][0]['duration']['value']
     return res
-    
                      
 
 
