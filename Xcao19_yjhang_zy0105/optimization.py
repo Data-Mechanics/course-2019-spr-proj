@@ -83,12 +83,12 @@ class optimization(dml.Algorithm):
                           {prov.model.PROV_LABEL: 'result', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(resZip, this_script)
         doc.wasGeneratedBy(resZip, activity, endTime)
-        doc.wasDerivedFrom(resource, resZip, activity, activity, activity)
+        doc.wasDerivedFrom(resZip, resource, activity, activity, activity)
 
         return doc
 
 #optimization.execute()
-optimization.provenance()
+#optimization.provenance()
 # doc = optimization.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))
