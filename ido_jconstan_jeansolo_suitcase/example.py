@@ -224,7 +224,7 @@ class example(dml.Algorithm):
                 #indexed to 0, but there is only a 0th element. it shouldn't be an array but go ogle made a decision
                 lat = f[0]['geometry']['location']['lat']
                 lng = f[0]['geometry']['location']['lng']
-                POINTS_NEW[i][j] = (lat,lng)
+                POINTS_NEW[i][j] = tuple([lat,lng])
                 
         
         #the stops are the means for k-means - converted to sets and back to remove duplicates
@@ -251,21 +251,24 @@ class example(dml.Algorithm):
                 #indexed to 0, but there is only a 0th element. it shouldn't be an array but go ogle made a decision
                 lat = f[0]['geometry']['location']['lat']
                 lng = f[0]['geometry']['location']['lng']
-                STOPS_NEW[i][j] = (lat,lng)
+                STOPS_NEW[i][j] = tuple([lat,lng])
         
         #implementation of k-means, with md.time as the distance function
         #todo: set a departure time in md.time
 
         #done for every school separately
-        for x in range(len(STOPS_OG)):
-            MEANS = STOPS_OG[x]
+        for x in range(len(STOPS_NEW)):
+            MEANS = STOPS_NEW[x]
             print("MEANS[0]: ", MEANS[0])
-            POINTSC = POINTS_OG[x]
+            POINTSC = POINTS_NEW[x]
             OLD = []
             
             while OLD != MEANS:
                 OLD = MEANS
 #(3,4), (3,8)
+                for (m, p) in product(MEANS[0], POINTSC[0]):
+                    print("m: ", m)
+                    print("p: ", p)
                 MPD = [(m, p, md.walk_time_url(m,p)) for (m, p) in product(MEANS, POINTSC)]
                 PDs = [(p, md.walk_time_url(m,p)) for (m, p, d) in MPD]
                 PD = aggregate(PDs, min)
