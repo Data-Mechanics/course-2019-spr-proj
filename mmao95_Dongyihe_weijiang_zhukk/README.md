@@ -32,3 +32,6 @@ In this part, we filtered and optimized existing datasets from multiple datasets
 
 ### Streetbook_filtered
 Given the datasets in project 1, we filtered unnecessary entries from Landmarks, Famous people, Colleges and Universities and Uber Movement data, etc. Besides, for redundant street names, we processed corresponding rows given their redundant times and gave an alternate dataset.
+
+### Canddate_Res
+What we do in this part is calculate duplicate counts and nearby lankmarks of a given street in filtered streetbook. Then we claculate the correlation coefficient of duplicate times and nearby lankmarks and find it bearly relate to each other. Lastly, we group those streets based on their zipcode and get the one with the largest duplicate counts and least nearby lankmarks.
