@@ -1,12 +1,6 @@
-import urllib.request
-import json
-from shapely.geometry import Polygon, Point
-import json
 import dml
 import prov.model
 import datetime
-import csv
-import codecs
 import uuid
 from scipy.stats import pearsonr
 from statistics import mean, stdev
