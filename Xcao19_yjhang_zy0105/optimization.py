@@ -53,45 +53,42 @@ class optimization(dml.Algorithm):
     def provenance(doc=prov.model.ProvDocument(), startTime=None, endTime=None):
 
         # Set up the database connection.
-        client = dml.pymongo.MongoClient()
-        repo = client.repo
-        repo.authenticate('Jinghang_Yuan', 'Jinghang_Yuan')
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')
         doc.add_namespace('dat', 'http://datamechanics.io/data/')
-        doc.add_namespace('ont',
-                          'http://datamechanics.io/ontology#')
+        doc.add_namespace('ont', 'http://datamechanics.io/ontology#')
         doc.add_namespace('log', 'http://datamechanics.io/log/')
         doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
 
 
-        this_script = doc.agent('alg:Jinghang_Yuan#center',
+        this_script = doc.agent('alg:Jinghang_Yuan#optimization',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
-        resource = doc.entity('bdp:wc8 w-nujj',
+        resource = doc.entity('dat:Jh_Y_Xy$JoinByZip',
                               {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource',
                                'ont:Extension': 'json'})
-        get_center = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+        #select = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+        activity = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
 
 
 
-        doc.wasAssociatedWith(get_center, this_script)
-        doc.usage(get_center, resource, startTime, None,
+        #doc.wasAssociatedWith(select, this_script)
+
+        doc.wasAssociatedWith(activity, this_script)
+        doc.usage(activity, resource, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:Retrieval',
                    'ont:Query': 'FID,OBJECTID,SITE,PHONE,FAX,STREET,NEIGH,ZIP'
                    }
                   )
 
-        center = doc.entity('dat:Jinghang_Yuan#center',
-                          {prov.model.PROV_LABEL: 'center', prov.model.PROV_TYPE: 'ont:DataSet'})
-        doc.wasAttributedTo(center, this_script)
-        doc.wasGeneratedBy(center, get_center, endTime)
-        doc.wasDerivedFrom(resource, center, get_center, get_center, get_center)
-
-        repo.logout()
+        resZip = doc.entity('dat:Jinghang_Yuan#result',
+                          {prov.model.PROV_LABEL: 'result', prov.model.PROV_TYPE: 'ont:DataSet'})
+        doc.wasAttributedTo(resZip, this_script)
+        doc.wasGeneratedBy(resZip, activity, endTime)
+        doc.wasDerivedFrom(resource, resZip, activity, activity, activity)
 
         return doc
 
-optimization.execute()
-#optimization.provenance()
+#optimization.execute()
+optimization.provenance()
 # doc = optimization.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))

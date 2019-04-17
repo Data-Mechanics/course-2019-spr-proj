@@ -12,7 +12,7 @@ from math import sqrt
 class correlation(dml.Algorithm):
     contributor = 'Jinghang_Yuan'
     reads = ['Jinghang_Yuan.ZIPCounter']
-    writes = []
+    writes = ['Jinghang_Yuan.correlation']
 
     @staticmethod
     def execute(trial=False):
@@ -20,6 +20,7 @@ class correlation(dml.Algorithm):
 
         startTime = datetime.datetime.now()
 
+        # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate('Jinghang_Yuan', 'Jinghang_Yuan')
@@ -58,25 +59,43 @@ class correlation(dml.Algorithm):
             if stddev(x) * stddev(y) != 0:
                 return cov(x, y) / (stddev(x) * stddev(y))
 
-        print("avg_value vs centerNum")
+        res = []
+
+        # print("avg_value vs centerNum")
         corr_avg_value_centerNum = corr(ave_val,centerNum)
-        print(corr_avg_value_centerNum)
-        print("----------")
+        # print(corr_avg_value_centerNum)
+        # print("----------")
 
-        print("avg_value vs centerPoolNum")
+        res.append({'avg_value vs centerNum': corr_avg_value_centerNum})
+
+        # print("avg_value vs centerPoolNum")
         corr_avg_value_centerPoolNum = corr(ave_val, centerPoolNum)
-        print(corr_avg_value_centerPoolNum)
-        print("----------")
+        # print(corr_avg_value_centerPoolNum)
+        # print("----------")
 
-        print("avg_value vs policeStationNum")
+        res.append({'avg_value vs centerPoolNum': corr_avg_value_centerPoolNum})
+
+        # print("avg_value vs policeStationNum")
         corr_avg_value_policeStationNum = corr(ave_val, policeStationNum)
-        print(corr_avg_value_policeStationNum)
-        print("----------")
+        # print(corr_avg_value_policeStationNum)
+        # print("----------")
 
-        print("avg_value vs schoolNum")
+        res.append({'avg_value vs policeStationNum': corr_avg_value_policeStationNum})
+
+        # print("avg_value vs schoolNum")
         corr_avg_value_schoolNum = corr(ave_val, schoolNum)
-        print(corr_avg_value_schoolNum)
-        print("----------")
+        # print(corr_avg_value_schoolNum)
+        # print("----------")
+
+        res.append({'avg_value vs schoolNum': corr_avg_value_schoolNum})
+
+        # print(res)
+
+        repo.dropCollection("correlation")
+        repo.createCollection("correlation")
+        repo["Jinghang_Yuan.correlation"].insert_many(res)
+
+        # print(list(repo['Jinghang_Yuan.correlation'].find()))
 
         repo.logout()
         endTime = datetime.datetime.now()
