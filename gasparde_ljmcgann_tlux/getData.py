@@ -75,7 +75,6 @@ class getData(dml.Algorithm):
         All_Assessments = []
         for i in range(9):
             # need to iterate because we api request only brings max 20000 parcels
-
             skip = 20000 * (i)
             url1 = "https://data.boston.gov/datastore/odata3.0/fd351943-c2c6-4630-992d-3f895360febd?$top=20000&$format=json&$skip=" + str(
                 skip)
