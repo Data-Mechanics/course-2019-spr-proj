@@ -358,26 +358,24 @@ class example(dml.Algorithm):
             #print("\nMeans: ",MEANS, "\n")
             #print("len(MEANS", len(MEANS))
             #print("len(MEANS[0])", len(MEANS[0]))
-            while not isClose(MEANS, sorted(OLD)):
-                #print("\n\n\n\n\n\n")
+            #while not isClose(MEANS, sorted(OLD)):
+            while sorted(MEANS) != sorted(OLD)):
                 OLD = MEANS
                 #print("MEANS1", MEANS)
                 #MPD = [(m, p, md.walk_time_url(m,p)) for (m, p) in product(MEANS, POINTSC)]
                 #PDs = [(p, md.walk_time_url(m,p)) for (m, p, d) in MPD]
 
                 MPD = [(m, p, dist(m,p)) for (m, p) in product(MEANS, POINTSC)]
-                PDs = [(p, dist(m,p)) for (m, p, d) in MPD]
+                PDs = [(p, d) for (m, p, d) in MPD]
 
                 PD = aggregate(PDs, min)
                 MP = [(m, p) for ((m,p,d), (p2,d2)) in product(MPD, PD) if p==p2 and d==d2]
-                #print("MP: ", MP)
                 MT = aggregate(MP, plus)
                 
                 M1 = [(m, 1) for (m, _) in MP]
                 MC = aggregate(M1, sum)
 
                 MEANS = [scale(t,c) for ((m,t),(m2,c)) in product(MT, MC) if m == m2]
-                #print("MEANS1", MEANS)
                 print("\n old: ", OLD)
                 print("\n means: ", MEANS, "\n")
                 
