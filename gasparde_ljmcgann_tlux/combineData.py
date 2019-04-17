@@ -414,4 +414,5 @@ class combineData(dml.Algorithm):
 
     @staticmethod
     def provenance(doc=prov.model.ProvDocument(), startTime=None, endTime=None):
+
         return 0
