@@ -44,5 +44,5 @@ python execute.py kzhang21_ryuc_zui_sarms
 
 Trial Mode:
 ```
-python execute.py kzhang21_ryuc_zui_sarms
+python execute.py kzhang21_ryuc_zui_sarms -t
 ```
