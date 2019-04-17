@@ -56,15 +56,17 @@ _crime_health_waste_space_: This algorithm sums up all of the crime, health issu
 
 _linearRegression_: I decided to use gradient descent and linear regression to determine whether there was a relationship between the data sets. I first used gradient descent to see if I could find a solution that minimized the mean squared error more than linear regression. However, after running the algorithm using hundreds of iterations and a very small step size, the gradient descent algorithm had a very high mean squared error. I found that gradient descent is computationally less expensive but doesn't yield the most accurate results. So, instead, I used the statsmodel api in python which yielded more robust results. In addition to finding the coefficient, it allows me to find the p-values, t-values, and standard errors. I am also able to use robust standard errors with the stasmodel api linear regression which allows me to control for heteroskedasticity.
 
-However, since one of my health outcome variables is prevalence rate, which is a proportion, I decided to also average all of the prevalence rates for every fips tract to get an average disease prevalence rate for an area. Then, I performed logistic regression using crime, waste, income, and open spaces as my regressors to see if this was better at approximating the relationship than the linear regression. The equations for the linear regression I estimated is below:
+However, since one of my health outcome variables is prevalence rate, which is a proportion, I decided to also average all of the prevalence rates for every fips tract to get an average disease prevalence rate for an area. Then, I performed logistic regression using crime, waste, income, and open spaces as my regressors to see if this was better at approximating the relationship than the linear regression. The equations for the linear regression I estimated are below:
 
  ![equation](https://latex.codecogs.com/gif.latex?y_%7Bhealthproblems%7D%20%3D%20%5Cbeta_%7B0%7D%20&plus;%20%5Cbeta_%7B1%7Dx_%7Bcrime%7D%20&plus;%20%5Cbeta_%7B2%7Dx_%7Bwaste%7D%20&plus;%20%5Cbeta_%7B3%7Dx_%7Bopenspace%7D%20&plus;%20%5Cbeta_%7B4%7Dx_%7Bincome%7D%20&plus;%20e)
  
-Logistic regression equation is the same as the linear regression above. I also estimated the following equation using linear regression:
+ ![equation](https://latex.codecogs.com/gif.latex?y_%7Bcrime%7D%20%3D%20%5Cbeta_%7B0%7D%20&plus;%20%5Cbeta_%7B1%7Dx_%7Bwaste%7D%20&plus;%20%5Cbeta_%7B2%7Dx_%7Bopenspace%7D%20&plus;%20%5Cbeta_%7B3%7Dx_%7Bincome%7D%20&plus;%20e)
+ 
+The logistic regression equation I estimated is below:
 
-![equation](https://latex.codecogs.com/gif.latex?y_%7Bcrime%7D%20%3D%20%5Cbeta_%7B0%7D%20&plus;%20%5Cbeta_%7B1%7Dx_%7Bwaste%7D%20&plus;%20%5Cbeta_%7B2%7Dx_%7Bopenspace%7D%20&plus;%20%5Cbeta_%7B3%7Dx_%7Bincome%7D%20&plus;%20e)
+ ![equation](https://latex.codecogs.com/gif.latex?y_%7Bdiseaseprevalence%7D%20%3D%20%5Cbeta_%7B0%7D%20&plus;%20%5Cbeta_%7B1%7Dx_%7Bcrime%7D%20&plus;%20%5Cbeta_%7B2%7Dx_%7Bwaste%7D%20&plus;%20%5Cbeta_%7B3%7Dx_%7Bopenspace%7D%20&plus;%20%5Cbeta_%7B4%7Dx_%7Bincome%7D%20&plus;%20e)
 
-_WasteOptimization_: I also thought it would be useful to find the centroids of these waste sites and find the centroids that maximize the distance from these waste sites to schools and green spaces and that are also located in the least densely populated areas. I wanted to find these clusters so that in the future, waste sites could be situated in these areas so as to minimize the impact hazardous waste has on people's lives.
+_WasteOptimization_: I also thought it would be useful to find the centroids of these waste sites and find the centroids that maximize the distance from these waste sites to schools and green spaces. I also wanted to find the centroids that are located in the least densely populated areas. I wanted to find these clusters so that in the future, waste sites could be situated in these areas so as to minimize the impact hazardous waste has on people's lives.
 
 #### Statistical Analysis
 
@@ -72,7 +74,7 @@ _Correlation_: I computed the correlation coefficients between health and crime,
 
   ![equation](https://latex.codecogs.com/gif.latex?y%20%3D%20x_%7Bhealth%20problems%7D%20&plus;%20x_%7Bopen%20space%7D%5Ccdot%20w_%7Bopen%20space%7D%20&plus;%20x_%7Bcrime%7D%5Ccdot%20w_%7Bcrime%7D%20&plus;%20x_%7Bwaste%7D%5Ccdot%20w_%7Bwaste%7D) 
   
-The w's are the corresponding correlation coefficient between that factor and health and the x variable is the number of those factors. I calculate this metric for all zip codes in Boston to get a sense of how healthy every neighborhood is.
+The w's are the corresponding correlation coefficient between that factor and health and the x variable is the number of those factors. I calculate this metric for all zip codes in Boston to get a sense of how healthy every neighborhood is. I used the correlation coefficient as a weight and multiply it by the actual number because I thought this would be a good indicator of their absolute effect on health.
 
 _Justification_: For this project, I wanted to explore the relationship between the various data sets that I retrieved. I decided that a good way to approach this would be to employ gradient descent to find the parameters that best explained the number of health occurrences for each FIPS code in Boston. I decided to use gradient descent at first because it is a computationally efficient way to do linear regression. However, after doing gradient descent, I had a large mean squared error. So I decided to also do linear regression using the statsmodel api. The coefficients are calculated along with their corresponding t-values, p-values, and standard errors so it is easier to see whether your results are significant. In general, it gives you a good idea of how your independent variables such as waste and open spaces in this case affect health in a certain area and it also gives you a good idea of if your data is linear. But since I could easily create a probability as my outcome variable since I have prevalence rates, I decided to also do logistic regression to see if there would be a better fit. 
 
