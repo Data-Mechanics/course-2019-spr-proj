@@ -144,11 +144,12 @@ class join_by_ZIP(dml.Algorithm):
         doc.usage(activity, policeStation, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:select and aggregate'}
                   )
-        doc.wasDerivedFrom(school, count_all_by_zip, activity, activity, activity)
-        doc.wasDerivedFrom(centerPool, count_all_by_zip, activity, activity, activity)
-        doc.wasDerivedFrom(center, count_all_by_zip, activity, activity, activity)
-        doc.wasDerivedFrom(policeStation, count_all_by_zip, activity, activity, activity)
-        doc.wasDerivedFrom(property, count_all_by_zip, activity, activity, activity)
+        doc.wasDerivedFrom(count_all_by_zip, school, activity, activity, activity)
+        doc.wasDerivedFrom(count_all_by_zip, centerPool, activity, activity, activity)
+        doc.wasDerivedFrom(count_all_by_zip, center, activity, activity, activity)
+        doc.wasDerivedFrom(count_all_by_zip, policeStation, activity, activity, activity)
+        doc.wasDerivedFrom(count_all_by_zip, property, activity, activity, activity)
+
         doc.wasAttributedTo(count_all_by_zip, agent)
         doc.wasGeneratedBy(count_all_by_zip, activity, endTime)
 

@@ -68,7 +68,7 @@ class property(dml.Algorithm):
                           {prov.model.PROV_LABEL: 'property', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(property, this_script)
         doc.wasGeneratedBy(property, get_property, endTime)
-        doc.wasDerivedFrom(resource, property, get_property, get_property, get_property)
+        doc.wasDerivedFrom(property, resource, get_property, get_property, get_property)
 
         repo.logout()
 

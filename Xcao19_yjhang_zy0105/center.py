@@ -73,7 +73,7 @@ class center(dml.Algorithm):
                           {prov.model.PROV_LABEL: 'center', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(center, this_script)
         doc.wasGeneratedBy(center, get_center, endTime)
-        doc.wasDerivedFrom(resource, center, get_center, get_center, get_center)
+        doc.wasDerivedFrom(center, resource, get_center, get_center, get_center)
 
         repo.logout()
 

@@ -84,8 +84,8 @@ class property_to_school(dml.Algorithm):
         #doc.wasAttributedTo(citycrime, this_script)
         doc.wasGeneratedBy(property_school_by_zip, ppty_scl_join_by_zip, endTime)
 
-        doc.wasDerivedFrom(school, property_school_by_zip, ppty_scl_join_by_zip, ppty_scl_join_by_zip, ppty_scl_join_by_zip)
-        doc.wasDerivedFrom(property, property_school_by_zip, ppty_scl_join_by_zip, ppty_scl_join_by_zip, ppty_scl_join_by_zip)
+        doc.wasDerivedFrom(property_school_by_zip, school, ppty_scl_join_by_zip, ppty_scl_join_by_zip, ppty_scl_join_by_zip)
+        doc.wasDerivedFrom(property_school_by_zip, property, ppty_scl_join_by_zip, ppty_scl_join_by_zip, ppty_scl_join_by_zip)
 
         repo.logout()
 

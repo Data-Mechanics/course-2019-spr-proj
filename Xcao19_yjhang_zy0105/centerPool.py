@@ -69,7 +69,7 @@ class centerPool(dml.Algorithm):
                           {prov.model.PROV_LABEL: 'centerPool', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(centerPool, this_script)
         doc.wasGeneratedBy(centerPool, get_centerPool, endTime)
-        doc.wasDerivedFrom(resource, centerPool, get_centerPool, get_centerPool, get_centerPool)
+        doc.wasDerivedFrom(centerPool, resource, get_centerPool, get_centerPool, get_centerPool)
 
         repo.logout()
 

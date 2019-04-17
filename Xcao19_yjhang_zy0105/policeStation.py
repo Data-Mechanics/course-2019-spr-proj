@@ -69,7 +69,7 @@ class policeStation(dml.Algorithm):
                           {prov.model.PROV_LABEL: 'policeStation', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(policeStation, this_script)
         doc.wasGeneratedBy(policeStation, get_policeStation, endTime)
-        doc.wasDerivedFrom(resource, policeStation, get_policeStation, get_policeStation, get_policeStation)
+        doc.wasDerivedFrom(policeStation, resource, get_policeStation, get_policeStation, get_policeStation)
 
         repo.logout()
 
