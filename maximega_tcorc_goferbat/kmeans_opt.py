@@ -10,9 +10,9 @@ import matplotlib.pyplot as plt
 import pandas
 from pandas.plotting import parallel_coordinates
 
-from maximega_tcorc.helper_functions.lat_long_kmeans import run_lat_long_kmeans
-from maximega_tcorc.helper_functions.cons_sat import cons_sat
-from maximega_tcorc.helper_functions.Correlation import Correlation
+from maximega_tcorc_goferbat.helper_functions.lat_long_kmeans import run_lat_long_kmeans
+from maximega_tcorc_goferbat.helper_functions.cons_sat import cons_sat
+from maximega_tcorc_goferbat.helper_functions.Correlation import Correlation
 
 # from helper_functions.lat_long_kmeans import run_lat_long_kmeans
 # from helper_functions.cons_sat import cons_sat
