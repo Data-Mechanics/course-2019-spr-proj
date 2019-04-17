@@ -1,18 +1,16 @@
-import json
 import dml
 import prov.model
 import datetime
 import uuid
 import pandas as pd
-import statsmodels.api as sm
 from sklearn.metrics import mean_squared_error
 import numpy as np
-
+import statsmodels.api as sm
 
 class linearRegression(dml.Algorithm):
     contributor = 'misn15'
     reads = ['misn15.crime_health_waste_space']
-    writes = ['misn15.reg_results']
+    writes = ['misn15.reg_results', 'misn15.log_results']
 
     @staticmethod
     def execute(trial = False):
@@ -55,9 +53,9 @@ class linearRegression(dml.Algorithm):
         # get data into proper format
         crime_health = list(repo['misn15.crime_health_waste_space'].find())
         crime_health = pd.DataFrame(crime_health)
-        crime_health = crime_health[['open space', 'waste', 'income', 'crime', 'cancer occurrences', 'asthma occurrences',
+        health_filter = crime_health[['open space', 'waste', 'income', 'crime', 'cancer occurrences', 'asthma occurrences',
                                      'COPD occurrences', 'total occurrences']]
-        final_matrix = np.matrix(crime_health, dtype='float64')
+        final_matrix = np.matrix(health_filter, dtype='float64')
 
         # choose regressors and dependent variable
         X = final_matrix[:,0:3]
@@ -93,9 +91,35 @@ class linearRegression(dml.Algorithm):
         repo.dropCollection("misn15.reg_results")
         repo.createCollection("misn15.reg_results")
         repo['misn15.reg_results'].insert_one(results)
-
         repo['misn15.reg_results'].metadata({'complete':True})
         print(repo['misn15.reg_results'].metadata())
+
+        # Logistic Regression
+        # get data
+        crime_health = crime_health[['open space', 'waste', 'income', 'crime', 'probability of disease']]
+        final_matrix = np.matrix(crime_health, dtype='float64')
+        y = final_matrix[:, -1]
+
+        # construct model
+        X = sm.add_constant(X)
+        logreg = sm.Logit(y, X).fit()
+        #logreg.summary()
+
+        # get odds ratio
+        coef = np.array(np.exp(logreg.params)).tolist()
+        conf = np.exp(logreg.conf_int())
+        std_err = np.array(logreg.bse).tolist()
+        p_values = np.array(logreg.pvalues).tolist()
+        t_stat = np.array(logreg.tvalues).tolist()
+
+        results = {'coefficients': coef, 'standard error': std_err, 'p-values': p_values, 't-statistics': t_stat}
+
+        repo.dropCollection("misn15.log_results")
+        repo.createCollection("misn15.log_results")
+        repo['misn15.log_results'].insert_one(results)
+
+        repo['misn15.log_results'].metadata({'complete':True})
+        print(repo['misn15.log_results'].metadata())
 
         repo.logout()
 

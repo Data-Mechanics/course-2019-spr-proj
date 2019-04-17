@@ -1,4 +1,3 @@
-import json
 import dml
 import prov.model
 import datetime
@@ -10,7 +9,7 @@ import numpy as np
 class Correlation(dml.Algorithm):
     contributor = 'misn15'
     reads = ['misn15.crime_health_waste_space']
-    writes = ['misn15.correlation', 'misn15.scores']
+    writes = ['misn15.correlation', 'misn15.score']
 
     @staticmethod
     def execute(trial = False):
@@ -165,7 +164,7 @@ class Correlation(dml.Algorithm):
                   
         return doc
 
-##Correlation.execute()
+Correlation.execute()
 ##doc = Correlation.provenance()
 ##print(doc.get_provn())
 ##print(json.dumps(json.loads(doc.serialize()), indent=4))

@@ -62,6 +62,13 @@ _WasteOptimization_: I also thought it would be useful to find the centroids of 
 
 _Correlation_: I computed the correlation coefficients between health and crime, waste, open spaces, and income so as to see whether there was a relationship between any of these factors. I also defined my own custom scoring metric to determine which neighborhoods had a higher quality of life than others. This metric is defined as follows:
 
+  ![equation](https://latex.codecogs.com/gif.latex?y%20%3D%20x_%7Bhealth%20problems%7D%20&plus;%20x_%7Bopen%20space%7D%5Ccdot%20w_%7Bopen%20space%7D%20&plus;%20x_%7Bcrime%7D%5Ccdot%20w_%7Bcrime%7D%20&plus;%20x_%7Bwaste%7D%5Ccdot%20w_%7Bwaste%7D) where 
+  
+The w's are the corresponding correlation coefficient between that factor and health and the x variable is the number of those factors. I calculate this metric for all zip codes in Boston to get a sense of how healthy every neighborhood is.
 
+_Justification_: For this project, I wanted to explore the relationship between the various data sets that I retrieved. I decided that a good way to approach this would be to employ gradient descent to find the parameters that best explained the number of health occurrences for each FIPS code in Boston. I decided to use gradient descent at first because it is a computationally efficient way to do linear regression. However, after doing gradient descent, I had a large mean squared error. So I decided to also do linear regression using the statsmodel api. The coefficients are output along with their corresponding t-values, p-values, and standard errors so it is easier to see whether your results are significant. In general, it gives you a good idea of how your independent variables such as waste and open spaces in this case affect health in a certain area and it also gives you a good idea of if your data is linear. 
 
-_Justification_: I first retrieved
+If waste turned out to be a significant factor affecting health, I wanted to calculate areas where waste sites would have minimal impact on people's lives. In order to do that, I used DBSCAN clustering because this library allows me to use the haversine metric which is better for geospatial data. I find waste clusters and then find the distances from these clusters to schools, open spaces, as well as the population that the cluster resides in. Then I rank the clusters based on these factors.
+
+Finally, I find the correlations between health and factors such as waste, open spaces and crimes to see if there is a relationship and how strong that relationship is. I also create a custom metric that 
+

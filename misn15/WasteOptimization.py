@@ -1,6 +1,5 @@
 import urllib.request
 import dml
-import json
 import prov.model
 import datetime
 import uuid

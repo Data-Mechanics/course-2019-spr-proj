@@ -9,7 +9,7 @@ import requests
 class crime_health_waste_space(dml.Algorithm):
     contributor = 'misn15'
     reads = ['misn15.waste_all', 'misn15.health', 'misn15.crime', 'misn15.income', 'misn15.openSpace_centroids']
-    writes = ['misn15.crime_health_waste_space']
+    writes = ['misn15.crime_health_waste_space', 'misn15.health_prob']
 
     @staticmethod
     def execute(trial = False):
@@ -85,8 +85,19 @@ class crime_health_waste_space(dml.Algorithm):
         income_pd = pd.DataFrame(income_list, columns=['fips', 'income'])
         waste_income = wasteSum_pd.merge(income_pd, left_on= 'fips', right_on = 'fips', how = 'outer')
 
-        # combine waste, income and health
+        # get average probability of disease
         health_pd = pd.DataFrame(clean_health)
+        total_prev_list = []
+        for x in range(len(health_pd)):
+            total_prev = 0
+            for y in range(0, 11):
+                total_prev += float(health_pd.iloc[x,y])/100
+            total_prev /= 12
+            total_prev_list.append(total_prev)
+
+        health_pd['probability of disease'] = total_prev_list
+
+        # combine waste, income and health
         health_pd = health_pd.drop(columns =['_id', 'coordinates', 'Physical Health', 'Teeth Loss'])
         waste_health_pd = waste_income.merge(health_pd, left_on = 'fips', right_on='tractfips', how = 'outer')
 
@@ -121,7 +132,8 @@ class crime_health_waste_space(dml.Algorithm):
         for x in range(len(final_df)):
             entry = {'fips': final_df.iloc[x,0], 'open space': final_df.iloc[x, 1], 'waste': final_df.iloc[x, 2], 'income': final_df.iloc[x, 3],
                      'crime': final_df.iloc[x,-5], 'cancer occurrences': final_df.iloc[x, -4], 'asthma occurrences': final_df.iloc[x, -3],
-                     'COPD occurrences': final_df.iloc[x,-2], 'total occurrences': final_df.iloc[x, -1], 'population': final_df.iloc[x,-6]}
+                     'COPD occurrences': final_df.iloc[x,-2], 'total occurrences': final_df.iloc[x, -1], 'population': final_df.iloc[x,-7],
+                     'probability of disease': final_df.iloc[x,-6]}
             repo['misn15.crime_health_waste_space'].insert_one(entry)
 
 
