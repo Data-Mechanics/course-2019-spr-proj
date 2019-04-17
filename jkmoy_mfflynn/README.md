@@ -1,4 +1,4 @@
-# Group members:
+## Group members:
 Justin Moy (jkmoy@bu.edu)
 
 Mary Flynn (mfflynn@bu.edu)
@@ -18,7 +18,7 @@ The datasets that we chose to retrieve are one that are based on emergency servi
 * modeLocationCount.py - Count the different car accidents and street type pairs to see if a certain mode of transportation (vehicle, bike, etc) was more dangerous/prone to accidents on a certain type of street (one-ways, intersections, etc).
 
 # Project #2
-...
+The purpose of our project is to analyze the overall safety of Boston and each of its towns.
 
 ## Running 
 To run our code, clone the data and cd into the top-level directory (course-2019-spr-proj) and run:
