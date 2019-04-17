@@ -5,6 +5,7 @@ import prov.model
 import datetime
 import uuid
 import pandas as pd
+import logging
 
 import argparse
 import json
