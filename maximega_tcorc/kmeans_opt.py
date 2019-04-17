@@ -9,82 +9,96 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas
 from pandas.plotting import parallel_coordinates
-#from maximega_tcorc.helper_functions.cons_sat import cons_sat
-from helper_functions.cons_sat import cons_sat
-#from maximega_tcorc.helper_functions.lat_long_kmeans import run_lat_long_kmeans
-from helper_functions.lat_long_kmeans import run_lat_long_kmeans
+
+from maximega_tcorc.helper_functions.lat_long_kmeans import run_lat_long_kmeans
+from maximega_tcorc.helper_functions.cons_sat import cons_sat
+from maximega_tcorc.helper_functions.Correlation import Correlation
+
+# from helper_functions.lat_long_kmeans import run_lat_long_kmeans
+# from helper_functions.cons_sat import cons_sat
+# from helper_functions.Correlation import Correlation
 
 
 class kmeans_opt(dml.Algorithm):
 	contributor = 'maximega_tcorc'
 	reads = ['maximega_tcorc.income_with_NTA_with_percentages']
-	writes = []
+	writes = ['maximega_tcorc.new_zone_fares']
 	
 	@staticmethod
 	def execute(trial = False):
 		startTime = datetime.datetime.now()
 
-		#repo_name = kmeans_opt.writes[0]
+		repo_name = kmeans_opt.writes[0]
 		# ----------------- Set up the database connection -----------------
 		client = dml.pymongo.MongoClient()
 		repo = client.repo
 		repo.authenticate('maximega_tcorc', 'maximega_tcorc')
 
+		# -----------------Retrieve neighborhood data from Mongodb -----------------
 		nta_objects = repo.maximega_tcorc.income_with_NTA_with_percentages.find()
 
+		# ----------------- If the trial flag is set, only use a small sample of the data -----------------
 		if trial:
 			nta_objects = nta_objects[0:50]
-		
+
+		incomes = []
+		pops = []
 		X = []
 		data_copy = []
+		# ----------------- Create a copy of the data, only including neihgborhoods with a subway station -----------------
 		for nta in nta_objects:
 			if(len(nta['stations'])!= 0):
 				income = nta['income']
 				X.append([nta['ntaname'], nta['position'][0], nta['position'][1], income])
 				data_copy.append(nta)
+				incomes.append(income)
+				pops.append(nta['trans_percent'])
 
-		#------------------ K Means -----------------
+		# ----------------- Finding the correlation between avergae income and % of popoulaiton using public transport-----------------
+		Correlation(incomes, pops)
+
+		#------------------ Run k Means on ([lat, long], avg_income) -----------------
 		kmeans = run_lat_long_kmeans(X)
-
+		# ----------------- k =5 derived from error graph in kmeans file -----------------
 		k = 5
-		k_groupings = kmeans.labels_
 
+		k_groupings = kmeans.labels_
 		for i in range(len(data_copy)):
 			data_copy[i]['zone'] = k_groupings[i]
 		avg_inc = [0] * k
 		count_inc = [0] * k
+		# ----------------- Find and insert average income for each zone -----------------
 		for item in data_copy:
 			avg_inc[item['zone']] += item['income']
 			count_inc[item['zone']] += 1
 		for i in range(len(avg_inc)):
 			avg_inc[i] /= count_inc[i]
-
 		for i in range(len(data_copy)):
 			data_copy[i]['avg_inc'] = avg_inc[data_copy[i]['zone']]
-
+		# ----------------- Reorder the zones based on avg_zone_income (income zone1 < income zone 2 ...) -----------------
 		for i in range(k):
 			min_avg = min(avg_inc)
 			for item in data_copy:
 				if (item['avg_inc'] == min_avg):
 					item['zone'] = i
 			avg_inc.remove(min_avg)
-			
-		x = cons_sat(data_copy, k)
-		print(x.translate)
-		for i in x:
-			print(i.params)
-		
-		# ----------------- Reformat data for mongodb insertion -----------------
-		# insert_many_arr = []
-		# for key in nta_objects.keys():
-		# 	insert_many_arr.append(nta_objects[key])
+		# ----------------- Use z3 to find new zone fares that satisfy constraint set -----------------	
+		sat = cons_sat(data_copy, k)
+		new_fares = [0] * k
+		for i in range(len(sat)):
+			new_fares[i] = sat[sat[i]].as_decimal(2)
+			new_fares[i] = new_fares[i][:-1]
+			new_fares[i] = float(new_fares[i])
+		# ----------------- Insert new zone fares into Mongodb -----------------
+		for item in data_copy:
+			item['new_fare'] = new_fares[item['zone']]
 
 		#----------------- Data insertion into Mongodb ------------------
-		# repo.dropCollection('neighborhoods_with_stations')
-		# repo.createCollection('neighborhoods_with_stations')
-		# repo[repo_name].insert_many(insert_many_arr)
-		# repo[repo_name].metadata({'complete':True})
-		# print(repo[repo_name].metadata())
+		repo.dropCollection('new_zone_fares')
+		repo.createCollection('new_zone_fares')
+		repo[repo_name].insert_many(data_copy)
+		repo[repo_name].metadata({'complete':True})
+		print(repo[repo_name].metadata())
 
 		repo.logout()
 
@@ -112,13 +126,13 @@ class kmeans_opt(dml.Algorithm):
 		#agent
 		this_script = doc.agent('alg:maximega_tcorc#kmeans_opt', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
 		#resource
-		nta_objects = doc.entity('dat:maximega_tcorc#nta_objects', {prov.model.PROV_LABEL:'Income with NTA with Percentages', prov.model.PROV_TYPE:'ont:DataSet'})
+		nta_objects = doc.entity('dat:maximega_tcorc#income_with_NTA_with_percentages', {prov.model.PROV_LABEL:'Income with NTA with Percentages', prov.model.PROV_TYPE:'ont:DataSet'})
 		#agent
-		running_k_means = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+		running_k_means_cons_sat = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
 
-		doc.wasAssociatedWith(running_k_means, this_script)
+		doc.wasAssociatedWith(running_k_means_cons_sat, this_script)
 
-		doc.usage(running_k_means, nta_objects, startTime, None,
+		doc.usage(running_k_means_cons_sat, nta_objects, startTime, None,
 					{prov.model.PROV_TYPE:'ont:Computation'
 					}
 					)
@@ -126,10 +140,9 @@ class kmeans_opt(dml.Algorithm):
 		categorized_ntas = doc.entity('dat:maximega_tcorc#categorized_ntas', {prov.model.PROV_LABEL:'Categorized NTAS', prov.model.PROV_TYPE:'ont:DataSet'})
 		
 		doc.wasAttributedTo(categorized_ntas, this_script)
-		doc.wasGeneratedBy(categorized_ntas, running_k_means, endTime)
-		doc.wasDerivedFrom(categorized_ntas, nta_objects, running_k_means, running_k_means, running_k_means)
+		doc.wasGeneratedBy(categorized_ntas, running_k_means_cons_sat, endTime)
+		doc.wasDerivedFrom(categorized_ntas, nta_objects, running_k_means_cons_sat, running_k_means_cons_sat, running_k_means_cons_sat)
 
 		repo.logout()
 				
 		return doc
-kmeans_opt.execute()
