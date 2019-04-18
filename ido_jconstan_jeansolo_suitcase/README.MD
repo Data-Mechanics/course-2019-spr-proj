@@ -1,4 +1,4 @@
-PROJECT #1 REPORT
+# PROJECT #1 REPORT
 
 We have 5 data sets:
 1) BU-TRANSPORTATION-STUDY
@@ -15,7 +15,7 @@ Goal: Show the ratio of students that take the bus to students who don't.
 Justification: This will give us a good idea of the percentage of students that aren't using the bus, and give us a good number to point at in an argument for the benefits of better bus routes.
 
 
-PROJECT #2 REPORT
+# PROJECT #2 REPORT
 
   Our goal for this project is to increase the number of students taking buses to and from school. We aim to decrease the walking distance between the bus stop and the student’s houses, as we assume this is a major deterrent to bus ridership. 
 
