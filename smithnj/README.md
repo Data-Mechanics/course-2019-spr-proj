@@ -12,7 +12,9 @@ Using data on station popularity, community socioeconomic hardship, and taxi pic
 *Two smaller questions to answer:*
 1. *What would the zones look like?* Using the k-means algorithm, zones will be created with a varying number of clusters, taking into account the popularity, community hardship, and community taxi demand for each station. Each cluster will represent a zone, with all stations in it now residing in that zone.
 
-2. *Would these zones benefit socioeconimically disadvantaged commuters while raising a similar amount of revenue?* Statistical analysis will be done taking into account the fare zones to see how underserved socioeconomically burdened areas are and whether lowering their fare (while increasing other zone fares) will produce a similar amount of revenue.
+2. *Do these three metrics obtained show insight into Chicago Transit?* Statistical analysis will be done observing correlation between the three tracked metrics.
+
+3. **Not answered in Project 2 but will be explored.** Whether lowering their fare (while increasing other zone fares) will produce a similar amount of revenue.
 ---
 # Insights
 1. Woah
