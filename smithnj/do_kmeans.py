@@ -55,8 +55,8 @@ class do_kmeans(dml.Algorithm):
         # ---[ KMeans Operation ]-----------------------------------
         fignum = 1
         if (trial):
-            titles = ["8 clusters/zones", "3 clusters/zones"]
-            estimators = [('kmeans_8', KMeans(n_clusters=8)), ('kmeans_3', KMeans(n_clusters=3))]
+            titles = ["3 clusters/zones"]
+            estimators = [('kmeans_3', KMeans(n_clusters=3))]
         else:
             titles = ["8 clusters/zones", "6 clusters/zones", "4 clusters/zones", "3 clusters/zones"]
             estimators = [('kmeans_8', KMeans(n_clusters=8)), ('kmeans_6', KMeans(n_clusters=6)),
@@ -74,7 +74,7 @@ class do_kmeans(dml.Algorithm):
             three.scatter(centers[:, 0], centers[:, 1], centers[:, 2], c='black', s=200, alpha=0.5)
             title = "Figure #" + str(fignum) + ": " + titles[fignum - 1]
             plt.title(title)
-            # plt.show()  # - uncomment to show graphs
+            plt.show()  # - uncomment to show graphs
             fignum = fignum + 1
             clusters.append(y_kmeans)
         # ---[ MongoDB Insertion ]-----------------------------------
@@ -82,9 +82,9 @@ class do_kmeans(dml.Algorithm):
         df_clusters = df_clusters.transpose()
         df_final = df.join(df_clusters)
         if (trial):
-            columns = ["HardshipIndex", "TaxiDemand", "StationID", "Hardship", "8Zones", "3Zones"]
+            columns = ["HardshipIndex", "Popularity", "StationID", "TaxiDemand", "3Zones"]
         else:
-            columns = ["HardshipIndex", "TaxiDemand", "StationID", "Hardship", "8Zones", "6Zones", "4Zones", "3Zones"]
+            columns = ["HardshipIndex", "Popularity", "StationID", "TaxiDemand", "8Zones", "6Zones", "4Zones", "3Zones"]
         df_final.columns = columns
         # ---[ MongoDB Insertion ]-----------------------------------
         df = df_final.to_json(orient="records")
