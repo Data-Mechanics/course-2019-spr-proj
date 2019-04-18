@@ -189,14 +189,14 @@ class Clustering(dml.Algorithm):
             count = 0
             for doc in docs:
                 count += 1
-                if len(doc['x']) != 0 and len(doc['y']) != 0 and ((count % 10) == 0):
+                if len(doc['x']) != 0 and len(doc['y']) != 0 and ((count % 20) == 0) and doc['x'] != "0" and doc['y'] != "0":
                     liOfXs.append(float(doc['x']))
                     liOfYs.append(float(doc['y']))
                     liOfDates.append(doc['crashdate'][-4:])
                     liOfCIDs.append(doc['crashnumber'])
         else:
             for doc in docs:
-                if len(doc['x']) != 0 and len(doc['y']) != 0:
+                if len(doc['x']) != 0 and (len(doc['y']) != 0) and doc['x'] != "0" and doc['y'] != "0":
                     liOfXs.append(float(doc['x']))
                     liOfYs.append(float(doc['y']))
                     liOfDates.append(doc['crashdate'][-4:])
