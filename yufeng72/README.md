@@ -1,4 +1,4 @@
-<h1>CS 504 Project #1 & Project #2</h1>
+<h1>CS 504 Project #1 & #2</h1>
 
 <h2>Inspiration</h2>
 
@@ -34,7 +34,7 @@ Transformation 2: calculate the distance between every Bluebike station and ever
 
 Transformation 3: for each college and university, find out how many Bluebike trips take them as destination (in a month) to see if it is popular.
 
-<h2> Constraint satisfaction and Optimization </h2>
+<h2>Constraint satisfaction and Optimization</h2>
 
 I set 2 constraints for the datasets I got above, and solve one constraint satisfaction problem and two optimization
 
@@ -42,6 +42,17 @@ Constraint 1: Add some new bike stations nearby colleges and universities and ac
 
 Constraint 2: Add that much bike stations at one time is not practical, so how about add a small number (let's say X) of new bike stations, and let the average ratio of around trip number and around station number (of all colleges and universities) as small as possible? I solved this optimization problem using X = 1 in OptimizationLimitStations.py.
 
-<h2> Statistical Analysis </h2>
+<h2>Statistical Analysis</h2>
 
 todo
+
+<h2>Running the Execute Script for the Project</h2>
+
+```
+python execute.py yufeng72
+```
+run in trial mode (where retrive function read less data and the algorithm work on less data):
+```
+python execute.py yufeng72 --trial
+```
+on my machine, running in normal mode takes about 1 minute, while running in trial mode takes less than 10 seconds.
