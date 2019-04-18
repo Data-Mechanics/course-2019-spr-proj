@@ -411,8 +411,8 @@ class example(dml.Algorithm):
                         tswitch = True
 
         # parse points
-        new_stops = pointParser(new_stops)
-        print('new_stops',new_stops)
+        NEW_STOPS = pointParser(new_stops)
+        print('new_stops',NEW_STOPS)
 
 
         print("Before loop")
@@ -430,7 +430,7 @@ class example(dml.Algorithm):
                 POINTSC.append(POINTS_NEW[x][i])
 
             M_OLD = MEANS # old bus stops
-            print('MEANS',M_OLD)
+            print('OLD MEANS',M_OLD)
             P = POINTSC # student addresses
             MPD_OLD = [(m, p, dist(m,p)) for (m, p) in product(M_OLD, P)]
             PDs_OLD = [(p, dist(m,p)) for (m, p, d) in MPD_OLD]
@@ -443,8 +443,7 @@ class example(dml.Algorithm):
             print('old avg', average_OLD)
 
             M_NEW = NEW_STOPS # new bus stops
-            print('MEANS',M_NEW)
-            P = POINTSC # student addresses
+            print('NEW MEANS',M_NEW)
             MPD_NEW = [(m, p, dist(m,p)) for (m, p) in product(M_NEW, P)]
             PDs_NEW = [(p, dist(m,p)) for (m, p, d) in MPD_NEW]
             PD_NEW = aggregate(PDs_NEW, min)
@@ -798,8 +797,6 @@ def pointParser(point_list):
             flt_lat = float(str_lat)
             flt_lng = float (str_lng)
             point_list_float.append((flt_lat, flt_lng))
-        else:
-            print("error")
 
 
     return point_list_float
