@@ -1,5 +1,3 @@
-import urllib.request
-import json
 import dml
 import prov.model
 import datetime
@@ -7,9 +5,6 @@ import uuid
 import pandas as pd
 from pprint import pprint
 
-"""
-
-"""
 
 
 class pairwiseCorrelation(dml.Algorithm):
@@ -30,6 +25,8 @@ class pairwiseCorrelation(dml.Algorithm):
         
         tc = repo.nhuang54_tkixi_wud.streetlight_collisions.find() 
         data = []
+
+
         for item in tc:
             data.append({'streetlight':item.get('streetlight'),
                             'collisions':item.get('collisions')})
@@ -37,15 +34,16 @@ class pairwiseCorrelation(dml.Algorithm):
             data = data[:20]
             
         data = pd.DataFrame(data) # constructs DataFrame with data
+        corr = pd.DataFrame(data.corr()) # Compute pairwise correlation of accumulated streetlights and collisions
+        # pprint(corr)
 
-        corr = pd.DataFrame(data.corr()) # Compute pairwise correlation of columns
-        pprint(corr)
-
-        repo.dropCollection("correlation")
-        repo.createCollection("correlation")
+        
+        
 
         r = {'col1': 'streetlight', 'col2': 'collisions', 'value': corr['streetlight']['collisions']}
         pprint(r)
+        repo.dropCollection("correlation")
+        repo.createCollection("correlation")
         repo['nhuang54_tkixi_wud.correlation'].insert(r)
         repo['nhuang54_tkixi_wud.correlation'].metadata({'complete':True})
         print(repo['nhuang54_tkixi_wud.correlation'].metadata())
