@@ -3,32 +3,45 @@
 Nathaniel Smith | BU: smithnj | github: njsmithh </br>
 CS504 - Data Mechanics - Project 2
 
-## Proposal
-The City of Chicago is the third largest city in the United States. Like other urban areas, it has a relatively robust transit network connecting the city and the surrounding suburbs. The Chicago Transit Authority ('CTA') is tasked with management of the Chicago bus and the elevated-rail ('L') networks. It opts for a static fare, independent of distance traveled within the network and other possible variables unlike a city such as London, which has designated zones for determining fare. The Metra commuter rail, which serves the greater Northwestern Illinois area, does use a distance-based fare. But what if the CTA took an approach similar to Metra rail, while also taking into account "surge" style pricing (with congestion and ridership data) and while maintaining a more stable price for transit in lower-income areas?
+## Intent
+The City of Chicago currently has a flat rate of $2.50 for entry into the Elevated Rail ("L")  transit system. Other metropolitan transit systems such as Transport for London's Tube network have fare zones where, depending on your entry and exit into the system, a fare may be higher or lower. While the "L" infrastructure is currently incapable of tracking when passengers exit the system, is it still possible for Chicago to benefit from zone-based fares?
 
+Using data on station popularity, community socioeconomic hardship, and taxi pick-up and drop-off, fare zones can be created for the "L" network that encourage transit in burdened areas of the network while offsetting this fare deficit by charging riders in more stressed parts of the network a higher fare.
+
+####*Would a zone based system for the 'L' benefit Chicago?* Two smaller questions to answer:
+1. *What would the zones look like?* Using the k-means algorithm, zones will be created with a varying number of clusters, taking into account the popularity, community hardship, and community taxi demand for each station. Each cluster will represent a zone, with all stations in it now residing in that zone.
+
+2. *Would these zones benefit socioeconimically disadvantaged commuters while raising a similar amount of revenue?* Statistical analysis will be done taking into account the fare zones to see how underserved socioeconomically burdened areas are and whether lowering their fare (while increasing other zone fares) will produce a similar amount of revenue.
+--
+## Insights
+Woah.
+--
+## Scripts
+| Name                     | Purpose                                                                    | Datasets Used                                                  |
+|--------------------------|----------------------------------------------------------------------------|----------------------------------------------------------------|
+| create_taxiagg           | Calculate taxi ride totals for Community Areas.                            | get_taxitrips                                                  |
+| create_stationpopularity | Calculate station popularity statistics.                                   | get_stationstats                                               |
+| create_stationhardship   | Match Community Hardship Index with stations.                              | get_censushardship get_stations                                |
+| create_metricarray       | Create final metric array of taxi rides, station popularity, and hardship. | create_taxiagg create_stationpopularity create_stationhardship |
+| do_kmeans                | Perform k-means analysis on metric array to gather stations into clusters. | create_metricarray                                             |
+| do_stats                 | INSERT HERE                                                                | INSERT HERE                                                    |
+--
 ## Data Sets
-| Portal              | Dataset                                                                                                                                    | Notes                                             |
-|---------------------|--------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------|
-| Chicago Data Portal | ['L' Station Ridership Stats](https://data.cityofchicago.org/Transportation/CTA-Ridership-L-Station-Entries-Monthly-Day-Type-A/t2rn-p8d7)  | Retrieved as .csv                                 |
-| Chicago Data Portal | [Chicago Census Tract Boundaries](https://data.cityofchicago.org/Facilities-Geographic-Boundaries/Boundaries-Census-Tracts-2010/5jrd-6zik) | Retrieved as .geojson                             |
-| Data.gov            | [Census Socioeconomic Hardship](https://catalog.data.gov/dataset/census-data-selected-socioeconomic-indicators-in-chicago-2008-2012-36e55) | Retrieved as .json                                |
-| datamechanics.io    | [Chicago Taxi Ridership Data](https://google.com/)                                                                                         | Retrieved as .json                                |
-| datamechanics.io    | [Chicago 'L' Station Geospatial Data](https://google.com/)                                                                                 | Retrieved as .kml, manually converted to .geojson |
-## Transformations
-Transformations should point to reducing/projecting data in a way to determine price for all L stations on a certain day, such as Weekday, Weekend, or Holiday.
-1. **create_travelstats**: Utilizes pandas library to aggregate ridership sums per station per month [aggregation]. A four year average is calculated after using the ridership sums [projection].
-
-    This can point to calculating whether or not a station should expect to be busy on a certain type of day (weekday, weekend, holiday) and adjust pricing accordingly.
-2. **create_communitydata**: Utilizes pandas and geopandas libaries to merge census socioeconomic hardship data and geospatial data for each specific Community Area Number [union] and drops [projection] unutilized census data.
-
-    Chicago uses Community Area Numbers as a way to identify specific regions. By joining these two databases, socioeconomic hardship is now linked with geospatial data of the neighborhood, which can lead to determining hardship of the area surrounding an L-station.
-    
-3. **create_mergedstations**: Utilizes geopandas libary to merge two distinct types of geospatial data: point and multipolygon. Points in Chicago L-station date are mapped onto [projection] the Chicago Community Area Numbers dataset.
-
+| Portal             | Name (Source Linked)                                                                                                                 | Filetype |
+|--------------------|--------------------------------------------------------------------------------------------------------------------------------------|----------|
+| Chicago Data Porta | [Census Tract Boundaries](https://data.cityofchicago.org/Facilities-Geographic-Boundaries/Boundaries-Census-Tracts-2010/5jrd-6zik)   | .geojson |
+| Chicago Data Porta | ['L' Station Statistics](https://data.cityofchicago.org/Transportation/CTA-Ridership-L-Station-Entries-Monthly-Day-Type-A/t2rn-p8d7) | .csv     |
+| Data.gov           | [Census Hardship Data](https://catalog.data.gov/dataset/census-data-selected-socioeconomic-indicators-in-chicago-2008-2012-36e55)    | .json    |
+| Data.gov           | [Chicago Taxi Trip Data](https://catalog.data.gov/dataset/taxi-trips)                                                                | .json    |
+| datamechanics.io   | [Chicago L-Stations](https://data.cityofchicago.org/Transportation/CTA-L-Rail-Stations-kml/4qtv-9w43)                                | .geojson |
 ---
 #### Library Dependencies
-* pandas, geopandas
+* pandas, geopandas, numpy
 * JSON
 * Data Mechanics Library, Provenance, Protoql
 * datetime
-* spatialindex
+* sodapy import Socrata
+* matplotlib.pyplot
+* sklearn
+* mpl_toolkits.mplot3d
+
