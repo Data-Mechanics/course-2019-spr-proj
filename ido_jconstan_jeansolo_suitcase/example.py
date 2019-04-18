@@ -204,17 +204,101 @@ class example(dml.Algorithm):
         t3 = project(r2, lambda t: (t[r2Addy], t[r2TotalValue]) ) # ('Address', 'Assessed Total')
         t4 = project(r7, lambda t: (t[r7Addy], t[r7SchoolName]) ) # ('Address', 'School Name')
         t5 = project(select(product(t3, t4), lambda t: t[0][0] == t[1][0]), lambda t: (t[0][0], t[1][1], t[0][1]) ) 
-        
+
         # ('Address') ; students who do not take the bus
         t6 = project(r6, lambda t: (t[r6Addy]) )
 
         # ('Address', 'School Name', 'Assessed Total', 'Y') ; students who take the bus
         t7 = project(t5, lambda t: (t[0], t[1], t[2], 'Y') )
-        t8 = select(t7, lambda t: (t[0] not in t6) )
+        t8 = select(t7, lambda t: (t[0] not in t6 ) )
+
+        cat1 = select(t8, lambda t: (t[2] < 500000))
+        #print('CAT1', cat1)
+        proj_cat1 = project(cat1,lambda t:('less than 500k',1))
+        num_cat1 = aggregate(proj_cat1,sum)
+        print('NUM_CAT1',num_cat1)
+
+        cat2 = select(t8, lambda t: (t[2] >= 500000 and t[2] < 600000))
+        #print('CAT2', cat2)
+        proj_cat2 = project(cat2,lambda t:('500k-600k',1))
+        num_cat2 = aggregate(proj_cat2,sum)
+        print('NUM_CAT2',num_cat2)
+
+        cat3 = select(t8, lambda t: (t[2] >= 600000 and t[2] < 700000))
+        #print('CAT3', cat3)
+        proj_cat3 = project(cat3,lambda t:('600k-700k',1))
+        num_cat3 = aggregate(proj_cat3,sum)
+        print('NUM_CAT3',num_cat3)
+
+        cat4 = select(t8, lambda t: (t[2] >= 700000 and t[2] < 800000))
+        #print('CAT4', cat4)
+        proj_cat4 = project(cat4,lambda t:('700k-800k',1))
+        num_cat4 = aggregate(proj_cat4,sum)
+        print('NUM_CAT4',num_cat4)
+
+        cat5 = select(t8, lambda t: (t[2] >= 800000 and t[2] < 900000))
+        #print('CAT5', cat5)
+        proj_cat5 = project(cat5,lambda t:('800k-900k',1))
+        num_cat5 = aggregate(proj_cat5,sum)
+        print('NUM_CAT5',num_cat5)
+
+        cat6 = select(t8, lambda t: (t[2] >= 900000 and t[2] < 1000000))
+        #print('CAT6', cat6)
+        proj_cat6 = project(cat6,lambda t:('900k-1M',1))
+        num_cat6 = aggregate(proj_cat6,sum)
+        print('NUM_CAT6',num_cat6)
+
+        cat7 = select(t8, lambda t: (t[2] >= 1000000))
+        #print('CAT7', cat7)
+        proj_cat7 = project(cat7,lambda t:('Over 1M',1))
+        num_cat7 = aggregate(proj_cat7,sum)
+        print('NUM_CAT7',num_cat7)
 
         # ('Address', 'School Name', 'Assessed Total', 'N') ; students who do not take the bus
         t9 = project(t5, lambda t: (t[0], t[1], t[2], 'N') )
         t10 = select(t9, lambda t: (t[0] in t6) )
+
+        cat11 = select(t10, lambda t: (t[2] < 500000))
+        #print('CAT11', cat11)
+        proj_cat11 = project(cat11,lambda t:('less than 500k',1))
+        num_cat11 = aggregate(proj_cat11,sum)
+        print('NUM_CAT11',num_cat11)
+
+        cat12 = select(t10, lambda t: (t[2] >= 500000 and t[2] < 600000))
+        #print('CAT12', cat12)
+        proj_cat12 = project(cat12,lambda t:('500k-600k',1))
+        num_cat12 = aggregate(proj_cat12,sum)
+        print('NUM_CAT12',num_cat12)
+
+        cat13 = select(t10, lambda t: (t[2] >= 600000 and t[2] < 700000))
+        #print('CAT3', cat3)
+        proj_cat13 = project(cat13,lambda t:('600k-700k',1))
+        num_cat13 = aggregate(proj_cat13,sum)
+        print('NUM_CAT13',num_cat13)
+
+        cat14 = select(t10, lambda t: (t[2] >= 700000 and t[2] < 800000))
+        #print('CAT4', cat4)
+        proj_cat14 = project(cat14,lambda t:('700k-800k',1))
+        num_cat14 = aggregate(proj_cat14,sum)
+        print('NUM_CAT14',num_cat14)
+
+        cat15 = select(t10, lambda t: (t[2] >= 800000 and t[2] < 900000))
+        #print('CAT5', cat15)
+        proj_cat15 = project(cat15,lambda t:('800k-900k',1))
+        num_cat15 = aggregate(proj_cat15,sum)
+        print('NUM_CAT15',num_cat15)
+
+        cat16 = select(t10, lambda t: (t[2] >= 900000 and t[2] < 1000000))
+        #print('CAT16', cat16)
+        proj_cat16 = project(cat16,lambda t:('900k-1M',1))
+        num_cat16 = aggregate(proj_cat6,sum)
+        print('NUM_CAT16',num_cat16)
+
+        cat17 = select(t10, lambda t: (t[2] >= 1000000))
+        #print('CAT17', cat17)
+        proj_cat17 = project(cat17,lambda t:('Over 1M',1))
+        num_cat17 = aggregate(proj_cat17,sum)
+        print('NUM_CAT17',num_cat17)
 
         # ('Address', 'School Name', 'Assessed Total', 'Y/N do they take the bus')
         t11 = union(t8, t10)
