@@ -53,7 +53,7 @@ class savings(dml.Algorithm):
                 rdict['theoretical_percentage_change'] = fracDec
                 r.append(rdict)
 
-        print(r)
+        # print(r)
 
 
         # df = df1.filter(['hod', 'mean_travel_time'])

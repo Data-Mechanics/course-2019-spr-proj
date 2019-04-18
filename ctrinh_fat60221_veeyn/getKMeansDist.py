@@ -173,13 +173,7 @@ class getNewMean(dml.Algorithm):
 # getNewMean.execute()
 
 
-
-
-
-
-
-
-
-
-
-
+# getNewMean.execute()
+# doc = getNewMean.provenance()
+# print(doc.get_provn())
+# print(json.dumps(json.loads(doc.serialize()), indent=4))

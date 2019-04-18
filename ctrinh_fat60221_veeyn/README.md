@@ -7,6 +7,8 @@ Subfolder for Christopher Trinh, Tom Kang, and Vee Nguyen in the Spring 2019 ite
 * `json` module
 * `sklearn.cluster` module
 * `numpy` module
+* `gmplot` module 
+* `GoogleMapPlotter` module
 
 ## Project 2
 
@@ -41,7 +43,7 @@ We utilized the `k-means` algorithm in order to the optimal placement of coffee 
 
 ### Building
 
-Simply run `execute.py` on the root project directory to run the scripts.
+Simply run `execute.py` on the root project directory to run the scripts. However, the `yelpfusion.py` module that includes the connection to the Yelp Fusion API has difficult running via `execute.py`, so you might have to run each module individually. 
 
 ## Project 1
 

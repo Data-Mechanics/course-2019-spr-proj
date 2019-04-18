@@ -9,6 +9,8 @@ import pandas as pd
 import json
 auth = json.load(open('../auth.json', 'r'))
 
+# import sys
+# sys.path.insert(0, 'yelp/')
 
 import yelpfusion as yf
 API_KEY= auth['services']['yelpfusionportal']['key']

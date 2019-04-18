@@ -17,7 +17,7 @@ def csv_to_json(url, trial):
     val = entries[0].split('\r')  # retrieve column names for keys
     del val[-1]
     keys = val[0].split(',')
-    print(val)
+    # print(val)
 
     if trial == True:
         for row in entries[1:10]:
@@ -52,7 +52,7 @@ class getMBTA(dml.Algorithm):
         url = 'http://datamechanics.io/data/final_mbta.csv'
         mbtaJSON = csv_to_json(url, trial)
 
-        print(mbtaJSON[0])
+        # print(mbtaJSON[0])
 
 
         repo.dropCollection("getMBTA")

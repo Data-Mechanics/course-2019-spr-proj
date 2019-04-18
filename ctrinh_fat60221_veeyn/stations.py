@@ -38,6 +38,8 @@ class stations(dml.Algorithm):
         else:
             switchTrial = len(r['data'])
 
+        # print(len(r['data']))
+
         for i in range(switchTrial):
             rindict = {}
             name = r['data'][i]['attributes']['name']
@@ -55,7 +57,8 @@ class stations(dml.Algorithm):
                 address = "43 South Street, Boston, MA"
             yfres = yf.search(API_KEY, "coffee shop", address)
             csres = []
-            for j in range(switchTrial):
+            for j in range(len(yfres['businesses'])):
+                # print(j)
                 csdict = {}
                 csdict["name"] = yfres['businesses'][j]['name'].replace(".", "")
                 csdict["coordinates"] = yfres['businesses'][j]['coordinates']
@@ -71,6 +74,11 @@ class stations(dml.Algorithm):
         r = json.loads(response)
         reslist = []
 
+        if trial == True:
+            switchTrial = 2
+        else:
+            switchTrial = len(r['data'])
+
         for i in range(switchTrial):
             rindict = {}
             name = r['data'][i]['attributes']['name']
@@ -85,7 +93,7 @@ class stations(dml.Algorithm):
             rindict['address'] = address
             yfres = yf.search(API_KEY, "coffee shop", address)
             csres = []
-            for j in range(switchTrial):
+            for j in range(len(yfres['businesses'])):
                 csdict = {}
                 csdict["name"] = yfres['businesses'][j]['name'].replace(".", "")
                 csdict["coordinates"] = yfres['businesses'][j]['coordinates']
@@ -101,6 +109,11 @@ class stations(dml.Algorithm):
         r = json.loads(response)
         reslist = []
 
+        if trial == True:
+            switchTrial = 2
+        else:
+            switchTrial = len(r['data'])
+
         for i in range(switchTrial):
             rindict = {}
             name = r['data'][i]['attributes']['name']
@@ -115,7 +128,7 @@ class stations(dml.Algorithm):
             rindict['address'] = address
             yfres = yf.search(API_KEY, "coffee shop", address)
             csres = []
-            for j in range(switchTrial):
+            for j in range(len(yfres['businesses'])):
                 csdict = {}
                 csdict["name"] = yfres['businesses'][j]['name'].replace(".", "")
                 csdict["coordinates"] = yfres['businesses'][j]['coordinates']
@@ -131,6 +144,11 @@ class stations(dml.Algorithm):
         r = json.loads(response)
         reslist = []
 
+        if trial == True:
+            switchTrial = 2
+        else:
+            switchTrial = len(r['data'])
+
         for i in range(switchTrial):
             rindict = {}
             name = r['data'][i]['attributes']['name']
@@ -145,7 +163,7 @@ class stations(dml.Algorithm):
             rindict['address'] = address
             yfres = yf.search(API_KEY, "coffee shop", address)
             csres = []
-            for j in range(switchTrial):
+            for j in range(len(yfres['businesses'])):
                 csdict = {}
                 csdict["name"] = yfres['businesses'][j]['name'].replace(".", "")
                 csdict["coordinates"] = yfres['businesses'][j]['coordinates']
@@ -160,8 +178,8 @@ class stations(dml.Algorithm):
         
         r = [resdict]
 
-        sout = open("mbta-stations.txt", "w")
-        print(json.dumps(resdict), file=sout)
+        # sout = open("mbta-stations.txt", "w")
+        # print(json.dumps(resdict), file=sout)
 
         repo.dropCollection("stations")
         repo.createCollection("stations")
