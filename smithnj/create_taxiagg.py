@@ -4,6 +4,7 @@ import prov.model
 import datetime
 import uuid
 import pandas as pd
+
 ############################################
 # create_taxiagg.py
 # Script for creating taxi community area pickup and dropoff counts.
