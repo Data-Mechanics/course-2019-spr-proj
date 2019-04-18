@@ -1,3 +1,18 @@
+
+
+1 of 4,554
+AHOI
+Inbox
+x
+
+roberto alcade diego
+Attachments
+10:30 PM (2 minutes ago)
+to me
+
+
+5 Attachments
+
 import dml
 import prov.model
 import datetime
@@ -12,8 +27,6 @@ class ChangesOverTime(dml.Algorithm):
 
     @staticmethod
     def execute(trial=False):
-
-        startTime = datetime.datetime.now()
         ''' calculates the changes over time, and mean change over time of total accidents in revere '''
 
         client = dml.pymongo.MongoClient()
@@ -26,9 +39,21 @@ class ChangesOverTime(dml.Algorithm):
         docs = collection.find()
 
         docList = []
-        for doc in docs:
-            date = doc['crashdate'][-4:]
-            docList += [(date, doc)]
+        
+        
+        if not trial:
+            for doc in docs:
+                date = doc['crashdate'][-4:]
+                docList += [(date, doc)]
+        else:
+            i = 0
+            for doc in docs:
+                i+=1
+                if i%10 == 0:
+                    date = doc['crashdate'][-4:]
+                    docList += [(date, doc)]
+    
+                    
 
         # aggregate accidents per year
         accidentsPerYear = ChangesOverTime.aggregateYears(docList, sum)
@@ -63,10 +88,6 @@ class ChangesOverTime(dml.Algorithm):
         repo['darren68_gladding_ralcalde.MainStats'].metadata({'complete': True})
 
         repo.logout()
-        endTime = datetime.datetime.now()
-
-        return {"start": startTime, "end": endTime}
-
 
 
 
