@@ -66,12 +66,12 @@ class RetrieveCollegesUniversities(dml.Algorithm):
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet',
         # 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/')  # The event log.
-        doc.add_namespace('bdp', 'http://bostonopendata-boston.opendata.arcgis.com/datasets/')
+        doc.add_namespace('bdp2', 'http://bostonopendata-boston.opendata.arcgis.com/datasets/')
 
         this_script = doc.agent('alg:yufeng72#RetrieveCollegesUniversities',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
 
-        resource = doc.entity('bdp:cbf14bb032ef4bd38e20429f71acb61a_2',
+        resource = doc.entity('bdp2:cbf14bb032ef4bd38e20429f71acb61a_2',
                               {'prov:label': 'Colleges and Universities', prov.model.PROV_TYPE: 'ont:DataResource',
                                'ont:Extension': 'csv'})
 
@@ -84,10 +84,11 @@ class RetrieveCollegesUniversities(dml.Algorithm):
                   )
 
         collegesUniversities = doc.entity('dat:yufeng72#collegesUniversities',
-                          {prov.model.PROV_LABEL: 'Colleges and Universities', prov.model.PROV_TYPE: 'ont:DataSet'})
+                                          {prov.model.PROV_LABEL: 'Colleges and Universities',
+                                           prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(collegesUniversities, this_script)
         doc.wasGeneratedBy(collegesUniversities, get_collegesUniversities, endTime)
-        doc.wasDerivedFrom(collegesUniversities, resource, get_collegesUniversities, get_collegesUniversities,
+        doc.wasDerivedFrom(resource, collegesUniversities, get_collegesUniversities, get_collegesUniversities,
                            get_collegesUniversities)
 
         repo.logout()

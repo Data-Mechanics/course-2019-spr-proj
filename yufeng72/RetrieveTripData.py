@@ -36,9 +36,16 @@ class RetrieveTripData(dml.Algorithm):
             r_parse.append(temp)
         r_parse.remove(r_parse[0])
 
+        if not trial:
+            result = list(r_parse)
+        else:
+            result = []
+            for i in range(20):
+                result.append(r_parse[i])
+
         repo.dropCollection("tripData")
         repo.createCollection("tripData")
-        repo['yufeng72.tripData'].insert_many(r_parse)
+        repo['yufeng72.tripData'].insert_many(result)
         repo['yufeng72.tripData'].metadata({'complete': True})
         print(repo['yufeng72.tripData'].metadata())
 
@@ -65,12 +72,12 @@ class RetrieveTripData(dml.Algorithm):
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet',
         # 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/')  # The event log.
-        doc.add_namespace('bdp', 'http://datamechanics.io/data/yufeng72/')
+        doc.add_namespace('bdp1', 'http://datamechanics.io/data/yufeng72/')
 
         this_script = doc.agent('alg:yufeng72#RetrieveTripData',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
 
-        resource = doc.entity('bdp:Bluebikes_Tripdata_201809',
+        resource = doc.entity('bdp1:Bluebikes_Tripdata_201809',
                               {'prov:label': 'Trip Data', prov.model.PROV_TYPE: 'ont:DataResource',
                                'ont:Extension': 'csv'})
 
@@ -86,7 +93,7 @@ class RetrieveTripData(dml.Algorithm):
                           {prov.model.PROV_LABEL: 'Trip Data', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(tripData, this_script)
         doc.wasGeneratedBy(tripData, get_tripData, endTime)
-        doc.wasDerivedFrom(tripData, resource, get_tripData, get_tripData, get_tripData)
+        doc.wasDerivedFrom(resource, tripData, get_tripData, get_tripData, get_tripData)
 
         repo.logout()
 
