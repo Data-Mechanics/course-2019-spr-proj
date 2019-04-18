@@ -1,10 +1,10 @@
-<h1>CS 504 Project #1 & #2</h1>
+<h1>CS 504 Project #1 & Project #2</h1>
 
 <h2>Inspiration</h2>
 
 Bluebikes is a public bike share system in Boston, Brookline, Cambridge and Somerville. I ride their bike to BU everyday and it's really convenient. However, sometimes I find it hard to find a bike or a dock to park my bike because the bike stations are not located very reasonably. For example, the Bluebike station at BU campus has only one bike station with 10 docks, so when I ride to campus, I sometimes have to look for another bike station nearby because that one is already full. That actually made me late for CS504 class for twice this semester! So I am thinking, if Bluebike can learn more about their bike-using situation and set their bike stations more properly, it will be very nice for people who use their bike service like me. Thus in this project, I will try to find out which places are good choices to place new Bluebike stations.
 
-The first step to address the problem I chose is to look for some datasets that are useful for this project. I picked 5 datasets as beginning and I'll introduce them below. The second move is to use these datasets to get some information I need, that requires me to perform some data transformations. After project 1, I’ve analyzed the Bluebike trip data and other information and found out how many bike stations are close to each college and university. I also got the frequency of Bluebike trip around each college. Then in project 2, I did some statistical analysis to see if college students are the main customer of the Bluebike service and if it’s practicable to place more bike stations for them. I also got some statistics about the relation between a college’s student number, bike station number and trip number. Then I set some constraints and solve them as satisfaction and optimization problems to find out what is the best strategy to place new bike stations nearby colleges and universities so that students' riding experience can be enchanced. After that I got some new relation between these information and compared them with the old one. Thus, the problem can be adressed by data mechanics tools and techniques.
+The first step to address the problem I chose is to look for some datasets that are useful for this project. I picked 5 datasets as beginning and I'll introduce them below. The second move is to use these datasets to get some information I need, that requires me to perform some data transformations. After project 1, I’ve analyzed the Bluebike trip data and other information and found out how many bike stations are close to each college and university. I also got the frequency of Bluebike trip around each college. Then in project 2, I did some statistical analysis to see if college students are the main customer of the Bluebike service and if it’s practicable to place more bike stations for them. I also got some statistics about the relation between a college’s student number, bike station number and trip number. Then I set some constraints and solve them as satisfaction and optimization problems so that I can find out what is the best strategy to place new bike stations nearby colleges and universities (so students' riding experience can be enchanced at most under the same condition). After that I got some updated statistics between these information and compared them with the old one. Thus, the problem of where to place new Bluebike stations can be adressed by data mechanics tools and techniques.
 
 <h2>Datasets</h2>
 There are five datasets at this time, each has a retrieve algorithm in separated python files:
@@ -45,6 +45,8 @@ Constraint 2: Add that much bike stations at one time is not practical, so how a
 <h2>Statistical Analysis</h2>
 
 I did some statistical analysis to see if college students are the main customer of the Bluebike service and if it’s practicable to place more bike stations for them. I also got some statistics about the relation between a college’s bike station number, bike trip number and student number. After I solved the constraint satisfaction and optimization problems, I got some of these statistics (like correlation coefficients) updated and compared them with the old one.
+
+Code implemented in StatisticalAnalysis.py.
 
 <h2>Running the Execute Script for the Project</h2>
 
