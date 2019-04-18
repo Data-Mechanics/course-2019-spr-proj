@@ -54,8 +54,12 @@ class do_kmeans(dml.Algorithm):
         variable_names = ['Popularity', 'Hardship Index', 'Taxi Demand']
         # ---[ KMeans Operation ]-----------------------------------
         fignum = 1
-        titles = ["8 clusters/zones", "6 clusters/zones", "4 clusters/zones", "3 clusters/zones"]
-        estimators = [('kmeans_8', KMeans(n_clusters=8)), ('kmeans_6', KMeans(n_clusters=6)),
+        if (trial):
+            titles = ["8 clusters/zones", "3 clusters/zones"]
+            estimators = [('kmeans_8', KMeans(n_clusters=8)), ('kmeans_3', KMeans(n_clusters=3))]
+        else:
+            titles = ["8 clusters/zones", "6 clusters/zones", "4 clusters/zones", "3 clusters/zones"]
+            estimators = [('kmeans_8', KMeans(n_clusters=8)), ('kmeans_6', KMeans(n_clusters=6)),
                       ('kmeans_4', KMeans(n_clusters=4)), ('kmeans_3', KMeans(n_clusters=3))]
         clusters = []
         for name, est in estimators:
@@ -77,9 +81,11 @@ class do_kmeans(dml.Algorithm):
         df_clusters = pd.DataFrame.from_records(clusters)
         df_clusters = df_clusters.transpose()
         df_final = df.join(df_clusters)
-        columns = ["HardshipIndex", "TaxiDemand", "StationID", "Hardship", "8Zones", "6Zones", "4Zones", "3Zones"]
+        if (trial):
+            columns = ["HardshipIndex", "TaxiDemand", "StationID", "Hardship", "8Zones", "3Zones"]
+        else:
+            columns = ["HardshipIndex", "TaxiDemand", "StationID", "Hardship", "8Zones", "6Zones", "4Zones", "3Zones"]
         df_final.columns = columns
-        print(df_final.head(10))
         # ---[ MongoDB Insertion ]-----------------------------------
         df = df_final.to_json(orient="records")
         loaded = json.loads(df)
