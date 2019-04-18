@@ -125,12 +125,6 @@ class retrieveDatasets(dml.Algorithm):
         doc.wasGeneratedBy(streetLights, get_streetlights, endTime)
         doc.wasDerivedFrom(streetLights, resource, get_streetlights, get_streetlights, get_streetlights)
 
-
-        trafficSignals = doc.entity('dat:nhuang54_tkixi_wud#trafficSignals', {prov.model.PROV_LABEL:'Traffic Signals Locations', prov.model.PROV_TYPE:'ont:DataSet'})
-        doc.wasAttributedTo(trafficSignals, this_script)
-        doc.wasGeneratedBy(trafficSignals, get_trafficSignals, endTime)
-        doc.wasDerivedFrom(trafficSignals, resource, get_trafficSignals, get_trafficSignals, get_trafficSignals)
-
         # Dataset : Boston Vision Zero Crash Records
         this_script = doc.agent('alg:tkixi#retrieveDatasets', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
         resource = doc.entity('bdp:boston-vision-zero-crash-records', {'prov:label':'Vision Zero Crash Records', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'csv'})

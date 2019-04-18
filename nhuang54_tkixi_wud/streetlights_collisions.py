@@ -172,7 +172,7 @@ class streetlights_collisions(dml.Algorithm):
         doc.add_namespace('dat', 'http://datamechanics.io/?prefix=tkixi/')
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#')
         doc.add_namespace('log', 'http://datamechanics.io/log/')
-        
+    
         
         this_script = doc.agent('alg:nhuang54_tkixi_wud#streetlightcollision_transformation', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
         resource1 = doc.entity('dat:nhuang54_tkixi_wud#streetlight_locations', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'csv'})

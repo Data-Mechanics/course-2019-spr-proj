@@ -44,7 +44,7 @@ class pairwiseCorrelation(dml.Algorithm):
         repo.dropCollection("correlation")
         repo.createCollection("correlation")
 
-        r = {'field1': 'streetlight', 'field2': 'collisions', 'value': corr['streetlight']['collisions']}
+        r = {'col1': 'streetlight', 'col2': 'collisions', 'value': corr['streetlight']['collisions']}
         pprint(r)
         repo['nhuang54_tkixi_wud.correlation'].insert(r)
         repo['nhuang54_tkixi_wud.correlation'].metadata({'complete':True})
@@ -75,7 +75,7 @@ class pairwiseCorrelation(dml.Algorithm):
 
         this_script = doc.agent('alg:nhuang54_tkixi_wud#pairwiseCorrelation', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
         
-        resource2 = doc.entity('dat:nhuang54_tkixi_wud#streetlights', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        resource1 = doc.entity('dat:nhuang54_tkixi_wud#streetlights', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
 
         getCorrelation = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(getCorrelation, this_script)
@@ -90,7 +90,7 @@ class pairwiseCorrelation(dml.Algorithm):
         bikestreetlight_correlation = doc.entity('dat:nhuang54_tkixi_wud#bikestreetlight_correlation', {prov.model.PROV_LABEL:'Correlation of number of bike incidents and street lights present', prov.model.PROV_TYPE:'ont:DataSet'})
         doc.wasAttributedTo(bikestreetlight_correlation, this_script)
         doc.wasGeneratedBy(bikestreetlight_correlation, getCorrelation, endTime)
-        doc.wasDerivedFrom(bikestreetlight_correlation, resource1, resource2, getCorrelation, getCorrelation)
+        doc.wasDerivedFrom(bikestreetlight_correlation, resource1, getCorrelation, getCorrelation)
 
         repo.logout()
                   
