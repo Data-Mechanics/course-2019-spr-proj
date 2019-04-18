@@ -34,9 +34,14 @@ class coffee(dml.Algorithm):
 
         # print(res)
 
-        for num in range(len(res['businesses'])):
-            name = res['businesses'][num]['name'].replace(".", "")
-            r[name] = res['businesses'][num]['coordinates']
+        if trial == True:
+            for num in range(5):
+                name = res['businesses'][num]['name'].replace(".", "")
+                r[name] = res['businesses'][num]['coordinates']
+        else:
+            for num in range(len(res['businesses'])):
+                name = res['businesses'][num]['name'].replace(".", "")
+                r[name] = res['businesses'][num]['coordinates']
 
         # r = r.to_dict(orient='records')
         # r = json.loads(r)
@@ -96,10 +101,10 @@ class coffee(dml.Algorithm):
 
 # This is example code you might use for debugging this module.
 # Please remove all top-level function calls before submitting.
-coffee.execute()
-doc = coffee.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
+# coffee.execute()
+# doc = coffee.provenance()
+# print(doc.get_provn())
+# print(json.dumps(json.loads(doc.serialize()), indent=4))
 
 
 ## eof

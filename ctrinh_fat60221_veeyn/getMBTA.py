@@ -8,20 +8,30 @@ import pandas as pd
 
 import json
 
-def csv_to_json(url):
+def csv_to_json(url, trial):
     file = urllib.request.urlopen(url).read().decode("utf-8")  # retrieve file from datamechanics.io
     finalJson = []
     entries = file.split('\n')
 
     # print(entries[0])
     val = entries[0].split('\r')  # retrieve column names for keys
+    del val[-1]
     keys = val[0].split(',')
-    for row in val[1:-1]:
-        values = row.split(',')
-        values[-1] = values[-1][:-1]
-        dictionary = dict([(keys[i], values[i]) for i in range(len(keys))])
-        finalJson.append(dictionary)
-    print(finalJson)
+    print(val)
+
+    if trial == True:
+        for row in entries[1:10]:
+            values = row.split(',')
+            values[-1] = values[-1][:-1]
+            dictionary = dict([(keys[i], values[i]) for i in range(len(keys))])
+            finalJson.append(dictionary)
+    else:
+        for row in entries[1:-1]:
+            values = row.split(',')
+            values[-1] = values[-1][:-1]
+            dictionary = dict([(keys[i], values[i]) for i in range(len(keys))])
+            finalJson.append(dictionary)
+
     return finalJson
 
 class getMBTA(dml.Algorithm):
@@ -40,12 +50,13 @@ class getMBTA(dml.Algorithm):
         repo.authenticate('ctrinh_fat60221_veeyn', 'ctrinh_fat60221_veeyn')
 
         url = 'http://datamechanics.io/data/final_mbta.csv'
-        mbtaJSON = csv_to_json(url)
-        #Create id_name list
+        mbtaJSON = csv_to_json(url, trial)
+
+        print(mbtaJSON[0])
 
 
-        repo.dropCollection("mbta")
-        repo.createCollection("mbta")
+        repo.dropCollection("getMBTA")
+        repo.createCollection("getMBTA")
         repo['ctrinh_fat60221_veeyn.getMBTA'].insert_many(mbtaJSON)
         repo['ctrinh_fat60221_veeyn.getMBTA'].metadata({'complete':True})
         print(repo['ctrinh_fat60221_veeyn.getMBTA'].metadata())
@@ -94,7 +105,7 @@ class getMBTA(dml.Algorithm):
 
 # This is example code you might use for debugging this module.
 # Please remove all top-level function calls before submitting.
-getMBTA.execute()
-doc = getMBTA.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
+# getMBTA.execute()
+# doc = getMBTA.provenance()
+# print(doc.get_provn())
+# print(json.dumps(json.loads(doc.serialize()), indent=4))

@@ -24,20 +24,23 @@ class uber(dml.Algorithm):
         url1 = 'http://datamechanics.io/data/ctrinh_fat60221_veeyn/uber-peak-hourly-2018-1.csv'
         df1 = pd.read_csv(url1)
 
+        # print("just reading regular")
         # print(df1)
 
-        url2 = 'http://datamechanics.io/data/ctrinh_fat60221_veeyn/uber-peak-hourly-2018-2.csv'
-        df2 = pd.read_csv(url2)
+        if (trial == False):
+            # print("READING THIS WOO")
+            url2 = 'http://datamechanics.io/data/ctrinh_fat60221_veeyn/uber-peak-hourly-2018-2.csv'
+            df2 = pd.read_csv(url2)
 
-        url3 = 'http://datamechanics.io/data/ctrinh_fat60221_veeyn/uber-peak-hourly-2018-3.csv'
-        df3 = pd.read_csv(url3)
+            url3 = 'http://datamechanics.io/data/ctrinh_fat60221_veeyn/uber-peak-hourly-2018-3.csv'
+            df3 = pd.read_csv(url3)
 
-        url4 = 'http://datamechanics.io/data/ctrinh_fat60221_veeyn/uber-peak-hourly-2018-4.csv'
-        df4 = pd.read_csv(url4)
+            url4 = 'http://datamechanics.io/data/ctrinh_fat60221_veeyn/uber-peak-hourly-2018-4.csv'
+            df4 = pd.read_csv(url4)
 
-        df1 = df1.append(df2)
-        df1 = df1.append(df3)
-        df1 = df1.append(df4)
+            df1 = df1.append(df2)
+            df1 = df1.append(df3)
+            df1 = df1.append(df4)
 
         df = df1.filter(['hod', 'mean_travel_time'])
         r = df.to_dict(orient='records')
@@ -46,8 +49,13 @@ class uber(dml.Algorithm):
         rdf = pd.DataFrame(r)
 
         grouped = rdf.groupby(['hod']).agg(sum)
+        
+        # grouped.columns = ['hod', 'aggregate_mean_travel_times']
 
         r = grouped.reset_index().to_dict('records')
+
+        for i in range(len(r)):
+            r[i]["aggregate_mean_travel_times"] = r[i].pop('mean_travel_time')
         # print(r)
 
         # print(df2.to_dict(orient='records')[0])
@@ -104,10 +112,10 @@ class uber(dml.Algorithm):
 
 # This is example code you might use for debugging this module.
 # Please remove all top-level function calls before submitting.
-uber.execute()
-doc = uber.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
+# uber.execute()
+# doc = uber.provenance()
+# print(doc.get_provn())
+# print(json.dumps(json.loads(doc.serialize()), indent=4))
 
 
 ## eof

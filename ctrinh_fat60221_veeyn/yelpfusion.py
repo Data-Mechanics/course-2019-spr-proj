@@ -25,6 +25,9 @@ import requests
 import sys
 import urllib
 
+auth = json.load(open('../auth.json', 'r'))
+
+API_KEY= auth['services']['yelpfusionportal']['key']
 
 # This client code can run on Python 2.x or 3.x.  Your imports can be
 # simpler if you only need one of those.
@@ -45,7 +48,7 @@ except ImportError:
 # It now uses private keys to authenticate requests (API Key)
 # You can find it on
 # https://www.yelp.com/developers/v3/manage_app
-API_KEY= "QDgDC978iTKi0REpCdl57wm7cj4GdR39pshHcOa1xH2lllBJWAuISYhUnKncrOeZQss43zLgOPzxuD3PlNcgacLIbJmOm5-7ZXQrTmIq5nDZj2Ed_zR6BQkHhDOVXHYx" 
+# API_KEY= "QDgDC978iTKi0REpCdl57wm7cj4GdR39pshHcOa1xH2lllBJWAuISYhUnKncrOeZQss43zLgOPzxuD3PlNcgacLIbJmOm5-7ZXQrTmIq5nDZj2Ed_zR6BQkHhDOVXHYx" 
 
 
 # API constants, you shouldn't have to change these.

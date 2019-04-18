@@ -14,11 +14,25 @@ def aggregate(R, f):
 
 print(testData)
 
+print()
 df = pd.DataFrame(testData)
 
 grouped = df.groupby(['hod']).agg(sum)
 
-print(grouped.reset_index().to_dict('records'))
+# grouped.rename(columns={'hod':'hod',
+#                         'mean_travel_times':'aggregate_mean_travel_times'}, 
+#                  inplace=True)
+
+# grouped.columns = ['hod', 'aggregate_mean_travel_times']
+
+# df.rename(index=str, columns={"hod": "hod", "mean_travel_times": "aggregate_mean_travel_times"})
+
+r = (grouped.reset_index().to_dict('records'))
+
+for i in range(len(r)):
+    r[i]["aggregate_mean_travel_times"] = r[i].pop('mean_travel_time')
+
+print(r)
 
 # res = aggregate(testData, sum)
 

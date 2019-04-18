@@ -18,7 +18,11 @@ print(len(r[0]["Green Line B"]))
 # r = {}
 
 for i in range(len(r[0]["Green Line B"])):
+    rd = {}
     res = yf.search(API_KEY, "coffee shop", r[0]["Green Line B"][i]["address"])
+    for j in range(len(res['businesses'])):
+        name = res['businesses'][num]['name'].replace(".", "")
+        rd[name] = res['businesses'][num]['coordinates']
     print(res)
     print()
 
