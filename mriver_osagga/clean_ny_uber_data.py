@@ -6,6 +6,7 @@ import prov.model
 import datetime
 import uuid
 from io import StringIO
+import itertools
 
 class clean_ny_uber_data(dml.Algorithm):
     contributor = 'mriver_osagga'
@@ -22,10 +23,20 @@ class clean_ny_uber_data(dml.Algorithm):
         repo = client.repo
         repo.authenticate('mriver_osagga', 'mriver_osagga')
 
-        data = list(repo['mriver_osagga.ny_uber_data'].find())
+        data = repo['mriver_osagga.ny_uber_data'].find()
+        if (trial):
+            data = itertools.islice(data, 0, 600000, 1000)
         
-        # Projection to extract the neighborhoods list
-        r_p = [{"pickup_point": (val['Lat'], val['Lon']) } for val in data]
+        # Project + Select only the pickup times within the rush-hour boundaries
+        # defined from 7AM-10AM and from 5PM-8PM
+        r_p = list()
+        for val in data:
+            time = val['Date/Time']
+            pickup_hour = datetime.datetime.strptime(time, '%m/%d/%Y %H:%M:%S').hour
+            if ((7 <= pickup_hour <= 10) or (17 <= pickup_hour <= 19)):
+                # Check if the value is within rush hour boundaries
+                r_p.append({"Date/Time": time, "Lat": val['Lat'],"Lon": val['Lon']})
+
         r = json.loads(json.dumps(r_p))
 
         repo.dropCollection("ny_uber_data_clean")
@@ -86,7 +97,7 @@ class clean_ny_uber_data(dml.Algorithm):
 '''
 # This is example code you might use for debugging this module.
 # Please remove all top-level function calls before submitting.
-clean_bos_neighborhoods.execute()
+clean_ny_uber_data.execute(True)
 doc = clean_bos_neighborhoods.provenance()
 print(doc.get_provn())
 print(json.dumps(json.loads(doc.serialize()), indent=4))
