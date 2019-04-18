@@ -44,14 +44,15 @@ Constraint 2: Add that much bike stations at one time is not practical, so how a
 
 <h2>Statistical Analysis</h2>
 
-todo
+I did some statistical analysis to see if college students are the main customer of the Bluebike service and if it’s practicable to place more bike stations for them. I also got some statistics about the relation between a college’s bike station number, bike trip number and student number. After I solved the constraint satisfaction and optimization problems, I got some of these statistics (like correlation coefficients) updated and compared them with the old one.
 
 <h2>Running the Execute Script for the Project</h2>
 
+Run in trial mode (whole datasets):
 ```
 python execute.py yufeng72
 ```
-run in trial mode (where retrive function read less data and the algorithm work on less data):
+Run in trial mode (where retrive function read less data and the algorithm work on less data):
 ```
 python execute.py yufeng72 --trial
 ```
