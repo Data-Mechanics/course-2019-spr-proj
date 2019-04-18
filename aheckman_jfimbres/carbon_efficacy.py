@@ -36,7 +36,7 @@ class carbon_efficacy(dml.Algorithm):
         intense = t.project(t.select(carbon_intensity, lambda x: x['State'] in list_of_states), lambda x: (x['State'], x['2016']))
 
         emissions = t.aggregate(t.union(adj, unadj), np.mean)
-        efficacy = dict(t.aggregate(t.union(emissions, intense), lambda v: [(v[0]/v[1])]))
+        efficacy = dict(t.aggregate(t.union(emissions, intense), lambda v: (v[0]/v[1])))
         repo.dropCollection("carbon_efficacy")
         repo.createCollection("carbon_efficacy")
         repo['aheckman_jfimbres.carbon_efficacy'].insert(efficacy)
