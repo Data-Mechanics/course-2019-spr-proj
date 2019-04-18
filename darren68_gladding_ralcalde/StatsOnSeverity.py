@@ -1,3 +1,18 @@
+
+
+1 of 4,554
+AHOI
+Inbox
+x
+
+roberto alcade diego
+Attachments
+10:30 PM (1 minute ago)
+to me
+
+
+5 Attachments
+
 import dml
 import prov.model
 import datetime
@@ -14,8 +29,6 @@ class StatsOnSeverity(dml.Algorithm):
              'darren68_gladding_ralcalde.SeverityStats']
     @staticmethod
     def execute(trial=False):
-
-        startTime = datetime.datetime.now()
 
         client = dml.pymongo.MongoClient()
         repo = client.repo
@@ -39,26 +52,52 @@ class StatsOnSeverity(dml.Algorithm):
 
         FullList = []
 
-        for doc in docs:
+        
+        if not trial:
+            for doc in docs:
 
-            if doc['crashseverity'] == 'Non-fatal injury':
-                date = doc['crashdate'][-4:]
-                Nfatal += [(date, doc)]
-                Non_fatal += 1
-                TotalQuant += 1
+                if doc['crashseverity'] == 'Non-fatal injury':
+                    date = doc['crashdate'][-4:]
+                    Nfatal += [(date, doc)]
+                    Non_fatal += 1
+                    TotalQuant += 1
 
 
-            elif doc['crashseverity'] == 'Property damage only (none injured)':
-                date = doc['crashdate'][-4:]
-                Ninjury += [(date, doc)]
-                TotalQuant += 1
-                Property += 1
+                elif doc['crashseverity'] == 'Property damage only (none injured)':
+                    date = doc['crashdate'][-4:]
+                    Ninjury += [(date, doc)]
+                    TotalQuant += 1
+                    Property += 1
 
-            elif doc['crashseverity'] == 'Fatal injury':
-                date = doc['crashdate'][-4:]
-                Fatal += [(date, doc)]
-                TotalQuant += 1
-                FatalNumb += 1
+                elif doc['crashseverity'] == 'Fatal injury':
+                    date = doc['crashdate'][-4:]
+                    Fatal += [(date, doc)]
+                    TotalQuant += 1
+                    FatalNumb += 1
+        else:
+            i = 0
+            for doc in docs:
+                i+=1
+                if i%10 == 0:
+                    if doc['crashseverity'] == 'Non-fatal injury':
+                        date = doc['crashdate'][-4:]
+                        Nfatal += [(date, doc)]
+                        Non_fatal += 1
+                        TotalQuant += 1
+                    
+                    
+                    elif doc['crashseverity'] == 'Property damage only (none injured)':
+                        date = doc['crashdate'][-4:]
+                        Ninjury += [(date, doc)]
+                        TotalQuant += 1
+                        Property += 1
+                    
+                    elif doc['crashseverity'] == 'Fatal injury':
+                        date = doc['crashdate'][-4:]
+                        Fatal += [(date, doc)]
+                        TotalQuant += 1
+                        FatalNumb += 1
+                    
 
         print()
         print()
@@ -156,12 +195,6 @@ class StatsOnSeverity(dml.Algorithm):
         repo['darren68_gladding_ralcalde.SeverityStats'].metadata({'complete': True})
 
         repo.logout()
-
-        endTime = datetime.datetime.now()
-
-        return {"start": startTime, "end": endTime}
-
-
 
 
     @staticmethod
