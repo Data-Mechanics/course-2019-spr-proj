@@ -8,13 +8,13 @@ The City of Chicago currently has a flat rate of $2.50 for entry into the Elevat
 
 Using data on station popularity, community socioeconomic hardship, and taxi pick-up and drop-off, fare zones can be created for the "L" network that encourage transit in burdened areas of the network while offsetting this fare deficit by charging riders in more stressed parts of the network a higher fare.
 
-####*Would a zone based system for the 'L' benefit Chicago?* Two smaller questions to answer:
+###*Would a zone based system for the 'L' benefit Chicago?* Two smaller questions to answer:
 1. *What would the zones look like?* Using the k-means algorithm, zones will be created with a varying number of clusters, taking into account the popularity, community hardship, and community taxi demand for each station. Each cluster will represent a zone, with all stations in it now residing in that zone.
 
 2. *Would these zones benefit socioeconimically disadvantaged commuters while raising a similar amount of revenue?* Statistical analysis will be done taking into account the fare zones to see how underserved socioeconomically burdened areas are and whether lowering their fare (while increasing other zone fares) will produce a similar amount of revenue.
 --
-## Insights
-Woah.
+# Insights
+1. Woah
 --
 ## Scripts
 | Name                     | Purpose                                                                    | Datasets Used                                                  |
