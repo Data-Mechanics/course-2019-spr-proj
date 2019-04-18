@@ -5,6 +5,8 @@ Subfolder for Christopher Trinh, Tom Kang, and Vee Nguyen in the Spring 2019 ite
 ## External Dependencies
 * `pandas` module
 * `json` module
+* `sklearn.cluster` module
+* `numpy` module
 
 ## Project 2
 
@@ -20,23 +22,26 @@ Our goal is to find the optimal placement of coffee shops, whether that involves
 
 The "peak morning commute times" that we mentioned earlier no doubt vary for many parts of Boston, but for the sake of convenience, we will be operating under the assumption that peak morning commute times are any time from 6am to noon. We also needed to determine a metric that measured how busy a train station was, so we decided to use number of departures from a particular station in order to measure this. On certain stretches of the Green Line during morning commutes, the MBTA often features express trains that pass through multiple stops without stopping to allow for a departure at that stop. Thus, we worked under the assumption that the more departures a station has, the more people waiting to get on at that stop, which would be an effective measure of how busy that station is. 
 
+Another important assumption we made is that commuters take Uber rides from the coffee shop to the nearest train station. By performing a statistical analysis at the end to the total Uber mean travel times of 2018 with our new coffee shop location data, we could provide an estimate for how much Uber travel times could decrease if coffee shops were moved closer to the nearest train station using the `k-means` algorithm.
+
+In order to further optimize the locations of the coffee shops to lean towards fitting more busy train locations ("busyness" calculated by the number of departures of that station), we added a weight to each train station. The weight is assigned by adding more data points to the train station location. Thus, when running the `k-means` algorithm, the optimized locations of the coffee shops will become more centralized and/or closer to train stations that are more busy.
+
 ### Methodology
 
 We utilized the `k-means` algorithm in order to the optimal placement of coffee shops along the Green Line. The data sets we used are as follows:
 
-1.
+1. `coffee.py` to get the coffee shops from the Yelp Fusion API.
+2. `stations.py` to get the MBTA Green Line train station location data along with their closest coffee shops from the MBTA API.
+3. `uber.py` to get the mean Uber travel times of 2018 sorted by hour of day, provided they fall under our "peak morning commute times", from the Uber Movement API.
+4. `getMBTA.py` to get data from the MBTA API and calculate each coffee shop's distance from their closest train station. 
+5. `getMean.py` to get the average distance (in meters) that a coffee shop was from their closest train station.
+6. `getKMeans.py` to perform the `k-means` algorithm and calculate new locations of each of our coffee shops.
+7. `kmeansDist.py` to finds the closest distance for a station from the list of generated `k-means` and get the new distance for each coffee shop, averaging it over the number of stations.
+8. `savings.py` to calculate how much more efficient the new coffee shop locations are in terms of Uber travel times.
 
-## Methods
-Our project utilizes k-means to identify where train stations are most busy and place a coffee shop there. We have the following data sets (and the algorithms associated with them):
+### Building
 
-1. MBTA Green Line stations and their coordinates
-2. Coffee shops and their coordinates
-3. MBTA Green Line stations and how busy they are
-
-Determine the optimal location for each coffee shop based on station busyness.
-
-1. Create a dictionary called `busyStations` where keys are stations and values are busyness.
-2. Create a `busyStationCoords` list, which is a list of coordinates of busy stations. We run k-means on `busyStationCoords`, which will give us an idea of where to place a new coffee shop or where to move an existing one.
+Simply run `execute.py` on the root project directory to run the scripts.
 
 ## Project 1
 
