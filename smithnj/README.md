@@ -10,14 +10,14 @@ Using data on station popularity, community socioeconomic hardship, and taxi pic
 
 ### Would a zone based system for the 'L' benefit Chicago?
 *Two smaller questions to answer:*
-1. *What would the zones look like?* Using the k-means algorithm, zones will be created with a varying number of clusters, taking into account the popularity, community hardship, and community taxi demand for each station. Each cluster will represent a zone, with all stations in it now residing in that zone.
+1. *What would the zones look like?* Using the k-means algorithm, zones will be created with a varying number of clusters, taking into account the station popularity, community hardship, and area taxi demand. Each cluster will represent a zone, with all stations in it now residing in that zone.
 
 2. *Do these three metrics obtained show insight into Chicago Transit?* Statistical analysis will be done observing correlation between the three tracked metrics.
 
-3. **Not answered in Project 2 but will be explored.** Whether lowering their fare (while increasing other zone fares) will produce a similar amount of revenue.
+3. **Not answered in Project 2 but will be explored later on.** Whether lowering certain fares while increasing other zone fares will produce a similar amount of revenue.
 ---
-# Insights
-1. Woah
+Insights:
+See generated images for k-means grouping and print statements for correlation coefficients.
 ---
 ## Scripts
 | Name                     | Purpose                                                                    | Datasets Used                                                  |
@@ -27,7 +27,7 @@ Using data on station popularity, community socioeconomic hardship, and taxi pic
 | create_stationhardship   | Match Community Hardship Index with stations.                              | get_censushardship get_stations                                |
 | create_metricarray       | Create final metric array of taxi rides, station popularity, and hardship. | create_taxiagg create_stationpopularity create_stationhardship |
 | do_kmeans                | Perform k-means analysis on metric array to gather stations into clusters. | create_metricarray                                             |
-| do_stats                 | INSERT HERE                                                                | INSERT HERE                                                    |
+| do_stats                 | Calculate metric coefficients.                                                               | create_metricarray                                                   |
 ---
 ## Data Sets
 | Portal             | Name (Source Linked)                                                                                                                 | Filetype |
@@ -47,4 +47,5 @@ Using data on station popularity, community socioeconomic hardship, and taxi pic
 * matplotlib.pyplot
 * sklearn
 * mpl_toolkits.mplot3d
+* from scipy.stats.stats import pearsonr
 
