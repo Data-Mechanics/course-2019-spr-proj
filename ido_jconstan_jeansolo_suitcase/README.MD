@@ -24,5 +24,5 @@ Justification: This will give us a good idea of the percentage of students that 
   Using the current bus stops as our centroids and the students’ addresses as the points, we ran k-means to find the optimal positions for each stop, based on the distance to each student’s house. 
 
   For our first statistical analysis, we calculated the average distance between students walking to old bus stops vs. the average distance it would be if new stops were implemented. Our implementation of k-means algorithm yielded smaller distances traveled on average by the students.  
-
-  For our second statistical analysis we calculated the correlation between household value and if they take the bus or not. This will tell us the impact income has on the likeliness of a student taking the bus.
+  
+  For our second statistical analysis we calculated the correlation between household value and if they take the bus or not. This will tell us the impact income has on the likeliness of a student taking the bus. Using proportion agreement (accuracy) we had an accuracy of ~80%. We used binary variables to represent whether or not a student takes the bus, and whether or not their house value is worth over an average value of 400k.
