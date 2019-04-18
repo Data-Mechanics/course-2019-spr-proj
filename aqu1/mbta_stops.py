@@ -15,22 +15,14 @@ class mbta_stops(dml.Algorithm):
     def execute(trial = False):
         '''Retrieve some data sets (not using the API here for the sake of simplicity).'''
         startTime = datetime.datetime.now()
-        # Dataset 5: MBTA Bus Stops
-        url = 'https://opendata.arcgis.com/datasets/2c00111621954fa08ff44283364bba70_0.csv?outSR=%7B%22wkid%22%3A102100%2C%22latestWkid%22%3A3857%7D'
-        bus_stops = pd.read_csv(url)
 
-        # Dataset 6: MBTA T stops 
+        # Dataset 5: MBTA T stops 
         url = 'http://maps-massgis.opendata.arcgis.com/datasets/a9e4d01cbfae407fbf5afe67c5382fde_2.csv'
-        t_stops = pd.read_csv(url)
+        train_stops = pd.read_csv(url)
 
-        # Merge latitude and longitudes of all bus and T-stops in Boston
-        bus = pd.concat([bus_stops.stop_lat, bus_stops.stop_lon], axis = 1) # select columns
-        bus.columns = ['Latitude', 'Longitude']
-        train = pd.concat([t_stops.Y, t_stops.X], axis = 1) # select columns
-        train.columns = ['Latitude', 'Longitude']
-        public_stops = bus.append(train) # aggregate data 
-        public_stops = pd.DataFrame(public_stops)
-        public_stops = json.loads(public_stops.to_json(orient = 'records'))
+        t_stops = pd.concat([train_stops.Y, train_stops.X], axis = 1) # select columns
+        t_stops.columns = ['Latitude', 'Longitude']
+        t_stops = json.loads(t_stops.to_json(orient = 'records'))
         
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
@@ -39,7 +31,7 @@ class mbta_stops(dml.Algorithm):
         
         repo.dropCollection("mbta_stops_data")
         repo.createCollection("mbta_stops_data")
-        repo['aqu1.mbta_stops_data'].insert_many(public_stops)
+        repo['aqu1.mbta_stops_data'].insert_many(t_stops)
         
         repo.logout()
 
@@ -59,7 +51,7 @@ class mbta_stops(dml.Algorithm):
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
         doc.add_namespace('agh', 'https://opendata.arcgis.com/datasets/') # Arc GIS Hub
 
-        this_script = doc.agent('alg:aqu1#', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        this_script = doc.agent('alg:aqu1#mbta_stops', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
         
         # MBTA Stops Report
         resource_bus_stops = doc.entity('agh:2c00111621954fa08ff44283364bba70_0.csv?outSR=%7B%22wkid%22%3A102100%2C%22latestWkid%22%3A3857%7D', {'prov:label':'MBTA Bus Stops', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
@@ -78,3 +70,11 @@ class mbta_stops(dml.Algorithm):
         repo.logout()
 
         return doc
+        
+
+mbta_stops.execute()
+'''
+doc = mbta_stops.provenance()
+print(doc.get_provn())
+print(json.dumps(json.loads(doc.serialize()), indent=4))
+'''
