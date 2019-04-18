@@ -16,3 +16,7 @@ Knoema (https://knoema.com/)
 Jordan Department of Statistics (http://dosweb.dos.gov.jo/) 
 Twitter (https://developer.twitter.com/en/docs.html)
 
+-----------------------------------------------------------------
+
+Project 2 Justification:
+For project two, we determined that the best evaluation technique to solve the problem of mapping young people in the neoliberal city of Amman, Jordan. This problem was solved using optimization. Our Linkedin.py is the script for retrieving Linkedin data. JobAnalysis.py is the script used for finding the top three necessary skills for a developer or engineer in Amman, Jordan. Our job_edu_eng.py is the script used to find three correlation coefficients between three attributes for people in our Linkedin data, which highlights their employment status, education level, and whether they speak English or not. Furthermore, from project 1, we used data sets regarding participation and attendance in classes in Amman, Jordan, to complete optimization via k-means.
