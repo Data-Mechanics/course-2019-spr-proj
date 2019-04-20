@@ -6,10 +6,10 @@ import pandas as pd
 import uuid
 
 
-class masterList(dml.Algorithm):
+class nonMBEmasterList(dml.Algorithm):
     contributor = 'ashwini_gdukuray_justini_utdesai'
     reads = ['ashwini_gdukuray_justini_utdesai.massHousing', 'ashwini_gdukuray_justini_utdesai.secretary', 'ashwini_gdukuray_justini_utdesai.validZipCodes']
-    writes = ['ashwini_gdukuray_justini_utdesai.masterList']
+    writes = ['ashwini_gdukuray_justini_utdesai.nonMBEmasterList']
 
     @staticmethod
     def execute(trial=False):
@@ -28,6 +28,7 @@ class masterList(dml.Algorithm):
         secretary = repo['ashwini_gdukuray_justini_utdesai.secretary']
         validZips = repo['ashwini_gdukuray_justini_utdesai.validZipCodes']
 
+
         if (trial):
             massHousingDF = pd.DataFrame(list(massHousing.find()))[:100]
             secretaryDF = pd.DataFrame(list(secretary.find()))[:100]
@@ -43,7 +44,7 @@ class masterList(dml.Algorithm):
         secretaryDF['Zip'] = secretaryDF['Zip'].astype('str')
         secretaryDF['Zip'] = secretaryDF['Zip'].apply(lambda zipCode: ((5 - len(zipCode))*'0' + zipCode \
                                                         if len(zipCode) < 5 else zipCode)[:5])
-        secretaryDF = secretaryDF.loc[secretaryDF['MBE - Y/N'] == 'Y']
+        secretaryDF = secretaryDF.loc[secretaryDF['MBE - Y/N'] == 'N']
         secretaryDF = secretaryDF[['Business Name', 'Address', 'City', 'Zip', 'State', 'Description of Services']]
         secretaryDF = secretaryDF.rename(index=str, columns={'Description of Services': 'Industry'})
 
@@ -59,7 +60,7 @@ class masterList(dml.Algorithm):
 
         # clean up massHousing dataset
         massHousingDF['Zip'] = massHousingDF['Zip'].apply(lambda zipCode: zipCode[:5])
-        massHousingDF = massHousingDF.loc[massHousingDF['Ownership and Certification Information'].str.contains('Ownership: Minority')]
+        massHousingDF = massHousingDF.loc[~massHousingDF['Ownership and Certification Information'].str.contains('Ownership: Minority')]
         massHousingDF = massHousingDF[['Business Name', 'Address', 'City', 'Zip', 'State', 'Primary Trade', 'Primary Other/Consulting Description']]
 
         businessIDs = []
@@ -68,7 +69,7 @@ class masterList(dml.Algorithm):
             cleanedText = busName.upper().strip().replace(' ','').replace('.','').replace(',','').replace('-','')
             businessIDs.append(cleanedText)
 
-            if (row['Primary Trade'] == 'Other: Specify' or row['Primary Trade'] == 'Consultant: Specify'):
+            if (row['Primary Trade'] == 'Other: Specify'):
                 row['Primary Trade'] = row['Primary Other/Consulting Description']
 
         massHousingDF['B_ID'] = pd.Series(businessIDs, index=massHousingDF.index)
@@ -101,8 +102,7 @@ class masterList(dml.Algorithm):
                 preDict['Address'].append(row['Address_x'])
                 preDict['Industry'].append(row['Industry_x'])
 
-
-        masterList = pd.DataFrame(preDict)
+        nonMBEmasterList = pd.DataFrame(preDict)
 
         # filter out invalid zips
         validZipsDF['Zip'] = validZipsDF['Zip'].astype('str')
@@ -110,17 +110,17 @@ class masterList(dml.Algorithm):
                                                         if len(zipCode) < 5 else zipCode)[:5])
         listOfGoodZips = validZipsDF['Zip'].tolist()
 
-        masterList = masterList[masterList['Zip'].isin(listOfGoodZips)]
+        nonMBEmasterList = nonMBEmasterList[nonMBEmasterList['Zip'].isin(listOfGoodZips)]
 
         #records = json.loads(masterList.T.to_json()).values()
 
-        #print(masterList)
+        #print(nonMBEmasterList)
 
-        repo.dropCollection('masterList')
-        repo.createCollection('masterList')
-        repo['ashwini_gdukuray_justini_utdesai.masterList'].insert_many(masterList.to_dict('records'))
-        repo['ashwini_gdukuray_justini_utdesai.masterList'].metadata({'complete': True})
-        print(repo['ashwini_gdukuray_justini_utdesai.masterList'].metadata())
+        repo.dropCollection('nonMBEmasterList')
+        repo.createCollection('nonMBEmasterList')
+        repo['ashwini_gdukuray_justini_utdesai.nonMBEmasterList'].insert_many(nonMBEmasterList.to_dict('records'))
+        repo['ashwini_gdukuray_justini_utdesai.nonMBEmasterList'].metadata({'complete': True})
+        print(repo['ashwini_gdukuray_justini_utdesai.nonMBEmasterList'].metadata())
 
         repo.logout()
 
@@ -168,10 +168,10 @@ class masterList(dml.Algorithm):
         secretaryCommonwealthDataPost = doc.entity('dat:ashwini_gdukuray_justini_utdesai#secretaryCommonwealthPost',
                                       {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataSet',
                                        'ont:Extension': 'json'})
-        preMasterList = doc.entity('dat:ashwini_gdukuray_justini_utdesai#preMasterList',
+        preNonMBEMasterList = doc.entity('dat:ashwini_gdukuray_justini_utdesai#preNonMBEMasterList',
                                       {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataSet',
                                        'ont:Extension': 'json'})
-        MasterList =  doc.entity('dat:ashwini_gdukuray_justini_utdesai#MasterList',
+        NonMBEMasterList =  doc.entity('dat:ashwini_gdukuray_justini_utdesai#NonMBEMasterList',
                                       {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataSet',
                                        'ont:Extension': 'json'})
 
@@ -192,29 +192,32 @@ class masterList(dml.Algorithm):
                   {prov.model.PROV_TYPE: 'ont:Query'})
         doc.usage(merge_act, secretaryCommonwealthDataPost, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:Query'})
-        doc.usage(master_act, preMasterList, startTime, None,
+        doc.usage(master_act, preNonMBEMasterList, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:Query'})
         doc.usage(master_act, validZipCodesData, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:Query'})
 
+        """
         doc.wasAttributedTo(massHousingDataPre, selectProject)
         doc.wasAttributedTo(secretaryCommonwealthDataPre, selectProject)
         doc.wasAttributedTo(massHousingDataPost, join)
         doc.wasAttributedTo(secretaryCommonwealthDataPost, join)
-        doc.wasAttributedTo(preMasterList, selectProject)
+        doc.wasAttributedTo(preNonMBEMasterList, selectProject)
         doc.wasAttributedTo(validZipCodesData, selectProject)
+        """
+
 
         doc.wasGeneratedBy(massHousingDataPost, massHouse_act, endTime)
         doc.wasGeneratedBy(secretaryCommonwealthDataPost, sec_act, endTime)
-        doc.wasGeneratedBy(preMasterList, merge_act, endTime)
-        doc.wasGeneratedBy(MasterList, master_act, endTime)
+        doc.wasGeneratedBy(preNonMBEMasterList, merge_act, endTime)
+        doc.wasGeneratedBy(NonMBEMasterList, master_act, endTime)
 
         doc.wasDerivedFrom(massHousingDataPost, massHousingDataPre, massHouse_act, massHouse_act, massHouse_act)
         doc.wasDerivedFrom(secretaryCommonwealthDataPost, secretaryCommonwealthDataPre, sec_act, sec_act, sec_act)
-        doc.wasDerivedFrom(preMasterList, massHousingDataPost, merge_act, merge_act, merge_act)
-        doc.wasDerivedFrom(preMasterList, secretaryCommonwealthDataPost, merge_act, merge_act, merge_act)
-        doc.wasDerivedFrom(MasterList, preMasterList, master_act, master_act, master_act)
-        doc.wasDerivedFrom(MasterList, validZipCodesData, master_act, master_act, master_act)
+        doc.wasDerivedFrom(preNonMBEMasterList, massHousingDataPost, merge_act, merge_act, merge_act)
+        doc.wasDerivedFrom(preNonMBEMasterList, secretaryCommonwealthDataPost, merge_act, merge_act, merge_act)
+        doc.wasDerivedFrom(NonMBEMasterList, preNonMBEMasterList, master_act, master_act, master_act)
+        doc.wasDerivedFrom(NonMBEMasterList, validZipCodesData, master_act, master_act, master_act)
 
 
         repo.logout()
