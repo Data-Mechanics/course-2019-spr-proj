@@ -3,7 +3,7 @@ Team Members: Vidya Akavoor, Lauren DiSalvo, Sreeja Keesara
 
 Directory: ldisalvo_skeesara_vidyaap
 
-## Project Justification
+## Project 1 - Justification
 The below datasets can be combined to score the ideologies of voting districts within Massachusetts. The election data will help to identify which political party residents in that district typically vote for. The demographic census data can be used to determine predictors of voting patterns within each county and town. We plan to use the county shapes data to build our visualization of voting districts. We also plan to characterize each ballot question ideologically by comparing districts that voted in favor of the ballot question with those that voted for certain party candidates in the same year.  
 
 ## Datasets
@@ -132,7 +132,9 @@ source: http://datamechanics.io/data/massachusetts_counties.csv
 }
 ```
 ### demographicDataCounty
-contains: demographic data for Massachusetts by county from census.gov (to see full list of fields, go to https://www.census.gov/quickfacts/fact/table/ma/PST045217)
+contains: demographic data for Massachusetts by county from census.gov, to see full list of fields, go to:
+ 
+source:https://www.census.gov/quickfacts/fact/table/ma/PST045217
 ```
 { "Barnstable County, Massachusetts":
    "Population estimates, July 1, 2017,  (V2017)": "213,444",
@@ -146,7 +148,9 @@ contains: demographic data for Massachusetts by county from census.gov (to see f
 ```
 
 ### demographicDataTown
-contains: demographic data for Massachusetts by town from census.gov (to see full list of fields, go to https://www.census.gov/quickfacts/fact/table/ma/PST045217)
+contains: demographic data for Massachusetts by city and town from census.gov and includes the data retreived from demographicDataCity, to see full list of fields, go to:
+
+source: https://www.census.gov/quickfacts/fact/table/ma/PST045217)
 ```
 { "Winchester town, Middlesex County, Massachusetts":
   "Population estimates, July 1, 2017,  (V2017)": "23,339",
@@ -156,6 +160,8 @@ contains: demographic data for Massachusetts by town from census.gov (to see ful
   ..........................
 }
 ```
+
+
 
 ## Transformations
 ### House District Ideology
@@ -234,6 +240,95 @@ Retrieves summary demographic data for all facts by county and town. Displays ma
 }
 
 ```
+
+### Voting District Towns
+Maps voting district for state senate and house races to the list of towns in each district.
+```
+{
+    "Type" : "Senate",
+    "District" : "2nd Middlesex and Norfolk",
+    "Towns" : [ "Ashland", "Framingham", "Franklin", "Holliston", "Hopkinton", "Medway", "Natick" ]
+}
+
+```
+
+### demographicDataDistrictHouse
+Retrieves average demographic data by house district for Massachusetts.
+```
+     {  "House District" : "10th Bristol" ,
+        "Population estimates, July 1, 2017,  (V2017)" : 64728,
+        "Population estimates base, April 1, 2010,  (V2017)" : 64552,
+        "Population, Census, April 1, 2010" : 64552,
+        ..........................
+     }
+```
+
+### demographicDataDistrictSenate
+Retrieves average demographic data by senate district for Massachusetts.
+```
+     {  "Senate District" : "2nd Middlesex and Norfolk" 
+        "Population estimates, July 1, 2017,  (V2017)" : 29299.571428571428, 
+        "Population estimates base, April 1, 2010,  (V2017)" : 27253, 
+        "Population, Census, April 1, 2010" : 27253.714285714286, 
+        "Persons under 5 years, percent" : 5.985714285714286,  }
+        ..........................
+     }
+```
+
+## Project 2 - Narrative
+Problem: How do we use demographic factors to create a profile of local voting districts in Massachusetts that allows campaigns or political groups to determine which neighborhoods to canvass in?
+
+To do this, we created demographic profiles of each voting district. We did this through several preliminary datasets. We created Voting District Towns which contains a mapping of all the towns within each voting district. The districts are also classified by state senate or house. We also created Demographic Data District House and Demographic Data District Senate datasets. These two scripts used the Voting District Towns dataset and the Demographic Data Town dataset to determine which towns made up a district and to average the numbers for a certain demographic statistic across all the towns to determine the statistic for the entire district. Once we did the above, we were able to proceed with our statistical analysis and constraint satisfaction problems. 
+
+Constraint Satisfaction: We chose to solve the canvassing problem on a voting district level. Each voting district consists of neighborhoods for which we have demographic data. Given a budgeting constraint of X number of people that can be canvassed, we want to solve the problem of which neighborhoods within the district can be visited without going over the total district budget. We decided to use the z3-Solver library to solve this constraint problem for each district. Each neighborhood within a district is a z3 variable that can either be assigned a 0 (do not canvass) or a 1 (do canvass). The constraints use the population of each neighborhood to weight which ones to visit.
+
+Statistical Analysis: In order to determine any strong predictors of voting ideology by district, we used the 2017 demographic data by district and the weighted ideology tables to create a table of correlation coefficients comparing demographic information and voting ideology.  The coefficients compare each piece of demographic data with "how Democratic" and  "how Republican" each district is.  The higher the coefficient, the more correlated that demographic information is with the likelihood of that district voting a certain way.
+
+Note: When trial mode is enabled, running time is cut from 2 minutes and 30 seconds to 28 seconds. 
+
+## Datasets
+### Canvassing Budget Constraint
+Determines which towns within a voting district can be canvassed within a specified canvassing budget (in number of people).
+```
+{
+    "District" : "2nd Middlesex and Norfolk",
+    "Type" : "Senate",
+    "Budget (# of people)" : 100000,
+    "Check" : "sat",
+    "Excluded Towns" : [ ],
+    "Model" : [
+                [ "Ashland", 1 ],
+                [ "Framingham", 1 ],
+                [ "Franklin", 0 ],
+                [ "Holliston", 0 ],
+                [ "Hopkinton", 0 ],
+                [ "Medway", 0 ],
+                [ "Natick", 0 ],
+                [ "popNatick", 36246 ],
+                [ "popMedway", 13329 ],
+                [ "popHopkinton", 18035 ],
+                [ "popHolliston", 14753 ],
+                [ "popFranklin", 32996 ],
+                [ "popFramingham", 72032 ],
+                [ "popAshland", 17706 ]
+            ]
+}
+```
+
+### Voting District Election Outcome Factors
+```
+     {"_id" : ObjectId("5ca6479e3f7b1b6f24598da3"),
+      "Party" : "Democratic", 
+      "Population estimates, July 1, 2017,  (V2017)" : NaN, 
+      "Population estimates base, April 1, 2010,  (V2017)" : NaN, 
+      "Population, Census, April 1, 2010" : 0.35763757741202973, 
+      "Persons under 5 years, percent" : 0.16158614409129984, 
+      "Persons under 18 years, percent" : -0.24276258580942858, 
+      "Persons 65 years and over, percent" : -0.15693780305590088,
+      ...
+      }
+```
+
 
 ## Additional Python Libraries
 You may need to import the following libraries to access our datasets: bs4, pandas, requests, csv, io

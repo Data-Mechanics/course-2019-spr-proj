@@ -8,6 +8,7 @@ import zillow
 import requests
 import xmltodict
 import csv
+from tqdm import tqdm
 
 
 class get_zillow_search_data(dml.Algorithm):
@@ -20,7 +21,8 @@ class get_zillow_search_data(dml.Algorithm):
     def execute(trial = True):
         '''Retrieve some data sets (not using the API here for the sake of simplicity).'''
         startTime = datetime.datetime.now()
-
+        print('')
+        print('inserting zillow search data...')
         #connect to database
         client = dml.pymongo.MongoClient()
         repo = client.repo
@@ -33,11 +35,11 @@ class get_zillow_search_data(dml.Algorithm):
         s =json.dumps(r, sort_keys=True, indent=2)
         repo.dropCollection("zillow_getsearchresults_data")
         repo.createCollection("zillow_getsearchresults_data")
-        for info in r:
+        for info in tqdm(r):
             repo['ekmak_gzhou_kaylaipp_shen99.zillow_getsearchresults_data'].insert_one(info)
         repo['ekmak_gzhou_kaylaipp_shen99.zillow_getsearchresults_data'].metadata({'complete':True})
         print(repo['ekmak_gzhou_kaylaipp_shen99.zillow_getsearchresults_data'].metadata())
-        print('inserted zillow search data')
+        # print('inserted zillow search data')
         
         repo.logout()
         endTime = datetime.datetime.now()
@@ -88,8 +90,8 @@ class get_zillow_search_data(dml.Algorithm):
 Helper functions to retrieve data 
 
 '''
-#connect to zillow api
-zillow_key = 'X1-ZWz1gx7ezhy3uz_9abc1'
+#connect to zillow api, need to have key in auth.json file
+zillow_key = dml.auth['services']['zillow']['key']
 api = zillow.ValuationApi()
 
 #params: address,city,zipcode
@@ -142,10 +144,6 @@ def retrieve_zillow_property_data():
         json.dump(result, outfile)
 
 
-
-key = 'X1-ZWz182me3104qz_6wmn8'
-api = zillow.ValuationApi()
-
 def retrieve_zillow_searchresults_data():
     result = []
     CSV_URL = 'http://datamechanics.io/data/Live_Street_Address_Management_SAM_Addresses.csv'
@@ -159,7 +157,7 @@ def retrieve_zillow_searchresults_data():
                 index += 1
                 address = street + ", Boston, MA"
                 try: 
-                    data = api.GetSearchResults(key, address, zipcode).get_dict()
+                    data = api.GetSearchResults(zillow_key, address, zipcode).get_dict()
                 except zillow.error.ZillowError as e: 
                     print('error')
                     continue
