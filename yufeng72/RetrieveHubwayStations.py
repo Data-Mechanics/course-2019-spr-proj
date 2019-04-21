@@ -33,9 +33,16 @@ class RetrieveHubwayStations(dml.Algorithm):
             r_parse.append(temp)
         r_parse.remove(r_parse[0])
 
+        if not trial:
+            result = list(r_parse)
+        else:
+            result = []
+            for i in range(20):
+                result.append(r_parse[i])
+
         repo.dropCollection("hubwayStations")
         repo.createCollection("hubwayStations")
-        repo['yufeng72.hubwayStations'].insert_many(r_parse)
+        repo['yufeng72.hubwayStations'].insert_many(result)
         repo['yufeng72.hubwayStations'].metadata({'complete': True})
         print(repo['yufeng72.hubwayStations'].metadata())
 
@@ -62,12 +69,12 @@ class RetrieveHubwayStations(dml.Algorithm):
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet',
         # 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/')  # The event log.
-        doc.add_namespace('bdp', 'https://s3.amazonaws.com/hubway-data/')
+        doc.add_namespace('bdp3', 'https://s3.amazonaws.com/hubway-data/')
 
         this_script = doc.agent('alg:yufeng72#RetrieveHubwayStations',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
 
-        resource = doc.entity('bdp:Hubway_Stations_as_of_July_2017',
+        resource = doc.entity('bdp3:Hubway_Stations_as_of_July_2017',
                               {'prov:label': 'Hubway Stations', prov.model.PROV_TYPE: 'ont:DataResource',
                                'ont:Extension': 'csv'})
 
@@ -83,7 +90,7 @@ class RetrieveHubwayStations(dml.Algorithm):
                           {prov.model.PROV_LABEL: 'Hubway Stations', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(hubwayStations, this_script)
         doc.wasGeneratedBy(hubwayStations, get_hubwayStations, endTime)
-        doc.wasDerivedFrom(hubwayStations, resource, get_hubwayStations, get_hubwayStations, get_hubwayStations)
+        doc.wasDerivedFrom(resource, hubwayStations, get_hubwayStations, get_hubwayStations, get_hubwayStations)
 
         repo.logout()
 

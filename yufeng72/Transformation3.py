@@ -6,10 +6,10 @@ import uuid
 from math import *
 
 
-class Transformation2(dml.Algorithm):
+class Transformation3(dml.Algorithm):
     contributor = 'yufeng72'
-    reads = ['yufeng72.collegeUniversities','yufeng72.hubwayStations']
-    writes = ['yufeng72.stationNearbySchool']
+    reads = ['yufeng72.collegesUniversities','yufeng72.tripData']
+    writes = ['yufeng72.tripToSchool']
 
     @staticmethod
     def execute(trial=False):
@@ -44,29 +44,29 @@ class Transformation2(dml.Algorithm):
             return distance
 
         collegesUniversities = getCollection('collegesUniversities')
-        hubwayStations = getCollection('hubwayStations')
+        tripData = getCollection('tripData')
         r = []
         for row1 in collegesUniversities:
             if (int(row1['NumStudent']) > 0) and (row1['Latitude'] is not None) and (row1['Longitude'] is not None):
-                hubwayStationCount = 0
+                tripToSchoolCount = 0
                 Lat_A = float(row1['Latitude'])
                 Lng_A = float(row1['Longitude'])
-                for row2 in hubwayStations:
-                    if (row2['Latitude'] is not None) and (row2['Longitude'] is not None):
-                        Lat_B = float(row2['Latitude'])
-                        Lng_B = float(row2['Longitude'])
+                for row2 in tripData:
+                    if (row2['end station latitude'] is not None) and (row2['end station longitude'] is not None):
+                        Lat_B = float(row2['end station latitude'])
+                        Lng_B = float(row2['end station longitude'])
                     dist = calcDistance(Lat_A, Lng_A, Lat_B, Lng_B)
                     if dist < 0.3:  # 300m
-                        hubwayStationCount += 1
+                        tripToSchoolCount += 1
                 newRow = {'Name': row1['Name'], 'NumStudent': row1['NumStudent'], 'Latitude': row1['Latitude'],
-                          'Longitude': row1['Longitude'], 'HubwayStationNearby': hubwayStationCount}
+                          'Longitude': row1['Longitude'], 'TripToSchool': tripToSchoolCount}
                 r.append(newRow)
 
-        repo.dropCollection('stationNearbySchool')
-        repo.createCollection('stationNearbySchool')
-        repo['yufeng72.stationNearbySchool'].insert_many(r)
-        repo['yufeng72.stationNearbySchool'].metadata({'complete': True})
-        print(repo['yufeng72.stationNearbySchool'].metadata())
+        repo.dropCollection('tripToSchool')
+        repo.createCollection('tripToSchool')
+        repo['yufeng72.tripToSchool'].insert_many(r)
+        repo['yufeng72.tripToSchool'].metadata({'complete': True})
+        print(repo['yufeng72.tripToSchool'].metadata())
 
         repo.logout()
 
@@ -92,30 +92,29 @@ class Transformation2(dml.Algorithm):
         # 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/')  # The event log.
 
-        this_script = doc.agent('alg:yufeng72#Transformation2',
+        this_script = doc.agent('alg:yufeng72#Transformation3',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
 
         collegesUniversities = doc.entity('dat:yufeng72#collegesUniversities',
                                           {prov.model.PROV_LABEL: 'Colleges and Universities',
                                            prov.model.PROV_TYPE: 'ont:DataSet'})
 
-        hubwayStations = doc.entity('dat:yufeng72#hubwayStations',
-                                    {prov.model.PROV_LABEL: 'Hubway Stations', prov.model.PROV_TYPE: 'ont:DataSet'})
+        tripData = doc.entity('dat:yufeng72#tripData',
+                              {prov.model.PROV_LABEL: 'Trip Data', prov.model.PROV_TYPE: 'ont:DataSet'})
 
-        get_stationNearbySchool = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(get_stationNearbySchool, this_script)
-        doc.used(get_stationNearbySchool, collegesUniversities, startTime)
-        doc.used(get_stationNearbySchool, hubwayStations, startTime)
+        get_tripToSchool = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(get_tripToSchool, this_script)
+        doc.used(get_tripToSchool, collegesUniversities, startTime)
+        doc.used(get_tripToSchool, tripData, startTime)
 
-        stationNearbySchool = doc.entity('dat:yufeng72#stationNearbySchool',
-                                    {prov.model.PROV_LABEL: 'Count Hubway Stations nearby Colleges and Universities',
-                                     prov.model.PROV_TYPE: 'ont:DataSet'})
-        doc.wasAttributedTo(stationNearbySchool, this_script)
-        doc.wasGeneratedBy(stationNearbySchool, get_stationNearbySchool, endTime)
-        doc.wasDerivedFrom(stationNearbySchool, collegesUniversities, get_stationNearbySchool, get_stationNearbySchool,
-                           get_stationNearbySchool)
-        doc.wasDerivedFrom(stationNearbySchool, hubwayStations, get_stationNearbySchool, get_stationNearbySchool,
-                           get_stationNearbySchool)
+        tripToSchool = doc.entity('dat:yufeng72#tripToSchool',
+                                  {prov.model.PROV_LABEL: 'Trips End at Colleges', prov.model.PROV_TYPE: 'ont:DataSet'})
+        doc.wasAttributedTo(tripToSchool, this_script)
+        doc.wasGeneratedBy(tripToSchool, get_tripToSchool, endTime)
+        doc.wasDerivedFrom(collegesUniversities, tripToSchool, get_tripToSchool, get_tripToSchool,
+                           get_tripToSchool)
+        doc.wasDerivedFrom(tripData, tripToSchool, get_tripToSchool, get_tripToSchool,
+                           get_tripToSchool)
         repo.logout()
 
         return doc
@@ -123,8 +122,8 @@ class Transformation2(dml.Algorithm):
 '''
 # This is example code you might use for debugging this module.
 # Please remove all top-level function calls before submitting.
-Transformation2.execute()
-doc = Transformation2.provenance()
+Transformation3.execute()
+doc = Transformation3.provenance()
 print(doc.get_provn())
 print(json.dumps(json.loads(doc.serialize()), indent=4))
 '''

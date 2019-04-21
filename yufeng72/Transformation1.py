@@ -7,7 +7,7 @@ import uuid
 
 class Transformation1(dml.Algorithm):
     contributor = 'yufeng72'
-    reads = ['yufeng72.busStops','yufeng72.collegeUniversities']
+    reads = ['yufeng72.busStops','yufeng72.collegesUniversities']
     writes = ['yufeng72.possiblePlaces']
 
     @staticmethod
@@ -96,8 +96,8 @@ class Transformation1(dml.Algorithm):
                                      prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(possiblePlaces, this_script)
         doc.wasGeneratedBy(possiblePlaces, get_possiblePlaces, endTime)
-        doc.wasDerivedFrom(possiblePlaces, busStops, get_possiblePlaces, get_possiblePlaces, get_possiblePlaces)
-        doc.wasDerivedFrom(possiblePlaces, collegesUniversities, get_possiblePlaces, get_possiblePlaces,
+        doc.wasDerivedFrom(busStops, possiblePlaces, get_possiblePlaces, get_possiblePlaces, get_possiblePlaces)
+        doc.wasDerivedFrom(collegesUniversities, possiblePlaces, get_possiblePlaces, get_possiblePlaces,
                            get_possiblePlaces)
 
         repo.logout()
