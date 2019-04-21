@@ -114,6 +114,3 @@ auth.json
 
 # exclude node_modules
 node_modules/
-
-# exclue provenance.html
-provenance.html
