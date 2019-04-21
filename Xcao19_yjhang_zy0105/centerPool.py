@@ -6,10 +6,11 @@ import datetime
 import uuid
 
 
-class center(dml.Algorithm):
+
+class centerPool(dml.Algorithm):
     contributor = 'Jinghang_Yuan'
     reads = []
-    writes = ['Jinghang_Yuan.center']
+    writes = ['Jinghang_Yuan.centerPool']
 
     @staticmethod
     def execute(trial=False):
@@ -20,16 +21,16 @@ class center(dml.Algorithm):
         repo = client.repo
         repo.authenticate('Jinghang_Yuan', 'Jinghang_Yuan')
 
-        url = 'http://datamechanics.io/data/Jinghang_Yuan/communityCenter.json'
+        url = 'http://datamechanics.io/data/Jinghang_Yuan/centerPool.json'
         response = urllib.request.urlopen(url).read().decode("utf-8")
         r = json.loads(response)
         s = json.dumps(r, sort_keys=True, indent=2)
-        repo.dropCollection("center")
-        repo.createCollection("center")
-        repo['Jinghang_Yuan.center'].insert_many(r)
-        repo['Jinghang_Yuan.center'].metadata({'complete': True})
+        repo.dropCollection("centerPool")
+        repo.createCollection("centerPool")
+        repo['Jinghang_Yuan.centerPool'].insert_many(r)
+        repo['Jinghang_Yuan.centerPool'].metadata({'complete': True})
         # print('-----------------')
-        # print(list(repo['Jinghang_Yuan.center'].find()))
+        # print(list(repo['Jinghang_Yuan.centerPool'].find()))
         # print('-----------------')
 
         repo.logout()
@@ -52,34 +53,29 @@ class center(dml.Algorithm):
         doc.add_namespace('log', 'http://datamechanics.io/log/')
         doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
 
-
-        this_script = doc.agent('alg:Jinghang_Yuan#center',
+        this_script = doc.agent('alg:Jinghang_Yuan#centerPool',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
-        resource = doc.entity('bdp:wc8 w-nujj',
+        resource = doc.entity('bdp:wc8w-nujj',
                               {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource',
                                'ont:Extension': 'json'})
-        get_center = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
-
-
-
-        doc.wasAssociatedWith(get_center, this_script)
-        doc.usage(get_center, resource, startTime, None,
+        get_centerPool = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(get_centerPool, this_script)
+        doc.usage(get_centerPool, resource, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:Retrieval',
-                   'ont:Query': 'FID,OBJECTID,SITE,PHONE,FAX,STREET,NEIGH,ZIP'
+                   'ont:Query': 'FID,OBJECTID_1,OBJECTID,PHONE,FAX,STREET,NEIGH,ZIP,SITE'
                    }
                   )
-
-        center = doc.entity('dat:Jinghang_Yuan#center',
-                          {prov.model.PROV_LABEL: 'center', prov.model.PROV_TYPE: 'ont:DataSet'})
-        doc.wasAttributedTo(center, this_script)
-        doc.wasGeneratedBy(center, get_center, endTime)
-        doc.wasDerivedFrom(resource, center, get_center, get_center, get_center)
+        centerPool = doc.entity('dat:Jinghang_Yuan#centerPool',
+                          {prov.model.PROV_LABEL: 'centerPool', prov.model.PROV_TYPE: 'ont:DataSet'})
+        doc.wasAttributedTo(centerPool, this_script)
+        doc.wasGeneratedBy(centerPool, get_centerPool, endTime)
+        doc.wasDerivedFrom(centerPool, resource, get_centerPool, get_centerPool, get_centerPool)
 
         repo.logout()
 
         return doc
-#center.provenance()
-# doc = center.provenance()
+centerPool.execute()
+# doc = centerPool.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))
 

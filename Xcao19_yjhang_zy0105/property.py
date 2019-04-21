@@ -4,13 +4,13 @@ import dml
 import prov.model
 import datetime
 import uuid
+import pandas
 
 
-
-class centerPool(dml.Algorithm):
+class property(dml.Algorithm):
     contributor = 'Jinghang_Yuan'
     reads = []
-    writes = ['Jinghang_Yuan.centerPool']
+    writes = ['Jinghang_Yuan.property']
 
     @staticmethod
     def execute(trial=False):
@@ -21,17 +21,16 @@ class centerPool(dml.Algorithm):
         repo = client.repo
         repo.authenticate('Jinghang_Yuan', 'Jinghang_Yuan')
 
-        url = 'http://datamechanics.io/data/Jinghang_Yuan/centerPool.json'
-        response = urllib.request.urlopen(url).read().decode("utf-8")
-        r = json.loads(response)
-        s = json.dumps(r, sort_keys=True, indent=2)
-        repo.dropCollection("centerPool")
-        repo.createCollection("centerPool")
-        repo['Jinghang_Yuan.centerPool'].insert_many(r)
-        repo['Jinghang_Yuan.centerPool'].metadata({'complete': True})
-        # print('-----------------')
-        # print(list(repo['Jinghang_Yuan.centerPool'].find()))
-        # print('-----------------')
+        url = 'https://data.boston.gov/dataset/e02c44d2-3c64-459c-8fe2-e1ce5f38a035/resource/fd351943-c2c6-4630-992d-3f895360febd/download/ast2018full.csv'
+
+        df = pandas.read_csv(url)
+        json_df = df.to_json(orient='records')
+        r = json.loads(json_df)
+
+        repo.dropCollection("property")
+        repo.createCollection("property")
+        repo['Jinghang_Yuan.property'].insert_many(r)
+        repo['Jinghang_Yuan.property'].metadata({'complete': True})
 
         repo.logout()
 
@@ -53,29 +52,29 @@ class centerPool(dml.Algorithm):
         doc.add_namespace('log', 'http://datamechanics.io/log/')
         doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
 
-        this_script = doc.agent('alg:Jinghang_Yuan#centerPool',
+        this_script = doc.agent('alg:Jinghang_Yuan#property',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
         resource = doc.entity('bdp:wc8w-nujj',
                               {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource',
                                'ont:Extension': 'json'})
-        get_centerPool = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(get_centerPool, this_script)
-        doc.usage(get_centerPool, resource, startTime, None,
+        get_property = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(get_property, this_script)
+        doc.usage(get_property, resource, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:Retrieval',
-                   'ont:Query': 'FID,OBJECTID_1,OBJECTID,PHONE,FAX,STREET,NEIGH,ZIP,SITE'
+                   'ont:Query': 'PID,CM_ID,GIS_ID,ST_NUM,ST_NAME,ST_NAME_SUF,UNIT_NUM,ZIPCODE,PTYPE,LU,OWN_OCC,OWNER,MAIL_ADDRESSEE,MAIL_ADDRESS,MAIL CS,MAIL_ZIPCODE'
                    }
                   )
-        centerPool = doc.entity('dat:Jinghang_Yuan#centerPool',
-                          {prov.model.PROV_LABEL: 'centerPool', prov.model.PROV_TYPE: 'ont:DataSet'})
-        doc.wasAttributedTo(centerPool, this_script)
-        doc.wasGeneratedBy(centerPool, get_centerPool, endTime)
-        doc.wasDerivedFrom(resource, centerPool, get_centerPool, get_centerPool, get_centerPool)
+        property = doc.entity('dat:Jinghang_Yuan#property',
+                          {prov.model.PROV_LABEL: 'property', prov.model.PROV_TYPE: 'ont:DataSet'})
+        doc.wasAttributedTo(property, this_script)
+        doc.wasGeneratedBy(property, get_property, endTime)
+        doc.wasDerivedFrom(property, resource, get_property, get_property, get_property)
 
         repo.logout()
 
         return doc
-centerPool.execute()
-# doc = centerPool.provenance()
+property.execute()
+# doc = property.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))
 

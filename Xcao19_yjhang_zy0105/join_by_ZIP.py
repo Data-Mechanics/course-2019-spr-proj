@@ -7,12 +7,18 @@ import dml
 import prov.model
 import datetime
 import uuid
+import math
+def dealWithZip(data,key):
+    for i in data:
+        if(len(str(int(i[key][:5]))) == 4):
+            i[key] = '0'+str(int(i[key][:5]))
+
 
 
 class join_by_ZIP(dml.Algorithm):
     contributor = 'Jinghang_Yuan'
     reads = ['Jinghang_Yuan.center', 'Jinghang_Yuan.centerPool', 'Jinghang_Yuan.policeStation','Jinghang_Yuan.school','Jinghang_Yuan.property']
-    writes = ['Jinghang_Yuan.countAll']
+    writes = ['Jinghang_Yuan.ZIPCounter']
 
     @staticmethod
     def execute(trial=False):
@@ -40,7 +46,15 @@ class join_by_ZIP(dml.Algorithm):
         policeStation = list(r_policeStation.find({},{'_id':0,'ZIP':1}))
         property = list(r_property.find({},{'_id':0,'ZIPCODE':1,'AV_TOTAL':1,'GROSS_AREA':1}))
         school = list(r_school.find({},{'_id':0,'ZIP':1}))
-        #print(center)
+        dealWithZip(center,"ZIP")
+        dealWithZip(centerPool,"ZIP")
+        dealWithZip(policeStation,"ZIP")
+        #dealWithProZip(property,"ZIPCODE")
+        dealWithZip(school,"ZIP")
+        for s in property:
+            s["ZIPCODE"] = "0"+ str(s["ZIPCODE"])[:4]
+        # print(school)
+
         val_dic = {}
         ar_dic = {}
         ppty_avg = {}
@@ -48,13 +62,13 @@ class join_by_ZIP(dml.Algorithm):
         for ppty in property:
             #val_dic.setdefault(ppty['ZIPCODE'],0)
             if(ppty['GROSS_AREA'] is not None):
-                if(val_dic.__contains__(str(ppty['ZIPCODE'])[:-2])):
-                    val_dic[str(ppty['ZIPCODE'])[:-2]]+=ppty['AV_TOTAL']
+                if(val_dic.__contains__(ppty['ZIPCODE'])):
+                    val_dic[ppty['ZIPCODE']]+=ppty['AV_TOTAL']
                     #print(ppty['GROSS_AREA'])
-                    ar_dic[str(ppty['ZIPCODE'])[:-2]]+=ppty['GROSS_AREA']
+                    ar_dic[ppty['ZIPCODE']]+=ppty['GROSS_AREA']
                 else:
-                    val_dic[str(ppty['ZIPCODE'])[:-2]]=ppty['AV_TOTAL']
-                    ar_dic[str(ppty['ZIPCODE'])[:-2]]=ppty['GROSS_AREA']
+                    val_dic[ppty['ZIPCODE']]=ppty['AV_TOTAL']
+                    ar_dic[ppty['ZIPCODE']]=ppty['GROSS_AREA']
         #print(val_dic)
 
         for k in val_dic:
@@ -88,9 +102,6 @@ class join_by_ZIP(dml.Algorithm):
             document describing that invocation event.
             '''
         # New
-        client = dml.pymongo.MongoClient()
-        repo = client.repo
-        repo.authenticate('chuci_yfch_yuwan_zhurh', 'chuci_yfch_yuwan_zhurh')
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')  # The scripts are in <folder>#<filename> format.
         doc.add_namespace('dat', 'http://datamechanics.io/data/')  # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
@@ -133,15 +144,14 @@ class join_by_ZIP(dml.Algorithm):
         doc.usage(activity, policeStation, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:select and aggregate'}
                   )
-        doc.wasDerivedFrom(school, count_all_by_zip, activity, activity, activity)
-        doc.wasDerivedFrom(centerPool, count_all_by_zip, activity, activity, activity)
-        doc.wasDerivedFrom(center, count_all_by_zip, activity, activity, activity)
-        doc.wasDerivedFrom(policeStation, count_all_by_zip, activity, activity, activity)
-        doc.wasDerivedFrom(property, count_all_by_zip, activity, activity, activity)
+        doc.wasDerivedFrom(count_all_by_zip, school, activity, activity, activity)
+        doc.wasDerivedFrom(count_all_by_zip, centerPool, activity, activity, activity)
+        doc.wasDerivedFrom(count_all_by_zip, center, activity, activity, activity)
+        doc.wasDerivedFrom(count_all_by_zip, policeStation, activity, activity, activity)
+        doc.wasDerivedFrom(count_all_by_zip, property, activity, activity, activity)
+
         doc.wasAttributedTo(count_all_by_zip, agent)
         doc.wasGeneratedBy(count_all_by_zip, activity, endTime)
-        
-        repo.logout()
 
         return doc
 

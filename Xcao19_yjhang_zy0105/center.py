@@ -6,11 +6,10 @@ import datetime
 import uuid
 
 
-
-class policeStation(dml.Algorithm):
+class center(dml.Algorithm):
     contributor = 'Jinghang_Yuan'
     reads = []
-    writes = ['Jinghang_Yuan.policeStation']
+    writes = ['Jinghang_Yuan.center']
 
     @staticmethod
     def execute(trial=False):
@@ -21,16 +20,16 @@ class policeStation(dml.Algorithm):
         repo = client.repo
         repo.authenticate('Jinghang_Yuan', 'Jinghang_Yuan')
 
-        url = 'http://datamechanics.io/data/Jinghang_Yuan/policeStation.json'
+        url = 'http://datamechanics.io/data/Jinghang_Yuan/communityCenter.json'
         response = urllib.request.urlopen(url).read().decode("utf-8")
         r = json.loads(response)
         s = json.dumps(r, sort_keys=True, indent=2)
-        repo.dropCollection("policeStation")
-        repo.createCollection("policeStation")
-        repo['Jinghang_Yuan.policeStation'].insert_many(r)
-        repo['Jinghang_Yuan.policeStation'].metadata({'complete': True})
+        repo.dropCollection("center")
+        repo.createCollection("center")
+        repo['Jinghang_Yuan.center'].insert_many(r)
+        repo['Jinghang_Yuan.center'].metadata({'complete': True})
         # print('-----------------')
-        # print(list(repo['Jinghang_Yuan.policeStation'].find()))
+        # print(list(repo['Jinghang_Yuan.center'].find()))
         # print('-----------------')
 
         repo.logout()
@@ -53,29 +52,34 @@ class policeStation(dml.Algorithm):
         doc.add_namespace('log', 'http://datamechanics.io/log/')
         doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
 
-        this_script = doc.agent('alg:Jinghang_Yuan#policeStation',
+
+        this_script = doc.agent('alg:Jinghang_Yuan#center',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
-        resource = doc.entity('bdp:wc8w-nujj',
+        resource = doc.entity('bdp:wc8 w-nujj',
                               {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource',
                                'ont:Extension': 'json'})
-        get_policeStation = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(get_policeStation, this_script)
-        doc.usage(get_policeStation, resource, startTime, None,
+        get_center = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+
+
+
+        doc.wasAssociatedWith(get_center, this_script)
+        doc.usage(get_center, resource, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:Retrieval',
-                   'ont:Query': 'OBJECTID,BLDG_ID,BID,ADDRESS,POINT_X,POINT_Y,NAME,NEIGHBOTHOOD,CITY,ZIP,FT_SOFT,STORY_HT,PARCEL_ID'
+                   'ont:Query': 'FID,OBJECTID,SITE,PHONE,FAX,STREET,NEIGH,ZIP'
                    }
                   )
-        policeStation = doc.entity('dat:Jinghang_Yuan#policeStation',
-                          {prov.model.PROV_LABEL: 'policeStation', prov.model.PROV_TYPE: 'ont:DataSet'})
-        doc.wasAttributedTo(policeStation, this_script)
-        doc.wasGeneratedBy(policeStation, get_policeStation, endTime)
-        doc.wasDerivedFrom(resource, policeStation, get_policeStation, get_policeStation, get_policeStation)
+
+        center = doc.entity('dat:Jinghang_Yuan#center',
+                          {prov.model.PROV_LABEL: 'center', prov.model.PROV_TYPE: 'ont:DataSet'})
+        doc.wasAttributedTo(center, this_script)
+        doc.wasGeneratedBy(center, get_center, endTime)
+        doc.wasDerivedFrom(center, resource, get_center, get_center, get_center)
 
         repo.logout()
 
         return doc
-policeStation.execute()
-# doc = property.provenance()
+#center.provenance()
+# doc = center.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))
 

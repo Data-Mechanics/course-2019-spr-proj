@@ -69,7 +69,7 @@ class school(dml.Algorithm):
                           {prov.model.PROV_LABEL: 'school', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(school, this_script)
         doc.wasGeneratedBy(school, get_school, endTime)
-        doc.wasDerivedFrom(resource, school, get_school, get_school, get_school)
+        doc.wasDerivedFrom(school, resource, get_school, get_school, get_school)
 
         repo.logout()
 

@@ -84,8 +84,8 @@ class center_to_policeStation(dml.Algorithm):
         #doc.wasAttributedTo(citycrime, this_script)
         doc.wasGeneratedBy(center_policeStation_by_zip, ctr_pS_join_by_zip, endTime)
 
-        doc.wasDerivedFrom(center, center_policeStation_by_zip, ctr_pS_join_by_zip, ctr_pS_join_by_zip, ctr_pS_join_by_zip)
-        doc.wasDerivedFrom(policeStation, center_policeStation_by_zip, ctr_pS_join_by_zip, ctr_pS_join_by_zip, ctr_pS_join_by_zip)
+        doc.wasDerivedFrom(center_policeStation_by_zip, center, ctr_pS_join_by_zip, ctr_pS_join_by_zip, ctr_pS_join_by_zip)
+        doc.wasDerivedFrom(center_policeStation_by_zip, policeStation, ctr_pS_join_by_zip, ctr_pS_join_by_zip, ctr_pS_join_by_zip)
 
         repo.logout()
 

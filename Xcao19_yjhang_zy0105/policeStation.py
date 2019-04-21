@@ -4,13 +4,13 @@ import dml
 import prov.model
 import datetime
 import uuid
-import pandas
 
 
-class property(dml.Algorithm):
+
+class policeStation(dml.Algorithm):
     contributor = 'Jinghang_Yuan'
     reads = []
-    writes = ['Jinghang_Yuan.property']
+    writes = ['Jinghang_Yuan.policeStation']
 
     @staticmethod
     def execute(trial=False):
@@ -21,16 +21,17 @@ class property(dml.Algorithm):
         repo = client.repo
         repo.authenticate('Jinghang_Yuan', 'Jinghang_Yuan')
 
-        url = 'https://data.boston.gov/dataset/e02c44d2-3c64-459c-8fe2-e1ce5f38a035/resource/fd351943-c2c6-4630-992d-3f895360febd/download/ast2018full.csv'
-
-        df = pandas.read_csv(url)
-        json_df = df.to_json(orient='records')
-        r = json.loads(json_df)
-
-        repo.dropCollection("property")
-        repo.createCollection("property")
-        repo['Jinghang_Yuan.property'].insert_many(r)
-        repo['Jinghang_Yuan.property'].metadata({'complete': True})
+        url = 'http://datamechanics.io/data/Jinghang_Yuan/policeStation.json'
+        response = urllib.request.urlopen(url).read().decode("utf-8")
+        r = json.loads(response)
+        s = json.dumps(r, sort_keys=True, indent=2)
+        repo.dropCollection("policeStation")
+        repo.createCollection("policeStation")
+        repo['Jinghang_Yuan.policeStation'].insert_many(r)
+        repo['Jinghang_Yuan.policeStation'].metadata({'complete': True})
+        # print('-----------------')
+        # print(list(repo['Jinghang_Yuan.policeStation'].find()))
+        # print('-----------------')
 
         repo.logout()
 
@@ -52,28 +53,28 @@ class property(dml.Algorithm):
         doc.add_namespace('log', 'http://datamechanics.io/log/')
         doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
 
-        this_script = doc.agent('alg:Jinghang_Yuan#property',
+        this_script = doc.agent('alg:Jinghang_Yuan#policeStation',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
         resource = doc.entity('bdp:wc8w-nujj',
                               {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource',
                                'ont:Extension': 'json'})
-        get_property = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(get_property, this_script)
-        doc.usage(get_property, resource, startTime, None,
+        get_policeStation = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(get_policeStation, this_script)
+        doc.usage(get_policeStation, resource, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:Retrieval',
-                   'ont:Query': 'PID,CM_ID,GIS_ID,ST_NUM,ST_NAME,ST_NAME_SUF,UNIT_NUM,ZIPCODE,PTYPE,LU,OWN_OCC,OWNER,MAIL_ADDRESSEE,MAIL_ADDRESS,MAIL CS,MAIL_ZIPCODE'
+                   'ont:Query': 'OBJECTID,BLDG_ID,BID,ADDRESS,POINT_X,POINT_Y,NAME,NEIGHBOTHOOD,CITY,ZIP,FT_SOFT,STORY_HT,PARCEL_ID'
                    }
                   )
-        property = doc.entity('dat:Jinghang_Yuan#property',
-                          {prov.model.PROV_LABEL: 'property', prov.model.PROV_TYPE: 'ont:DataSet'})
-        doc.wasAttributedTo(property, this_script)
-        doc.wasGeneratedBy(property, get_property, endTime)
-        doc.wasDerivedFrom(resource, property, get_property, get_property, get_property)
+        policeStation = doc.entity('dat:Jinghang_Yuan#policeStation',
+                          {prov.model.PROV_LABEL: 'policeStation', prov.model.PROV_TYPE: 'ont:DataSet'})
+        doc.wasAttributedTo(policeStation, this_script)
+        doc.wasGeneratedBy(policeStation, get_policeStation, endTime)
+        doc.wasDerivedFrom(policeStation, resource, get_policeStation, get_policeStation, get_policeStation)
 
         repo.logout()
 
         return doc
-property.execute()
+policeStation.execute()
 # doc = property.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))
