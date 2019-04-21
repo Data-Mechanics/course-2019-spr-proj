@@ -14,37 +14,23 @@ import os
 import importlib
 import json
 import argparse
-
-import logging
 import prov.model
-
-log = logging.getLogger(__name__)
-logging.basicConfig(level=logging.DEBUG)
-
 
 parser = argparse.ArgumentParser()
 parser.add_argument("contributor_folder")
-parser.add_argument("--algo_class", dest="algo_class", type=str, required=False)
 parser.add_argument("-t", "--trial", help="run all algorithms in trial mode", action="store_true")
 args = parser.parse_args()
-log.debug("Args %s", args)
+
 # Extract the algorithm classes from the modules in the
 # subdirectory specified on the command line.
 path = args.contributor_folder
 algorithms = []
 for r,d,f in os.walk(path):
     for file in f:
-        log.debug("File %s", file)
         if r.find(os.sep) == -1 and file.split(".")[-1] == "py":
             name_module = ".".join(file.split(".")[0:-1])
             module = importlib.import_module(path + "." + name_module)
             algorithms.append(module.__dict__[name_module])
-
-            if (name_module == args.algo_class):
-
-                module.__dict__[name_module].execute(trial=args.trial)
-
-                sys.exit()
 
 # Create an ordering of the algorithms based on the data
 # sets that they read and write.
@@ -69,7 +55,6 @@ print(provenance.get_provn())
 
 # Render the provenance document as an interactive graph.
 prov_json = json.loads(provenance.serialize())
-
 import protoql
 agents = [[a] for a in prov_json['agent']]
 entities = [[e] for e in prov_json['entity']]
