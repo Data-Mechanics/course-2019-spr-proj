@@ -9,7 +9,7 @@ import os
 def aggregate(R, f):
 	keys = {r[0] for r in R}
 	return [(key, f([v for (k,v) in R if k == key])) for key in keys]
-class y_facilities(dml.Algorithm):
+class facilities(dml.Algorithm):
 
 	contributor = 'ruipang_zhou482'
 	reads = ["ruipang_zhou482.hospital", "ruipang_zhou482.police"]

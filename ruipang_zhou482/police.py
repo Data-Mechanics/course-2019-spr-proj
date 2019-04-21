@@ -47,6 +47,8 @@ class police(dml.Algorithm):
 			dic["count"] = police[1]
 			repo['ruipang_zhou482.police'].insert_one(dic)
 		repo.logout()
+		file.close()
+		os.remove("police.csv")
 
 		endTime = datetime.datetime.now()
 
