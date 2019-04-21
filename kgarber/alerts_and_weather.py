@@ -14,7 +14,7 @@ from tqdm import tqdm
 class alerts_and_weather(dml.Algorithm):
     contributor = 'kgarber'
     reads = ['kgarber.weather', 'kgarber.mbta.alerts']
-    writes = ['kgarber.alerts_and_weather']
+    writes = ['kgarber.alerts_and_weather', 'kgarber.alert_weather_daily']
     @staticmethod
     def execute(trial = False):
         print("Starting alerts_and_weather algorithm.")
@@ -26,6 +26,8 @@ class alerts_and_weather(dml.Algorithm):
         repo.authenticate('kgarber', 'kgarber')
         repo.dropCollection("alerts_and_weather")
         repo.createCollection("alerts_and_weather")
+        repo.dropCollection("alert_weather_daily")
+        repo.createCollection("alert_weather_daily")
 
         repo['kgarber.mbta.alerts'].aggregate([
             {"$project": {
@@ -53,6 +55,9 @@ class alerts_and_weather(dml.Algorithm):
             {"$unwind": "$tempMin"},
             {"$unwind": "$tempMax"},
             {"$unwind": "$tempAvg"},
+            {"$out": "kgarber.alert_weather_daily"}
+        ])
+        repo['kgarber.alert_weather_daily'].aggregate([
             {"$project": 
                 {
                     "date": 1, "totalAlerts": 1, "tempMin": 1, "tempMax": 1, "tempAvg": 1,
@@ -78,6 +83,7 @@ class alerts_and_weather(dml.Algorithm):
 
         # indicate that the collection is complete
         repo['kgarber.alerts_and_weather'].metadata({'complete':True})
+        repo['kgarber.alert_weather_daily'].metadata({'complete':True})
         
         repo.logout()
         endTime = datetime.datetime.now()
@@ -110,6 +116,12 @@ class alerts_and_weather(dml.Algorithm):
                 prov.model.PROV_LABEL:'Boston Weather 2018', 
                 prov.model.PROV_TYPE:'ont:DataSet'
             })
+        alert_weather_daily = doc.entity(
+            'dat:kgarber#alert_weather_daily', 
+            {
+                prov.model.PROV_LABEL:'Alerts and Weather Daily', 
+                prov.model.PROV_TYPE:'ont:DataSet'
+            })
         alert_weather_aggregate = doc.entity(
             'dat:kgarber#alerts_and_weather', 
             {
@@ -123,13 +135,21 @@ class alerts_and_weather(dml.Algorithm):
             {prov.model.PROV_TYPE:'ont:Select'})
         doc.usage(get_averages, weather, startTime, None,
             {prov.model.PROV_TYPE:'ont:Join'})
+
+        doc.wasAttributedTo(alert_weather_daily, this_script)
+        doc.wasGeneratedBy(alert_weather_daily, get_averages, endTime)
+        doc.wasDerivedFrom(alert_weather_daily, weather,
+                get_averages, get_averages, get_averages)
+        doc.wasDerivedFrom(alert_weather_daily, alerts,
+                get_averages, get_averages, get_averages)
+
         doc.wasAttributedTo(alert_weather_aggregate, this_script)
         doc.wasGeneratedBy(alert_weather_aggregate, get_averages, endTime)
         doc.wasDerivedFrom(alert_weather_aggregate, weather,
                 get_averages, get_averages, get_averages)
         doc.wasDerivedFrom(alert_weather_aggregate, alerts,
                 get_averages, get_averages, get_averages)
-        
+
         # return the generated provenance document
         return doc
 
