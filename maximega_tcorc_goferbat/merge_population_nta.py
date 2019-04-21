@@ -33,6 +33,7 @@ class merge_population_nta(dml.Algorithm):
 						'ntaname': neighborhood['ntaname'], 
 						'the_geom': neighborhood['the_geom'], 
 						'stations': neighborhood['stations'], 
+						'position' : neighborhood['position'],
 						'population': population['population']
 					})
 					break

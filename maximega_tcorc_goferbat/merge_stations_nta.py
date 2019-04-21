@@ -5,6 +5,7 @@ import prov.model
 import datetime
 import uuid
 from maximega_tcorc.helper_functions.within_polygon import point_inside_polygon
+#from helper_functions.within_polygon import point_inside_polygon
 
 class merge_stations_nta(dml.Algorithm):
 	contributor = 'maximega_tcorc'
@@ -28,9 +29,10 @@ class merge_stations_nta(dml.Algorithm):
 		filtered_stations = []
 		# ----------------- Create a list of unique stations (stations data contains many duplicates) -----------------
 		for station in stations:
-			name = station['Station Name']
-			if name not in duplicates:
-				duplicates.append(name)
+			lat = station['Station Latitude']
+			lon = station['Station Longitude']
+			if (lat, lon) not in duplicates:
+				duplicates.append((lat, lon))
 				filtered_stations.append(station)
 
 		nta_objects = {}
@@ -39,12 +41,27 @@ class merge_stations_nta(dml.Algorithm):
 		# ----------------- Merge NTA info with station info if the subway station is inside of NTA multi polygon -----------------
 		for nta in ntas:
 			nta_objects[nta['ntacode']] = {'ntacode': nta['ntacode'],'ntaname': nta['ntaname'], 'the_geom': nta['the_geom'], 'stations': []}
-			nta_multipolygon = nta['the_geom']['coordinates'][0][0]
+			nta_multipolygon = []
+			min_lat = 0
+			max_long = 0
+			for i in nta['the_geom']['coordinates']:
+				for j in i:
+					for k in range(len(j)):
+						nta_multipolygon.append(j[k])
+			for coord in nta_multipolygon:
+				neg_lat = coord[0]
+				pos_long = abs(coord[1])
+				if neg_lat < min_lat:
+					min_lat = neg_lat
+				if pos_long > max_long:
+					max_long = pos_long
+
+			nta_objects[nta['ntacode']]['position'] = [min_lat, max_long]
 
 			for station in filtered_stations:
 				# ----------------- station coordinates come in form: (lat, long) as a string -----------------
 				# ----------------- retreive lat and long points, cast them to floats to be passed into point_inside_polygon function -----------------				
-				station_coordinates = station['Entrance Location']
+				station_coordinates = station['Station Location']
 				lat_coord = ''
 				long_coord = ''
 				i = 1
@@ -57,12 +74,14 @@ class merge_stations_nta(dml.Algorithm):
 					i += 1
 				lat_coord = float(lat_coord)
 				long_coord = float(long_coord)
-				#print(type(nta_multipolygon[0][0]))
 				is_in_nta = point_inside_polygon(long_coord, lat_coord, nta_multipolygon)
 				if is_in_nta:
 					nta_objects[nta['ntacode']]['stations'].append({
 						'station_name': station['Station Name']
 					})
+
+		
+
 		# ----------------- Reformat data for mongodb insertion -----------------
 		insert_many_arr = []
 		for key in nta_objects.keys():
@@ -126,5 +145,3 @@ class merge_stations_nta(dml.Algorithm):
 		repo.logout()
 				
 		return doc
-
-
