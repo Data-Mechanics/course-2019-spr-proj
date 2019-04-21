@@ -1,6 +1,6 @@
 # Directories.
 data/
-
+db_store/
 # Common operating system files.
 .DS_Store
 .Rhistory

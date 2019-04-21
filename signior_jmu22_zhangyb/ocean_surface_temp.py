@@ -7,9 +7,9 @@ import uuid
 import pandas as pd
 
 class ocean_surface_temp(dml.Algorithm):
-  contributor = 'signior_jmu22'
+  contributor = 'signior_jmu22_zhangyb'
   reads = []
-  writes = ['signior_jmu22.ocean_surface_temp']
+  writes = ['signior_jmu22_zhangyb.ocean_surface_temp']
 
   @staticmethod
   def execute(trial = False):
@@ -18,7 +18,7 @@ class ocean_surface_temp(dml.Algorithm):
     # Set up database connection
     client = dml.pymongo.MongoClient()
     repo = client.repo
-    repo.authenticate('signior_jmu22', 'signior_jmu22')
+    repo.authenticate('signior_jmu22_zhangyb', 'signior_jmu22_zhangyb')
 
     url = 'http://datamechanics.io/data/signior_jmu22/sea_surface_temp_anomaly.csv'
     df = pd.read_csv(url)
@@ -26,12 +26,13 @@ class ocean_surface_temp(dml.Algorithm):
     # print(new_df.head(5)) #uncomment this to see structure
     ocean_temp_dict = new_df.to_dict(orient='records')
     
+    # print(ocean_temp_dict)
     repo.dropCollection("ocean_surface_temp")
     repo.createCollection("ocean_surface_temp")
-    repo['signior_jmu22.ocean_surface_temp'].insert_many(ocean_temp_dict)
-    repo['signior_jmu22.ocean_surface_temp'].metadata({'complete': True})
+    repo['signior_jmu22_zhangyb.ocean_surface_temp'].insert_many(ocean_temp_dict)
+    repo['signior_jmu22_zhangyb.ocean_surface_temp'].metadata({'complete': True})
 
-    print(repo['signior_jmu22.power_plants'].metadata())
+    print(repo['signior_jmu22_zhangyb.ocean_surface_temp'].metadata())
 
     repo.logout()
 
@@ -44,7 +45,7 @@ class ocean_surface_temp(dml.Algorithm):
   def provenance(doc = prov.model.ProvDocument(), startTime = None, endTime = None):
     client = dml.pymongo.MongoClient()
     repo = client.repo
-    repo.authenticate('signior_jmu22', 'signior_jmu22')
+    repo.authenticate('signior_jmu22_zhangyb', 'signior_jmu22_zhangyb')
     doc.add_namespace('alg', 'http://datamechanics.io/algorithm/signior_jmu22') # The scripts are in <folder>#<filename> format
     doc.add_namespace('dat', 'http://datamechanics.io/data/signior_jmu22' ) # The datasets are in <user>#<collection> format
     doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retreival', 'Query', or 'Computation'
@@ -72,7 +73,7 @@ class ocean_surface_temp(dml.Algorithm):
 
 
 # comment this when submitting, this is purely for testing purposes
-ocean_surface_temp.execute()
+# ocean_surface_temp.execute()
 # doc = ocean_surface_temp.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))

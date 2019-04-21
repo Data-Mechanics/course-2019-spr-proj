@@ -12,9 +12,9 @@ import pandas as pd
 
 
 class power_plants(dml.Algorithm):
-  contributor = 'signior_jmu22'
+  contributor = 'signior_jmu22_zhangyb'
   reads = []
-  writes = ['signior_jmu22.power_plants']
+  writes = ['signior_jmu22_zhangyb.power_plants']
 
   @staticmethod
   def execute(trial = False):
@@ -23,7 +23,7 @@ class power_plants(dml.Algorithm):
     # Set up database connection
     client = dml.pymongo.MongoClient()
     repo = client.repo
-    repo.authenticate('signior_jmu22', 'signior_jmu22')
+    repo.authenticate('signior_jmu22_zhangyb', 'signior_jmu22_zhangyb')
 
     url = 'http://datamechanics.io/data/signior_jmu22/global_power_plant_database.csv'
     df = pd.read_csv(url)
@@ -32,10 +32,10 @@ class power_plants(dml.Algorithm):
     
     repo.dropCollection("power_plants")
     repo.createCollection("power_plants")
-    repo['signior_jmu22.power_plants'].insert_many(power_plants_dict)
-    repo['signior_jmu22.power_plants'].metadata({'complete': True})
+    repo['signior_jmu22_zhangyb.power_plants'].insert_many(power_plants_dict)
+    repo['signior_jmu22_zhangyb.power_plants'].metadata({'complete': True})
 
-    print(repo['signior_jmu22.power_plants'].metadata())
+    print(repo['signior_jmu22_zhangyb.power_plants'].metadata())
 
     repo.logout()
 
@@ -48,7 +48,7 @@ class power_plants(dml.Algorithm):
   def provenance(doc = prov.model.ProvDocument(), startTime = None, endTime = None):
     client = dml.pymongo.MongoClient()
     repo = client.repo
-    repo.authenticate('signior_jmu22', 'signior_jmu22')
+    repo.authenticate('signior_jmu22_zhangyb', 'signior_jmu22_zhangyb')
     doc.add_namespace('alg', 'http://datamechanics.io/algorithm/signior_jmu22') # The scripts are in <folder>#<filename> format
     doc.add_namespace('dat', 'http://datamechanics.io/data/signior_jmu22' ) # The datasets are in <user>#<collection> format
     doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retreival', 'Query', or 'Computation'
@@ -75,7 +75,7 @@ class power_plants(dml.Algorithm):
 
 
 # comment this out when submitting, just for testing
-# power_plants.execute()
+power_plants.execute()
 # doc = power_plants.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))
