@@ -1,15 +1,20 @@
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import urllib.request
 import json
 import dml
 import prov.model
 import datetime
 import uuid
+import numpy as np
+import matplotlib.pyplot as plt
+import random
 
 
-class getTweets(dml.Algorithm):
+class sentimentAnalysis(dml.Algorithm):
+
     contributor = 'gaotian_xli33'
-    reads = []
-    writes = ['emmaliu_gaotian_xli33_yuyangl.tweets']
+    reads = ['emmaliu_gaotian_xli33_yuyangl.tweets_translated']
+    writes = []
 
     @staticmethod
     def execute(trial=False):
@@ -21,16 +26,40 @@ class getTweets(dml.Algorithm):
         repo = client.repo
         repo.authenticate('emmaliu_gaotian_xli33_yuyangl', 'emmaliu_gaotian_xli33_yuyangl')
 
-        url = 'http://datamechanics.io/data/tweets_amman.json'
-        response = urllib.request.urlopen(url).read().decode("utf-8")
-        # print(response)
-        r = json.loads(response)
-        s = json.dumps(r, sort_keys=True, indent=2)
-        repo.dropCollection("tweets")
-        repo.createCollection("tweets")
-        repo['emmaliu_gaotian_xli33_yuyangl.tweets'].insert_many(r)
-        repo['emmaliu_gaotian_xli33_yuyangl.tweets'].metadata({'complete': True})
-        print(repo['emmaliu_gaotian_xli33_yuyangl.tweets'].metadata())
+        # Get Tweets data
+        tweetsData = repo.emmaliu_gaotian_xli33_yuyangl.tweets_translated.find()
+        sentences = []
+        compoundScore = []
+        sentiment = []
+        analyzer = SentimentIntensityAnalyzer()
+
+        # sentiment analysis
+        for item in tweetsData:
+            sentences.append(item['text'])
+
+        for sentence in sentences:
+            vs = analyzer.polarity_scores(sentence)
+            # print("{:-<65} {}".format(sentence, str(vs)))
+            compoundScore.append(vs['compound'])
+            if vs['compound'] >= 0:
+                sentiment.append(1)
+            else:
+                sentiment.append(0)
+
+        # sampling: random sample 200 tweets from 5000 tweets
+        sample = []
+        sampleNum = random.sample(range(len(compoundScore)), 200)
+        for i in sampleNum:
+            sample.append(compoundScore[i])
+            # print(i)
+
+        x = range(len(sample))
+        # compoundScore.sort()
+
+        # draw plot
+        plt.scatter(x, sample, c=sample, cmap='coolwarm', alpha=1)
+        # plt.plot(x, compoundScore,  alpha=1)
+        plt.show()
 
         repo.logout()
 
@@ -54,34 +83,26 @@ class getTweets(dml.Algorithm):
         doc.add_namespace('dat', 'http://datamechanics.io/data/emmaliu_gaotian_xli33_yuyangl')  # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/')  # The event log.
-        doc.add_namespace('bdp', 'https://developer.twitter.com/en/docs/tweets/search/api-reference/get-search-tweets')
-
-        this_script = doc.agent('alg:emmaliu_gaotian_xli33_yuyangl#getTweets',
+        doc.add_namespace('bdp', '')
+        this_script = doc.agent('alg:emmaliu_gaotian_xli33_yuyangl#sentimentAnalysis',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
-        resource = doc.entity('bdp:twitter API',
+        resource = doc.entity('dat:emmaliu_gaotian_xli33_yuyangl#tweets_translated',
                               {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource',
                                'ont:Extension': 'json'})
-        get_tweets = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(get_tweets, this_script)
-        doc.usage(get_tweets, resource, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:Retrieval',
-                   'ont:Query': '?type=Animal+Found&$select=type,latitude,longitude,OPEN_DT'
+        sentiment_analysis = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(sentiment_analysis, this_script)
+        doc.usage(sentiment_analysis, resource, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:calculation',
+                   'ont:Query': ''
                    }
                   )
-
-        tweets = doc.entity('dat:emmaliu_gaotian_xli33_yuyangl#get_tweets',
-                          {prov.model.PROV_LABEL: 'tweets from Amman', prov.model.PROV_TYPE: 'ont:DataSet'})
-        doc.wasAttributedTo(tweets, this_script)
-        doc.wasGeneratedBy(tweets, get_tweets, endTime)
-        doc.wasDerivedFrom(tweets, resource, get_tweets, get_tweets, get_tweets)
 
         repo.logout()
 
         return doc
 
-
-getTweets.execute()
-# doc = getTweets.provenance()
+# sentimentAnalysis.execute()
+# doc = sentimentAnalysis.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))
 

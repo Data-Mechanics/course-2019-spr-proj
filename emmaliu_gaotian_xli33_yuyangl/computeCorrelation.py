@@ -1,19 +1,55 @@
-import urllib.request
-import json
 import dml
 import prov.model
 import datetime
 import uuid
+from random import shuffle
+from math import sqrt
 
 
-class getTweets(dml.Algorithm):
+def permute(x):
+    shuffled = [xi for xi in x]
+    shuffle(shuffled)
+    return shuffled
+
+
+def avg(x): # Average
+    return sum(x)/len(x)
+
+
+def stddev(x): # Standard deviation.
+    m = avg(x)
+    return sqrt(sum([(xi-m)**2 for xi in x])/len(x))
+
+
+def cov(x, y): # Covariance.
+    return sum([(xi-avg(x))*(yi-avg(y)) for (xi,yi) in zip(x,y)])/len(x)
+
+
+def corr(x, y): # Correlation coefficient.
+    if stddev(x)*stddev(y) != 0:
+        return cov(x, y)/(stddev(x)*stddev(y))
+
+
+def p(x, y):
+    c0 = corr(x, y)
+    corrs = []
+    for k in range(0, 500):
+        y_permuted = permute(y)
+        corrs.append(corr(x, y_permuted))
+        # print(k)
+    return len([c for c in corrs if abs(c) >= abs(c0)])/len(corrs)
+
+
+class computeCorrelation(dml.Algorithm):
+
     contributor = 'gaotian_xli33'
-    reads = []
-    writes = ['emmaliu_gaotian_xli33_yuyangl.tweets']
+    reads = ['emmaliu_gaotian_xli33_yuyangl.tweets']
+    writes = []
 
     @staticmethod
     def execute(trial=False):
         '''Retrieve some data sets (not using the API here for the sake of simplicity).'''
+
         startTime = datetime.datetime.now()
 
         # Set up the database connection.
@@ -21,16 +57,21 @@ class getTweets(dml.Algorithm):
         repo = client.repo
         repo.authenticate('emmaliu_gaotian_xli33_yuyangl', 'emmaliu_gaotian_xli33_yuyangl')
 
-        url = 'http://datamechanics.io/data/tweets_amman.json'
-        response = urllib.request.urlopen(url).read().decode("utf-8")
-        # print(response)
-        r = json.loads(response)
-        s = json.dumps(r, sort_keys=True, indent=2)
-        repo.dropCollection("tweets")
-        repo.createCollection("tweets")
-        repo['emmaliu_gaotian_xli33_yuyangl.tweets'].insert_many(r)
-        repo['emmaliu_gaotian_xli33_yuyangl.tweets'].metadata({'complete': True})
-        print(repo['emmaliu_gaotian_xli33_yuyangl.tweets'].metadata())
+        # Get Tweets data
+        tweetsData = repo.emmaliu_gaotian_xli33_yuyangl.tweets.find()
+
+        followers_num = []
+        list_num = []
+        i = 0
+        for item in tweetsData:
+            followers_num.append(item['user']['followers_count'])
+            list_num.append(item['user']['listed_count'])
+            i += 1
+            if i >= 200:
+                break
+
+        print('correlation coefficient: ' + str(corr(followers_num, list_num)))
+        print('p-value: ' + str(p(followers_num, list_num)))
 
         repo.logout()
 
@@ -54,34 +95,27 @@ class getTweets(dml.Algorithm):
         doc.add_namespace('dat', 'http://datamechanics.io/data/emmaliu_gaotian_xli33_yuyangl')  # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/')  # The event log.
-        doc.add_namespace('bdp', 'https://developer.twitter.com/en/docs/tweets/search/api-reference/get-search-tweets')
-
-        this_script = doc.agent('alg:emmaliu_gaotian_xli33_yuyangl#getTweets',
+        doc.add_namespace('bdp', '')
+        this_script = doc.agent('alg:emmaliu_gaotian_xli33_yuyangl#computeCorrelation',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
-        resource = doc.entity('bdp:twitter API',
+        resource = doc.entity('dat:emmaliu_gaotian_xli33_yuyangl#tweets',
                               {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource',
                                'ont:Extension': 'json'})
-        get_tweets = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(get_tweets, this_script)
-        doc.usage(get_tweets, resource, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:Retrieval',
-                   'ont:Query': '?type=Animal+Found&$select=type,latitude,longitude,OPEN_DT'
+        compute_correlation = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(compute_correlation, this_script)
+        doc.usage(compute_correlation, resource, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:calculation',
+                   'ont:Query': ''
                    }
                   )
-
-        tweets = doc.entity('dat:emmaliu_gaotian_xli33_yuyangl#get_tweets',
-                          {prov.model.PROV_LABEL: 'tweets from Amman', prov.model.PROV_TYPE: 'ont:DataSet'})
-        doc.wasAttributedTo(tweets, this_script)
-        doc.wasGeneratedBy(tweets, get_tweets, endTime)
-        doc.wasDerivedFrom(tweets, resource, get_tweets, get_tweets, get_tweets)
 
         repo.logout()
 
         return doc
 
 
-getTweets.execute()
-# doc = getTweets.provenance()
+# computeCorrelation.execute()
+# doc = computeCorrelation.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))
 
