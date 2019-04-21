@@ -1,13 +1,19 @@
-I gathered data from Massachusetts local and regional school districts to summarize some statistics that can help visualize public education and availability of educational resources in Massachusetts. First, I computed the number of districts with average class sizes of less than 10, 10-19, 20-29, and 30+ students (in the collection "sizecategories". Then, I computed the number of districts in each of those categories for districts that offered grades 9-12 and that didn't offer grades 9-12 (in the collection "sizecategorieshs". Finally, I geocoded all public libraries in Massachusetts based on an online list of public libraries, and determined how many public libraries fell in the geographic bounds of each school district (in the collection "libperdistr"). Based on the variation in these results, we could formulate hypotheses based on the number of libraries, grades offered, and class size within a school district, and use these factors as potential covariates in a statistical model on the quality of educational resources in Massachusetts. Of course, more metrics and qualitative information about school districts and their performance would be needed to perform such assessments.
+In this project, I model the problem of choosing a neighborhood in Boston in which to place a new community center. The decision involves taking into account the quantities of public and non-public schools in each neighborhood, the number of existing community centers and YMCA locations in each neighborhood, and the aggregate average by neighborhood of variables from the 2010 Boston Neighborhood Survey, which polled Boston residents on their sense of togetherness and security within their neighborhoods. The survey variables that I used in the neighborhood selection were social cohesion ("the strength of positive social relationships between people in the neighborhood"), social control ("the perceived ability of the neighborhood to enforce shared norms"), and reciprocal exchange ("the perceived degree to which neighbors interact with one another").
+
+The preferred criteria for selecting a neighborhood are that the selected neighborhood has:
+(1) at most 2 community centers,
+(2) at least 2 public schools,
+(3) at least 1 non public school,
+and the neighborhood's survey scores for (4) cohesion, (5) control, and (6) reciprocal exchange are all less than their respective means across all neighborhoods.
+
+The algorithm adds these criteria one by one to the model--in the following prioritized order: (1), (4), (5), (6), (2), (3)--and tests if there is a neighborhood that satisfies all criteria that have been added. If the addition of one constraint makes the model unsatisfactory, it is dropped in order to keep the formerly added higher-priority constraints intact. The selected neighborhood(s) along with their corresponding statistics are stored in the collection entitled "selected".
+
+The criteria in this project were chosen based on personal intuitions on what sort of neighborhood might benefit from a new community center (a neighborhood that is socially disconnected and lacks community centers at the moment, but has a solid population of children and young adults whom a community center could help). However, in real life, this criteria should be based on research supporting the premise that a neighborhood with such characteristics would benefit from, and improve togetherness from, the addition of a new community center. 
+Additionally, a new community center should not just exist, but should offer programming and recreational opportunities that are designed with the neighborhood's collected statistics and residents' reported struggles in mind.
+
+Because the neighborhood divisions provided by the City of Boston were different from those provided by the Boston Neighborhood Survey, I manually created a list of neighborhood regions based on the ones provided by both the City of Boston, the survey, and my knowledge of Boston geography. If there were multiple survey regions that existed within a single shapefile region provided by the City of Boston, I took the minimum value of the neighborhood aggregates for that variable out of all the survey regions within the City of Boston region. This ensured that we had "worst case scenario" survey variable averages for each of the City of Boston regions, since a neighborhood with lower values on the survey were more likely to be selected by the selection criteria. (If time/resources permitted, it would be crucial to contact the conductors of the Boston Neighborhood Survey to get more information on how to split their data geographically by the bounds provided by the City of Boston.)
 
 In order to run the program, you will need to get an API key for Google Maps geocoding and put it into auth.json in the following format:
-{"services": {"googlemaps": {"key": <API key>}}}  
-  
-Additionally, the Shapely and Pyproj libraries are required to convert the school district shapefile coordinates into Latitude/Longitude and to determine whether libraries are within school districts.
+{"services": {"googlemaps": {"key": <API key>}}}
 
-Data sources:  
-Class sizes: http://profiles.doe.mass.edu/statereport/classsizebyraceethnicity.aspx  
-Grade levels: http://profiles.doe.mass.edu/state_report/gradesbydistrict.aspx  
-Public libraries: https://publiclibraries.com/state/massachusetts/  
-
-Note: due to issues with the retrieved data sets that I have not yet fixed or found solutions for, the count data in the resulting collections is not always completely accurate (for instance, the libraries per school district count says 0 for some districts that definitely contain libraries).
+Note: due to some issues with the computations that I have not yet fixed or found solutions for, the count data in the resulting collections is not always completely accurate, therefore the selected neighborhood may not actually meet the criteria that I have defined in real life.
