@@ -20,9 +20,10 @@ class income(dml.Algorithm):
 
         income = income.groupby('Name').sum() # aggregate data for 23 neighborhoods of Boston
         income['prop_low_income'] = income.Low_to_No / income.POP100_RE # projection: new column for proportion of people who have low income
+        income = income.rename_axis('Neighborhood').reset_index()
         income = pd.DataFrame(income)
         income = json.loads(income.to_json(orient = 'records'))
-
+        
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
@@ -50,7 +51,7 @@ class income(dml.Algorithm):
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
         doc.add_namespace('bod', 'http://bostonopendata-boston.opendata.arcgis.com/datasets/') # Boston Open Data 
         
-        this_script = doc.agent('alg:aqu1#', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        this_script = doc.agent('alg:aqu1#income', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
         # Income Report 
         resource_income = doc.entity('bod:34f2c48b670d4b43a617b1540f20efe3_0.csv', {'prov:label':'Low Income Population', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
         get_income = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
@@ -64,4 +65,12 @@ class income(dml.Algorithm):
         
         repo.logout()
 
-        return doc   
+        return doc  
+'''
+# This is example code you might use for debugging this module.
+# Please remove all top-level function calls before submitting.
+income.execute()
+doc = income.provenance()
+print(doc.get_provn())
+print(json.dumps(json.loads(doc.serialize()), indent=4))
+'''

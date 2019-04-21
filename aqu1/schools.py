@@ -17,15 +17,44 @@ class schools(dml.Algorithm):
         # Dataset 1: Colleges in Boston
         url = 'http://bostonopendata-boston.opendata.arcgis.com/datasets/cbf14bb032ef4bd38e20429f71acb61a_2.csv'
         college = pd.read_csv(url)
+        # Clean data to only include traditional 4-year colleges and 2-year community colleges
+        college['City'] = college['City'].replace(['North Dorchester', 'South Dorchester'], 'Dorchester')
+        college['City'] = college['City'].replace('Fenway/Kenmore', 'Fenway')
+        college['City'] = college['City'].replace('Financial District', 'Downtown')
+        college = college[college['NumStudents13'] != 0]
+        college = college[college['Latitude'] != 0]
+        college = college[college['City'] != 'Chestnut Hill']
+        college = college[college['Name'] != 'Massachusetts General Hospital Dietetic Internship']
+        college['City'] = college['City'].mask(college['Name'] == 'Suffolk University', 'Downtown')
+        college['City'] = college['City'].mask(college['Name'] == 'Everest Institute-Brighton', 'Brighton')
+        college['City'] = college['City'].mask(college['Name'] == 'Saint John\'s Seminary', 'Brighton')
+        college['City'] = college['City'].mask(college['Name'] == 'Harvard Business School', 'Allston')
+        college['City'] = college['City'].replace('Chinatown', 'Downtown')
+        colleges = pd.concat([college.Latitude, college.Longitude, college.City], axis = 1) # select columns
 
         # Dataset 2: Public Schools in Boston
         url = 'http://bostonopendata-boston.opendata.arcgis.com/datasets/1d9509a8b2fd485d9ad471ba2fdb1f90_0.csv'
         school = pd.read_csv(url)
-
-        # Merge latitude and longitudes of all colleges and public schools in Boston
-        colleges = pd.concat([college.Latitude, college.Longitude], axis = 1) # select columns
-        schools = pd.concat([school.Y, school.X], axis = 1) # select columns 
-        schools.columns = ['Latitude', 'Longitude']
+        school = school.rename(columns = {'CITY': 'City'})
+        #print(school.City.unique())
+        school['City'] = school['City'].mask(school['BLDG_NAME'] == 'Boston HS Bldg', 'Chinatown')
+        school['City'] = school['City'].mask(school['BLDG_NAME'] == 'Eliot Bldg', 'North End')
+        school['City'] = school['City'].mask(school['BLDG_NAME'] == 'Abraham Lincoln Building', 'Back Bay')
+        school['City'] = school['City'].mask(school['BLDG_NAME'] == 'Snowden Hs Bldg', 'Back Bay')
+        school['City'] = school['City'].mask(school['BLDG_NAME'] == 'Mckinley Mackey Bldg', 'South End')
+        school['City'] = school['City'].mask(school['BLDG_NAME'] == 'Hurley Bldg', 'South End')
+        school['City'] = school['City'].mask(school['BLDG_NAME'] == 'Blackstone Bldg', 'South End')
+        school['City'] = school['City'].mask(school['BLDG_NAME'] == 'Boston Latin Academy Bldg', 'Roxbury')
+        school['City'] = school['City'].mask(school['BLDG_NAME'] == 'Boston Latin School Bldg', 'Fenway')
+        school['City'] = school['City'].mask(school['BLDG_NAME'] == 'Health Careers Academy', 'Fenway')
+        school['City'] = school['City'].mask(school['BLDG_NAME'] == 'Mckinley Peterborough Bldg', 'Fenway')
+        school['City'] = school['City'].mask(school['BLDG_NAME'] == 'Mckinley St Mary\'S St Bldg', 'Fenway')
+        school['City'] = school['City'].mask(school['BLDG_NAME'] == 'Church Street Bldg', 'Back Bay')
+        school['City'] = school['City'].replace('Chinatown', 'Downtown')
+        # Merge latitudes, longitudes, and neighborhoods of all colleges and public schools in Boston
+        school = school[school['SCH_TYPE'] != 'ELC']
+        schools = pd.concat([school.Y, school.X, school.City], axis = 1) # select columns 
+        schools.columns = ['Latitude', 'Longitude', 'City']
         all_schools = colleges.append(schools) # aggregate data 
         all_schools = pd.DataFrame(all_schools)
         all_schools = json.loads(all_schools.to_json(orient = 'records'))
@@ -57,7 +86,7 @@ class schools(dml.Algorithm):
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
         doc.add_namespace('bod', 'http://bostonopendata-boston.opendata.arcgis.com/datasets/') # Boston Open Data 
         
-        this_script = doc.agent('alg:aqu1#', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        this_script = doc.agent('alg:aqu1#schools', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
         
         # Schools Report 
         resource_schools = doc.entity('bod:1d9509a8b2fd485d9ad471ba2fdb1f90_0.csv', {'prov:label':'Boston Public Schools', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
@@ -76,3 +105,10 @@ class schools(dml.Algorithm):
         repo.logout()
 
         return doc
+
+'''   
+schools.execute()
+doc = schools.provenance()
+print(doc.get_provn())
+print(json.dumps(json.loads(doc.serialize()), indent=4))
+'''
