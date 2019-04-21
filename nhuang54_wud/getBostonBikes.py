@@ -5,26 +5,10 @@ import prov.model
 import datetime
 import uuid
 
-# method to convert csv into json, returns dictionary
-def csv_to_json(url):
-    file = urllib.request.urlopen(url).read().decode("utf-8")  # retrieve file from datamechanics.io
-    dict_values = []
-    entries = file.split('\n')
-
-    keys = entries[0].split(',')  # retrieve column names for keys
-
-    for r in entries[1:-1]:
-        val = r.split(',')
-        val[-1] = val[-1][:-1]
-        dictionary = dict([(keys[i], val[i]) for i in range(len(keys))])
-        dict_values.append(dictionary)
-    return dict_values
-
-
-class getBikeFatality(dml.Algorithm):
+class getBostonBikes(dml.Algorithm):
     contributor = 'nhuang54_wud'
     reads = []
-    writes = ['nhuang54_wud.bikeFatality']
+    writes = ['nhuang54_wud.boston_bikes']
 
     @staticmethod
     def execute(trial = False):
@@ -36,14 +20,18 @@ class getBikeFatality(dml.Algorithm):
         repo = client.repo
         repo.authenticate('nhuang54_wud', 'nhuang54_wud')
 
-        url = 'http://datamechanics.io/data/fatality_open_data.csv'
-        json_file = csv_to_json(url)
+        url = 'http://datamechanics.io/data/tkixi/bike_network.json'
+        response = urllib.request.urlopen(url).read().decode("utf-8")
+        r = json.loads(response)
+        # s = json.dumps(r, sort_keys=True, indent=2)
+
         
-        repo.dropCollection("bikeFatality")
-        repo.createCollection("bikeFatality")
-        repo['nhuang54_wud.bikeFatality'].insert_many(json_file)
-        repo['nhuang54_wud.bikeFatality'].metadata({'complete':True})
-        print(repo['nhuang54_wud.bikeFatality'].metadata())
+        repo.dropCollection("boston_bikes")
+        repo.createCollection("boston_bikes")
+
+        repo['nhuang54_wud.boston_bikes'].insert_many(r)
+        repo['nhuang54_wud.boston_bikes'].metadata({'complete':True})
+        print(repo['nhuang54_wud.boston_bikes'].metadata())
 
         repo.logout()
 
@@ -70,20 +58,20 @@ class getBikeFatality(dml.Algorithm):
         doc.add_namespace('bdp', 'https://data.boston.gov/dataset/')
 
         # https://data.boston.gov/dataset/d326a4e3-75f2-42ac-9b32-e2920566d04c/resource/92f18923-d4ec-4c17-9405-4e0da63e1d6c/download/fatality_open_data.csv
-        this_script = doc.agent('alg:nhuang54_wud#getBikeFatality', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        resource = doc.entity('dat:fatality_open_data', {'prov:label':'Vision Zero Fatality Records', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'csv'})
-        get_bikeFatality = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(get_bikeFatality, this_script)
-        doc.usage(get_bikeFatality, resource, startTime, None,
+        this_script = doc.agent('alg:nhuang54_wud#getBostonBikes', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        resource = doc.entity('bdp:boston-existing-bike-network', {'prov:label':'Existing Bike Network', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        get_bikeNetwork = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(get_bikeNetwork, this_script)
+        doc.usage(get_bikeNetwork, resource, startTime, None,
                   {prov.model.PROV_TYPE:'ont:Retrieval',
                   'ont:Query':''
                   }
                   )
 
-        bikeFatality = doc.entity('dat:nhuang54_wud#bikeFatality', {prov.model.PROV_LABEL:'Vision Zero Fatality Records', prov.model.PROV_TYPE:'ont:DataSet'})
-        doc.wasAttributedTo(bikeFatality, this_script)
-        doc.wasGeneratedBy(bikeFatality, get_bikeFatality, endTime)
-        doc.wasDerivedFrom(bikeFatality, resource, get_bikeFatality, get_bikeFatality, get_bikeFatality)
+        bikeNetwork = doc.entity('dat:nhuang54_wud#bikeNetwork', {prov.model.PROV_LABEL:'Existing Bike Network', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(bikeNetwork, this_script)
+        doc.wasGeneratedBy(bikeNetwork, get_bikeNetwork, endTime)
+        doc.wasDerivedFrom(bikeNetwork, resource, get_bikeNetwork, get_bikeNetwork, get_bikeNetwork)
 
 
         repo.logout()
@@ -100,6 +88,6 @@ print(json.dumps(json.loads(doc.serialize()), indent=4))
 '''
 
 if __name__ == '__main__':
-    getBikeFatality.execute()
+    getBostonBikes.execute()
 
 ## eof
