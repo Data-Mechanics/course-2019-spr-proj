@@ -9,7 +9,6 @@ data/
 __pycache__/
 *.py[cod]
 *$py.class
-*.pyc
 
 # C extensions.
 *.so
@@ -115,6 +114,3 @@ auth.json
 
 # exclude node_modules
 node_modules/
-
-# exclude pycharm checkpoints
-.idea/
