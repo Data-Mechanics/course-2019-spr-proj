@@ -1,3 +1,6 @@
+# writes to database
+# not using bc by precinct
+
 import urllib.request
 import json
 import dml
@@ -13,6 +16,7 @@ class non_registered_precincts(dml.Algorithm):
 
     @staticmethod
     def execute(trial=False):
+        print("non_registered_precincts")
         '''Retrieve some data sets (without API).'''
         startTime = datetime.datetime.now()
 

@@ -9,7 +9,7 @@ import pandas as pd
 from pprint import pprint
 class sd_non_registered_coefficient(dml.Algorithm):
     contributor = 'carlosp_jpva_tkay_yllescas'
-    reads = ['carlosp_jpva_tkay_yllescas.registered', 'carlosp_jpva_tkay_yllescas.non_registered_voters']
+    reads = ['carlosp_jpva_tkay_yllescas.registered_sd', 'carlosp_jpva_tkay_yllescas.non_registered_voters_sd']
     writes = ['carlosp_jpva_tkay_yllescas.sd_non_registered_coefficient']
 
     @staticmethod
@@ -191,7 +191,7 @@ class sd_non_registered_coefficient(dml.Algorithm):
 
         s_d_json = json.dumps(dictionary_of_coefficients)
         s_d_json = json.loads(s_d_json)
-        print( s_d_json)
+#        print( s_d_json)
 
         repo['carlosp_jpva_tkay_yllescas.sd_non_registered_coefficient'].insert_many(s_d_json)
         repo['carlosp_jpva_tkay_yllescas.sd_non_registered_coefficient'].metadata({'complete':True})

@@ -1,7 +1,3 @@
-# writes to database
-# congressional districts
-# not using
-
 import urllib.request
 import json
 import dml
@@ -10,32 +6,32 @@ import datetime
 import uuid
 
 
-class non_registered_cd(dml.Algorithm):
+class non_registered_voters_sd(dml.Algorithm):
     contributor = 'carlosp_jpva_tkay_yllescas'
     reads = []
-    writes = ['carlosp_jpva_tkay_yllescas.non_registered_cd']
+    writes = ['carlosp_jpva_tkay_yllescas.non_registered_voters_sd']
 
     @staticmethod
     def execute(trial=False):
-        print("non_registered_cd")
-        '''Retrieve some data sets (without API).'''
+        print("non_registered_voters_sd")
+        '''Retrieve some data sets (not using the API here for the sake of simplicity).'''
         startTime = datetime.datetime.now()
 
-        # Set up the database connection
+        # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate('carlosp_jpva_tkay_yllescas', 'carlosp_jpva_tkay_yllescas')
 
-        file = 'data/non_registered_CD.json'
-        with open(file, "r", encoding="utf8") as datafile:
+        file = 'data/non_registered_xtabs.json'
+        with open(file, "r", encoding = "utf8") as datafile:
             json_string = datafile.read()
         r = json.loads(json_string)
         s = json.dumps(r, sort_keys=True, indent=2)
-        repo.dropCollection("non_registered_cd")
-        repo.createCollection("non_registered_cd")
-        repo['carlosp_jpva_tkay_yllescas.non_registered_cd'].insert_many(r)
-        repo['carlosp_jpva_tkay_yllescas.non_registered_cd'].metadata({'complete': True})
-        print(repo['carlosp_jpva_tkay_yllescas.non_registered_cd'].metadata())
+        repo.dropCollection("non_registered_voters_sd")
+        repo.createCollection("non_registered_voters_sd")
+        repo['carlosp_jpva_tkay_yllescas.non_registered_voters_sd'].insert_many(r)
+        repo['carlosp_jpva_tkay_yllescas.non_registered_voters_sd'].metadata({'complete': True})
+        print(repo['carlosp_jpva_tkay_yllescas.non_registered_voters_sd'].metadata())
 
         repo.logout()
 
@@ -62,29 +58,37 @@ class non_registered_cd(dml.Algorithm):
         doc.add_namespace('log', 'http://datamechanics.io/log/')  # The event log.
         doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
 
-        this_script = doc.agent('alg:carlosp_jpva_tkay_yllescas#non_registered_cd',
+        this_script = doc.agent('alg:carlosp_jpva_tkay_yllescas#non_registered_voters_sd',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
         resource = doc.entity('bdp:wc8w-nujj',
                               {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource',
                                'ont:Extension': 'json'})
-        get_non_registered_cd = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(get_non_registered_cd, this_script)
-        doc.usage(get_non_registered_cd, resource, startTime, None,
+        get_found = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+        get_lost = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(get_found, this_script)
+        doc.wasAssociatedWith(get_lost, this_script)
+        doc.usage(get_found, resource, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:Retrieval',
-                   'ont:Query': '?type=non_registered_cd&$select=type,latitude,longitude,OPEN_DT'
+                   'ont:Query': '?type=Animal+Found&$select=type,latitude,longitude,OPEN_DT'
+                   }
+                  )
+        doc.usage(get_lost, resource, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:Retrieval',
+                   'ont:Query': '?type=Animal+Lost&$select=type,latitude,longitude,OPEN_DT'
                    }
                   )
 
-        non_registeredCD = doc.entity('dat:carlosp_jpva_tkay_yllescas#registered_cd',
-                                {prov.model.PROV_LABEL: 'Registered Voters by CD', prov.model.PROV_TYPE: 'ont:DataSet'})
-        doc.wasAttributedTo(non_registeredCD, this_script)
-        doc.wasGeneratedBy(non_registeredCD, get_non_registered_cd, endTime)
-        doc.wasDerivedFrom(non_registeredCD, resource, get_non_registered_cd, get_non_registered_cd, get_non_registered_cd)
+        lost = doc.entity('dat:carlosp_jpva_tkay_yllescas#non_registered_voters_sd',
+                          {prov.model.PROV_LABEL: 'Animals Lost', prov.model.PROV_TYPE: 'ont:DataSet'})
+        doc.wasAttributedTo(lost, this_script)
+        doc.wasGeneratedBy(lost, get_lost, endTime)
+        doc.wasDerivedFrom(lost, resource, get_lost, get_lost, get_lost)
 
         repo.logout()
 
         return doc
 
+#non_registered_voters.execute()
 
 '''
 # This is example code you might use for debugging this module.

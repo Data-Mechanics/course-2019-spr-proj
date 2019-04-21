@@ -1,125 +1,49 @@
 # Growing Voter Engagement in Communities of Color
 
-For this project, we are working with Amplify Latinx and BU Spark! to analyze Massachusetts voting and demographic data to suggest where they should focus their voter turnout efforts in order to get more people of color out to vote.
+_by Carlos Portilla, JP Vasquez, Tallulah Kay, Gabriel Yllescas_
 
-We are starting with 5 data sets, one of which is public that we found through our own research, and four private data sets which were provided by Amplify Latinx:
+## Abstract
 
-1. Demographics by Towns (public)
-2. Massachusetts Early Voting Data
-3. Registered Voter Demographics
-    a) Senate District
-    b) Precinct
-    c) Congressional District
-4. Non-Registered Voter Demographics
-    a) Senate District
-    b) Precinct
-    c) Congressional District
-5. Voter Turnout Percentages (1948-2016)
+For this project, we are working with [Amplify Latinx][amplify] and [BU Spark!][spark] to analyze Massachusetts voting and demographic data to suggest where they should focus their voter turnout efforts in order to get more people of color out to vote.
 
-We are combining these data sets to analyze where people are voting, who is turning out to vote, and extrapolating where voter registration efforts are going to be effective. Ultimately, our goal is to identify which elections are such that more voters showing up would change the result and provide Amplify Latinx with an interactive, embeddable heat map of Massachusetts.
+As our team is responsible for creating only the groundwork for what will be a much large project in the future, the scope of data analyzed will be limited to city council race results among Latinx voters within Boston Wards. However, the code shall be built with modularity in mind in order to allow for all political races within all the geo-political subdivisions within Massachusetts. 
 
-To start, we isolated race and ethnicity data from Registered (3a) and Non-Registered (4a)Voter Demographics by Senate District, and then aggregating those data sets. From this, we produced a coefficient that we plan to further develop for Amplify Latinx to use to strategize. Additionally, we used Demographics by Town (1) and early voting data (2) to compare voter registration percentages with percentages of people of color. This transformation will also be used to suggest where to apply GOTV efforts. For example, if we can identify towns where there is a correlation between low voter registration and high percentage of people of color, we would suggest GOTV efforts there. Finally, we used the Google Geocoding API to transform Demographics by Towns (1) into the geocoding information necessary to use in the map.
+## Data Import
 
-## course-2019-spr-proj
+For the scope of this project, we are using 6 data sets, two of which are public that we found through our own research, and four private data sets which were provided by Amplify Latinx:
 
-In this project, you will implement platform components that can obtain a some data sets from web services of your choice, and platform components that combine these data sets into at least two additional derived data sets. These components will interact with the backend repository by inserting and retrieving data sets as necessary. They will also satisfy a standard interface by supporting specified capabilities (such as generation of dependency information and provenance records).
+1. `Registered Voter Demographics`
+   - Senate District
+   - Precinct
+   - Congressional District
+2. `Non-Registered Voter Demographics`
+   - Senate District
+   - Precinct
+   - Congressional District
+3. Massachusetts Early Voting Data
+4. Voter Turnout Percentages (1948-2016)
+5. [`City Council Race Results (2009-2017)`][results]
+6. [`Demographics by Towns`][dems]
 
-**This project description will be updated as we continue work on the infrastructure.**
+## Data Transformations
 
-## MongoDB infrastructure
+We are combining these data sets to produce 3 metrics: in which wards people are voting more, what percentage of registered voters are voting within those wards, and how many people are not registered to vote. From this, we will extrapolate where voter registration efforts are going to be effective as based on ratios formed from the amount of registered to non-registered voters and registered voters to total votes cast. Ultimately, our goal is to identify which elections are such that more voters showing up would change the result and provide Amplify Latinx with an interactive, embeddable heat map of Massachusetts that will illustrate this data.
 
-### Setting up
+To do so, we isolated Latinx voter data by Boston Ward from `Registered Voter Demographics` and `Non-Registered Voter Demographics` by `Precinct`, and then aggregated the precincts, by ward. Then, we generated the total vote difference by ward for the city council race from the `City Council Race Results (2009-2017)`. From here, we generated the aforementioned ratios to find the wards with the most disproportionate amount of people who could vote but dont. Additionally, we used `Demographics by Towns` and `Massachusetts Early Voting Data` to compare voter registration percentages with percentages of people of color. 
 
-We have committed setup scripts for a MongoDB database that will set up the database and collection management functions that ensure users sharing the project data repository can read everyone's collections but can only write to their own collections. Once you have installed your MongoDB instance, you can prepare it by first starting `mongod` _without authentication_:
-```
-mongod --dbpath "<your_db_path>"
-```
-If you're setting up after previously running `setup.js`, you may want to reset (i.e., delete) the repository as follows.
-```
-mongo reset.js
-```
-Next, make sure your user directories (e.g., `alice_bob` if Alice and Bob are working together on a team) are present in the same location as the `setup.js` script, open a separate terminal window, and run the script:
-```
-mongo setup.js
-```
-Your MongoDB instance should now be ready. Stop `mongod` and restart it, enabling authentication with the `--auth` option:
-```
-mongod --auth --dbpath "<your_db_path>"
-```
+## Statistical Analysis
 
-### Working on data sets with authentication
+We used these ratios and race data to create summary statistics about our voting population. These summary statistics act as a data sample to guage the demographics of the voters. Using both `Registered Voter Demographics` and `Eligible Voter Demographics`, we produced several statistics comparing all products of registered and eligible, Latinx and otherwise voters. These statistics are stored as `sampling`, and then used as a constraint for choosing which wards to visit. We can choose which statistic to prioritize in our suggestions for where to focus voter turnout efforts.
 
-With authentication enabled, you can start `mongo` on the repository (called `repo` by default) with your user credentials:
-```
-mongo repo -u alice_bob -p alice_bob --authenticationDatabase "repo"
-```
-However, you should be unable to create new collections using `db.createCollection()` in the default `repo` database created for this project:
-```
-> db.createCollection("EXAMPLE");
-{
-  "ok" : 0,
-  "errmsg" : "not authorized on repo to execute command { create: \"EXAMPLE\" }",
-  "code" : 13
-}
-```
-Instead, load the server-side functions so that you can use the customized `createCollection()` function, which creates a collection that can be read by everyone but written only by you:
-```
-> db.loadServerScripts();
-> var EXAMPLE = createCollection("EXAMPLE");
-```
-Notice that this function also prefixes the user name to the name of the collection (unless the prefix is already present in the name supplied to the function).
-```
-> EXAMPLE
-alice_bob.EXAMPLE
-> db.alice_bob.EXAMPLE.insert({value:123})
-WriteResult({ "nInserted" : 1 })
-> db.alice_bob.EXAMPLE.find()
-{ "_id" : ObjectId("56b7adef3503ebd45080bd87"), "value" : 123 }
-```
-If you do not want to run `db.loadServerScripts()` every time you open a new terminal, you can use a `.mongorc.js` file in your home directory to store any commands or calls you want issued whenever you run `mongo`.
+## Constraint Satisfaction (Greedy Algorithm)
 
-## Other required libraries and tools
+The constraints used are a flip percentage, predicting how effective canvassing efforts would be, flip goal, and proportion of hispanic people in a ward (generated in the statistical analysis). This algorithm generates visits by which Amplify could flip the entire race, in the fewest number of wards. The algorithms sorts wards by descending number of registered voters who didn't turn out. Then, for each ward, it checks if the ward satisfies the constraints, prioritizing the hispanic proportion constraint. If the ward meets the constraints, it is added to `wards_to_visit`.
 
-You will need the latest versions of the PROV, DML, and Protoql Python libraries. If you have `pip` installed, the following should install the latest versions automatically:
-```
-pip install prov --upgrade --no-cache-dir
-pip install dml --upgrade --no-cache-dir
-pip install protoql --upgrade --no-cache-dir
-```
-If you are having trouble installing `lxml` in a Windows environment, you could try retrieving it [here](http://www.lfd.uci.edu/~gohlke/pythonlibs/).
+## Plans For Visualization
 
-Note that you may need to use `python -m pip install <library>` to avoid issues if you have multiple versions of `pip` and Python on your system.
+We used the `Google Geocoding API` to transform `Demographics by Towns` into the geocoding information necessary to produce an interactive map for Amplify Latinx. The map will be demarcated by wards that will reveal statistical information when hovered over. The user will also be able to input their confidence in how effective their outreach efforts will be ex. a user might predict that they can flip the votes of 50% of people they reach) and a constraint for desired Latinx percentage in the communities they visit. We will be provide a suggestion of wards to visit based on the user's constraints.
 
-## Formatting the `auth.json` file
-
-The `auth.json` file should remain empty and should not be submitted. When you are running your algorithms, you should use the file to store your credentials for any third-party data resources, APIs, services, or repositories that you use. An example of the contents you might store in your `auth.json` file is as follows:
-```
-{
-    "services": {
-        "cityofbostondataportal": {
-            "service": "https://data.cityofboston.gov/",
-            "username": "alice_bob@example.org",
-            "token": "XxXXXXxXxXxXxxXXXXxxXxXxX",
-            "key": "xxXxXXXXXXxxXXXxXXXXXXxxXxxxxXXxXxxX"
-        },
-        "mbtadeveloperportal": {
-            "service": "http://realtime.mbta.com/",
-            "username": "alice_bob",
-            "token": "XxXX-XXxxXXxXxXXxXxX_x",
-            "key": "XxXX-XXxxXXxXxXXxXxx_x"
-        }
-    }
-}
-```
-To access the contents of the `auth.json` file after you have loaded the `dml` library, use `dml.auth`.
-
-## Running the execution script for a contributed project.
-
-To execute all the algorithms for a particular contributor (e.g., `alice_bob`) in an order that respects their explicitly specified data flow dependencies, you can run the following from the root directory:
-```
-python execute.py alice_bob
-```
-To execute the algorithms for a particular contributor in trial mode, use the `-t` or `--trial` option:
-```
-python execute.py alice_bob --trial
-
+[amplify]: https://amplifylatinx.co/
+[spark]: http://www.bu.edu/spark/
+[results]: https://www.boston.gov/sites/default/files/2017_-_11-07-17_-_city_councillor_at_large_ward_precinct_results.pdf?fbclid=IwAR0FimlNPxQ1WkOBau8nOWlXGUCU_A_gtFel71KmKQkuUC7xnEVlBjGF-6I
+[dems]: http://archive.boston.com/news/local/massachusetts/graphics/03_22_11_2010_census_town_population/?fbclid=IwAR1-4mbJ6MZbR9u2sNwsebbWGTaEo3pDR3wJjjAonrZEJhm1EbQz6i0mrW0
