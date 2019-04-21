@@ -26,3 +26,21 @@ This dataset can be derived from [http://bostonopendata-boston.opendata.arcgis.c
 
 ### Landmarks
 This dataset can be derived from [http://bostonopendata-boston.opendata.arcgis.com/datasets/7a7aca614ad740e99b060e0ee787a228_3.csv](http://bostonopendata-boston.opendata.arcgis.com/datasets/7a7aca614ad740e99b060e0ee787a228_3.csv). For the origin dataset, we fill in the missing values and select rows that its column "Petiton" > 15. Then project to have a dateset have six cloumns: `Petition`, `Name of landmarks`, `Areas_Desi`, `Address`, `Neighbourhood`, `ShapeSTWidth`. Besides, based on Landmarks dataset and Colleges and Universities dataset, we filter the data and use `City` as the key value to get a new dataset which desrcibes the features related to street names.
+
+## Project #2
+In this part, we filtered and optimized existing datasets from multiple datasets in project 1. In addition, we used K means to solve a constraint satisfaction problem and implemented statistical analysis.
+
+### Famous_people
+We updated `famous_people` produced in project 1 with a new data source [United States Famous People](https://www.smithsonianmag.com/smithsonianmag/meet-100-most-significant-americans-all-time-180953341/), such that streets like `Washington St` will not be renamed.
+
+### Filtered_famous_people_streets
+With the dataset `famous_people`, we remove streets whose names are any of famous people's first names or last names. We used the MongoDB built-in filter syntax to improve efficiency. The output `filtered_famous_people_streets` is the input of later-on steps.
+
+### Streetbook_filtered
+Given the datasets in project 1, we filtered unnecessary entries from Landmarks, Famous people, Colleges and Universities and Uber Movement data, etc. Besides, for redundant street names, we processed corresponding rows given their redundant times and gave an alternate dataset.
+
+### Candidate_Res
+What we do in this part is to calculate duplicate counts and nearby lankmarks of a given street in filtered streetbook. Then we calculate the correlation coefficient of duplicate times and nearby lankmarks and find it barely related to each other. Lastly, we group those streets based on their zipcode and get the one with the largest duplicate counts and least nearby lankmarks.
+
+### Streetbook_kmeans
+In this part, we combine filtered_streetbook and streetbook_alternate to obtain a dataset containing redundant street names and its own zip code. Then we use their zip codes to implement k-means algorithm to separate these streets into different clusters. We hope that street names which are renamed can be distributed in different districts as many as possible.
