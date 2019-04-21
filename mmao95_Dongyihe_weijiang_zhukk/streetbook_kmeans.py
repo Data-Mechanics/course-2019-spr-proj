@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Wed Mar  6 17:46:24 2019
+Created on Tue Apr 16 11:06:34 2019
 
 @author: zhukaikang
 """
@@ -17,52 +17,28 @@ import csv
 from io import StringIO
 import json
 import pymongo
-import math
+import numpy as np
+from sklearn.cluster import KMeans
 
-
-class landmarks(dml.Algorithm):
-
+class streetbook_kmeans(dml.Algorithm):
     contributor = 'mmao95_Dongyihe_weijiang_zhukk'
-    reads = []
-    writes = [contributor + '.landmarks']
-
+    reads = [contributor + '.streetbook_filtered',
+              contributor + '.streetbook_alternate']
+    writes = [contributor + '.streetbook_kmeans']
+    
     @staticmethod
     def execute(trial=False):
         startTime = datetime.datetime.now()
         contributor = 'mmao95_Dongyihe_weijiang_zhukk'
-        writes = [contributor + '.landmarks']
-        #url = 'http://bostonopendata-boston.opendata.arcgis.com/datasets/7a7aca614ad740e99b060e0ee787a228_3.csv'
+        reads = [contributor + '.streetbook_filtered',
+              contributor + '.streetbook_alternate']
+        writes = [contributor + '.streetbook_kmeans']
 
-        # set up database connection
+        # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate(contributor, contributor)
-
-        url = 'http://datamechanics.io/data/Boston_Landmarks.csv'
-        doc = requests.get(url).text
-        # print(doc)
-        data_file = StringIO(doc)
-        reader = csv.reader(data_file)
-        # print(reader)
-        Landmarks = []
-        for row in reader:
-            Landmarks += [row]
-
-        del Landmarks[0]
-
         
-        for line in Landmarks:
-            if(line[7] == '' or line[7] == ' '):
-                line[7] = 0
-
-        for line in Landmarks:
-            if(line[9] == '' or line[9] == ' '):
-                line[9] = None
-
-        for line in Landmarks:
-            if(line[11] == '' or line[11] == ' '):
-                line[11] = None
-
         def union(R, S):
             return R + S
 
@@ -84,32 +60,42 @@ class landmarks(dml.Algorithm):
         def aggregate(R, f):
             keys = {r[0] for r in R}
             return [(key, f([v for (k, v) in R if k == key])) for key in keys]
-
-        after_p = project(select(Landmarks, lambda t: float(t[7]) > 15), lambda t: (
-            t[7], t[8], t[9], t[10], t[11], t[16], t[17]))
-        after_pp = project(after_p, lambda t: (
-            t[0], t[1], t[2], t[3], t[4], float(t[5]) // float(t[6])))
-        column_names = ['Petition', 'Name of landmarks',
-                        'Areas_Desi', 'Address', 'Neighbourhood', 'ShapeSTWidth']
-        df = pd.DataFrame(columns=column_names, data=after_pp)
+        
+        filtered_list = list(repo[reads[0]].find())
+        filtered_df = pd.DataFrame(filtered_list)
+        filtered_list = np.array(filtered_df).tolist()
+        
+        alternate_list = list(repo[reads[1]].find())
+        alternate_df = pd.DataFrame(alternate_list)
+        alternate_list = np.array(alternate_df).tolist()
+        
+        alternate = [street_name for [redundant_time, street_name, id_] in alternate_list]
+        #print(alternate)
+        #for i in range(len(alternate_list)):
+            #if alternate_list[i][1] in 
+        kmeans_data = [(full_name, zipcode) for [full_name, street_name, zipcode, id_] in filtered_list if street_name in alternate]
+        kmeans_data1 = [(zipcode,) for [full_name, zipcode] in kmeans_data]
+        kmeans = KMeans(n_clusters=26, random_state=0).fit(kmeans_data1)
+        streetbook_kmeans = [[full_name, zipcode, 0] for [full_name, zipcode] in kmeans_data]
+        for i in range(len(streetbook_kmeans)):
+            streetbook_kmeans[i][2] = kmeans.labels_[i]
+        #print(kmeans_data[0:2])
+        column_names = ['full_name', 'zipcode', 'kmeans_cluster']
+        df = pd.DataFrame(columns=column_names, data=streetbook_kmeans)
         data = json.loads(df.to_json(orient="records"))
-        repo.dropCollection('landmarks')
-        repo.createCollection('landmarks')
+        
+        repo.dropCollection('streetbook_kmeans')
+        repo.createCollection('streetbook_kmeans')
         repo[writes[0]].insert_many(data)
-
+        
         repo.logout()
-
+        
         endTime = datetime.datetime.now()
-
+        
         return {"start": startTime, "end": endTime}
-
-    @staticmethod
-    def provenance(doc=prov.model.ProvDocument(), startTime=None, endTime=None):
-        '''
-            Create the provenance document describing everything happening
-            in this script. Each run of the script will generate a new
-            document describing that invocation event.
-            '''
+    
+    @staticmethod    
+    def provenance(doc = prov.model.ProvDocument(), startTime = None, endTime = None):
         contributor = 'mmao95_Dongyihe_weijiang_zhukk'
         client = dml.pymongo.MongoClient()
         repo = client.repo
@@ -123,13 +109,12 @@ class landmarks(dml.Algorithm):
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#')
         # The event log.
         doc.add_namespace('log', 'http://datamechanics.io/log/')
-        doc.add_namespace(
-            'bdp', 'https://data.boston.gov/dataset/boston-landmarks-commission-blc-landmarks')
-        this_script = doc.agent('alg:' + contributor + '#landmarks', {
+        doc.add_namespace('bdp', 'https://www.50states.com/bio/mass.htm')
+
+        this_script = doc.agent('alg:' + contributor + '#cau_kmeans', {
                                 prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
         resource = doc.entity('bdp:wc8w-nujj', {'prov:label': '311, Service Requests',
                                                 prov.model.PROV_TYPE: 'ont:DataResource', 'ont:Extension': 'json'})
-
         get_names = doc.activity(
             'log:uuid' + str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(get_names, this_script)
@@ -139,8 +124,8 @@ class landmarks(dml.Algorithm):
                    }
                   )
 
-        fp = doc.entity('dat:' + contributor + '#landmarks',
-                        {prov.model.PROV_LABEL: 'landmarks', prov.model.PROV_TYPE: 'ont:DataSet'})
+        fp = doc.entity('dat:' + contributor + '#streetbook_kmeans', {
+                        prov.model.PROV_LABEL: 'StreetBook Kmeans', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(fp, this_script)
         doc.wasGeneratedBy(fp, get_names, endTime)
         doc.wasDerivedFrom(fp, resource, get_names, get_names, get_names)
@@ -148,3 +133,4 @@ class landmarks(dml.Algorithm):
         repo.logout()
 
         return doc
+    
