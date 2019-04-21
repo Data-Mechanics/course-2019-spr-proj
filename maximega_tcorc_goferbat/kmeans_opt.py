@@ -53,20 +53,22 @@ class kmeans_opt(dml.Algorithm):
 				data_copy.append(nta)
 				incomes.append(income)
 				pops.append(nta['trans_percent'])
+				
+		# ----------------- k =5 derived from error graph in kmeans file -----------------
+		k = 5
 
 		# ----------------- Finding the correlation between avergae income and % of popoulaiton using public transport-----------------
 		Correlation(incomes, pops)
 
 		#------------------ Run k Means on ([lat, long], avg_income) -----------------
-		kmeans = run_lat_long_kmeans(X)
-		# ----------------- k =5 derived from error graph in kmeans file -----------------
-		k = 5
+		kmeans = run_lat_long_kmeans(X, k)
 
 		k_groupings = kmeans.labels_
 		for i in range(len(data_copy)):
 			data_copy[i]['zone'] = k_groupings[i]
 		avg_inc = [0] * k
 		count_inc = [0] * k
+
 		# ----------------- Find and insert average income for each zone -----------------
 		for item in data_copy:
 			avg_inc[item['zone']] += item['income']

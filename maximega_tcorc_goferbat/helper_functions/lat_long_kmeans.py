@@ -17,15 +17,15 @@ def createScatter(df):
     matplot.title('Lat vs Long')
     
 
-def vectorizeAndCluster(data, labels):
+def vectorizeAndCluster(data, labels, k):
     # convert dictionary to vector
     v = DictVectorizer(sparse=False)
     # running k means
     X = v.fit_transform(data)
-    kmeans = KMeans(n_clusters=5)
+    kmeans = KMeans(n_clusters=k)
     pred = kmeans.fit_predict(X)
     # print labels
-    # printLabels(pred, labels)
+    # printLabels(pred, labels, k)
     return [kmeans, X]
 
 def getLabels(cats, kmeans):
@@ -39,13 +39,13 @@ def getLabels(cats, kmeans):
         labels.append(cats[list_arr[0]])
     return labels
 
-def printLabels(pred_classes, labels):
-    for cluster in range(5):
+def printLabels(pred_classes, labels, k):
+    for cluster in range(k):
         print('cluster: ', cluster)
         print(labels[np.where(pred_classes == cluster)])
             
             
-def formatIntoVectors(dataf):
+def formatIntoVectors(dataf, k):
     # create list of object
     vector_arr = []
     labels = np.array([])
@@ -57,7 +57,7 @@ def formatIntoVectors(dataf):
         labels = np.append(labels, row['ntaname'])
         vector_arr.append(temp_obj)
         
-    return vectorizeAndCluster(vector_arr, labels)
+    return vectorizeAndCluster(vector_arr, labels, k)
     
 def scalePoints(df):
     # scale between 0-1
@@ -120,22 +120,22 @@ def detectOutliers(df, labels, centroids, X):
     df['cluster_labels'] = cluster_labels
     return df
 
-def run_lat_long_kmeans(data):
+def run_lat_long_kmeans(data, k):
     data = pd.DataFrame(data, columns=['ntaname', 'longitude', 'latitude', 'income'])
 
     data_scaled = scaleAllData(data) # scale lat and long points
 
     # print(data_scaled.tail())
 
-    return formatIntoVectors(data_scaled)[0]
+    return formatIntoVectors(data_scaled, k)[0]
 
-    # clusters = formatIntoVectors(data_scaled)[0]
+    # clusters = formatIntoVectors(data_scaled, k)[0]
 
     # plotRealAndClustered(data_scaled, clusters)
 
     # print(clusters.labels_)
 
-    # X = formatIntoVectors(data_w_scaled, top_categories, cat_dict)[1]
+    # X = formatIntoVectors(data_w_scaled, top_categories, cat_dict, k)[1]
     # labels = getLabels(top_categories, clusters)
     # plotRealAndClustered(data_w_scaled, clusters, labels)
     # return [data_w_scaled, clusters, X]
