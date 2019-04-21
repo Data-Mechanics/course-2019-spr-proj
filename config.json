@@ -4,7 +4,7 @@
     "name": "repo"
   },
   "admin": {
-    "name": "runqi",
-    "pwd": "123456"
+    "name": "admin",
+    "pwd": "example"
   }
 }
