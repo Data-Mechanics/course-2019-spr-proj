@@ -90,7 +90,7 @@ class example(dml.Algorithm):
         doc.wasDerivedFrom(found, resource, get_found, get_found, get_found)
 
         repo.logout()
-                  
+
         return doc
 
 '''
