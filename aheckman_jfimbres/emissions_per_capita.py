@@ -15,7 +15,7 @@ list_of_states = ["Alabama","Alaska","Arizona","Arkansas","California","Colorado
 
 class emissions_per_capita(dml.Algorithm):
     contributor = 'aheckman_jfimbres'
-    reads = ['aheckman_jfimbres.carbon_efficacy', 'aheckman_jfimbres.census']
+    reads = ['aheckman_jfimbres.co2_adjusted', 'aheckman_jfimbres.census']
     writes = ['aheckman_jfimbres.emissions_per_capita']
     @staticmethod
     def execute(trial = False):
@@ -34,7 +34,7 @@ class emissions_per_capita(dml.Algorithm):
         # adj is given in x millions, so it needs to be scaled up to match population, which is just given in x
 
         tons = t.aggregate(t.union(adj, pops), lambda vs: (vs[0]/vs[1]))
-        epc = dict(t.project(tons, lambda t: (t[0], str(t[1])+" Metric Tons per person")))
+        epc = dict(t.project(tons, lambda t: (t[0], t[1])))
 
         repo.dropCollection("emissions_per_capita")
         repo.createCollection("emissions_per_capita")
