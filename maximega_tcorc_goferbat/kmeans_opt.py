@@ -53,7 +53,7 @@ class kmeans_opt(dml.Algorithm):
 				data_copy.append(nta)
 				incomes.append(income)
 				pops.append(nta['trans_percent'])
-				
+
 		# ----------------- k =5 derived from error graph in kmeans file -----------------
 		k = 5
 
@@ -77,23 +77,34 @@ class kmeans_opt(dml.Algorithm):
 			avg_inc[i] /= count_inc[i]
 		for i in range(len(data_copy)):
 			data_copy[i]['avg_inc'] = avg_inc[data_copy[i]['zone']]
-		# ----------------- Reorder the zones based on avg_zone_income (income zone1 < income zone 2 ...) -----------------
-		for i in range(k):
-			min_avg = min(avg_inc)
+		# ----------------- Reorder the zones based on avg_zone_income (income zone1 > income zone 2 ...) -----------------
+		for i in range(1, k +1):
+			max_avg = max(avg_inc)
 			for item in data_copy:
-				if (item['avg_inc'] == min_avg):
+				if (item['avg_inc'] == max_avg):
 					item['zone'] = i
-			avg_inc.remove(min_avg)
+			avg_inc.remove(max_avg)
 		# ----------------- Use z3 to find new zone fares that satisfy constraint set -----------------	
 		sat = cons_sat(data_copy, k)
-		new_fares = [0] * k
+		new_fares = [] 
 		for i in range(len(sat)):
-			new_fares[i] = sat[sat[i]].as_decimal(2)
-			new_fares[i] = new_fares[i][:-1]
-			new_fares[i] = float(new_fares[i])
+			route = sat[i].name()
+			price = sat[sat[i]].as_decimal(2)
+			if price[-1] == '?':
+				price = price[:-1]
+			
+			temp_dict = {}
+			temp_dict[route] = price
+			new_fares.append(temp_dict)
+		print(new_fares)
 		# ----------------- Insert new zone fares into Mongodb -----------------
 		for item in data_copy:
-			item['new_fare'] = new_fares[item['zone']]
+			for i in range(len(new_fares)):
+				key = list(new_fares[i].keys())[0]
+				dest_1 = int(key[1])
+				dest_2 = int(key[-1])
+				if item['zone'] == dest_1 or item['zone'] == dest_2:
+					item[key] = new_fares[i][key]
 
 		#----------------- Data insertion into Mongodb ------------------
 		repo.dropCollection('new_zone_fares')
@@ -148,3 +159,4 @@ class kmeans_opt(dml.Algorithm):
 		repo.logout()
 				
 		return doc
+
