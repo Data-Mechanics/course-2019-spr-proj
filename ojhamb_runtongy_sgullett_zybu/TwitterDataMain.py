@@ -1,5 +1,5 @@
 import sys, getopt, datetime, codecs
-import DBOperations as dbo
+from ojhamb_runtongy_sgullett_zybu import DBOperations as dbo
 import dml
 import prov.model
 import datetime
@@ -7,10 +7,7 @@ import uuid
 import math
 import sys
 
-if sys.version_info[0] < 3:
-    import got
-else:
-    import got3 as got
+from ojhamb_runtongy_sgullett_zybu import got3 as got
 
 
 class TwitterDataMain(dml.Algorithm):
@@ -100,5 +97,5 @@ class TwitterDataMain(dml.Algorithm):
 
 
 TwitterDataMain.execute()
-doc = Tweets.provenance()
+doc = TwitterDataMain.provenance()
 
