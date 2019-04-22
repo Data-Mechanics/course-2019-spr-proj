@@ -9,7 +9,7 @@ from bson.objectid import ObjectId
 
 class busRiders(dml.Algorithm):
     contributor = 'ido_jconstan_jeansolo_suitcase'
-    reads = ['ido_jconstan_jeansolo_suitcase.bu_transportation_study',
+    reads = ['ido_jconstan_jeansolo_suitcase.registered_students',
              'ido_jconstan_jeansolo_suitcase.property_data']
     writes = ['ido_jconstan_jeansolo_suitcase.PropertyValueRiders']
 
@@ -26,8 +26,8 @@ class busRiders(dml.Algorithm):
         repo.dropCollection("PropertyValueRiders")
         repo.createCollection("PropertyValueRiders")
 
-        #r = repo.ido_jconstan_jeansolo_suitcase.bu_transportation_study.find()
-        # OBTAINING FIRST DATASET [Bu Transportation Study]
+        #r = repo.ido_jconstan_jeansolo_suitcase.registered_students.find()
+        # OBTAINING FIRST DATASET [Bu Transportation Study (Registered Students)]
         url = 'http://datamechanics.io/data/ido_jconstan_jeansolo_suitcase/bu_transportation_study.json'
         response = urllib.request.urlopen(url).read().decode("utf-8")
         r = json.loads(response)

@@ -9,7 +9,7 @@ from bson.objectid import ObjectId
 
 class ratioStudents(dml.Algorithm):
     contributor = 'ido_jconstan_jeansolo_suitcase'
-    reads = ['ido_jconstan_jeansolo_suitcase.bu_transportation_study',
+    reads = ['ido_jconstan_jeansolo_suitcase.registered_students',
              'ido_jconstan_jeansolo_suitcase.property_data']
     writes = ['ido_jconstan_jeansolo_suitcase.RatioRiders']
 
@@ -26,7 +26,7 @@ class ratioStudents(dml.Algorithm):
         repo.dropCollection("RatioRiders")
         repo.createCollection("RatioRiders")
 
-        #r = repo.ido_jconstan_jeansolo_suitcase.bu_transportation_study.find()
+        #r = repo.ido_jconstan_jeansolo_suitcase.registered_students.find()
         # OBTAINING FIRST DATASET [Bu Transportation Study]
         url = 'http://datamechanics.io/data/ido_jconstan_jeansolo_suitcase/bu_transportation_study.json'
         response = urllib.request.urlopen(url).read().decode("utf-8")
