@@ -6,10 +6,10 @@ import datetime
 import uuid
 
 
-class age_cur_edu(dml.Algorithm):
+class linkedin(dml.Algorithm):
     contributor = 'ojhamb_runtongy_sgullett_zybu'
     reads = []
-    writes = ['ojhamb_runtongy_sgullett_zybu.age_cur_edu']
+    writes = ['ojhamb_runtongy_sgullett_zybu.linkedin']
 
     @staticmethod
     def execute(trial=False):
@@ -21,15 +21,18 @@ class age_cur_edu(dml.Algorithm):
         repo = client.repo
         repo.authenticate('ojhamb_runtongy_sgullett_zybu', 'ojhamb_runtongy_sgullett_zybu')
 
-        url = 'http://datamechanics.io/data/amman_edu_age.json'
+        url = 'http://datamechanics.io/data/link_am.json'
         response = urllib.request.urlopen(url).read().decode("utf-8")
-        r = json.loads(response)
+        if trial:
+            r = json.loads(response)[:30]
+        else:
+            r = json.loads(response)
 
-        repo.dropCollection("age_cur_edu")
-        repo.createCollection("age_cur_edu")
-        repo['ojhamb_runtongy_sgullett_zybu.age_cur_edu'].insert_many(r)
-        repo['ojhamb_runtongy_sgullett_zybu.age_cur_edu'].metadata({'complete': True})
-        print(repo['ojhamb_runtongy_sgullett_zybu.age_cur_edu'].metadata())
+        repo.dropCollection("linkedin")
+        repo.createCollection("linkedin")
+        repo['ojhamb_runtongy_sgullett_zybu.linkedin'].insert_many(r)
+        repo['ojhamb_runtongy_sgullett_zybu.linkedin'].metadata({'complete': True})
+        print(repo['ojhamb_runtongy_sgullett_zybu.linkedin'].metadata())
 
         repo.logout()
 
@@ -54,28 +57,22 @@ class age_cur_edu(dml.Algorithm):
         doc.add_namespace('ont',
                           'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/')  # The event log.
-        # doc.add_namespace('bdp', 'http://www.dos.gov.jo/dos_home_a/main/population/census2015/Education/')
 
-        this_script = doc.agent('alg:ojhamb_runtongy_sgullett_zybu#age_cur_edu',
+        this_script = doc.agent('alg:ojhamb_runtongy_sgullett_zybu#linkedin',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
 
-        resource = doc.entity('dat:amman_edu_age',
-                              {'prov:label': 'Educational Stage', prov.model.PROV_TYPE: 'ont:DataResource',
+        resource = doc.entity('dat:link_am',
+                              {'prov:label': 'Linkedin Data', prov.model.PROV_TYPE: 'ont:DataResource',
                                'ont:Extension': 'json'})
-        '''
-        resource = doc.entity('bdp:Education_4.3.pdf',
-                              {'prov:label': 'Educational Stage', prov.model.PROV_TYPE: 'ont:DataResource',
-                               'ont:Extension': 'pdf'})
-        '''
-        get_Edu_Stage = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(get_Edu_Stage, this_script)
-        doc.usage(get_Edu_Stage, resource, startTime, None,
+        get_Linkedin = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(get_Linkedin, this_script)
+        doc.usage(get_Linkedin, resource, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:Retrieval'})
-        Edu_Stage = doc.entity('dat:ojhamb_runtongy_sgullett_zybu#age_cur_edu',
-                          {prov.model.PROV_LABEL: 'Edu_Stage', prov.model.PROV_TYPE: 'ont:DataSet'})
-        doc.wasAttributedTo(Edu_Stage, this_script)
-        doc.wasGeneratedBy(Edu_Stage, get_Edu_Stage, endTime)
-        doc.wasDerivedFrom(Edu_Stage, resource, get_Edu_Stage, get_Edu_Stage, get_Edu_Stage)
+        Linkedin_Data = doc.entity('dat:ojhamb_runtongy_sgullett_zybu#linkedin',
+                          {prov.model.PROV_LABEL: 'Linkedin_Data', prov.model.PROV_TYPE: 'ont:DataSet'})
+        doc.wasAttributedTo(Linkedin_Data, this_script)
+        doc.wasGeneratedBy(Linkedin_Data, get_Linkedin, endTime)
+        doc.wasDerivedFrom(Linkedin_Data, resource, get_Linkedin, get_Linkedin, get_Linkedin)
 
         repo.logout()
 
@@ -85,9 +82,10 @@ class age_cur_edu(dml.Algorithm):
 '''
 # This is example code you might use for debugging this module.
 # Please remove all top-level function calls before submitting.
-
-age_cur_edu.execute()
-doc = age_cur_edu.provenance()
+'''
+'''
+linkedin.execute()
+doc = linkedin.provenance()
 print(doc.get_provn())
 print(json.dumps(json.loads(doc.serialize()), indent=4))
 '''
