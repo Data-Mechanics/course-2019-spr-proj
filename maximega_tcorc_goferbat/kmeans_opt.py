@@ -10,13 +10,13 @@ import matplotlib.pyplot as plt
 import pandas
 from pandas.plotting import parallel_coordinates
 
-from maximega_tcorc_goferbat.helper_functions.lat_long_kmeans import run_lat_long_kmeans
-from maximega_tcorc_goferbat.helper_functions.cons_sat import cons_sat
-from maximega_tcorc_goferbat.helper_functions.Correlation import Correlation
+# from maximega_tcorc_goferbat.helper_functions.lat_long_kmeans import run_lat_long_kmeans
+# from maximega_tcorc_goferbat.helper_functions.cons_sat import cons_sat
+# from maximega_tcorc_goferbat.helper_functions.Correlation import Correlation
 
-# from helper_functions.lat_long_kmeans import run_lat_long_kmeans
-# from helper_functions.cons_sat import cons_sat
-# from helper_functions.Correlation import Correlation
+from helper_functions.lat_long_kmeans import run_lat_long_kmeans
+from helper_functions.cons_sat import cons_sat
+from helper_functions.Correlation import Correlation
 
 
 class kmeans_opt(dml.Algorithm):
@@ -55,7 +55,7 @@ class kmeans_opt(dml.Algorithm):
 				pops.append(nta['trans_percent'])
 
 		# ----------------- k =5 derived from error graph in kmeans file -----------------
-		k = 5
+		k = 1
 
 		# ----------------- Finding the correlation between avergae income and % of popoulaiton using public transport-----------------
 		Correlation(incomes, pops)
@@ -85,36 +85,30 @@ class kmeans_opt(dml.Algorithm):
 					item['zone'] = i
 			avg_inc.remove(max_avg)
 		# ----------------- Use z3 to find new zone fares that satisfy constraint set -----------------	
-		sat = cons_sat(data_copy, k)
-		new_fares = [] 
-		for i in range(len(sat)):
-			route = sat[i].name()
-			price = sat[sat[i]].as_decimal(2)
-			if price[-1] == '?':
-				price = price[:-1]
-			
-			temp_dict = {}
-			temp_dict[route] = price
-			new_fares.append(temp_dict)
+		new_fares = cons_sat(data_copy, k)
 		print(new_fares)
-		# ----------------- Insert new zone fares into Mongodb -----------------
-		for item in data_copy:
-			for i in range(len(new_fares)):
-				key = list(new_fares[i].keys())[0]
-				dest_1 = int(key[1])
-				dest_2 = int(key[-1])
-				if item['zone'] == dest_1 or item['zone'] == dest_2:
-					item[key] = new_fares[i][key]
+		# ----------------- If constraint set was not satisfied, do not insert into mongodb -----------------
+		if (new_fares != 'unsat'):
+			# ----------------- Insert new zone fares into Mongodb -----------------
+			for item in data_copy:
+				for i in range(len(new_fares)):
+					key = list(new_fares[i].keys())[0]
+					dest_1 = int(key[1])
+					dest_2 = int(key[-1])
+					if item['zone'] == dest_1 or item['zone'] == dest_2:
+						item[key] = new_fares[i][key]
 
-		#----------------- Data insertion into Mongodb ------------------
-		repo.dropCollection('new_zone_fares')
-		repo.createCollection('new_zone_fares')
-		repo[repo_name].insert_many(data_copy)
-		repo[repo_name].metadata({'complete':True})
-		print(repo[repo_name].metadata())
+			#----------------- Data insertion into Mongodb ------------------
+			repo.dropCollection('new_zone_fares')
+			repo.createCollection('new_zone_fares')
+			repo[repo_name].insert_many(data_copy)
+			repo[repo_name].metadata({'complete':True})
+			print(repo[repo_name].metadata())
 
-		repo.logout()
+			repo.logout()
 
+		if (new_fares == 'unsat'):
+			print("Constraints Were Not Satisfied")
 		endTime = datetime.datetime.now()
 
 		return {"start":startTime, "end":endTime}
@@ -160,3 +154,4 @@ class kmeans_opt(dml.Algorithm):
 				
 		return doc
 
+kmeans_opt.execute()
