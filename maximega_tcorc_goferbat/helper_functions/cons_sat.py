@@ -57,6 +57,19 @@ def cons_sat(data_copy, k):
     # ----------------- Ensure that the most expesnive route (r1-1) is at most 1.4 times the cheapest route (r5-5) -----------------
     S.add(parameters_z[-1] * 1.4 > parameters_z[0])
 
-    S.check()
-    return S.model()
+    if str(S.check()) == 'unsat':
+        return 'unsat'
+    else:
+        sat = S.model()
+        new_fares = [] 
+        for i in range(len(sat)):
+            route = sat[i].name()
+            price = sat[sat[i]].as_decimal(2)
+            if price[-1] == '?':
+                price = price[:-1]
+            
+            temp_dict = {}
+            temp_dict[route] = price
+            new_fares.append(temp_dict)
+        return new_fares
     
