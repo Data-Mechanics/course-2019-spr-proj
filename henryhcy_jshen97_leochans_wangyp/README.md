@@ -20,7 +20,6 @@
 - MBTA stops in boston area
     - (http://datamechanics.io/data/MBTA_Stops.json)
 - **File rlated**: DataRetrieval.py
-  
 ####General Description, Procedure, and Narrative
 The project is divided into two tasks:
 - **Task One: Quantify Competition Between two major pharmacy brands CVS and Walgreen in Boston area **
