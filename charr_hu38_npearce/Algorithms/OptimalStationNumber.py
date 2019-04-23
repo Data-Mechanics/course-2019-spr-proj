@@ -12,7 +12,7 @@ class OptimalStationNumber(dml.Algorithm):
 	writes = ['charr_hu38_npearce.optstationnum']
 
 	@staticmethod
-	def execute(trial = False):
+	def execute(trial = False, max_num=10):
 		'''Union dataset containing bike data into the dataset containing city census information'''
 		startTime = datetime.datetime.now()
 
@@ -37,8 +37,8 @@ class OptimalStationNumber(dml.Algorithm):
 		z = np.polyfit(X, y, 1)		#Linear regression
 		#Washington has the highest amount of bike time/person, so we use washington station number plus our constraint max
 		#It is clear from our data that adding stations only increases productivity, so we add the max we can build
-		#k-means k=10
-		k=10
+		#k-means k=max_num
+		k=max_num
 		data_arry=[]
 		data_arry.append({"opt_num":k})
 		repo['charr_hu38_npearce.optstationnum'].insert_many(data_arry)														#Data set 0: Optimal Station Number

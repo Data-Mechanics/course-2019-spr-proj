@@ -17,7 +17,7 @@ class AggBikeData(dml.Algorithm):
 	writes = ['charr_hu38_npearce.aggbikedata']
 
 	@staticmethod
-	def execute(trial = False):
+	def execute(trial = False, max_num=10):
 		'''Aggregate total city bike use data into one dataset'''
 		startTime = datetime.datetime.now()
 

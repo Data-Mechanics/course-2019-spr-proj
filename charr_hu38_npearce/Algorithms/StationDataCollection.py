@@ -17,7 +17,7 @@ class StationDataCollection(dml.Algorithm):
 	writes = ['charr_hu38_npearce.boston_s', 'charr_hu38_npearce.washington_s', 'charr_hu38_npearce.newyork_s', 'charr_hu38_npearce.chicago_s', 'charr_hu38_npearce.sanfran_s']
 
 	@staticmethod
-	def execute(trial = False):
+	def execute(trial = False, max_num=10):
 		'''Retrieve some data sets (not using the API here for the sake of simplicity).'''
 		startTime = datetime.datetime.now()
 

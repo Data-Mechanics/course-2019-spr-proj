@@ -17,7 +17,7 @@ class DataCollection(dml.Algorithm):
 	writes = ['charr_hu38_npearce.boston', 'charr_hu38_npearce.washington', 'charr_hu38_npearce.newyork', 'charr_hu38_npearce.chicago', 'charr_hu38_npearce.sanfran', 'charr_hu38_npearce.census']
 
 	@staticmethod
-	def execute(trial = False):
+	def execute(trial = False, max_num=10):
 		'''Retrieve some data sets (not using the API here for the sake of simplicity).'''
 		startTime = datetime.datetime.now()
 
