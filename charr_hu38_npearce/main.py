@@ -27,8 +27,8 @@ app.secret_key = 'super secret string'	# Change this!
 def execute():
 	# Extract the algorithm classes from the modules in the
 	# subdirectory specified on the command line.
-	
-	path = "./"
+		
+	path="Algorithms"
 	algorithms = []
 	for r,d,f in os.walk(path):
 		for file in f:
@@ -75,13 +75,18 @@ def execute():
 	
 #default page  
 @app.route("/", methods=['GET'])
-def hello():
-	#execute()
+def homepage():
+	return render_template('hello.html', message="Welcome!  Click execute to run the program.")
+	
+@app.route("/execute", methods=['GET'])
+def ex_page():
+	execute()
 	client = dml.pymongo.MongoClient()
 	repo = client.repo
 	repo.authenticate('charr_hu38_npearce', 'charr_hu38_npearce')
 	kmeans = str(list(repo.charr_hu38_npearce.Kmeans.find())[0])
 	return render_template('hello.html', message=kmeans)
+	
 
 if __name__ == "__main__":
 	#this is invoked when in the shell	you run 
