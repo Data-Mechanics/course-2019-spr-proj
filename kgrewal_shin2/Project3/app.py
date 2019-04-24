@@ -5,11 +5,11 @@
 
 from flask import Flask, jsonify, abort, make_response, request, render_template
 from flask_googlemaps import GoogleMaps, Map
-from . import config
+from key_store import getGoogleMapsKey as key
 
 
 app = Flask(__name__, template_folder="templates")
-app.config['GOOGLEMAPS_KEY'] = config.getGoogleMapsKey()
+app.config['GOOGLEMAPS_KEY'] = key
 GoogleMaps(app)
 
 # users = [
