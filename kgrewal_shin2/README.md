@@ -34,6 +34,10 @@ It includes the locations of public schools in Boston.
 This data was collected from Uber including all the information of Uber rides originating at the Boston Common. 
 It includes where they ended their Uber rides and the mean time to get there. 
 
+6. Neighborhood Zip Codes
+From http://archive.boston.com/news/local/articles/2007/04/15/sixfigurezipcodes_city/ we took the table and changed
+it into a CSV. This tells us which boston zip codes belong to which neighborhood.
+
 
 <b> FILES: </b>
 
@@ -45,6 +49,8 @@ uber_data_cleaning.py - ran once in order to create json
 test.py - test file for our use previously 
 
 transformations.py - transformation functions as outlined in class 
+
+neighborhood_zipcodes.py - ran once in order to create json
 
 major_roads_cleaning.py - unused currently, major_roads json file too large to include in project currently
 

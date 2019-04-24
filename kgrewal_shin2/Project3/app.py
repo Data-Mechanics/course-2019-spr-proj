@@ -4,24 +4,12 @@
 # from flask_pymongo import PyMongo
 from flask import Flask, jsonify, abort, make_response, request, render_template
 from flask_googlemaps import GoogleMaps, Map
-from key_store import getGoogleMapsKey as key
+from config import getGoogleMapsKey
 
 
 app = Flask(__name__, template_folder="templates")
-app.config['GOOGLEMAPS_KEY'] = key
+app.config['GOOGLEMAPS_KEY'] = getGoogleMapsKey()
 GoogleMaps(app)
-
-# users = [
-#     {'id': 1, 'username': u'kgrewal'},
-#     {'id': 2, 'username': u'shin2'}
-# ]
-#
-# schema = {
-#     "type": "object",
-#     "properties": {"username": {"type": "string"}},
-#     "required": ["username"]
-# }
-
 
 @app.route('/')
 def mapview():
@@ -30,7 +18,8 @@ def mapview():
         identifier="view-side",
         lat=37.4419,
         lng=-122.1419,
-        markers=[(37.4419, -122.1419)]
+        markers=[(37.4419, -122.1419)],
+        zoom=30
     )
     sndmap = Map(
         identifier="sndmap",
