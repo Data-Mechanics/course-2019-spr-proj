@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <title>Kerin & Stephanie's Final Project!</title>
 
-        {{"decoupled-map"|googlemap_js(37.4419, -122.1419, markers=[(37.4419, -122.1419)])}}
+        {{"decoupled-map"|googlemap_js(42.3601, -71.0589, markers=[(42.3601, -71.0589)])}}
             {{mymap.js}}
             {{sndmap.js}}
     </head>
@@ -16,13 +16,14 @@
         <h1>Flask Google Maps Example</h1>
 
         <h2> Template function centered, no marker </h2>
-        {{googlemap("simple-map", 37.4419, -122.1419)}}
+        {{googlemap("simple-map", 42.3601, -71.0589)}}
 
         <h2> Template filter decoupled with single marker </h2>
-        {{"decoupled-map"|googlemap_html(37.4419, -122.1419)}}
+        {{"decoupled-map"|googlemap_html(42.3601, -71.0589)}}
 
         <h2> Template function with multiple markers </h2>
-        {% with map=googlemap_obj("another-map", 37.4419, -122.1419, markers=[(37.4419, -122.1419), (37.4300, -122.1400)]) %}
+        {% with map=googlemap_obj("another-map", 42.3601, -71.0589, markers=[(42.3601, -71.0589), (42.3501, -71.0589)])
+        %}
             {{map.html}}
             {{map.js}}
         {% endwith %}
