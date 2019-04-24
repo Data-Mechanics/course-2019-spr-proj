@@ -39,7 +39,7 @@ class transformation4():
         for x in free_streets:
             zip = x['zipcode']
             if not zip:
-                zip = '02111'
+                zip = 'None'
             elif len(zip) > 5:
                 zip = zip[:5]
             try:

@@ -86,7 +86,6 @@ class DatasetInsertion(dml.Algorithm):
         repo['kgrewal_shin2.ma_zip_loc'].metadata({'complete': True})
         print(repo['kgrewal_shin2.ma_zip_loc'].metadata())
 
-
         # neighborhoods and their zip codes
         url = 'http://datamechanics.io/data/kgrewal_shin2/neighborhood-zipcodes.json'
         response = urllib.request.urlopen(url).read().decode("utf-8")
