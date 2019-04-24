@@ -9,3 +9,5 @@ __pycache__/
 
 cleaning/.DS_Store
 cleaning/__pycache__/
+
+Project3/config.py

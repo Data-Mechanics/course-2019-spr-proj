@@ -2,10 +2,10 @@
 # import json
 # import dml
 # from flask_pymongo import PyMongo
-
+import sys
 from flask import Flask, jsonify, abort, make_response, request, render_template
 from flask_googlemaps import GoogleMaps, Map
-from . import config
+import Project3.config as Config
 
 
 app = Flask(__name__, template_folder="templates")
