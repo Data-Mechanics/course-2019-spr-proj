@@ -2,7 +2,7 @@
 # import json
 # import dml
 # from flask_pymongo import PyMongo
-from flask import Flask, jsonify, abort, make_response, request, render_template
+from flask import Flask, render_template, request
 from flask_googlemaps import GoogleMaps, Map
 from config import getGoogleMapsKey
 
@@ -38,10 +38,14 @@ def mapview():
             }
         ]
     )
-    return render_template("index.html", mymap=mymap, sndmap=sndmap)
+
+    return render_template("index.html", mymap=mymap, sndmap=sndmap, key=getGoogleMapsKey())
 
 
+@app.route('/neighborhood', methods=['GET', 'POST'])
+def searchneigh():
 
+    neighborhood = request.form.get('neighborhoods')
 
 if __name__ == '__main__':
     app.run('localhost', 8000, debug=True)
