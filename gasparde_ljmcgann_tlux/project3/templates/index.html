@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+          integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+          crossorigin=""/>
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+            integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+            crossorigin=""></script>
+    <!-- D3 import-->
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <link rel="stylesheet" href="../static/index.css">
+
+    <title>Title</title>
+</head>
+<body>
+<h1>HI THERE</h1>
+<div id="map">
+
+</div>
+</body>
+<script>
+    {% if censushealth is defined and censushealth %}
+        let censushealth = {{ censushealth|tojson }};
+        //console.log(censushealth);
+    {% endif %}
+    {% if kmeans is defined and kmeans %}
+        let kmeans = {{ kmeans|tojson }};
+        //console.log(kmeans);
+    {% endif %}
+    {% if stats is defined and stats %}
+        let stats = {{ stats|tojson }};
+       // console.log(stats);
+    {% endif %}
+    {% if neighborhoods is defined and neighborhoods %}
+        let neighborhoods = {{ neighborhoods|tojson }};
+        //console.log(neighborhoods);
+    {% endif %}
+    {% if openspaces is defined and openspaces %}
+        let openspaces = {{ openspaces|tojson }};
+       // console.log(openspaces);
+    {% endif %}
+    {% if parcelgeo is defined and parcelgeo %}
+        let parcelgeo = {{ parcelgeo|tojson }};
+        //console.log(parcelgeo);
+    {% endif %}
+    {% if assessments is defined and assessments %}
+        let assessments = {{ assessments|tojson }};
+        //console.log(assessments);
+    {% endif %}
+    {% if censusshape is defined and censusshape %}
+        let censusshape = {{ censusshape|tojson }};
+       // console.log(censusshape);
+    {% endif %}
+</script>
+<script type="text/javascript" src="../static/index.js"></script>
+</html>
