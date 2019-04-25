@@ -60,7 +60,7 @@ class combineData(dml.Algorithm):
         """
         val = {}
         for neighborhood in neighborhoods:
-            print(neighborhood)
+            #print(neighborhood)
             val[neighborhood['properties']['Name']] = []
         return val
 
