@@ -79,3 +79,9 @@ roads are more likely to be "major roads" and this would tell us if we are selec
 mostly major roads or mostly less-significant roads. We found no correlation between length
 and therefore we have chosen a balance between long and short streets which will mean the streets
 we have narrowed our list down to will have plenty of significant suggestions.
+
+
+<br></br>
+<b>Project 3:</b> 
+
+Library used for google maps API: https://github.com/rochacbruno/Flask-GoogleMaps
