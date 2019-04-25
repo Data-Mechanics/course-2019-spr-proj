@@ -8,6 +8,7 @@ import zillow
 import requests
 import xmltodict
 import csv
+from tqdm import tqdm
 
 #number of buildings per street in south boston 
 class num_per_street_1(dml.Algorithm):
@@ -22,7 +23,8 @@ class num_per_street_1(dml.Algorithm):
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate('ekmak_gzhou_kaylaipp_shen99','ekmak_gzhou_kaylaipp_shen99')
-
+        print('')
+        print('inserting num per street data (this takes awhile too)...')
         #list of tuples in format (street name, street num, 1) aka (beacon st  , 362, 1)                  
         #contains all street names for accessing & address data = union 
         all_streets = []
@@ -45,7 +47,7 @@ class num_per_street_1(dml.Algorithm):
 
         #retrieve accessing data
         accessing_data = repo.ekmak_gzhou_kaylaipp_shen99.accessing_data.find()
-        for info in accessing_data: 
+        for info in tqdm(accessing_data): 
             zipcode = info['ZIPCODE']
             st_name = info['ST_NAME'].lower().replace(".", "")         #beacon
             st_num = info['ST_NUM']                                    #362
@@ -76,7 +78,7 @@ class num_per_street_1(dml.Algorithm):
         for t in total: 
             repo['ekmak_gzhou_kaylaipp_shen99.num_per_street_1'].insert_one({t[0]:t[1]})
 
-        print('inserted number of houses per street data')
+        # print('inserted number of houses per street data')
         repo.logout()
         endTime = datetime.datetime.now()
         return {"start":startTime, "end":endTime}
@@ -149,9 +151,6 @@ print(json.dumps(json.loads(doc.serialize()), indent=4))
 '''
 
 # num_per_street_1.execute()
-# print('generating num houses per street provenance...')
-# print('')
-# doc = num_per_street_1.provenance()
-# print(doc.get_provn())
-# print(json.dumps(json.loads(doc.serialize()), indent=4))
+# num_per_street_1.provenance()
+# print('num per street done!')
 ## eof

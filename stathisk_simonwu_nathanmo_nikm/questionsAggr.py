@@ -57,7 +57,8 @@ def unzipper(data):
 
 class questionsAggr(dml.Algorithm):
     contributor = 'stathisk_simonwu_nathanmo_nikm'
-    reads = ['stathisk_simonwu_nathanmo_nikm.q1', 'stathisk_simonwu_nathanmo_nikm.q2', 'stathisk_simonwu_nathanmo_nikm.q3', 'stathisk_simonwu_nathanmo_nikm.q4']
+    reads = ['stathisk_simonwu_nathanmo_nikm.q1', 'stathisk_simonwu_nathanmo_nikm.q2',
+             'stathisk_simonwu_nathanmo_nikm.q3', 'stathisk_simonwu_nathanmo_nikm.q4']
     writes = ['stathisk_simonwu_nathanmo_nikm.avgAnswers']
 
     @staticmethod
@@ -70,7 +71,8 @@ class questionsAggr(dml.Algorithm):
         repo = client.repo
         repo.authenticate('stathisk_simonwu_nathanmo_nikm', 'stathisk_simonwu_nathanmo_nikm')
 
-        urls = ['stathisk_simonwu_nathanmo_nikm.q1', 'stathisk_simonwu_nathanmo_nikm.q2', 'stathisk_simonwu_nathanmo_nikm.q3', 'stathisk_simonwu_nathanmo_nikm.q4']
+        urls = ['stathisk_simonwu_nathanmo_nikm.q1', 'stathisk_simonwu_nathanmo_nikm.q2',
+                'stathisk_simonwu_nathanmo_nikm.q3', 'stathisk_simonwu_nathanmo_nikm.q4']
         combined = []
         for url in urls:
             df = list((repo[url].find()))
@@ -81,8 +83,15 @@ class questionsAggr(dml.Algorithm):
             combined = union(combined, res)
         final = koalas.DataFrame(data=project(aggregate(combined, multipleAverages), unzipper),
                                  columns=['Locality', 'Yes', 'No', 'Blanks', 'Total Votes Cast'])
-        repo['avgAnswers'].insert_many(json.loads(final.to_json(orient='records')))
-        repo['avgAnswers'].metadata({'complete': True})
+        # print(final)
+        repo['stathisk_simonwu_nathanmo_nikm.avgAnswers'].drop()
+        repo['stathisk_simonwu_nathanmo_nikm.avgAnswers'].insert_many(json.loads(final.to_json(orient='records')))
+        repo['stathisk_simonwu_nathanmo_nikm.avgAnswers'].metadata({'complete': True})
+
+        repo.logout()
+        endTime = datetime.datetime.now()
+
+        return {"start": startTime, "end": endTime}
 
     @staticmethod
     def provenance(doc=prov.model.ProvDocument(), startTime=None, endTime=None):
@@ -121,8 +130,8 @@ class questionsAggr(dml.Algorithm):
                         {'prov:label': 'ballot question 4', prov.model.PROV_TYPE: 'ont:DataResource',
                          'ont:Extension': 'json'})
         f = doc.entity('dat:question4',
-                        {'prov:label': 'ballot question 4', prov.model.PROV_TYPE: 'ont:DataResource',
-                         'ont:Extension': 'json'})
+                       {'prov:label': 'ballot question 4', prov.model.PROV_TYPE: 'ont:DataResource',
+                        'ont:Extension': 'json'})
 
         get_q1 = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
         get_q2 = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
@@ -161,7 +170,8 @@ class questionsAggr(dml.Algorithm):
         return doc
 
 
-questionsAggr.execute()
-doc = questionsAggr.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
+if __name__ == '__main__':
+    questionsAggr.execute()
+    # doc = questionsAggr.provenance()
+    # print(doc.get_provn())
+    # print(json.dumps(json.loads(doc.serialize()), indent=4))

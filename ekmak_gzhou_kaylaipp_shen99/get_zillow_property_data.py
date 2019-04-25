@@ -8,6 +8,7 @@ import zillow
 import requests
 import xmltodict
 import csv
+from tqdm import tqdm
 
 
 class get_zillow_property_data(dml.Algorithm):
@@ -24,6 +25,8 @@ class get_zillow_property_data(dml.Algorithm):
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate('ekmak_gzhou_kaylaipp_shen99','ekmak_gzhou_kaylaipp_shen99')
+        print('')
+        print('inserting zillow property data...')
 
         #Retrieve Zillow Property Data and add to mongo - source: Zillow API and uploaded to datamechanics.io
         url = 'http://datamechanics.io/data/zillow_property_data.json'
@@ -32,7 +35,7 @@ class get_zillow_property_data(dml.Algorithm):
         s = json.dumps(r, sort_keys=True, indent=2)
         repo.dropCollection("zillow_property_data")
         repo.createCollection("zillow_property_data")
-        for key,val in r.items(): 
+        for key,val in tqdm(r.items()): 
             try:
                 if val['posting'] == 'None': 
                     continue
@@ -40,7 +43,7 @@ class get_zillow_property_data(dml.Algorithm):
                 repo['ekmak_gzhou_kaylaipp_shen99.zillow_property_data'].insert_one(val)
         repo['ekmak_gzhou_kaylaipp_shen99.zillow_property_data'].metadata({'complete':True})
         print(repo['ekmak_gzhou_kaylaipp_shen99.zillow_property_data'].metadata())
-        print('inserted zillow property data')
+        # print('inserted zillow property data')
 
         repo.logout()
         endTime = datetime.datetime.now()
@@ -91,8 +94,8 @@ class get_zillow_property_data(dml.Algorithm):
 Helper functions to retrieve data 
 
 '''
-#connect to zillow api
-zillow_key = 'X1-ZWz1gx7ezhy3uz_9abc1'
+#connect to zillow api, need to have key in auth.json file
+zillow_key = dml.auth['services']['zillow']['key']
 api = zillow.ValuationApi()
 
 #params: address,city,zipcode
@@ -145,10 +148,6 @@ def retrieve_zillow_property_data():
         json.dump(result, outfile)
 
 
-
-key = 'X1-ZWz182me3104qz_6wmn8'
-api = zillow.ValuationApi()
-
 def retrieve_zillow_searchresults_data():
     result = []
     CSV_URL = 'http://datamechanics.io/data/Live_Street_Address_Management_SAM_Addresses.csv'
@@ -183,4 +182,6 @@ print(doc.get_provn())
 print(json.dumps(json.loads(doc.serialize()), indent=4))
 '''
 # get_zillow_property_data.execute()
+# get_zillow_property_data.provenance()
+# print('done')
 ## eof

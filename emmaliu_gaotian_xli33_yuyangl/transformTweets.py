@@ -22,7 +22,7 @@ class transformTweets(dml.Algorithm):
         repo.authenticate('emmaliu_gaotian_xli33_yuyangl', 'emmaliu_gaotian_xli33_yuyangl')
 
         # Get Tweets data
-        tweetsData = repo.emmaliu_gaotian_xli33_yuyangl.tweets.find()
+        tweetsData = repo.emmaliu_gaotian_xli33_yuyangl.tweets_translated.find()
         locations = {}
         dataStored = []
         # Filter for user's location, project key value pairs.
@@ -44,9 +44,9 @@ class transformTweets(dml.Algorithm):
             dataStored.append({'location': key, 'count': value['COUNT'],
                                'avg_followers_count': value['followers_count'] / value['COUNT'],
                                'avg_friends_count': value['friends_count'] / value['COUNT']})
-        # for k in dataStored.keys():
-        #     print(k)
-        # print(dataStored.keys())
+
+        # sort by location's count with decreasing order
+        dataStored.sort(key=lambda x: x['count'], reverse=True)
 
         with open("userLocation .json", 'w') as outfile:
             json.dump(dataStored, outfile, indent=4)
@@ -56,7 +56,7 @@ class transformTweets(dml.Algorithm):
         repo.createCollection("userLocation")
 
         for i in dataStored:
-            # print(i)
+            # print(str(i['location']) + ': ' + str(i['count']))
             repo['emmaliu_gaotian_xli33_yuyangl.userLocation'].insert(i)
         repo['emmaliu_gaotian_xli33_yuyangl.userLocation'].metadata({'complete': True})
         print(repo['emmaliu_gaotian_xli33_yuyangl.userLocation'].metadata())

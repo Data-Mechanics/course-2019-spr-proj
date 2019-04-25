@@ -12,7 +12,7 @@ class getHealth(dml.Algorithm):
 
     @staticmethod
     def execute(trial = False):
-        '''Retrieve health data for datamechanics.io'''
+        '''Retrieve health data from datamechanics.io'''
         startTime = datetime.datetime.now()
 
         # Set up the database connection.
@@ -47,16 +47,16 @@ class getHealth(dml.Algorithm):
         doc.add_namespace('dat', 'http://datamechanics.io/data/') # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
-        doc.add_namespace('bdp', 'https://chronicdata.cdc.gov/resource/csmm-fdhi.json?cityname=Boston')
+        doc.add_namespace('bdp', 'https://chronicdata.cdc.gov/resource/')
 
         this_script = doc.agent('alg:misn15#getHealth', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        resource = doc.entity('bdp:Boston_health', {'prov:label':'Boston_health', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        resource = doc.entity('bdp:csmm-fdhi', {'prov:label':'Boston_health', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
         get_health = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(get_health, this_script)
         doc.usage(get_health, resource, startTime, None,
                   {prov.model.PROV_TYPE:'ont:Retrieval',
                   'ont:Query':'?cityname=Boston'
-                  }
+                   }
                   )
 
         health = doc.entity('dat:misn15#health', {prov.model.PROV_LABEL:'Boston Health', prov.model.PROV_TYPE:'ont:DataSet'})
@@ -66,10 +66,10 @@ class getHealth(dml.Algorithm):
                   
         return doc
 
-getHealth.execute()
-doc = getHealth.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
+##getHealth.execute()
+##doc = getHealth.provenance()
+##print(doc.get_provn())
+##print(json.dumps(json.loads(doc.serialize()), indent=4))
 
 
 ## eof

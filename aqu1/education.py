@@ -29,7 +29,6 @@ class education(dml.Algorithm):
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate('aqu1', 'aqu1')
-
         repo.dropCollection("education_data")
         repo.createCollection("education_data")
         repo['aqu1.education_data'].insert_many(education)
@@ -51,7 +50,7 @@ class education(dml.Algorithm):
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('bdp', 'https://data.boston.gov/dataset/') # Boston Data Portal
 
-        this_script = doc.agent('alg:aqu1#', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        this_script = doc.agent('alg:aqu1#education', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
         
         # Education Attainment Report
         resource_education = doc.entity('bdp:8202abf2-8434-4934-959b-94643c7dac18/resource/bb0f26f8-e472-483c-8f0c-e83048827673/download/educational-attainment-age-25.csv', {'prov:label':'Education Attainment', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
@@ -67,3 +66,10 @@ class education(dml.Algorithm):
         repo.logout()
 
         return doc
+
+'''
+education.execute()
+doc = education.provenance()
+print(doc.get_provn())
+print(json.dumps(json.loads(doc.serialize()), indent=4))
+'''

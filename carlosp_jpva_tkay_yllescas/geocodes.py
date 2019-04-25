@@ -1,5 +1,7 @@
-# using voter turnouts and demographics by towns, evaluate, agg sum for total population 2010 and 2000, and find out how many are registered and voting, registered and not voting, not registered, etc.
-import urllib.request
+# finds google geocode for town
+# not using because not just Boston
+
+import urllib
 import json
 import dml
 import prov.model
@@ -7,6 +9,7 @@ import datetime
 import uuid
 import sys
 import math
+from urllib import request, parse
 
 class geocodes(dml.Algorithm):
     contributor = 'carlosp_jpva_tkay_yllescas'
@@ -86,7 +89,7 @@ class geocodes(dml.Algorithm):
                   
         return doc
 
-#geocodes.execute()
+# geocodes.execute()
 '''
 # This is example code you might use for debugging this module.
 # Please remove all top-level function calls before submitting.

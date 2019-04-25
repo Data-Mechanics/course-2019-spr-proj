@@ -38,7 +38,7 @@ class landmarks(dml.Algorithm):
         repo = client.repo
         repo.authenticate(contributor, contributor)
 
-        url = 'http://bostonopendata-boston.opendata.arcgis.com/datasets/7a7aca614ad740e99b060e0ee787a228_3.csv'
+        url = 'http://datamechanics.io/data/Boston_Landmarks.csv'
         doc = requests.get(url).text
         # print(doc)
         data_file = StringIO(doc)
@@ -50,7 +50,7 @@ class landmarks(dml.Algorithm):
 
         del Landmarks[0]
 
-        Landmarks[71][7] = '74'
+        
         for line in Landmarks:
             if(line[7] == '' or line[7] == ' '):
                 line[7] = 0

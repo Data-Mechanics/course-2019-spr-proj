@@ -57,7 +57,8 @@ class hospital(dml.Algorithm):
 			dic["count"] = hospital[1]
 			repo['ruipang_zhou482.hospital'].insert_one(dic)
 		repo.logout()
-
+		file.close()
+		os.remove("hospital.csv")
 		endTime = datetime.datetime.now()
 		return {"start": startTime, "end": endTime}
 
@@ -87,9 +88,3 @@ class hospital(dml.Algorithm):
 		repo.logout()
 
 		return doc
-
-hospital = hospital()
-hospital.execute()
-doc = hospital.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
