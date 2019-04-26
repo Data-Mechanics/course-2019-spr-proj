@@ -18,6 +18,7 @@ repo.authenticate(contributor, contributor)
 
 # censushealth = dumps(repo[contributor + ".CensusTractHealth"].find())
 kmeans = dumps(repo[contributor + ".KMeans"].find())
+print(kmeans)
 # stats = dumps(repo[contributor + ".Statistics"].find())
 neighborhoods = dumps(repo[contributor + ".Neighborhoods"].find())
 

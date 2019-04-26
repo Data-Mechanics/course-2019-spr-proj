@@ -10,7 +10,7 @@ console.log("this works");
     censusshape
  */
 //console.log(censushealth);
-//console.log(kmeans);
+console.log(kmeans);
 //console.log(stats);
 neighborhoods = JSON.parse(neighborhoods);
 //console.log(neighborhoods);
