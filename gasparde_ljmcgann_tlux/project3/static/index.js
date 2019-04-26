@@ -15,6 +15,7 @@ console.log("this works");
 neighborhoods = JSON.parse(neighborhoods);
 //console.log(neighborhoods);
 openspaces = JSON.parse(openspaces);
+kmeans = JSON.parse(kmeans);
 //console.log(openspaces);
 // console.log(parcelgeo);
 // console.log(assessments);
