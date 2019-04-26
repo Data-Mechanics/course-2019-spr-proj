@@ -10,12 +10,12 @@ console.log("this works");
     censusshape
  */
 //console.log(censushealth);
-console.log(kmeans);
+
 //console.log(stats);
 neighborhoods = JSON.parse(neighborhoods);
-//console.log(neighborhoods);
+console.log(neighborhoods);
 openspaces = JSON.parse(openspaces);
-kmeans = JSON.parse(kmeans);
+//kmeans = JSON.parse(kmeans);
 //console.log(openspaces);
 // console.log(parcelgeo);
 // console.log(assessments);
@@ -147,10 +147,10 @@ legend.onAdd = function (map) {
 };
 
 legend.addTo(map);
-var print_kmeans = function (kmeans){
-    var node = document.querySelector(".container");
-    var k = node.createElement("p");
-    k.appendChild(document.createTextNode(kmeans));
-}
-print_kmeans(kmeans);
+// var print_kmeans = function (kmeans){
+//     var node = document.querySelector(".container");
+//     var k = node.createElement("p");
+//     k.appendChild(document.createTextNode(kmeans));
+// }
+// print_kmeans(kmeans);
 console.log("Finished Executing Script!");
