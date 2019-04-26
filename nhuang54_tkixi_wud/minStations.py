@@ -149,7 +149,7 @@ class minStations():
           if str(d.name()) == str(len(answer[0])-1):
             solution["total"] = answer[0][d]
           else:
-            solution[d.name()] = {y[d.name()]['street'], y[d.name()]['lat'], y[d.name()]['long'], answer[0][d]}
+            solution[d.name()] = [y[d.name()]['street'], y[d.name()]['lat'], y[d.name()]['long'], answer[0][d]]
 
         repo.logout()
 
