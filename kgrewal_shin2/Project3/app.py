@@ -38,14 +38,20 @@ def mapview():
             }
         ]
     )
+    url = "https://maps.googleapis.com/maps/api/js?key=" + getGoogleMapsKey() + "&libraries=places&callback=initMap"
+    url2 = "https://maps.googleapis.com/maps/api/js?key=" + getGoogleMapsKey() + "&libraries=places"
 
-    return render_template("index.html", mymap=mymap, sndmap=sndmap, key=getGoogleMapsKey())
+    # print(url)
+    return render_template("placesearch.html")
+    # , mymap=mymap, sndmap=sndmap, url=url, url2=url2)
 
 
 @app.route('/neighborhood', methods=['GET', 'POST'])
-def searchneigh():
+def neighborhood():
+    nhood = request.form.get('neighborhoods')
 
-    neighborhood = request.form.get('neighborhoods')
+    return render_template("index.html", key=getGoogleMapsKey(), neighborhood=nhood)
+
 
 if __name__ == '__main__':
     app.run('localhost', 8000, debug=True)

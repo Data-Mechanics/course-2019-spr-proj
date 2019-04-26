@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Latest compiled and minified CSS -->
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -19,6 +20,66 @@
     {{"decoupled-map"|googlemap_js(42.3601, -71.0589, markers=[(42.3601, -71.0589)])}}
     {{mymap.js}}
     {{sndmap.js}}
+
+    <style>
+              /* Always set the map height explicitly to define the size of the div
+               * element that contains the map. */
+              #map {
+                height: 100%;
+              }
+
+
+
+    </style>
+    <script src={{url2}}>
+              // This example requires the Places library. Include the libraries=places
+              // parameter when you first load the API. For example:
+              // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+
+              var map;
+              var service;
+              var infowindow;
+
+              function initMap() {
+                var boston = new google.maps.LatLng(-42.3601, -71.0589);
+
+                infowindow = new google.maps.InfoWindow();
+
+                map = new google.maps.Map(
+                    document.getElementById('map'), {center: boston, zoom: 15});
+
+                var request = {
+                  query: 'Boston',
+                  fields: ['name', 'geometry'],
+                };
+
+                service = new google.maps.places.PlacesService(map);
+
+                service.findPlaceFromQuery(request, function(results, status) {
+                  if (status === google.maps.places.PlacesServiceStatus.OK) {
+                    for (var i = 0; i < results.length; i++) {
+                      createMarker(results[i]);
+                    }
+
+                    map.setCenter(results[0].geometry.location);
+                  }
+                });
+              }
+
+              function createMarker(place) {
+                var marker = new google.maps.Marker({
+                  map: map,
+                  position: place.geometry.location
+                });
+
+                google.maps.event.addListener(marker, 'click', function() {
+                  infowindow.setContent(place.name);
+                  infowindow.open(map, this);
+                });
+              }
+
+
+    </script>
 </head>
 
 
@@ -80,75 +141,16 @@
 
         </div>
 
-        <div class="col-sm-8">
-            <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-            <meta charset="utf-8">
-            <style>
-              /* Always set the map height explicitly to define the size of the div
-               * element that contains the map. */
-              #map {
-                height: 100%;
-              }
 
-            </style>
-            <script src="https://maps.googleapis.com/maps/api/js?key={{key}}&libraries=places">
-              // This example requires the Places library. Include the libraries=places
-              // parameter when you first load the API. For example:
-              // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
-
-              var map;
-              var service;
-              var infowindow;
-
-              function initMap() {
-                var boston = new google.maps.LatLng(-42.3601, -71.0589);
-
-                infowindow = new google.maps.InfoWindow();
-
-                map = new google.maps.Map(
-                    document.getElementById('map'), {center: boston, zoom: 15});
-
-                var request = {
-                  query: {{}},
-                  fields: ['name', 'geometry'],
-                };
-
-                service = new google.maps.places.PlacesService(map);
-
-                service.findPlaceFromQuery(request, function(results, status) {
-                  if (status === google.maps.places.PlacesServiceStatus.OK) {
-                    for (var i = 0; i < results.length; i++) {
-                      createMarker(results[i]);
-                    }
-
-                    map.setCenter(results[0].geometry.location);
-                  }
-                });
-              }
-
-              function createMarker(place) {
-                var marker = new google.maps.Marker({
-                  map: map,
-                  position: place.geometry.location
-                });
-
-                google.maps.event.addListener(marker, 'click', function() {
-                  infowindow.setContent(place.name);
-                  infowindow.open(map, this);
-                });
-              }
-
-
-            </script>
-        </div>
     </div>
 </div>
 
 
 </body>
-<div id="map"></div>
-<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=initMap" async
+<div class="col-sm-8">
+    <div id="map"></div>
+    <script src={{url}} async
         defer></script>
-
+</div>
 
 </html>
