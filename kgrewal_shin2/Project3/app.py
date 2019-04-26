@@ -16,9 +16,7 @@ def mapview():
 
     url = "https://maps.googleapis.com/maps/api/js?key=" + getGoogleMapsKey() + "&libraries=places&callback=initMap"
 
-    # print(url)
     return render_template("index.html", url=url)
-    # mymap=mymap, sndmap=sndmap,
 
 @app.route('/about')
 def about():
