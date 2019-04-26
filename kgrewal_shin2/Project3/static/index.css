@@ -5,3 +5,8 @@ body {
 .learn-btn {
     text-align: right;
 }
+
+.neighborhood {
+    text-align: center;
+    font-size: 60px;
+}

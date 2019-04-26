@@ -27,10 +27,6 @@
                 width: 300 px;
               }
 
-
-
-
-
     </style>
 
     <script>
@@ -155,10 +151,10 @@
 
                 <h3> Pick a possible street that will be renamed to view. </h3>
 
-                <select name="streets" size="3">
-                    <option value="ex1" selected>ex1</option>
-                    <option value="ex2">ex2</option>
-                    <option value="ex3">ex3</option>
+                <select name="streets" size="10">
+                    {% for street in streets %}
+                        <option value="{{street}}">{{street}}</option>
+                    {% endfor %}
                 </select>
             </div>
 
@@ -166,6 +162,9 @@
         </div>
 
         <div class="col-sm-8">
+            <div class="row neighborhood">
+                {{neighborhood}}
+            </div>
             <div id="map"></div>
             <script src={{url}} async defer></script>
         </div>

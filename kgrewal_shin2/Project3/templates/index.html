@@ -28,9 +28,6 @@
               }
 
 
-
-
-
     </style>
     <script>
               // This example requires the Places library. Include the libraries=places
@@ -59,7 +56,7 @@
                 service.findPlaceFromQuery(request, function(results, status) {
                   if (status === google.maps.places.PlacesServiceStatus.OK) {
                     for (var i = 0; i < results.length; i++) {
-                      createMarker(results[i]);
+                      <!--createMarker(results[i]);-->
                     }
 
                     map.setCenter(results[0].geometry.location);
@@ -160,6 +157,9 @@
 
 
             <div class="col-sm-8">
+                <div class="row neighborhood">
+                    Boston
+                </div>
                 <div id="map"></div>
                 <script src={{url}} async defer></script>
             </div>

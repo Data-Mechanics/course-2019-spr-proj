@@ -1,11 +1,12 @@
-# import urllib.request
-# import json
-# import dml
-# from flask_pymongo import PyMongo
+import urllib.request
+import json
+import dml
+from flask_pymongo import PyMongo
 from flask import Flask, render_template, request
 import flask
 from flask_googlemaps import GoogleMaps, Map
 from config import getGoogleMapsKey
+
 
 app = Flask(__name__, template_folder="templates")
 app.config['GOOGLEMAPS_KEY'] = getGoogleMapsKey()
@@ -26,10 +27,23 @@ def about():
 def neighborhood():
     nhood = flask.request.form.get('neighborhoods')
     print(nhood)
-
     url = "https://maps.googleapis.com/maps/api/js?key=" + getGoogleMapsKey() + "&libraries=places&callback=initMap"
 
-    return render_template("search.html", url=url, neighborhood=nhood)
+    if request.method == 'POST':
+        client = dml.pymongo.MongoClient()
+        repo = client.repo
+        repo.authenticate('kgrewal_shin2', 'kgrewal_shin2')
+        neigh_streets = list(repo['kgrewal_shin2.neigh_streets'].find())
+
+        streets = []
+        for s in neigh_streets:
+            if s['neighborhood'] == nhood and s['gender']=='male':
+                streets.append(s['full_name'])
+
+        repo.logout()
+
+
+    return render_template("search.html", url=url, neighborhood=nhood, streets=streets)
 
 
 if __name__ == '__main__':
