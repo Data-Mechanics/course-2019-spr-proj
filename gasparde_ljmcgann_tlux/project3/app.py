@@ -17,7 +17,7 @@ repo.authenticate(contributor, contributor)
 ################################################################################
 
 # censushealth = dumps(repo[contributor + ".CensusTractHealth"].find())
-# kmeans = dumps(repo[contributor + ".KMeans"].find())
+kmeans = dumps(repo[contributor + ".KMeans"].find())
 # stats = dumps(repo[contributor + ".Statistics"].find())
 neighborhoods = dumps(repo[contributor + ".Neighborhoods"].find())
 
@@ -64,12 +64,25 @@ def hello():
                            #  kmeans=kmeans,
                            # stats=stats,
                            neighborhoods=neighborhoods,
-                           openspaces=openspaces,
+                           openspaces=openspaces
                            # parcelgeo=parcelgeo,
                            # assessments=assessments,
                            # censusshape=censusshape
                            )
 
-
+@app.route("/")
+@app.route('/index', methods = ['GET'])
+def kmeans():
+    if request.method == 'Get':
+        return render_template("index.html",
+                               #   censushealth=censushealth,
+                               kmeans=kmeans,
+                               # stats=stats,
+                               neighborhoods=neighborhoods,
+                               openspaces=openspaces
+                               # parcelgeo=parcelgeo,
+                               # assessments=assessments,
+                               # censusshape=censusshape
+                               )
 if __name__ == "__main__":
     app.run(port=5000, debug=True)
