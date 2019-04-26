@@ -1,121 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>CS504: Kerin & Stephanie's Final Project!</title>
+<head>
+    <title>CS504: Kerin & Stephanie's Final Project!</title>
 
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-        <!-- jQuery library -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <!-- Latest compiled JavaScript -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 
-        <link rel="stylesheet" type="text/css" href="./static/index.css">
-        <!-- fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="./static/index.css">
+    <!-- fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 
-        {{"decoupled-map"|googlemap_js(42.3601, -71.0589, markers=[(42.3601, -71.0589)])}}
-            {{mymap.js}}
-            {{sndmap.js}}
-    </head>
+    {{"decoupled-map"|googlemap_js(42.3601, -71.0589, markers=[(42.3601, -71.0589)])}}
+    {{mymap.js}}
+    {{sndmap.js}}
+</head>
 
 
-    <body>
-    <div class="container text">
-        <div class="row">
-            <div class="col-sm-6">
-                <h1>Let's rename streets!</h1>
+<body>
+<div class="container text">
+    <div class="row">
+        <div class="col-sm-6">
+            <h1>Let's rename streets!</h1>
+        </div>
+
+        <div class="col-sm-4 col-sm-offset-2">
+            <a href="/about" class="btn btn-success learn-btn"> LEARN MORE </a>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="row">
+                <h3> Pick a neighborhood to view possible streets to be renamed. </h3>
             </div>
 
-            <div class="col-sm-4 col-sm-offset-2">
-                <a href="/about" class="btn btn-success learn-btn"> LEARN MORE </a>
+            <div class="row">
+                <form action="/action_page.php">
+                    <input list="neighborhoods" name="neighborhoods">
+                    <datalist id="neighborhoods">
+                        <option value="Roslindale">Roslindale</option>
+                        <option value="Jamaica Plain">Jamaica Plain</option>
+                        <option value="Leather District">Leather District</option>
+                        <option value="Roxbury">Roxbury</option>
+                        <option value="Roxbury Crossing">Roxbury Crossing</option>
+                        <option value="West Roxbury">West Roxbury</option>
+                        <option value="Fenway">Fenway</option>
+                        <option value="Brighton">Brighton</option>
+                        <option value="Hyde Park">Hyde Park</option>
+                        <option value="South End">South End</option>
+                        <option value="Back Bay" selected>Back Bay</option>
+                        <option value="Prudential" selected>Prudential</option>
+                        <option value="Kenmore / Boston University" selected>Kenmore / Boston University</option>
+                        <option value="East Boston">East Boston</option>
+                        <option value="Charlestown">Charlestown</option>
+                        <option value="Downtown Boston">Downtown Boston</option>
+                        <option value="Mission Hill">Mission Hill</option>
+                        <option value="Bay Village">Bay Village</option>
+                        <option value="Chinatown">Chinatown</option>
+                        <option value="North End">North End</option>
+                        <option value="West End">West End</option>
+                        <option value="Beacon Hill">Beacon Hill</option>
+                        <option value="Mattapan">Mattapan</option>
+                        <option value="Dorchester">Dorchester</option>
+                        <option value="South Boston Waterfront">South Boston Waterfront</option>
+                        <option value="South Boston">South Boston</option>
+                        <option value="Allston">Allston</option>
+                        <option value="Markets / Inner Harbor">Markets / Inner Harbor</option>
+                        <option value="Financial District / Wharves">Financial District / Wharves</option>
+                    </datalist>
+                    <input type="submit">
+                </form>
             </div>
+
+            <div class="row">
+
+                <h3> Pick a possible street that will be renamed to view. </h3>
+
+                <select name="streets" size="3">
+                    <option value="ex1" selected>ex1</option>
+                    <option value="ex2">ex2</option>
+                    <option value="ex3">ex3</option>
+                </select>
+            </div>
+
 
         </div>
 
-        <div class="row">
-            <div class="col-sm-4">
-                <div class="row">
-                    <h3> Pick a neighborhood to view possible streets to be renamed. </h3>
-                </div>
-
-                <div class="row">
-                    <form action="/action_page.php">
-                      <input list="neighborhoods" name="neighborhoods">
-                      <datalist id="neighborhoods">
-                          <option value="Roslindale">Roslindale</option>
-                          <option value="Jamaica Plain">Jamaica Plain</option>
-                          <option value="Leather District">Leather District</option>
-                          <option value="Roxbury">Roxbury</option>
-                          <option value="Roxbury Crossing">Roxbury Crossing</option>
-                          <option value="West Roxbury">West Roxbury</option>
-                          <option value="Fenway">Fenway</option>
-                          <option value="Brighton">Brighton</option>
-                          <option value="Hyde Park">Hyde Park</option>
-                          <option value="South End">South End</option>
-                          <option value="Back Bay" selected>Back Bay</option>
-                          <option value="Prudential" selected>Prudential</option>
-                          <option value="Kenmore / Boston University" selected>Kenmore / Boston University</option>
-                          <option value="East Boston">East Boston</option>
-                          <option value="Charlestown">Charlestown</option>
-                          <option value="Downtown Boston">Downtown Boston</option>
-                          <option value="Mission Hill">Mission Hill</option>
-                          <option value="Bay Village">Bay Village</option>
-                          <option value="Chinatown">Chinatown</option>
-                          <option value="North End">North End</option>
-                          <option value="West End">West End</option>
-                          <option value="Beacon Hill">Beacon Hill</option>
-                          <option value="Mattapan">Mattapan</option>
-                          <option value="Dorchester">Dorchester</option>
-                          <option value="South Boston Waterfront">South Boston Waterfront</option>
-                          <option value="South Boston">South Boston</option>
-                          <option value="Allston">Allston</option>
-                          <option value="Markets / Inner Harbor">Markets / Inner Harbor</option>
-                          <option value="Financial District / Wharves">Financial District / Wharves</option>
-                      </datalist>
-                      <input type="submit">
-                    </form>
-                </div>
-
-                <div class="row">
-
-                    <h3> Pick a possible street that will be renamed to view. </h3>
-
-                    <select name="streets" size="3">
-                      <option value="ex1" selected>ex1</option>
-                      <option value="ex2">ex2</option>
-                      <option value="ex3">ex3</option>
-                    </select>
-                </div>
+        <div class="col-sm-8">
+            <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+            <meta charset="utf-8">
+            <style>
+              /* Always set the map height explicitly to define the size of the div
+               * element that contains the map. */
+              #map {
+                height: 100%;
+              }
 
 
-            </div>
+            </style>
+            <script src="https://maps.googleapis.com/maps/api/js?key={{key}}&libraries=places">
+              // This example requires the Places library. Include the libraries=places
+              // parameter when you first load the API. For example:
+              // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
 
-            <div class="col-sm-8">
+              var map;
+              var service;
+              var infowindow;
 
-                <h2> Template function centered, no marker </h2>
-                {{googlemap("simple-map", 42.3601, -71.0589)}}
+              function initMap() {
+                var boston = new google.maps.LatLng(-42.3601, -71.0589);
 
-                <h2> Template filter decoupled with single marker </h2>
-                {{"decoupled-map"|googlemap_html(42.3601, -71.0589)}}
+                infowindow = new google.maps.InfoWindow();
 
-                <h2> Template function with multiple markers </h2>
-                {% with map=googlemap_obj("another-map", 42.3601, -71.0589, markers=[(42.3601, -71.0589), (42.3501, -71.0589)])
-                %}
-                    {{map.html}}
-                    {{map.js}}
-                {% endwith %}
+                map = new google.maps.Map(
+                    document.getElementById('map'), {center: boston, zoom: 15});
 
-                <h2> First map generated in view</h2>
-                {{mymap.html}}
+                var request = {
+                  query: {{}},
+                  fields: ['name', 'geometry'],
+                };
 
-                <h2> Second map generated in view</h2>
-                <h3> Example for different icons in multiple markers with infoboxes</h3>
-                {{sndmap.html}}
-            </div>
+                service = new google.maps.places.PlacesService(map);
+
+                service.findPlaceFromQuery(request, function(results, status) {
+                  if (status === google.maps.places.PlacesServiceStatus.OK) {
+                    for (var i = 0; i < results.length; i++) {
+                      createMarker(results[i]);
+                    }
+
+                    map.setCenter(results[0].geometry.location);
+                  }
+                });
+              }
+
+              function createMarker(place) {
+                var marker = new google.maps.Marker({
+                  map: map,
+                  position: place.geometry.location
+                });
+
+                google.maps.event.addListener(marker, 'click', function() {
+                  infowindow.setContent(place.name);
+                  infowindow.open(map, this);
+                });
+              }
+
+
+
+            </script>
         </div>
     </div>
-    </body>
+</div>
+
+
+</body>
+<div id="map"></div>
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=initMap" async
+        defer></script>
+
+
 </html>
