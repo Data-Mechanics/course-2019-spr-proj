@@ -39,11 +39,10 @@ def mapview():
         ]
     )
     url = "https://maps.googleapis.com/maps/api/js?key=" + getGoogleMapsKey() + "&libraries=places&callback=initMap"
-    url2 = "https://maps.googleapis.com/maps/api/js?key=" + getGoogleMapsKey() + "&libraries=places"
 
     # print(url)
-    return render_template("placesearch.html")
-    # , mymap=mymap, sndmap=sndmap, url=url, url2=url2)
+    return render_template("index.html", url=url)
+    # mymap=mymap, sndmap=sndmap,
 
 
 @app.route('/neighborhood', methods=['GET', 'POST'])
