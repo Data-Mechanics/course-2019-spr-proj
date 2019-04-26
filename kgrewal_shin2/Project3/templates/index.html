@@ -83,7 +83,14 @@
 <body>
 <div class="container text">
     <div class="row">
-        <h1>Let's rename streets!</h1>
+        <div class="col-sm-6">
+            <h1>Let's rename streets!</h1>
+        </div>
+
+        <div class="col-sm-4 col-sm-offset-2">
+            <a href="/about" class="btn btn-success learn-btn"> LEARN MORE </a>
+        </div>
+
     </div>
 
     <div class="row">
@@ -93,7 +100,7 @@
             </div>
 
             <div class="row">
-                <form method="POST">
+                <form action="/action_page.php">
                     <input list="neighborhoods" name="neighborhoods">
                     <datalist id="neighborhoods">
                         <option value="Roslindale">Roslindale</option>
@@ -133,11 +140,80 @@
             <div class="row">
 
                 <h3> Pick a possible street that will be renamed to view. </h3>
+
+                <select name="streets" size="3">
+                    <option value="ex1" selected>ex1</option>
+                    <option value="ex2">ex2</option>
+                    <option value="ex3">ex3</option>
+                </select>
             </div>
 
 
         </div>
 
+        <div class="col-sm-8">
+            <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+            <meta charset="utf-8">
+            <style>
+              /* Always set the map height explicitly to define the size of the div
+               * element that contains the map. */
+              #map {
+                height: 100%;
+              }
+
+
+            </style>
+            <script src="https://maps.googleapis.com/maps/api/js?key={{key}}&libraries=places">
+              // This example requires the Places library. Include the libraries=places
+              // parameter when you first load the API. For example:
+              // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+
+              var map;
+              var service;
+              var infowindow;
+
+              function initMap() {
+                var boston = new google.maps.LatLng(-42.3601, -71.0589);
+
+                infowindow = new google.maps.InfoWindow();
+
+                map = new google.maps.Map(
+                    document.getElementById('map'), {center: boston, zoom: 15});
+
+                var request = {
+                  query: {{}},
+                  fields: ['name', 'geometry'],
+                };
+
+                service = new google.maps.places.PlacesService(map);
+
+                service.findPlaceFromQuery(request, function(results, status) {
+                  if (status === google.maps.places.PlacesServiceStatus.OK) {
+                    for (var i = 0; i < results.length; i++) {
+                      createMarker(results[i]);
+                    }
+
+                    map.setCenter(results[0].geometry.location);
+                  }
+                });
+              }
+
+              function createMarker(place) {
+                var marker = new google.maps.Marker({
+                  map: map,
+                  position: place.geometry.location
+                });
+
+                google.maps.event.addListener(marker, 'click', function() {
+                  infowindow.setContent(place.name);
+                  infowindow.open(map, this);
+                });
+              }
+
+
+
+            </script>
+        </div>
 
     </div>
 </div>

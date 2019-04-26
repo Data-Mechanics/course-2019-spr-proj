@@ -1,7 +1,13 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
     <script>
@@ -672,77 +678,4 @@
 
 })(typeof exports !== 'undefined' ? exports : (this.protoql = {}));
 
-    </script>
-    <style>.pql { display:inline-block; width:600px; height:400px; }</style>
-</head>
-<body style="padding:0px;" onload="protoql.Visualizations($('.pql'));">
-<div class="pql" style="position:absolute; margin:-3px 0px 0px -8px; top:0px; bottom:10px; height:100%; width:100%;">
-    graph([['bdp:wc8w-nujj'], ['dat:kgrewal_shin2#street_name'], ['dat:kgrewal_shin2#landmarks'],
-    ['dat:kgrewal_shin2#neighborhoods'], ['dat:kgrewal_shin2#ubers'], ['dat:kgrewal_shin2#pub_schools'],
-    ['dat:kgrewal_shin2#ma_zip_loc'], ['dat:kgrewal_shin2#statistics'], ['dat:kgrewal_shin2#streets'],
-    ['dat:kgrewal_shin2#streets_without_landmarks'], ['dat:kgrewal_shin2#schools'],
-    ['dat:kgrewal_shin2#streets_without_schools'], ['dat:kgrewal_shin2#uber_destinations'],
-    ['dat:kgrewal_shin2#unclaimed_streets'], ['dat:kgrewal_shin2#kmeans_streets'],
-    ['alg:kgrewal_shin2#DatasetInsertion'], ['alg:kgrewal_shin2#statistics'], ['alg:kgrewal_shin2#transformation1'],
-    ['alg:kgrewal_shin2#transformation2'], ['alg:kgrewal_shin2#transformation3'], ['alg:kgrewal_shin2#transformation4'],
-    ['log:uuid598cfe23-c393-4cfd-a984-1589a13ce9a8'], ['log:uuid0c8eb279-6aeb-4a66-91ee-4e8129c5ac5a'],
-    ['log:uuidcaddd1b1-8bfc-4866-bd44-a4715535c7dc'], ['log:uuiddc672569-94d7-45bd-9320-aad21b0f3bf5'],
-    ['log:uuid8e3c40ae-4e32-4ddd-8eee-1750a1233cda'], ['log:uuid652cc211-160f-468a-83be-57d8dc29502f'],
-    ['log:uuid0523249d-decf-498f-b2e7-8cbc9014ac73'], ['log:uuid574c7cd3-45e2-4734-9248-c3ed81971391'],
-    ['log:uuid98da403c-1b7b-413f-bfc6-3d24fb3e45d2'], ['log:uuidb2393999-7ca0-47a4-b0f4-ca48fad36f2b'],
-    ['log:uuid6b556532-2dae-49fd-8416-1924ac69cd1c'], ['log:uuid6f10273a-41fe-4c74-871f-e6c22a65d116']],
-    [('log:uuid598cfe23-c393-4cfd-a984-1589a13ce9a8', 'alg:kgrewal_shin2#DatasetInsertion', 'wasAssociatedWith'),
-    ('log:uuid0523249d-decf-498f-b2e7-8cbc9014ac73', 'alg:kgrewal_shin2#statistics', 'wasAssociatedWith'),
-    ('log:uuid574c7cd3-45e2-4734-9248-c3ed81971391', 'alg:kgrewal_shin2#transformation1', 'wasAssociatedWith'),
-    ('log:uuid98da403c-1b7b-413f-bfc6-3d24fb3e45d2', 'alg:kgrewal_shin2#transformation2', 'wasAssociatedWith'),
-    ('log:uuidb2393999-7ca0-47a4-b0f4-ca48fad36f2b', 'alg:kgrewal_shin2#transformation3', 'wasAssociatedWith'),
-    ('log:uuid6b556532-2dae-49fd-8416-1924ac69cd1c', 'alg:kgrewal_shin2#transformation4', 'wasAssociatedWith'),
-    ('log:uuid6f10273a-41fe-4c74-871f-e6c22a65d116', 'alg:kgrewal_shin2#transformation4', 'wasAssociatedWith'),
-    ('dat:kgrewal_shin2#street_name', 'alg:kgrewal_shin2#DatasetInsertion', 'wasAttributedTo'),
-    ('dat:kgrewal_shin2#landmarks', 'alg:kgrewal_shin2#DatasetInsertion', 'wasAttributedTo'),
-    ('dat:kgrewal_shin2#neighborhoods', 'alg:kgrewal_shin2#DatasetInsertion', 'wasAttributedTo'),
-    ('dat:kgrewal_shin2#ubers', 'alg:kgrewal_shin2#DatasetInsertion', 'wasAttributedTo'),
-    ('dat:kgrewal_shin2#pub_schools', 'alg:kgrewal_shin2#DatasetInsertion', 'wasAttributedTo'),
-    ('dat:kgrewal_shin2#ma_zip_loc', 'alg:kgrewal_shin2#DatasetInsertion', 'wasAttributedTo'),
-    ('dat:kgrewal_shin2#statistics', 'alg:kgrewal_shin2#statistics', 'wasAttributedTo'),
-    ('dat:kgrewal_shin2#streets_without_landmarks', 'alg:kgrewal_shin2#transformation1', 'wasAttributedTo'),
-    ('dat:kgrewal_shin2#streets_without_schools', 'alg:kgrewal_shin2#transformation2', 'wasAttributedTo'),
-    ('dat:kgrewal_shin2#uber_destinations', 'alg:kgrewal_shin2#transformation3', 'wasAttributedTo'),
-    ('dat:kgrewal_shin2#unclaimed_streets', 'alg:kgrewal_shin2#transformation4', 'wasAttributedTo'),
-    ('dat:kgrewal_shin2#kmeans_streets', 'alg:kgrewal_shin2#transformation4', 'wasAttributedTo'), ('bdp:wc8w-nujj',
-    'dat:kgrewal_shin2#street_name', 'wasDerivedFrom'), ('bdp:wc8w-nujj', 'dat:kgrewal_shin2#landmarks',
-    'wasDerivedFrom'), ('bdp:wc8w-nujj', 'dat:kgrewal_shin2#neighborhoods', 'wasDerivedFrom'), ('bdp:wc8w-nujj',
-    'dat:kgrewal_shin2#ubers', 'wasDerivedFrom'), ('bdp:wc8w-nujj', 'dat:kgrewal_shin2#pub_schools', 'wasDerivedFrom'),
-    ('bdp:wc8w-nujj', 'dat:kgrewal_shin2#ma_zip_loc', 'wasDerivedFrom'), ('bdp:wc8w-nujj',
-    'dat:kgrewal_shin2#statistics', 'wasDerivedFrom'), ('bdp:wc8w-nujj', 'dat:kgrewal_shin2#streets', 'wasDerivedFrom'),
-    ('bdp:wc8w-nujj', 'dat:kgrewal_shin2#landmarks', 'wasDerivedFrom'), ('bdp:wc8w-nujj', 'dat:kgrewal_shin2#streets',
-    'wasDerivedFrom'), ('bdp:wc8w-nujj', 'dat:kgrewal_shin2#schools', 'wasDerivedFrom'), ('bdp:wc8w-nujj',
-    'dat:kgrewal_shin2#ubers', 'wasDerivedFrom'), ('bdp:wc8w-nujj', 'dat:kgrewal_shin2#unclaimed_streets',
-    'wasDerivedFrom'), ('bdp:wc8w-nujj', 'dat:kgrewal_shin2#kmeans_streets', 'wasDerivedFrom'),
-    ('dat:kgrewal_shin2#street_name', 'log:uuid598cfe23-c393-4cfd-a984-1589a13ce9a8', 'wasGeneratedBy'),
-    ('dat:kgrewal_shin2#landmarks', 'log:uuid0c8eb279-6aeb-4a66-91ee-4e8129c5ac5a', 'wasGeneratedBy'),
-    ('dat:kgrewal_shin2#neighborhoods', 'log:uuidcaddd1b1-8bfc-4866-bd44-a4715535c7dc', 'wasGeneratedBy'),
-    ('dat:kgrewal_shin2#ubers', 'log:uuiddc672569-94d7-45bd-9320-aad21b0f3bf5', 'wasGeneratedBy'),
-    ('dat:kgrewal_shin2#pub_schools', 'log:uuid8e3c40ae-4e32-4ddd-8eee-1750a1233cda', 'wasGeneratedBy'),
-    ('dat:kgrewal_shin2#ma_zip_loc', 'log:uuid8e3c40ae-4e32-4ddd-8eee-1750a1233cda', 'wasGeneratedBy'),
-    ('dat:kgrewal_shin2#statistics', 'log:uuid0523249d-decf-498f-b2e7-8cbc9014ac73', 'wasGeneratedBy'),
-    ('dat:kgrewal_shin2#streets_without_landmarks', 'log:uuid574c7cd3-45e2-4734-9248-c3ed81971391', 'wasGeneratedBy'),
-    ('dat:kgrewal_shin2#streets_without_schools', 'log:uuid98da403c-1b7b-413f-bfc6-3d24fb3e45d2', 'wasGeneratedBy'),
-    ('dat:kgrewal_shin2#uber_destinations', 'log:uuidb2393999-7ca0-47a4-b0f4-ca48fad36f2b', 'wasGeneratedBy'),
-    ('dat:kgrewal_shin2#unclaimed_streets', 'log:uuid6b556532-2dae-49fd-8416-1924ac69cd1c', 'wasGeneratedBy'),
-    ('dat:kgrewal_shin2#kmeans_streets', 'log:uuid6f10273a-41fe-4c74-871f-e6c22a65d116', 'wasGeneratedBy'),
-    ('log:uuid598cfe23-c393-4cfd-a984-1589a13ce9a8', 'bdp:wc8w-nujj', 'used'),
-    ('log:uuid0c8eb279-6aeb-4a66-91ee-4e8129c5ac5a', 'bdp:wc8w-nujj', 'used'),
-    ('log:uuidcaddd1b1-8bfc-4866-bd44-a4715535c7dc', 'bdp:wc8w-nujj', 'used'),
-    ('log:uuiddc672569-94d7-45bd-9320-aad21b0f3bf5', 'bdp:wc8w-nujj', 'used'),
-    ('log:uuid8e3c40ae-4e32-4ddd-8eee-1750a1233cda', 'bdp:wc8w-nujj', 'used'),
-    ('log:uuid652cc211-160f-468a-83be-57d8dc29502f', 'bdp:wc8w-nujj', 'used'),
-    ('log:uuid0523249d-decf-498f-b2e7-8cbc9014ac73', 'bdp:wc8w-nujj', 'used'),
-    ('log:uuid574c7cd3-45e2-4734-9248-c3ed81971391', 'bdp:wc8w-nujj', 'used'),
-    ('log:uuid98da403c-1b7b-413f-bfc6-3d24fb3e45d2', 'bdp:wc8w-nujj', 'used'),
-    ('log:uuidb2393999-7ca0-47a4-b0f4-ca48fad36f2b', 'bdp:wc8w-nujj', 'used'),
-    ('log:uuid6b556532-2dae-49fd-8416-1924ac69cd1c', 'bdp:wc8w-nujj', 'used'),
-    ('log:uuid6f10273a-41fe-4c74-871f-e6c22a65d116', 'bdp:wc8w-nujj', 'used')])
-</div>
-</body>
 </html>

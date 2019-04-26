@@ -1,0 +1,14 @@
+body {
+    font-family: "Montserrat", sans-serif;
+}
+
+.about-us {
+    text-align: center;
+}
+
+.start-btn {
+    width: 50%;
+    padding-top: 20px;
+    padding-bottom: 20px;
+
+}

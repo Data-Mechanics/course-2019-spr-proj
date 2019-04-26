@@ -44,6 +44,9 @@ def mapview():
     return render_template("index.html", url=url)
     # mymap=mymap, sndmap=sndmap,
 
+@app.route('/about')
+def about():
+    return render_template("about.html")
 
 @app.route('/neighborhood', methods=['GET', 'POST'])
 def neighborhood():
