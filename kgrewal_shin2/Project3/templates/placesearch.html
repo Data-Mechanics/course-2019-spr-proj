@@ -28,19 +28,25 @@
       var map;
       var service;
       var infowindow;
+      var hood;
 
       function initMap() {
-        var sydney = new google.maps.LatLng(-33.867, 151.195);
+        var boston = new google.maps.LatLng(-42.3601, -71.0589);
 
         infowindow = new google.maps.InfoWindow();
 
         map = new google.maps.Map(
-            document.getElementById('map'), {center: sydney, zoom: 15});
+            document.getElementById('map'), {center: boston, zoom: 15});
+
+        hood = '{{neighborhood}}';
+        console.log(hood);
 
         var request = {
-          query: 'Museum of Contemporary Art Australia',
-          fields: ['name', 'geometry'],
-        };
+           query: hood,
+           fields: ['name', 'geometry'],
+         };
+
+         console.log(request);
 
         service = new google.maps.places.PlacesService(map);
 
@@ -71,7 +77,7 @@
 </head>
 <body>
 <div id="map"></div>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDH05Josci12-QQWu84CSnsWg3UAHcQai0&libraries=places&callback=initMap"
+<script src={{url}}
         async defer></script>
 </body>
 

@@ -30,60 +30,69 @@
 
 
 
+
     </style>
+
     <script>
-              // This example requires the Places library. Include the libraries=places
-              // parameter when you first load the API. For example:
-              // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+      // This example requires the Places library. Include the libraries=places
+      // parameter when you first load the API. For example:
+      // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
 
-              var map;
-              var service;
-              var infowindow;
+      var map;
+      var service;
+      var infowindow;
+      var hood;
 
-              function initMap() {
-                var boston = new google.maps.LatLng(-42.3601, -71.0589);
+      function initMap() {
+        var boston = new google.maps.LatLng(-42.3601, -71.0589);
 
-                infowindow = new google.maps.InfoWindow();
+        infowindow = new google.maps.InfoWindow();
 
-                map = new google.maps.Map(
-                    document.getElementById('map'), {center: boston, zoom: 15});
+        map = new google.maps.Map(
+            document.getElementById('map'), {center: boston, zoom: 15});
 
-                var request = {
-                  query: 'Boston',
-                  fields: ['name', 'geometry'],
-                };
+        hood = '{{neighborhood}}';
+        console.log(hood);
 
-                service = new google.maps.places.PlacesService(map);
+        var request = {
+           query: hood,
+           fields: ['name', 'geometry'],
+         };
 
-                service.findPlaceFromQuery(request, function(results, status) {
-                  if (status === google.maps.places.PlacesServiceStatus.OK) {
-                    for (var i = 0; i < results.length; i++) {
-                      createMarker(results[i]);
-                    }
+         console.log(request);
 
-                    map.setCenter(results[0].geometry.location);
-                  }
-                });
-              }
+        service = new google.maps.places.PlacesService(map);
 
-              function createMarker(place) {
-                var marker = new google.maps.Marker({
-                  map: map,
-                  position: place.geometry.location
-                });
+        service.findPlaceFromQuery(request, function(results, status) {
+          if (status === google.maps.places.PlacesServiceStatus.OK) {
+            for (var i = 0; i < results.length; i++) {
+              createMarker(results[i]);
+            }
 
-                google.maps.event.addListener(marker, 'click', function() {
-                  infowindow.setContent(place.name);
-                  infowindow.open(map, this);
-                });
-              }
+            map.setCenter(results[0].geometry.location);
+          }
+        });
+      }
+
+      function createMarker(place) {
+        var marker = new google.maps.Marker({
+          map: map,
+          position: place.geometry.location
+        });
+
+        google.maps.event.addListener(marker, 'click', function() {
+          infowindow.setContent(place.name);
+          infowindow.open(map, this);
+        });
+      }
 
 
     </script>
+
 </head>
 
 
-<body>
+<body style="overflow: visible">
 <div class="container text">
     <div class="row">
         <div class="col-sm-6">
@@ -107,7 +116,7 @@
                     <!--<input list="neighborhoods" name="neighborhoods">-->
                     <select name=neighborhoods method="POST" action="/neighborhood">
                         <datalist id="neighborhoods">
-                            <option value="Downtown Boston" selected>Downtown Boston</option>
+                            <option value="Downtown Boston">Downtown Boston</option>
                             <option value="Roslindale">Roslindale</option>
                             <option value="Jamaica Plain">Jamaica Plain</option>
                             <option value="Leather District">Leather District</option>
@@ -156,12 +165,13 @@
 
         </div>
     </div>
-    <div class="row">
-        <div class="col-sm-8">
-            <div id="map"></div>
-            <script src={{url}} async defer></script>
-        </div>
-    </div>
+</div>
+
+
+<div style="height: 100%; width: 100%;">
+    <div id="map"></div>
+    <script src={{url}} async defer></script>
+</div>
 
 </body>
 </html>
