@@ -146,4 +146,10 @@ legend.onAdd = function (map) {
 };
 
 legend.addTo(map);
+var print_kmeans = function (kmeans){
+    var node = document.querySelector(".container");
+    var k = node.createElement("p");
+    k.appendChild(document.createTextNode(kmeans));
+}
+print_kmeans(kmeans);
 console.log("Finished Executing Script!");
