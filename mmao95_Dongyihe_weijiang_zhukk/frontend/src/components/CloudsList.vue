@@ -10,13 +10,16 @@
                     font-family="Impact"/>
                 </div>
                 <div class="col">
-                    <div class="list-group" id="zipcodes">
-                        <button v-for="(list, zipcode) in words"
+                    <div class="dropdown" id="zipcodes" data-toggle="dropdown">
+                        <button class="dropdown-toggle btn btn-secondary">{{highlight}}</button>
+                        <div class="dropdown-menu">
+                            <button v-for="(list, zipcode) in words"
                            data-toggle="list"
                            :key="zipcode"
                            @click="switchZipcode(zipcode)"
-                           :class="'list-group-item list-group-item-action ' + (zipcode == highlight ? 'active':'')"
+                           :class="'btn dropdown-item ' + (zipcode == highlight ? 'active':'')"
                            :href="'#zip-'+zipcode">{{zipcode}}</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -30,8 +33,12 @@ import convert from 'color-convert'
 export default {
     name: 'CloudsList',
     created () {
-        // axios.get('/words').then(resp=>{ this.words = resp.body })
-        this.switchZipcode(Object.keys(this.words))
+        axios.get('http://localhost:5000/zipcode', {headers: {
+	  'Access-Control-Allow-Origin': '*',
+	}}).then(resp=>{
+            this.words = resp.data
+            this.switchZipcode(Object.keys(this.words)[0])
+         })
     },
     data() {return {
         words: {
@@ -57,7 +64,7 @@ export default {
             this.min = min
         },
         getColor([, weight]){
-            return '#' + convert.hsl.hex([(weight-this.min)*200/(this.max-this.min) + 144, 50, 50])
+            return '#' + convert.hsl.hex([(weight-this.min)*200/(this.max-this.min) + 144 + Math.random()*10, 50, 50 + Math.random()*20])
         }
     },
     compute: {
@@ -71,5 +78,8 @@ export default {
 .word-cloud
     height 600px
     padding 20px 100px
+.dropdown-menu
+    max-height 300px
+    overflow-y scroll
 </style>
 
