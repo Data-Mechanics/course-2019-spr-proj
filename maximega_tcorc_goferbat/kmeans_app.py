@@ -92,7 +92,7 @@ def run(zones, maxp, minp, f):
         return data_copy
 
     if (new_fares == 'unsat'):
-        return "Constraints Were Not Satisfied"
+        return []
 
 def cons_sat(data_copy, k, percent_max, percent_min, factor):
 
