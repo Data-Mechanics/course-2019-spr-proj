@@ -10,13 +10,13 @@ import matplotlib.pyplot as plt
 import pandas
 from pandas.plotting import parallel_coordinates
 
-# from maximega_tcorc_goferbat.helper_functions.lat_long_kmeans import run_lat_long_kmeans
-# from maximega_tcorc_goferbat.helper_functions.cons_sat import cons_sat
-# from maximega_tcorc_goferbat.helper_functions.Correlation import Correlation
+from maximega_tcorc_goferbat.helper_functions.lat_long_kmeans import run_lat_long_kmeans
+from maximega_tcorc_goferbat.helper_functions.cons_sat import cons_sat
+from maximega_tcorc_goferbat.helper_functions.Correlation import Correlation
 
-from helper_functions.lat_long_kmeans import run_lat_long_kmeans
-from helper_functions.cons_sat import cons_sat
-from helper_functions.Correlation import Correlation
+# from helper_functions.lat_long_kmeans import run_lat_long_kmeans
+# from helper_functions.cons_sat import cons_sat
+# from helper_functions.Correlation import Correlation
 
 
 class kmeans_opt(dml.Algorithm):
@@ -55,7 +55,7 @@ class kmeans_opt(dml.Algorithm):
 				pops.append(nta['trans_percent'])
 
 		# ----------------- k =5 derived from error graph in kmeans file -----------------
-		k = 1
+		k = 5
 
 		# ----------------- Finding the correlation between avergae income and % of popoulaiton using public transport-----------------
 		Correlation(incomes, pops)
@@ -153,5 +153,3 @@ class kmeans_opt(dml.Algorithm):
 		repo.logout()
 				
 		return doc
-
-kmeans_opt.execute()
