@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+</head>
+
+<body> 
+    <form method="GET" action="{{ url_for('result') }}" id="form">
+        <input class="input" type="text" placeholder="Number of zones" name="zones">
+        <input class="input" type="text" placeholder="Max % of zone revenue" name="max">
+        <input class="input" type="text" placeholder="Min % of zone revenue" name="min">
+        <input class="input" type="text" placeholder="Factor" name="factor">
+        <button class="search-btn">Search</button>
+    </form>
+</body>
