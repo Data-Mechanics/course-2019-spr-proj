@@ -22,40 +22,18 @@
     <form>
         KMeans: <input  type="text" name="kmeans">
     </form>
+    <p id="neighborhood">
+
+    </p>
 </div>
 </body>
 <script>
-    {% if censushealth is defined and censushealth %}
-        let censushealth = {{ censushealth|tojson }};
-        //console.log(censushealth);
-    {% endif %}
-    {% if kmeans is defined and kmeans %}
-        let kmeans = {{ kmeans|tojson }};
-        //console.log(kmeans);
-    {% endif %}
-    {% if stats is defined and stats %}
-        let stats = {{ stats|tojson }};
-       // console.log(stats);
-    {% endif %}
     {% if neighborhoods is defined and neighborhoods %}
         let neighborhoods = {{ neighborhoods|tojson }};
-        //console.log(neighborhoods);
     {% endif %}
-    {% if openspaces is defined and openspaces %}
-        let openspaces = {{ openspaces|tojson }};
-       // console.log(openspaces);
-    {% endif %}
-    {% if parcelgeo is defined and parcelgeo %}
-        let parcelgeo = {{ parcelgeo|tojson }};
-        //console.log(parcelgeo);
-    {% endif %}
+
     {% if assessments is defined and assessments %}
         let assessments = {{ assessments|tojson }};
-        //console.log(assessments);
-    {% endif %}
-    {% if censusshape is defined and censusshape %}
-        let censusshape = {{ censusshape|tojson }};
-       // console.log(censusshape);
     {% endif %}
 </script>
 <script type="text/javascript" src="../static/index.js"></script>
