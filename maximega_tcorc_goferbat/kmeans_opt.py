@@ -91,12 +91,17 @@ class kmeans_opt(dml.Algorithm):
 		if (new_fares != 'unsat'):
 			# ----------------- Insert new zone fares into Mongodb -----------------
 			for item in data_copy:
+				item['routes'] = []
 				for i in range(len(new_fares)):
 					key = list(new_fares[i].keys())[0]
 					dest_1 = int(key[1])
 					dest_2 = int(key[-1])
 					if item['zone'] == dest_1 or item['zone'] == dest_2:
-						item[key] = new_fares[i][key]
+						x = new_fares[i][key]
+						obj = {}
+						obj[key] = x
+						item['routes'].append(obj)
+
 
 			#----------------- Data insertion into Mongodb ------------------
 			repo.dropCollection('new_zone_fares')

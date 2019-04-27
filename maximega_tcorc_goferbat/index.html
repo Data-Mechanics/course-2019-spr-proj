@@ -31,19 +31,19 @@
             <input class="form-control" id="k" type="number" ng-model="k">
           </div>
           <div class="col-xs-2">
-            <label for="ex2">Min %</label>
-            <input class="form-control" id="min" type="number" ng-model="min">
-          </div>
-          <div class="col-xs-2">
             <label for="ex3">Max %</label>
             <input class="form-control" id="max" type="number" ng-model="max">
           </div>
+          <div class="col-xs-2">
+              <label for="ex2">Min %</label>
+              <input class="form-control" id="min" type="number" ng-model="min">
+            </div>
           <div class="col-xs-2">
             <label for="ex3">Factor</label>
             <input class="form-control" id="factor" type="number" ng-model="factor">
           </div>
           <div class="col-xs-2">
-            <button type="submit" class="btn btn-default" ng-click="getData(k, min, max, factor)" style="margin-top: 23px;">Run</button>
+            <button type="submit" class="btn btn-default" ng-click="getData(k, max, min, factor)" style="margin-top: 23px;">Run</button>
           </div>
         </div>
       </form>
@@ -62,19 +62,65 @@
       angular.module('map-example', [])
         .controller('MapController', function($scope, $rootScope, $compile, $http) {
 
+            $scope.k = 4;
+            $scope.max = 20;
+            $scope.min = 1;
+            $scope.factor = 1.5;
+
             $scope.showDetails = function (event) {
-              var contentString = '<b>' + this.name + '</b>';
+              var contentString = '<b>' + this.name + ' ($' + this.income + ')</b><br><br>';
+              for(var i = 0; i < this.routes.length; i++){
+
+                var zone_from = Object.keys(this.routes[i])[0][1];
+                var zone_to = Object.keys(this.routes[i])[0][3];
+                var val = this.routes[i][Object.keys(this.routes[i])[0]];
+
+                var temp = '<p>Zone ' + zone_from + ' - Zone ' + zone_to + ': $' + val + '<br>';
+                contentString += temp;
+
+              }
               $scope.infoWindow.setContent(contentString);
               $scope.infoWindow.setPosition(event.latLng);
               $scope.infoWindow.open($scope.map);
             };
 
-            $scope.getData = function (k, min, max, factor) {
+            $scope.getData = function (k, max, min, factor) {
 
-              var url = "https://postman-echo.com/get?k=" + k + "&min=" + min + "&max=" + max + "&factor=" + factor; 
+              var url = "http://localhost:8080/result?zones=" + k + "&max=" + max + "&min=" + min + "&factor=" + factor; 
 
               $http.get(url)
                 .then(function(response) {
+
+                      var data = response.data;
+
+                      console.log(JSON.stringify(data));
+
+                      var nta_multipolygon = [];
+                      
+                      for(var i = 0; i < data.length; i++){
+
+                        data[i]['polygon'] = [];
+
+                        for(var j = 0; j < data[i]['geom']['coordinates'].length; j++){
+
+                          for(var k = 0; k < data[i]['geom']['coordinates'][j].length; k++){
+
+
+                            for(var x = 0; x < data[i]['geom']['coordinates'][j][k].length; x++){
+
+                              data[i]['polygon'].push({
+                                lat: data[i]['geom']['coordinates'][j][k][x][1],
+                                lng: data[i]['geom']['coordinates'][j][k][x][0]
+                              });
+
+                            }
+
+                          }
+
+                        }
+
+                      }
+                        
 
                       var outerCoords = [
                         {lat: -32.364, lng: 153.207}, // north west
@@ -91,20 +137,23 @@
                       ];
 
                       var points = [outerCoords, outerCoords2];
-                      var colors = ['#FF0000', '#FFFFFF'];
+                      var colors = ['red', 'green', 'yellow', 'blue', 'orange', 'gray', 'white'];
+
                       var names = ['Tom', 'Thomas'];
 
 
-                      for(var i = 0; i < points.length; i++){
+                      for(var a = 0; a < data.length; a++){
 
                         var neighborhood = new google.maps.Polygon({
-                          paths: points[i],
+                          paths: data[a]['polygon'],
                           strokeColor: 'gray',
                           strokeOpacity: 0.8,
                           strokeWeight: 2,
-                          fillColor: colors[i],
+                          fillColor: colors[data[a]['zone']],
                           fillOpacity: 0.35,
-                          name: names[i]
+                          name: data[a]['ntaname'],
+                          routes: data[a]['routes'],
+                          income: data[a]['income']
                         });
                         neighborhood.setMap($scope.map);
                         neighborhood.addListener('click', $scope.showDetails);
@@ -127,7 +176,7 @@
                     center: {lat: 40.755361, lng: -73.978515} 
                 });
 
-                $scope.getData(5, 10, 50, 2);
+                // $scope.getData(5, 10, 50, 2);
                 
             }
 

@@ -1,7 +1,7 @@
 import flask
 import requests
 import json
-from flask import Flask, request, render_template, redirect, url_for, session
+from flask import Flask, request, render_template, redirect, url_for, session, json
 
 from kmeans_app import run
 
@@ -28,7 +28,16 @@ def result():
         factor = 1.4
     data = run(int(zones), float(mx), float(mn), float(factor))
 
-    return render_template('result.html', data = data)
+    for x in data:
+        x['_id'] = ""
+
+    res = app.response_class(
+        response=json.dumps(data),
+        status=200,
+        mimetype='application/json'
+    )
+
+    return res
 
 if __name__ == "__main__":
     # this is invoked when in the shell  you run
