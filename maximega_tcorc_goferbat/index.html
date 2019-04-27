@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   
+    <!-- <link href="style.css" rel="stylesheet" type="text/css"> -->
+    <title>Map example</title>
+    <style type="text/css">
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 80%;
+      }
+    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+
+<body ng-app="map-example" ng-controller="MapController">
+
+      <div class="container">
+      <h2>Parameters</h2>
+      <form>
+        <div class="form-group row">
+          <div class="col-xs-2">
+            <label for="ex1">K</label>
+            <input class="form-control" id="k" type="number" ng-model="k">
+          </div>
+          <div class="col-xs-2">
+            <label for="ex2">Min %</label>
+            <input class="form-control" id="min" type="number" ng-model="min">
+          </div>
+          <div class="col-xs-2">
+            <label for="ex3">Max %</label>
+            <input class="form-control" id="max" type="number" ng-model="max">
+          </div>
+          <div class="col-xs-2">
+            <label for="ex3">Factor</label>
+            <input class="form-control" id="factor" type="number" ng-model="factor">
+          </div>
+          <div class="col-xs-2">
+            <button type="submit" class="btn btn-default" ng-click="getData(k, min, max, factor)" style="margin-top: 23px;">Run</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    
+    <div id="map"></div>
+   
+
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.0.1/lodash.js" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBs35QKJfPGL-1gPg5KgBKXdEI2xRKHrf4" async defer></script>
+    <!-- <script src="script.js"></script> -->
+    <script type="text/javascript">
+      angular.module('map-example', [])
+        .controller('MapController', function($scope, $rootScope, $compile, $http) {
+
+            $scope.showDetails = function (event) {
+              var contentString = '<b>' + this.name + '</b>';
+              $scope.infoWindow.setContent(contentString);
+              $scope.infoWindow.setPosition(event.latLng);
+              $scope.infoWindow.open($scope.map);
+            };
+
+            $scope.getData = function (k, min, max, factor) {
+
+              var url = "https://postman-echo.com/get?k=" + k + "&min=" + min + "&max=" + max + "&factor=" + factor; 
+
+              $http.get(url)
+                .then(function(response) {
+
+                      var outerCoords = [
+                        {lat: -32.364, lng: 153.207}, // north west
+                        {lat: -35.364, lng: 153.207}, // south west
+                        {lat: -35.364, lng: 158.207}, // south east
+                        {lat: -32.364, lng: 158.207}  // north east
+                      ];
+
+                      var outerCoords2 = [
+                        {lat: -42.364, lng: 143.207}, // north west
+                        {lat: -45.364, lng: 143.207}, // south west
+                        {lat: -45.364, lng: 148.207}, // south east
+                        {lat: -42.364, lng: 148.207}  // north east
+                      ];
+
+                      var points = [outerCoords, outerCoords2];
+                      var colors = ['#FF0000', '#FFFFFF'];
+                      var names = ['Tom', 'Thomas'];
+
+
+                      for(var i = 0; i < points.length; i++){
+
+                        var neighborhood = new google.maps.Polygon({
+                          paths: points[i],
+                          strokeColor: 'gray',
+                          strokeOpacity: 0.8,
+                          strokeWeight: 2,
+                          fillColor: colors[i],
+                          fillOpacity: 0.35,
+                          name: names[i]
+                        });
+                        neighborhood.setMap($scope.map);
+                        neighborhood.addListener('click', $scope.showDetails);
+
+                      }
+
+                      $scope.infoWindow = new google.maps.InfoWindow;
+
+                      
+                });
+
+              
+            };
+
+
+            function initialize() {
+
+                $scope.map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 11,
+                    center: {lat: 40.755361, lng: -73.978515} 
+                });
+
+                $scope.getData(5, 10, 50, 2);
+                
+            }
+
+            google.maps.event.addDomListener(window, 'load', initialize);
+
+        });
+    </script>
+</body>
+
+</html>
