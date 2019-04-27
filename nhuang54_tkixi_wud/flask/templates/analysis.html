@@ -4,11 +4,49 @@
 <head>
   <meta charset="UTF-8">
   <title>CS504</title>
+  <link rel = "stylesheet" href = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/>
   <link rel="stylesheet" href="main.css" type="text/css">
+  <script src = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+
+  <script type="text/javascript">
+    function putPoint() {
+      var coord = document.getElementById("latlong").value;
+      var lat = coord.split(" ")[0];
+      var long = coord.split(" ")[1];
+      var marker = L.marker([lat, long]).addTo(map);
+      alert(lat + " " + long);
+    }
+  </script>
 </head>
 
 <body>
-  <h1> CS504 Homepage </h1>
+  <div id = "map" style = "width: 600px; height: 400px"></div>
+
+  <script>
+     // Creating map options
+     var mapOptions = {
+        center: [42.361145, -71.057083],
+        zoom: 12
+     }
+
+     // Creating a map object
+     var map = new L.map('map', mapOptions);
+
+     // Creating a Layer object
+     var layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+
+     // Adding layer to the map
+     map.addLayer(layer);
+  </script>
+
+  <form action="javascript:putPoint()">
+    Month:<br>
+    <input type="text" name="month"><br>
+    List of (lat, longs):<br>
+    <input type="text" name="coord" id="latlong">
+    <input type="submit" name="Submit">
+  </form>
+
 
 </body>
 
