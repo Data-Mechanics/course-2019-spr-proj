@@ -18,16 +18,8 @@ function $onEachFeature(feature, layer) {
 
 geojson.addTo(map);
 
-
-
-function handleLayerClick(e) {
-    var neighborhood = e.sourceTarget.feature.properties.Name;
-    console.log(e.sourceTarget.feature.properties.Name);
-    var node = document.querySelector("#neighborhood");
-    node.innerHTML = neighborhood;
-    current_neighborhood = neighborhood;
-    var form = document.querySelector("#neighborhood_form");
-    console.log(form);
-    form.value =  neighborhood;
+if (kmeans == null) {
+    console.log("hello");
 
 }
+

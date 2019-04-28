@@ -45,6 +45,11 @@
     {% if assessments is defined and assessments %}
         let assessments = {{ assessments|tojson }};
     {% endif %}
+    {% if kmeans is defined and kmeans %}
+        let kmeans = {{kmeans|tojson}};
+    {% else %}
+        let kmeans = null;
+    {% endif %}
 </script>
 <script type="text/javascript" src="../static/index.js"></script>
 </html>
