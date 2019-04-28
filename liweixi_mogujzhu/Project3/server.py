@@ -4,44 +4,39 @@ import jsonschema
 from flask import Flask, jsonify, abort, make_response, request, send_from_directory
 import pymongo
 import dml
+import urllib.request
 # The project structure references https://github.com/Data-Mechanics/course-2018-spr-proj/tree/master/agoncharova_lmckone
 
 
 
-def generate_xxx(year):
-    return []
 
-def get_xxx_from_database():
-  client = dml.pymongo.MongoClient()
-  repo = client.repo
-  repo.authenticate('liweixi_mogujzhu', 'liweixi_mogujzhu')
-  xxx_collection = repo['liweixi_mogujzhu.xxx']
-  xxx = xxx_collection.find()
-  evictions_arr = []
-  years = []
-  count = 0
-  # TODO Retrive the data
+def download_fire_alarm_boxes_data():
+  url = 'https://opendata.arcgis.com/datasets/3a0f4db1e63a4a98a456fdb71dc37a81_1.geojson'
+  response = urllib.request.urlopen(url).read().decode("utf-8")
+  r = json.loads(response)
+  print("Write Boston Fire Alarm boxes to a json file")
+  ff_file = open("./data/boston_fire_alarm_boxes.json","w+")
+  ff_file.write('var boston_fire_alarm_boxes_json = ')
+  json.dump(r, ff_file)
 
+def download_fire_department_data():
+  url = 'https://opendata.arcgis.com/datasets/092857c15cbb49e8b214ca5e228317a1_2.geojson'
+  response = urllib.request.urlopen(url).read().decode("utf-8")
+  r = json.loads(response)
+  print("Write Boston Fire Department to a json file")
+  ff_file = open("./data/boston_fire_department.json", "w+")
+  ff_file.write('var boston_fire_department_json = ')
+  json.dump(r, ff_file)
 
+def download_fire_hydrants_data():
+  url = 'https://opendata.arcgis.com/datasets/1b0717d5b4654882ae36adc4a20fd64b_0.geojson'
+  response = urllib.request.urlopen(url).read().decode("utf-8")
+  r = json.loads(response)
+  print("Write Boston Fire Hydrants to a json file")
+  ff_file = open("./data/boston_fire_hydrants.json", "w+")
+  ff_file.write('var boston_fire_hydrants_json = ')
+  json.dump(r, ff_file)
 
-  # format it in the valid format to serve to the map
-  repo.logout()
-  print("Formatted " + str(count) + " xxx")
-  return []
-
-def generate_xxx_json_file():
-  '''
-  Writes formatted evictions to the file
-  '''
-  print("Write xxx to a json file")
-  xxx_file = open("./data/xxx.json","w")
-  xxx_file.write('var xxx_json = {')
-  xxx_file.write('"type": "FeatureCollection",')
-  xxx_file.write('"features":')
-
-  xxx = get_xxx_from_database()
-  xxx_file.write(json.dumps(xxx))
-  xxx_file.write("}")
 
 
 app = Flask(__name__)
@@ -52,12 +47,15 @@ def serve_data(path):
   # get the evictions data from the database and 
   # generate the json file
   print(path + " requested")
-  if(path == "xxx.json"):
-    generate_xxx_json_file()
-    print("Generated xxx json file for the map")
-  if(path == "xxx2.json"):
-    generate_xxx_json_file()
-    print("Generated xxx2 json file for the graph")
+  if (path == "boston_fire_department.json"):
+    download_fire_department_data()
+    print("Generated fire department json file for the map")
+  if (path == "boston_fire_hydrants.json"):
+    download_fire_hydrants_data()
+    print("Generated fire hydrants json file for the map")
+  if (path == "boston_fire_alarm_boxes.json"):
+    download_fire_alarm_boxes_data()
+    print("Generated fire alarm boxes json file for the map")
   return send_from_directory('./data', path)
 
 # main css file
