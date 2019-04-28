@@ -59,11 +59,13 @@
     			// "2015-01-01 00:24:27"
     			var month = date.slice(5,7);
     			console.log(month)
-    			if (month == monthFilter){
-    				var lat = data[i].lat;
-	    			var lng = data[i].long;
-	    			var marker = L.marker([lat, lng]).addTo(map);
-    			}
+    			if ('bike' == data[i].mode_type){
+	    			if (month == monthFilter){
+	    				var lat = data[i].lat;
+		    			var lng = data[i].long;
+		    			var marker = L.marker([lat, lng]).addTo(map);
+	    			}
+	    		}
     			
     		}
     		// for (var i = 0; i < data.length; i++){
