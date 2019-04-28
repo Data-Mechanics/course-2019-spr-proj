@@ -20,9 +20,9 @@
 <h1>HI THERE</h1>
 <div id="map"></div>
 <div class="container">
-    <form>
-        KMeans: <input type="text" name="kmeans">
-        Neighborhood: <input type="text" id="neighborhood_form" name="neighborhood">
+    <form onsubmit="drawKmeans()">
+        KMeans: <input type="number" name="kmeans" step = "1" min = "1" value="1">
+        Neighborhood: <input type="text" id="neighborhood_form" name="neighborhood" value="Allston">
         <div class="slidecontainer">
             Distance<input type="range" min="1" max="100" value="50" class="slider" id="myRange" name = "weight"> Health
         </div>

@@ -39,7 +39,10 @@ form {
     margin-right: 8px;
     opacity: 0.7;
 }
-
+.Back {
+    height: 30px;
+    width: 60px;
+}
 /* Slider CSS */
 .slidecontainer {
   width: 100%; /* Width of the outside container */

@@ -69,18 +69,16 @@ info.update = function (props) {
         : 'Hover over a Neighborhood');
 };
 
+
 info.addTo(map);
 
 // get color depending on population density value
-function getColor(d) {
-    return d > 1000 ? '#800026' :
-        d > 500 ? '#BD0026' :
-            d > 200 ? '#E31A1C' :
-                d > 100 ? '#FC4E2A' :
-                    d > 50 ? '#FD8D3C' :
-                        d > 20 ? '#FEB24C' :
-                            d > 10 ? '#FED976' :
-                                '#FFEDA0';
+function getColor(p) {
+    if (typeof p.Color != 'undefined'){
+        return p.Color;
+    } else {
+        return "#7fc9f4"
+    }
 }
 
 function style(feature) {
@@ -90,18 +88,18 @@ function style(feature) {
         color: 'white',
         dashArray: '3',
         fillOpacity: 0.7,
-        fillColor: getColor(feature.properties.Name)
+        fillColor: getColor(feature.properties)
     };
 }
 
 function highlightFeature(e) {
     let layer = e.target;
-
     layer.setStyle({
         weight: 5,
         color: '#666',
         dashArray: '',
-        fillOpacity: 0.7
+        fillOpacity: 0.7,
+        fillColor: getColor(layer.feature.properties)
     });
 
     if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
@@ -109,13 +107,14 @@ function highlightFeature(e) {
     }
 
     info.update(layer.feature.properties);
+
 }
 
 let neighborhoods_shape;
 let censustract_shape;
 
 function resetHighlight(e) {
-    neighborhoods_shape.resetStyle(e.target);
+    neighborhoods_shape.resetStyle(e.target)
     info.update();
 }
 
@@ -133,7 +132,7 @@ function onEachFeature(feature, layer) {
     layer.on({
         mouseover: highlightFeature,
         mouseout: resetHighlight,
-        click: zoomToFeatureAndAddData
+        click: handleLayerClick,
     });
 }
 if (kmeans !== null) {
@@ -156,17 +155,9 @@ censustract_shape = L.geoJson(censusshape);
 neighborhoods_shape = L.geoJson(neighborhoods, {
     style: style,
     onEachFeature: onEachFeature
-});
+}).addTo(map);
 //L.geoJson(parcelgeo).addTo(map);
 
-let baseMaps = {
-    "Map": tile
-};
-let overlayMaps = {
-    "Census Tracts": censustract_shape,
-    "Neighborhoods": neighborhoods_shape
-};
-L.control.layers(baseMaps, overlayMaps).addTo(map);
 map.attributionControl.addAttribution('Population data &copy; <a href="http://census.gov/">US Census Bureau</a>');
 
 
@@ -195,14 +186,37 @@ legend.onAdd = function (map) {
 legend.addTo(map);
 console.log("Finished Executing Script!");
 
+
+
+let go_back = L.control({position: "bottomleft"})
+
+function goback(map) {
+    let button = L.DomUtil.create("button", "Back");
+    button.innerHTML = "Back";
+    button.onclick = resetColor;
+    return button;
+}
+
+go_back.onAdd = goback;
+
+
 function handleLayerClick(e) {
+    map.fitBounds(e.target.getBounds());
     var neighborhood = e.sourceTarget.feature.properties.Name;
-    console.log(e.sourceTarget.feature.properties.Name);
-    var node = document.querySelector("#neighborhood");
-    node.innerHTML = neighborhood;
     current_neighborhood = neighborhood;
     var form = document.querySelector("#neighborhood_form");
-    console.log(form);
     form.value =  neighborhood;
+    resetColor(e);
+    e.target.feature.properties.Color = "#382ac1";
+    neighborhoods_shape.resetStyle(e.target);
+    go_back.addTo(map);
 
+}
+
+function resetColor(e) {
+
+    for (l in neighborhoods_shape._layers){
+        neighborhoods_shape._layers[l].feature.properties.Color = "#7fc9f4";
+        neighborhoods_shape.resetStyle(neighborhoods_shape._layers[l]);
+    }
 }
