@@ -5,7 +5,9 @@
   <meta charset="UTF-8">
   <title>CS504</title>
   <link rel = "stylesheet" href = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/>
-  <link rel="stylesheet" href="main.css" type="text/css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+  
   <script src = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
 
   <script type="text/javascript">
@@ -16,7 +18,26 @@
       var marker = L.marker([lat, long]).addTo(map);
       alert(lat + " " + long);
     }
+    function filterMonth(month) {
+    	// var month = document.getElementById('month1').value;
+    	var monthFilter = month
+    	console.log(monthFilter)
+    	alert(monthFilter)
+
+    	$.getJSON('https://cors.io/?http://datamechanics.io/data/boston_collisions.json', function(data) {
+    		console.log('success')
+    	})
+
+    	// http://datamechanics.io/data/boston_collisions.json
+    	
+
+
+
+    	
+    }
   </script>
+
+
 </head>
 
 <body>
@@ -46,6 +67,22 @@
     <input type="text" name="coord" id="latlong">
     <input type="submit" name="Submit">
   </form>
+
+  <form id='month'>
+	  <input type="radio" name="month" id='month1' onclick = "filterMonth(document.getElementById('month1').value);" value="January">January<br>
+	  <input type="radio" name="month" id='month2' onclick = "filterMonth(document.getElementById('month2').value);" value="February">February<br>
+	  <input type="radio" name="month" id='month3' onclick = "filterMonth(document.getElementById('month3').value);" value="March">March<br>
+	  <input type="radio" name="month" id='month4' onclick = "filterMonth(document.getElementById('month4').value);" value="April">April<br>
+	  <input type="radio" name="month" id='month5' onclick = "filterMonth(document.getElementById('month5').value);" value="May">May<br>
+	  <input type="radio" name="month" id='month6' onclick = "filterMonth(document.getElementById('month6').value);" value="June">June<br>
+	  <input type="radio" name="month" id='month7' onclick = "filterMonth(document.getElementById('month7').value);" value="July">July<br>
+	  <input type="radio" name="month" id='month8' onclick = "filterMonth(document.getElementById('month8').value);" value="August">August<br>
+	  <input type="radio" name="month" id='month9' onclick = "filterMonth(document.getElementById('month9').value);" value="September">September<br>
+	  <input type="radio" name="month" id='month10' onclick = "filterMonth(document.getElementById('month10').value);" value="October">October<br>
+	  <input type="radio" name="month" id='month11' onclick = "filterMonth(document.getElementById('month11').value);" value="November">November<br>
+	  <input type="radio" name="month" id='month12' onclick = "filterMonth(document.getElementById('month12').value);" value="December">December<br>
+
+	</form>
 
 
 </body>

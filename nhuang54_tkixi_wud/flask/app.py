@@ -29,7 +29,7 @@ def visualize():
 	month11 = request.form['month11']
 	month12 = request.form['month12']
 
-	
+	# http://datamechanics.io/data/boston_collisions.json
 
 	## pull all the collisions of the particular months (lat,lng in list)
 	## pass that lat lng to the template
