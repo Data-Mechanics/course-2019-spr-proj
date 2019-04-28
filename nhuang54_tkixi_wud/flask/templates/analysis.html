@@ -20,16 +20,62 @@
     }
     function filterMonth(month) {
     	// var month = document.getElementById('month1').value;
-    	var monthFilter = month
-    	console.log(monthFilter)
-    	alert(monthFilter)
+    	if (month == 'January'){
+    		var monthFilter = '01';
+    	} else if (month == 'February'){
+    		var monthFilter = '02';
+    	} else if (month == 'March'){
+    		var monthFilter = '03';
+    	} else if (month == 'April'){
+    		var monthFilter = '04';
+    	} else if (month == 'May'){
+    		var monthFilter = '05';
+    	} else if (month == 'June'){
+    		var monthFilter = '06';
+    	} else if (month == 'July'){
+    		var monthFilter = '07';
+    	} else if (month == 'August'){
+    		var monthFilter = '08';
+    	} else if (month == 'September'){
+    		var monthFilter = '09';
+    	} else if (month == 'October'){
+    		var monthFilter = '10';
+    	} else if (month == 'November'){
+    		var monthFilter = '11';
+    	} else{
+    		var monthFilter = '12';
+    	}
+
+    	console.log(monthFilter);
+    	alert(monthFilter);
 
     	$.getJSON('https://cors.io/?http://datamechanics.io/data/boston_collisions.json', function(data) {
+    		dataLength = data.length;
     		console.log('success')
-    	})
+    		console.log(dataLength)
+    		console.log(monthFilter)
+    		for (var i = 0; i < data.length; i++){
+    			var date = data[i].dispatch_ts;
+    			// "2015-01-01 00:24:27"
+    			var month = date.slice(5,7);
+    			console.log(month)
+    			if (month == monthFilter){
+    				var lat = data[i].lat;
+	    			var lng = data[i].long;
+	    			var marker = L.marker([lat, lng]).addTo(map);
+    			}
+    			
+    		}
+    		// for (var i = 0; i < data.length; i++){
+    		// 	var lat = data[i].lat;
+    		// 	var lng = data[i].long;
+    		// 	var date = data[i].dispatch_ts;
+    		// 	console.log(date);
+    		// 	console.log(text);
+    		// }
+    		
 
-    	// http://datamechanics.io/data/boston_collisions.json
-    	
+    	});
 
 
 
