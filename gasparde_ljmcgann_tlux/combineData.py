@@ -217,9 +217,12 @@ class combineData(dml.Algorithm):
                 tract_shapely = combineData.geojson_to_polygon(c_t_health_shape[ti]["geometry"])
                 for shape in tract_shapely:
                     if shape.contains(parcel_shapely):
+                        average_health = (float(c_t_health_shape[ti]["asthma"]) + float(c_t_health_shape[ti]["low_phys"])
+                                         + float(c_t_health_shape[ti]["obesity"]) ) /3
                         tract_data = {"asthma": c_t_health_shape[ti]["asthma"],
                                       "low_phys": c_t_health_shape[ti]["low_phys"],
                                       "obesity": c_t_health_shape[ti]["obesity"],
+                                      "health_score": average_health,
                                       "Census Tract": c_t_health_shape[ti]["_id"]}
                         data = {**unique_parc_shape_assess[i], **tract_data}
                         parcels_with_health.append(data)
