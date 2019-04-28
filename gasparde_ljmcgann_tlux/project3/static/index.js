@@ -122,21 +122,11 @@ function resetHighlight(e) {
 function zoomToFeatureAndAddData(e) {
     map.fitBounds(e.target.getBounds());
 
+
     postData(`http://127.0.0.1:5000/`, {'neighborhood': e.target.feature.properties.Name})
         .then(data => console.log(JSON.stringify(data))) // JSON-string from `response.json()` call
         .catch(error => console.error(error));
-if (kmeans !== null) {
-    kmeans = JSON.parse(kmeans);
-    kmeans.forEach(el => {
-        if (el.Neighborhood === e.target.feature.properties.Name)
-            for (let i = 0; i < el.means.length; i++) {
-                let marker = L.marker(el.means[i]).addTo(map);
-                marker.bindPopup("I am a mean calculate using the " + el.metric + " metric!");
-            }
-    });
-}else {
-    console.log("KMEANS not defined");
-}
+
 }
 
 function onEachFeature(feature, layer) {
@@ -146,7 +136,21 @@ function onEachFeature(feature, layer) {
         click: zoomToFeatureAndAddData
     });
 }
-
+if (kmeans !== null) {
+    console.log(typeof(kmeans));
+    //kmeans = JSON.parse(kmeans);
+    console.log(kmeans);
+    for (let i = 0; i < kmeans.length; i++) {
+        let marker = L.marker(kmeans[i]).addTo(map);
+    }
+    // kmeans.forEach(el => {
+    //         for (let i = 0; i < el.means.length; i++) {
+    //             let marker = L.marker(el.means[i]).addTo(map);
+    //             marker.bindPopup("I am a mean calculate using the " + el.metric + " metric!");
+    // });
+}else {
+    console.log("KMEANS not defined");
+}
 
 censustract_shape = L.geoJson(censusshape);
 neighborhoods_shape = L.geoJson(neighborhoods, {
@@ -190,3 +194,15 @@ legend.onAdd = function (map) {
 
 legend.addTo(map);
 console.log("Finished Executing Script!");
+
+function handleLayerClick(e) {
+    var neighborhood = e.sourceTarget.feature.properties.Name;
+    console.log(e.sourceTarget.feature.properties.Name);
+    var node = document.querySelector("#neighborhood");
+    node.innerHTML = neighborhood;
+    current_neighborhood = neighborhood;
+    var form = document.querySelector("#neighborhood_form");
+    console.log(form);
+    form.value =  neighborhood;
+
+}
