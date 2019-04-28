@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>CS504</title>
+  <link rel = "stylesheet" href = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+  
+  <script src = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+
+  <script type="text/javascript">
+    function putPoint() {
+      var coord = document.getElementById("latlong").value;
+      var lat = coord.split(" ")[0];
+      var long = coord.split(" ")[1];
+      var marker = L.marker([lat, long]).addTo(map);
+      alert(lat + " " + long);
+    }
+    function filterMonth(month) {
+    	// var month = document.getElementById('month1').value;
+    	if (month == 'January'){
+    		var monthFilter = '01';
+    	} else if (month == 'February'){
+    		var monthFilter = '02';
+    	} else if (month == 'March'){
+    		var monthFilter = '03';
+    	} else if (month == 'April'){
+    		var monthFilter = '04';
+    	} else if (month == 'May'){
+    		var monthFilter = '05';
+    	} else if (month == 'June'){
+    		var monthFilter = '06';
+    	} else if (month == 'July'){
+    		var monthFilter = '07';
+    	} else if (month == 'August'){
+    		var monthFilter = '08';
+    	} else if (month == 'September'){
+    		var monthFilter = '09';
+    	} else if (month == 'October'){
+    		var monthFilter = '10';
+    	} else if (month == 'November'){
+    		var monthFilter = '11';
+    	} else{
+    		var monthFilter = '12';
+    	}
+
+    	console.log(monthFilter);
+    	alert(monthFilter);
+
+    	$.getJSON('https://cors.io/?http://datamechanics.io/data/boston_collisions.json', function(data) {
+    		dataLength = data.length;
+    		console.log('success')
+    		console.log(dataLength)
+    		console.log(monthFilter)
+    		for (var i = 0; i < data.length; i++){
+    			var date = data[i].dispatch_ts;
+    			// "2015-01-01 00:24:27"
+    			var month = date.slice(5,7);
+    			console.log(month)
+    			if ('bike' == data[i].mode_type){
+	    			if (month == monthFilter){
+	    				var lat = data[i].lat;
+		    			var lng = data[i].long;
+		    			var marker = L.marker([lat, lng]).addTo(map);
+	    			}
+	    		}
+    			
+    		}
+    		// for (var i = 0; i < data.length; i++){
+    		// 	var lat = data[i].lat;
+    		// 	var lng = data[i].long;
+    		// 	var date = data[i].dispatch_ts;
+    		// 	console.log(date);
+    		// 	console.log(text);
+    		// }
+    		
+
+    	});
+
+
+
+    	
+    }
+  </script>
+
+
+</head>
+
+<body>
+  <div id = "map" style = "width: 600px; height: 400px"></div>
+
+  <script>
+     // Creating map options
+     var mapOptions = {
+        center: [42.361145, -71.057083],
+        zoom: 12
+     }
+
+     // Creating a map object
+     var map = new L.map('map', mapOptions);
+
+     // Creating a Layer object
+     var layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+
+     // Adding layer to the map
+     map.addLayer(layer);
+  </script>
+
+  <form action="javascript:putPoint()">
+    Month:<br>
+    <input type="text" name="month"><br>
+    List of (lat, longs):<br>
+    <input type="text" name="coord" id="latlong">
+    <input type="submit" name="Submit">
+  </form>
+
+  <form id='month'>
+	  <input type="radio" name="month" id='month1' onclick = "filterMonth(document.getElementById('month1').value);" value="January">January<br>
+	  <input type="radio" name="month" id='month2' onclick = "filterMonth(document.getElementById('month2').value);" value="February">February<br>
+	  <input type="radio" name="month" id='month3' onclick = "filterMonth(document.getElementById('month3').value);" value="March">March<br>
+	  <input type="radio" name="month" id='month4' onclick = "filterMonth(document.getElementById('month4').value);" value="April">April<br>
+	  <input type="radio" name="month" id='month5' onclick = "filterMonth(document.getElementById('month5').value);" value="May">May<br>
+	  <input type="radio" name="month" id='month6' onclick = "filterMonth(document.getElementById('month6').value);" value="June">June<br>
+	  <input type="radio" name="month" id='month7' onclick = "filterMonth(document.getElementById('month7').value);" value="July">July<br>
+	  <input type="radio" name="month" id='month8' onclick = "filterMonth(document.getElementById('month8').value);" value="August">August<br>
+	  <input type="radio" name="month" id='month9' onclick = "filterMonth(document.getElementById('month9').value);" value="September">September<br>
+	  <input type="radio" name="month" id='month10' onclick = "filterMonth(document.getElementById('month10').value);" value="October">October<br>
+	  <input type="radio" name="month" id='month11' onclick = "filterMonth(document.getElementById('month11').value);" value="November">November<br>
+	  <input type="radio" name="month" id='month12' onclick = "filterMonth(document.getElementById('month12').value);" value="December">December<br>
+
+	</form>
+
+
+</body>
+
+</html>
