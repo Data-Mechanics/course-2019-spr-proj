@@ -125,7 +125,8 @@ function zoomToFeatureAndAddData(e) {
     postData(`http://127.0.0.1:5000/`, {'neighborhood': e.target.feature.properties.Name})
         .then(data => console.log(JSON.stringify(data))) // JSON-string from `response.json()` call
         .catch(error => console.error(error));
-
+if (kmeans !== null) {
+    kmeans = JSON.parse(kmeans);
     kmeans.forEach(el => {
         if (el.Neighborhood === e.target.feature.properties.Name)
             for (let i = 0; i < el.means.length; i++) {
@@ -133,6 +134,9 @@ function zoomToFeatureAndAddData(e) {
                 marker.bindPopup("I am a mean calculate using the " + el.metric + " metric!");
             }
     });
+}else {
+    console.log("KMEANS not defined");
+}
 }
 
 function onEachFeature(feature, layer) {

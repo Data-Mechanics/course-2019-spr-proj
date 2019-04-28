@@ -14,16 +14,17 @@ repo.authenticate(contributor, contributor)
 
 
 neighborhoods = dumps(repo[contributor + ".Neighborhoods"].find())
+censusshape = dumps(repo[contributor + ".CensusTractShape"].find())
+
 
 @app.route('/')
 @app.route('/index')
 def hello():
-    if request.args.get('kmeans') != None and request.args.get("neighborhood") !=None:
+    if request.args.get('kmeans') != None and request.args.get("neighborhood") != None:
         kmeans = compute_kmeans(request.args.get("neighborhood"), int(request.args.get('kmeans')))
         print(kmeans)
-        return render_template("index.html", neighborhoods=neighborhoods, kmeans = kmeans,)
-    return render_template("index.html", neighborhoods=neighborhoods,)
-
+        return render_template("index.html", neighborhoods=neighborhoods, kmeans=kmeans, censusshape=censusshape)
+    return render_template("index.html", neighborhoods=neighborhoods, censusshape=censusshape)
 
 
 if __name__ == "__main__":

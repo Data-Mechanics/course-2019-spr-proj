@@ -18,11 +18,11 @@
 </head>
 <body>
 <h1>HI THERE</h1>
-<div id="map"> </div>
+<div id="map"></div>
 <div class="container">
     <form>
-        KMeans: <input  type="text" name="kmeans">
-        Neighborhood: <input  type="text" id="neighborhood_form" name = "neighborhood">
+        KMeans: <input type="text" name="kmeans">
+        Neighborhood: <input type="text" id="neighborhood_form" name="neighborhood">
         <input type="submit">
 
     </form>
@@ -31,9 +31,7 @@
 
     </p>
     <p>
-        {% if kmeans is defined and kmeans %}
-            {{kmeans}}
-        {% endif %}
+
     </p>
 </div>
 </body>
@@ -44,6 +42,14 @@
 
     {% if assessments is defined and assessments %}
         let assessments = {{ assessments|tojson }};
+    {% endif %}
+    {% if censusshape is defined and censusshape %}
+        let censusshape =  {{censusshape|tojson}};
+    {% endif %}
+    {% if kmeans is defined and kmeans %}
+        let kmeans =  {{kmeans|tojson}};
+    {% else %}
+        let kmeans = null;
     {% endif %}
 </script>
 <script type="text/javascript" src="../static/index.js"></script>
