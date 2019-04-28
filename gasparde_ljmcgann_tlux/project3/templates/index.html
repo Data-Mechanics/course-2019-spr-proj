@@ -44,10 +44,10 @@
         let assessments = {{ assessments|tojson }};
     {% endif %}
     {% if censusshape is defined and censusshape %}
-        let censusshape =  {{censusshape|tojson}};
+        let censusshape =  {{ censusshape|tojson }};
     {% endif %}
     {% if kmeans is defined and kmeans %}
-        let kmeans =  {{kmeans|tojson}};
+        let kmeans =  {{ kmeans|tojson}};
     {% else %}
         let kmeans = null;
     {% endif %}
