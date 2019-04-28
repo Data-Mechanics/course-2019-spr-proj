@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--title-->
+    <title>CS504 project</title>
+
+    <!---meta-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width-device-width, initial-scale = 1">
+
+    <!--bootstrap-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>  
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    
+    <!--css -->
+    <link rel='stylesheet' type='text/css' href='./main.css'/>
+
+    <!--js-->
+    <script src = "./script.js"></script>
+
+</head>
+<body>
+    <div class = "container"><h1 class = "jumbotron">CS504 Temp Title</h1></div>
+    
+    <div class = "container">
+    <form>
+        <!--min rating-->  
+        <div class="rating">
+            <h4 class = "form-label">Rating</h4>
+            <span>
+                <input type="radio" name="rating" id="str5" value="5">
+                <label for="str5"><span class="fa fa-star"></span></label>
+            </span>
+            <span>
+                <input type="radio" name="rating" id="str4" value="4">
+                <label for="str4"><span class="fa fa-star"></span></label>
+            </span>
+            <span>
+                <input type="radio" name="rating" id="str3" value="3">
+                <label for="str3"><span class="fa fa-star"></span></label>
+            </span>
+            <span>
+                <input type="radio" name="rating" id="str2" value="2">
+                <label for="str2"><span class="fa fa-star"></span></label>
+            </span>
+            <span>
+                <input type="radio" name="rating" id="str1" value="1">
+                <label for="str1"><span class="fa fa-star"></span></label>
+            </span>
+        </div>
+        
+        <!-- slider for violation -->
+        <div class="form-group">
+            <label for="violation">Violation Score</label>
+            <input type="radio" name="violation" value="1"/> 1
+            <input type="radio" name="violation" value="2"/> 2
+            <input type="radio" name="violation" value="1"/> 3
+        </div>
+
+        <!-- start location -->
+        <div class = "form-group">
+            <input type = "text">
+        </div>
+        
+        <!-- submit -->
+        <div class = "form-group">
+        <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+    </div>
+
+    <div class  = "avgVoliation"></div>
+
+</body>
+</html>
