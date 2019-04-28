@@ -47,7 +47,7 @@ class getStatistics(dml.Algorithm):
                          "statistic": "mean", "value": m})
                     repo[getStatistics.contributor + ".Statistics"].insert_one(
                         {"Neighborhood": name, "variable": category,
-                         "statistic": "std_dev", "val": stdev(y, m)})
+                         "statistic": "std_dev", "value": stdev(y, m)})
 
 
         # compute mean and std_dev of distance scores
