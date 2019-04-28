@@ -71,27 +71,31 @@ class famous_people(dml.Algorithm):
         doc.add_namespace('dat', 'http://datamechanics.io/data/') # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
-        doc.add_namespace('bdp', 'https://www.50states.com/bio/mass.htm')
-        doc.add_namespace('bdp', 'https://www.smithsonianmag.com/smithsonianmag/meet-100-most-significant-americans-all-time-180953341/')
+        doc.add_namespace('web1', 'https://www.50states.com/bio/mass.htm')
+        doc.add_namespace('web2', 'https://www.smithsonianmag.com/smithsonianmag/meet-100-most-significant-americans-all-time-180953341/')
 
         this_script = doc.agent('alg:'+contributor+'#famous_people', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        resource = doc.entity('bdp:wc8w-nujj', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        mafp = doc.entity('web1:ma', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'html'})
+        usfp = doc.entity('web2:us', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'html'})
+        
         get_names = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(get_names, this_script)
-        doc.usage(get_names, resource, startTime, None,
+        doc.usage(get_names, mafp, startTime, None,
+            {prov.model.PROV_TYPE:'ont:Retrieval',
+            'ont:Computation':'Data cleaning'
+            }
+        )
+        doc.usage(get_names, usfp, startTime, None,
             {prov.model.PROV_TYPE:'ont:Retrieval',
             'ont:Computation':'Data cleaning'
             }
         )
 
-        mafp = doc.entity('dat:'+contributor+'#famous_people', {prov.model.PROV_LABEL:'MA Famous People', prov.model.PROV_TYPE:'ont:DataSet'})
-        usfp = doc.entity('dat:'+contributor+'#famous_people', {prov.model.PROV_LABEL:'US Famous People', prov.model.PROV_TYPE:'ont:DataSet'})
-        # doc.wasAttributedTo(mafp, this_script)
-        doc.wasAttributedTo(usfp, this_script)
-        # doc.wasGeneratedBy(mafp, get_names, endTime)
-        doc.wasGeneratedBy(usfp, get_names, endTime)
-        # doc.wasDerivedFrom(mafp, resource, get_names, get_names, get_names)
-        doc.wasDerivedFrom(usfp, resource, get_names, get_names, get_names)
+        fp = doc.entity('dat:'+contributor+'#famous_people', {prov.model.PROV_LABEL:'Famous People', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(fp, this_script)
+        doc.wasGeneratedBy(fp, get_names, endTime)
+        doc.wasDerivedFrom(fp, usfp, get_names, get_names, get_names)
+        doc.wasDerivedFrom(fp, mafp, get_names, get_names, get_names)
 
         repo.logout()
                   

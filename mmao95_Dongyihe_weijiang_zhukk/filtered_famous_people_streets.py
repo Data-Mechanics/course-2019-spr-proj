@@ -53,11 +53,10 @@ class filtered_famous_people_streets(dml.Algorithm):
         doc.add_namespace('dat', 'http://datamechanics.io/data/') # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
-        doc.add_namespace('bdp', 'https://www.50states.com/bio/mass.htm')
 
         this_script = doc.agent('alg:'+contributor+'#filtered_famous_people_streets', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        res_fp = doc.entity('bdp:fp', {'prov:label':'Famous People in MA', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
-        res_sb = doc.entity('bdp:sb', {'prov:label':'Street Book', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        res_fp = doc.entity('dat:'+contributor+'#famous_people', {prov.model.PROV_LABEL:'Famous People', prov.model.PROV_TYPE:'ont:DataSet'})
+        res_sb = doc.entity('dat:'+contributor+'#street_book', {prov.model.PROV_LABEL:'Street Book', prov.model.PROV_TYPE:'ont:DataSet'})
         filter_names = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(filter_names, this_script)
         doc.usage(filter_names, res_fp, startTime, None,

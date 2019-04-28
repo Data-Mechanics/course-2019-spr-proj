@@ -102,26 +102,25 @@ class street_book(dml.Algorithm):
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#')
         # The event log.
         doc.add_namespace('log', 'http://datamechanics.io/log/')
-        doc.add_namespace('bdp', 'https://www.50states.com/bio/mass.htm')
 
         this_script = doc.agent('alg:' + contributor + '#street_book', {
                                 prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
-        resource = doc.entity('bdp:wc8w-nujj', {'prov:label': '311, Service Requests',
-                                                prov.model.PROV_TYPE: 'ont:DataResource', 'ont:Extension': 'json'})
+        resource = doc.entity('dat:street-book', {'prov:label': '311, Service Requests',
+                                                prov.model.PROV_TYPE: 'ont:DataResource', 'ont:Extension': 'csv'})
         get_names = doc.activity(
             'log:uuid' + str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(get_names, this_script)
         doc.usage(get_names, resource, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:Retrieval',
-                   'ont:Computation': 'Data cleaning'
+                   'ont:Query': 'street-book.csv'
                    }
                   )
 
-        fp = doc.entity('dat:' + contributor + '#street_book',
+        sb = doc.entity('dat:' + contributor + '#street_book',
                         {prov.model.PROV_LABEL: 'Street Book', prov.model.PROV_TYPE: 'ont:DataSet'})
-        doc.wasAttributedTo(fp, this_script)
-        doc.wasGeneratedBy(fp, get_names, endTime)
-        doc.wasDerivedFrom(fp, resource, get_names, get_names, get_names)
+        doc.wasAttributedTo(sb, this_script)
+        doc.wasGeneratedBy(sb, get_names, endTime)
+        doc.wasDerivedFrom(sb, resource, get_names, get_names, get_names)
 
         repo.logout()
 
