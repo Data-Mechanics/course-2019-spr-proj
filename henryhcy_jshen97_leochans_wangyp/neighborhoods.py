@@ -21,7 +21,7 @@ class neighborhoods(dml.Algorithm):
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('henryhcy_wangyp', 'henryhcy_wangyp')
+        repo.authenticate('henryhcy_jshen97_leochans_wangyp', 'henryhcy_jshen97_leochans_wangyp')
 
        	url = 'http://bostonopendata-boston.opendata.arcgis.com/datasets/3525b0ee6e6b427f9aab5d0a1d0a1a28_0.geojson'
         response = urllib.request.urlopen(url).read().decode("utf-8")
@@ -31,9 +31,9 @@ class neighborhoods(dml.Algorithm):
 
         repo.dropCollection("neighborhoods")
         repo.createCollection("neighborhoods")
-        repo['henryhcy_wangyp.neighborhoods'].insert_one(r)
-        repo['henryhcy_wangyp.neighborhoods'].metadata({'complete':True})
-        print(repo['henryhcy_wangyp.neighborhoods'].metadata())
+        repo['henryhcy_jshen97_leochans_wangyp.neighborhoods'].insert_one(r)
+        repo['henryhcy_jshen97_leochans_wangyp.neighborhoods'].metadata({'complete':True})
+        print(repo['henryhcy_jshen97_leochans_wangyp.neighborhoods'].metadata())
         repo.logout()
 
         endTime = datetime.datetime.now()
