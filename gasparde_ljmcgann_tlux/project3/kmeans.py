@@ -48,25 +48,30 @@ def distance_score(distance_score, stdev, mean):
     else:
         return 1
 
-def compute_weight(dist_score, dist_mean, dist_stdev, health_score, health_mean, health_stdev):
-    dist_z_score = (dist_score - dist_mean) / dist_stdev
-    health_z_score = (health_score - health_mean) / health_stdev
-    average_z_score = (dist_z_score + health_z_score) / 2
-    if average_z_score > 1.5:
+def compute_weight(dist_score, dist_mean, dist_stdev, health_score, health_mean, health_stdev, weight):
+    dist_z_score = ((dist_score - dist_mean) / dist_stdev)  * (weight/100)
+    #print("dist", dist_z_score)
+    health_z_score = ((health_score - health_mean) / health_stdev) * (1-(weight/100))
+    #print("health", health_z_score)
+    average_z_score = (dist_z_score + health_z_score)
+
+    if average_z_score > 1:
+        print("average", average_z_score)
         return 100
-    elif average_z_score > .75:
+    elif average_z_score > .5:
         return 10
     else:
         return 1
 
-def compute_kmeans(neighborhood, num_means):
+
+
+def compute_kmeans(neighborhood, num_means, passed_weight):
     client = dml.pymongo.MongoClient()
     repo = client.repo
     repo.authenticate('gasparde_ljmcgann_tlux', 'gasparde_ljmcgann_tlux')
     parcels = repo['gasparde_ljmcgann_tlux' + ".ParcelsCombined"]
     neighborhood_parcels = list(parcels.find({"Neighborhood": neighborhood}))
     stats = repo['gasparde_ljmcgann_tlux' + ".Statistics"]
-    print(list(stats.find({"Neighborhood": neighborhood, "variable": "health_score"})))
     dist_mean = float(stats.find_one({"Neighborhood": neighborhood, "variable": "distance_score", "statistic": "mean"})["value"])
     dist_stdev = float(stats.find_one({"Neighborhood": neighborhood, "variable": "distance_score", "statistic": "std_dev"})["value"])
     health_mean = float(stats.find_one({"Neighborhood": neighborhood,"variable": "health_score", "statistic": "mean"})["value"])
@@ -74,12 +79,14 @@ def compute_kmeans(neighborhood, num_means):
 
     kmean = []
 
-    for i in range(len(neighborhood_parcels)):
+    for i in range(100):
         shape = geojson_to_polygon(neighborhood_parcels[i]["geometry"])[0]
         # out of order, want [latitude, longitude]
         coords = [shape.centroid.coords[0][1], shape.centroid.coords[0][0]]
         weight = compute_weight(neighborhood_parcels[i]["distance_score"], dist_mean, dist_stdev,
-                                neighborhood_parcels[i]["health_score"], health_mean, health_stdev)
+                                neighborhood_parcels[i]["health_score"], health_mean, health_stdev, passed_weight)
+
+
         for _ in range(weight):
             kmean.append([coords[0], coords[1]])
 
