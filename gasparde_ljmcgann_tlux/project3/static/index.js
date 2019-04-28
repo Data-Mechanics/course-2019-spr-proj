@@ -1,3 +1,21 @@
+function postData(url = ``, data = {}) {
+    // Default options are marked with *
+    return fetch(url, {
+        method: "POST", // *GET, POST, PUT, DELETE, etc.
+        mode: "cors", // no-cors, cors, *same-origin
+        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: "same-origin", // include, *same-origin, omit
+        headers: {
+            "Content-Type": "application/json",
+            // "Content-Type": "application/x-www-form-urlencoded",
+        },
+        redirect: "follow", // manual, *follow, error
+        referrer: "no-referrer", // no-referrer, *client
+        body: JSON.stringify(data), // body data type must match "Content-Type" header
+    })
+        .then(response => response.json()); // parses JSON response into native Javascript objects
+}
+
 console.log("this works");
 /*
     censushealth,
@@ -10,20 +28,23 @@ console.log("this works");
     censusshape
  */
 //console.log(censushealth);
+kmeans = JSON.parse(kmeans);
 //console.log(kmeans);
 //console.log(stats);
 neighborhoods = JSON.parse(neighborhoods);
 //console.log(neighborhoods);
-openspaces = JSON.parse(openspaces);
+// openspaces = JSON.parse(openspaces);
 //console.log(openspaces);
+//parcelgeo = JSON.parse(parcelgeo);
 // console.log(parcelgeo);
 // console.log(assessments);
-// console.log(censusshape);
+censusshape = JSON.parse(censusshape);
+console.log(censusshape);
 
 
 let map = L.map('map', {center: [42.3601, -71.0589], zoom: 15});
 
-L.tileLayer('https://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png', {
+let tile = L.tileLayer('https://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png', {
     maxZoom: 18,
     attribution: 'Tiles &copy; <a href="http://openstreetmap.se/" target="_blank">OpenStreetMap Sweden</a>' +
         ', Map &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -90,21 +111,28 @@ function highlightFeature(e) {
     info.update(layer.feature.properties);
 }
 
-let geojson;
+let neighborhoods_shape;
+let censustract_shape;
 
 function resetHighlight(e) {
-    geojson.resetStyle(e.target);
+    neighborhoods_shape.resetStyle(e.target);
     info.update();
 }
 
 function zoomToFeatureAndAddData(e) {
     map.fitBounds(e.target.getBounds());
-    L.geoJSON(openspaces, {
-        filter: function (feature, layer) {
-            console.log(feature.properties.Name,e.target.feature.properties.Name);
-            return feature.properties.Name === e.target.feature.properties.Name;
-        }
-  }).addTo(map);
+
+    postData(`http://127.0.0.1:5000/`, {'neighborhood': e.target.feature.properties.Name})
+        .then(data => console.log(JSON.stringify(data))) // JSON-string from `response.json()` call
+        .catch(error => console.error(error));
+
+    kmeans.forEach(el => {
+        if (el.Neighborhood === e.target.feature.properties.Name)
+            for (let i = 0; i < el.means.length; i++) {
+                let marker = L.marker(el.means[i]).addTo(map);
+                marker.bindPopup("I am a mean calculate using the " + el.metric + " metric!");
+            }
+    });
 }
 
 function onEachFeature(feature, layer) {
@@ -115,11 +143,22 @@ function onEachFeature(feature, layer) {
     });
 }
 
-geojson = L.geoJson(neighborhoods, {
+
+censustract_shape = L.geoJson(censusshape);
+neighborhoods_shape = L.geoJson(neighborhoods, {
     style: style,
     onEachFeature: onEachFeature
-}).addTo(map);
+});
+//L.geoJson(parcelgeo).addTo(map);
 
+let baseMaps = {
+    "Map": tile
+};
+let overlayMaps = {
+    "Census Tracts": censustract_shape,
+    "Neighborhoods": neighborhoods_shape
+};
+L.control.layers(baseMaps, overlayMaps).addTo(map);
 map.attributionControl.addAttribution('Population data &copy; <a href="http://census.gov/">US Census Bureau</a>');
 
 
