@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request
 
+import minStations
+
 app = Flask(__name__)
 
 @app.route('/')
