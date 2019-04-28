@@ -53,13 +53,13 @@ The project is divided into two tasks:
 
            3. For further analsis, we plot the following histograms. It is interesting that there are around 16 pairs of CVS and Walgreen right next to each other which is consistent with our intuition.   It is reasonable to believe that density of CVS and Walgreen stores is proportional with the density of population. Hopefully, we can have further investigation about the location selction in next part of the project. 
 
-               ![](cvs_cvs.png)
+               ![](Visualizatoins/cvs_cvs.png)
 
-               ![](cvs_walgreen.png)
+               ![](Visualizatoins/cvs_walgreen.png)
 
-               ![](walgreen_walgreen.png)
+               ![](Visualizatoins/walgreen_walgreen.png)
 
-               ![](walgreen_cvs.png)
+               ![](Visualizatoins/walgreen_cvs.png)
 
                
 
@@ -107,7 +107,7 @@ The project is divided into two tasks:
                 - **1249 Boylston St, Boston**
             - with a total stability **S =  0.4886**
             - with a total accessibility **A = 11.2147 km**
-            - ![Google Maps result](Project2%20result.JPG)
+            - ![Google Maps result](Project2Results/Project2%20result.JPG)
     5. Constraints Satisfaction:
         - **Related Files**: Salesmen.py
         - **Question**: If we have the chance to send **3** salesmen (**1** per store), obtained the model that has the total stability >= **S**, total accessibility >= **A**?
@@ -120,4 +120,4 @@ The project is divided into two tasks:
                 - **631 Washington St, Boston**
             - with a total **S = 0.63646**
             - with a total **A = 7.91282**
-            - ![Google Maps result](Project2%20resultz3.JPG)
+            - ![Google Maps result](Project2Results/Project2%20resultz3.JPG)
