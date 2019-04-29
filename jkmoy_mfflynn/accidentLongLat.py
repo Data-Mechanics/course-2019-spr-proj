@@ -74,7 +74,7 @@ class accidentLongLat(dml.Algorithm):
             means.append(mean)
 
         final_dataset = [{'mean':tup[0], 'mean_points':tup[1], 'types':tup[3], 'num_points':tup[2]} for tup in means]
-
+        '''
         colors = [
                     'red',
                     'blue',
@@ -118,7 +118,7 @@ class accidentLongLat(dml.Algorithm):
             clusterCounter += 1
         # This might have to go into a separate file.
         myMap.save('index.html')
-        
+        '''
         repo.dropCollection('jkmoy_mfflynn.accidentLongLat')
         repo.createCollection('jkmoy_mfflynn.accidentLongLat')
         
