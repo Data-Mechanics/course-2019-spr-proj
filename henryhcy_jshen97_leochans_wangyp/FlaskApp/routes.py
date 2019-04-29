@@ -1,9 +1,7 @@
 from flask import render_template, redirect, request, flash
 from FlaskApp import app, db, repo
 from FlaskApp.models import User
-<<<<<<< HEAD
 from FlaskApp.forms import RateForm
-from FlaskApp import repo,data
 from bson.json_util import dumps
 from urllib.request import urlopen
 from mapping import Mapping
@@ -15,14 +13,12 @@ import prov.model
 import pprint
 import random
 import uuid
-=======
 from FlaskApp.forms import RateForm, Task2From
 import geopy.distance
 import itertools
 import math
 import z3
 
->>>>>>> 3234e274c0ba320de9738e7fabc614f2ca7d8fb8
 
 @app.route('/')
 @app.route('/index')
