@@ -1,3 +1,22 @@
 body{
-    cursor: url("lapets.jpg"), auto;
+    /* cursor: url("lapets.jpg"), auto; */
+    font: 12px sans-serif;
+    color: black;
+}
+
+
+#mapid {
+    height: 180px;
+}
+
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    display: inline-block;
+    width: max-content;
+    padding: 2px;
+    background: lightsteelblue;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
 }
