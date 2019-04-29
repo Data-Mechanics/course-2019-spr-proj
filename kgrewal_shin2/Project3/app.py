@@ -12,7 +12,6 @@ app = Flask(__name__, template_folder="templates")
 app.config['GOOGLEMAPS_KEY'] = getGoogleMapsKey()
 GoogleMaps(app)
 
-
 @app.route('/', methods=['GET', 'POST'])
 def mapview():
     return render_template("about.html")
