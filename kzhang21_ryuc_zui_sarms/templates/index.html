@@ -16,10 +16,13 @@
     
     
     <!--css -->
-    <link rel='stylesheet' type='text/css' href='./main.css'/>
+    <link rel='stylesheet' type='text/css' href="{{url_for('static', filename='main.css') }}"/>
 
     <!--js-->
-    <script src = "./script.js"></script>
+    <script src="{{url_for('static', filename='script.js') }}"></script>
+
+    <!--plotly-->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
 </head>
 <body>
@@ -49,15 +52,15 @@
         <h2>Data Analysis</h2>
         <p>Top Cuisines in Each Boston Neighborhood</p>
         <div class = "row">
-            <select class="custom-select custom-select-lg mb-3">
-                <option selected>Open this select menu</option>
+            <select class="custom-select custom-select-lg mb-3" id = "zipCodes">
+                <option selected disabled>Open this select menu</option>
                 {% for zipCode in zipCodes %}
                     <option value="{{zipCode}}">{{zipCode}}</option>
                 {% endfor %}
             </select>
         </div>
-        
     </div>
+    <h4 id= "result"></h4>
 
 </body>
 </html>
