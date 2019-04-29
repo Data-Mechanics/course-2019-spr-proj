@@ -86,8 +86,6 @@ class accidentStats(dml.Algorithm):
             
         final_dataset = [{'incident':tup[0], 'mean':tup[1], 'stddev':tup[2]} for tup in stats_results]
         
-        #print(final_dataset[0])
-        
         repo.dropCollection('jkmoy_mfflynn.accidentStats')
         repo.createCollection('jkmoy_mfflynn.accidentStats')
         
@@ -144,6 +142,5 @@ doc = example.provenance()
 print(doc.get_provn())
 print(json.dumps(json.loads(doc.serialize()), indent=4))
 '''
-#modeLocationCount.execute()
-
+accidentStats.execute()
 ## eof

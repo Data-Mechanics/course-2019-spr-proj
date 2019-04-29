@@ -4,6 +4,7 @@ import dml
 import prov.model
 import datetime
 import uuid
+import pandas as pd
 
 class accidents(dml.Algorithm):
     contributor = 'jkmoy_mfflynn'
@@ -36,14 +37,49 @@ class accidents(dml.Algorithm):
         #All car crashes from data mechanics
         # https://data.boston.gov/datastore/odata3.0/e4bfe397-6bfc-49c5-9367-c879fac7401d?$format=json
         #url = 'http://datamechanics.io/data/boston_car_accidents.json'
+        '''
         url = 'http://datamechanics.io/data/carAccidents.json'
         response = urllib.request.urlopen(url).read().decode("utf-8")
         r = json.loads(response)
         r = r['value']
         s = json.dumps(r, sort_keys=True, indent=2)
+        '''
+        
+        url = 'http://datamechanics.io/data/accidents.csv'
+        df = pd.read_csv(url)
+        # dicts where vals = headers and keys = list of all values for that header
+        d = df.to_dict()  #orient = 'records'
+        l = list(d) # list of all field headers
+        finalSet = []
+        for i in range(17912):
+            # Convert float nan values to empty string
+            # ternary if
+            dts = d['dispatch_ts'][i] if str(d['dispatch_ts'][i]) != 'nan' else ''
+            mt = d['mode_type'][i] if str(d['mode_type'][i]) != 'nan' else ''
+            lt = d['location_type'][i] if str(d['location_type'][i]) != 'nan' else ''
+            s = d['street'][i] if str(d['street'][i]) != 'nan' else ''
+            xs1 = d['xstreet1'][i] if str(d['xstreet1'][i]) != 'nan' else ''
+            xs2 = d['xstreet2'][i] if str(d['xstreet2'][i]) != 'nan' else ''
+            xc = d['x_cord'][i] if str(d['x_cord'][i]) != 'nan' else ''
+            yc = d['y_cord'][i] if str(d['y_cord'][i]) != 'nan' else ''
+            la = d['lat'][i] if str(d['lat'][i]) != 'nan' else ''
+            lo = d['long'][i] if str(d['long'][i]) != 'nan' else ''
+
+            e = {'dispatch_ts':dts,
+                 'mode_type':mt,
+                 'location_type':lt,
+                 'street':s,
+                 'xstreet1':xs1,
+                 'xstreet2':xs2,
+                 'x_cord':xc,
+                 'y_cord':yc,
+                 'lat':la,
+                 'long':lo }
+            finalSet.append(e)
+        
         repo.dropCollection("jkmoy_mfflynn.accident")
         repo.createCollection("jkmoy_mfflynn.accident")
-        repo['jkmoy_mfflynn.accident'].insert_many(r)
+        repo['jkmoy_mfflynn.accident'].insert_many(finalSet) #r or finalSet
         repo['jkmoy_mfflynn.accident'].metadata({'complete':True})
 
         print(repo['jkmoy_mfflynn.accident'].metadata())
@@ -104,5 +140,6 @@ doc = example.provenance()
 print(doc.get_provn())
 print(json.dumps(json.loads(doc.serialize()), indent=4))
 '''
+#accidents.execute()
 
 ## eof

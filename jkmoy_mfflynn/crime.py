@@ -20,11 +20,38 @@ class crime(dml.Algorithm):
         repo = client.repo
         repo.authenticate('jkmoy_mfflynn', 'jkmoy_mfflynn')
 
+        '''
         url = 'https://data.boston.gov/datastore/odata3.0/12cb3883-56f5-47de-afa5-3b1cf61b257b?$format=json'
         response = urllib.request.urlopen(url).read().decode("utf-8")
         r = json.loads(response)
         r = r['value']
         s = json.dumps(r, sort_keys=True, indent=2)
+        '''
+        
+        url = 'http://datamechanics.io/data/crimeFull.json'
+        response = urllib.request.urlopen(url).read().decode("utf-8")
+        r = json.loads(response)
+        s = json.dumps(r, sort_keys=True, indent=2)
+
+        r = r['records'] # this is list of dictionaries
+        r = [{'incident_number':elem[0],
+              'offense_code':elem[1],
+              'OFFENSE_CODE_GROUP':elem[2],
+              'offense_description':elem[3],
+              'district':elem[4],
+              'reporting_area':elem[5],
+              'shooting':elem[6],
+              'occured_on_date':elem[7],
+              'year':elem[8],
+              'month':elem[9],
+              'DAY_OF_WEEK':elem[10],
+              'hour':elem[11],
+              'ucr_part':elem[12],
+              'street':elem[13],
+              'Lat':elem[14],
+              'Long':elem[15],
+              'location':elem[16]} for elem in r]
+        
         repo.dropCollection("jkmoy_mfflynn.crime")
         repo.createCollection("jkmoy_mfflynn.crime")
         repo['jkmoy_mfflynn.crime'].insert_many(r)

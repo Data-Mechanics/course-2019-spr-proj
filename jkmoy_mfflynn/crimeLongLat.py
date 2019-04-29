@@ -7,6 +7,7 @@ import uuid
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.cluster import KMeans
+import folium
 
 def project(R, p):
     return [p(t) for t in R]
@@ -48,9 +49,16 @@ class crimeLongLat(dml.Algorithm):
         #data = data[0:20]
         
         types = [i[2] for i in data2]
-        data = [(i[0],i[1]) for i in data2]
-        
-        cluster_number = 10 #number of offical neighborhoods in boston
+        #data = [(i[0],i[1]) for i in data2]
+        data = [(i[0],i[1]) for i in data2 if i[0] != '' and i[1] != '']
+        data = select(data, lambda t: float(t[0]) != -1.0)
+        '''
+        for x in data:
+            print(x)
+            if float(x[0]) == float(-1) or float(x[1]) == float(-1):
+                break
+        '''
+        cluster_number = 23 #number of offical neighborhoods in boston
         kmeans = KMeans(n_clusters=cluster_number)
         kmeans.fit(data)
 
@@ -72,10 +80,19 @@ class crimeLongLat(dml.Algorithm):
             means.append(mean)
             
 
-
+        # NEW DATASET HAS PROBLEMS WHERE
+        # NO LOCATION IS DEFAULT to ('-1.00', '-1.00') COORDINATES
         final_dataset = [{'mean':tup[0], 'mean_points':tup[1], 'types':tup[3], 'num_points':tup[2]} for tup in means]
+        for x in final_dataset:
+            mp = x['mean_points']
+            x['mean_points'] = [[float(x), float(y)] for [(x, y)] in mp]
+        '''
+        for y in final_dataset:
+            for z in y['mean_points'][:50]:
+                continue
+            break
+        '''
 
-        #print("final_dataset_crime: ", final_dataset[1])
         
         repo.dropCollection('jkmoy_mfflynn.crimeLongLat')
         repo.createCollection('jkmoy_mfflynn.crimeLongLat')
@@ -133,6 +150,5 @@ doc = example.provenance()
 print(doc.get_provn())
 print(json.dumps(json.loads(doc.serialize()), indent=4))
 '''
-#modeLocationCount.execute()
-
+#crimeLongLat.execute()
 ## eof
