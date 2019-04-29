@@ -11,11 +11,12 @@ def Mapping():
    
 
     m = folium.Map(location = [42.3601,-71.0589],zoom_start = 12,
-                width='75%', 
-                height='75%',
+                width='100%', 
+                height='100%',
                 control_scale = True)
-    tooltip = 'click here for more info'
-    folium.Marker([42.3846071,-71.1197947],popup = '<strong>Location One</trong>',tooltip=tooltip).add_to(m)
+    cvs_group = folium.FeatureGroup(name='CVS Stores',show = False,control = True)
+    wal_group = folium.FeatureGroup(name = ' Walgreen Stores',show = False,control = True)
+    overlap_group = folium.FeatureGroup(name = ' CVS and Walgreen',show = False,control = True)
     cvs_wal = repo.henryhcy_jshen97_leochans_wangyp.wal_wal_cvs.find_one()
     
     overlap = []
@@ -31,31 +32,55 @@ def Mapping():
 
 
     heat = []
+    cvs_only = []
+    walgreen_only = []
+
 
     for item in repo.henryhcy_jshen97_leochans_wangyp.cvsWalgreen.find():
         
         if item['name'] == 'CVS':
             color = 'lightred'
+            folium.Marker([item['location']["lat"], item['location']["lng"]], 
+                    tooltip='CVS',
+                    icon=folium.Icon(color=color,icon='shopping-cart')).add_to(cvs_group)
+            cvs_only.append([item['location']["lat"], item['location']["lng"]])
         else:
             color = 'lightgreen'
+            folium.Marker([item['location']["lat"], item['location']["lng"]], 
+                tooltip='walgreen',
+                icon=folium.Icon(color=color,icon='shopping-cart')).add_to(wal_group)
+            walgreen_only.append([item['location']["lat"], item['location']["lng"]])
         heat.append([item['location']["lat"], item['location']["lng"]])
-        folium.Marker([item['location']["lat"], item['location']["lng"]], 
-                popup=folium.Popup(item['name']),
-                tooltip=tooltip,
-                icon=folium.Icon(color=color,icon='shopping-cart')).add_to(m)
+        
     for item in overlap:
         folium.Marker(item, 
                 popup=folium.Popup("cvs & walgreen"),
-                tooltip=tooltip,
-                icon=folium.Icon(color="pink",icon='shopping-cart')).add_to(m)
-        
-    m.add_children(plugins.HeatMap(heat, radius=30))
-
+                tooltip="cvs & walgreen",
+                icon=folium.Icon(color="pink",icon='shopping-cart')).add_to(overlap_group)
+    cvs_group.add_to(m)
+    wal_group.add_to(m)
+    overlap_group.add_to(m)   
+     
     
+    m.add_children(plugins.HeatMap(heat, radius=30,name = 'heatmap',show = False))
 
+    mc = plugins.MarkerCluster(name = 'CVS_Wal_Clustering',show = False)
+    cvs_cluster = plugins.MarkerCluster(name = 'CVS_Clustering',show = False)
+    wal_cluster = plugins.MarkerCluster(name = 'Wal_Clustering',show = False)
 
+    #creating a Marker for each point in df_sample. Each point will get a popup with their zip
+    for row in heat:
+        mc.add_child(folium.Marker(location=row))
+    for row in cvs_only:
+        cvs_cluster.add_child(folium.Marker(location=row))
+    for row in walgreen_only:
+        wal_cluster.add_child(folium.Marker(location=row))
+    
+ 
+    m.add_child(mc)
+    m.add_child(cvs_cluster)
+    m.add_child(wal_cluster)
     folium.LayerControl().add_to(m)
-
 
 
 

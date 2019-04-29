@@ -1,129 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {% include "heatafter.html" %}
-    
-        <!-- <style>
-        body {
-            position: absolute;
-            font-family: "Proxima Nova", "Montserrat", sans-serif;
-        }
-        h1, h2 {
-            position: absolute;
-            left: 10px;
-            font-size: 1.3em;
-            font-weight: 100;
-        }
-        h2 {
-            top: 100px;
-            font-size: 1em;
-        } 
-        
-        
-        </style>
-    <h3>Project Task I--Quantify the Rivalry: CVS versus Walgreen</h3> -->
-    <!-- <script src="http://d3js.org/d3.v4.min.js" charset="utf-8"></script> -->
-    <!-- <title>A Leaflet map!</title>
-    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/>
-    <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
-    
-    <style>
-        #map{ width: 900px; height: 500px; }
-    </style>
-  
+<main>
     <p>
-        TODO: complete Task I visualization and report.
-    </p> -->
-
-   <!-- <p>
-        <div id="map"></div>
-       <script>
-           // initialize the map
-        var map = L.map('map').setView([42.35, -71.08], 13);
-
-        // load a tile layer
-        L.tileLayer('http://tiles.mapc.org/basemap/{z}/{x}/{y}.png',
-        {
-            attribution: 'Tiles by <a href="http://mapc.org">MAPC</a>, Data by <a href="http://mass.gov/mgis">MassGIS</a>',
-            maxZoom: 17,
-            minZoom: 9
-        }).addTo(map);
-          
-       </script>
-   </p> -->
-
-
-    
-    <!-- <p>
-        <h1>Rodent Incidents in Boston</h1>
-        <h2> </h2>
-        <script>
-        
-        var neighborhoods_json = JSON.parse('{{ map_data|safe }}');
-        var stores_json = JSON.parse('{{ store_data|safe }}');
-        var width = 1400;
-        var height = 1160;
-    
-        var svg = d3.select( "body" )
-            .append( "svg" )
-            .attr( "width", width )
-            .attr( "height", height );
-    
-        var g = svg.append( "g" );
-    
-        var albersProjection = d3.geoAlbers()
-            .scale( 120000 )
-            .rotate( [71.057,0] )
-            .center( [0, 42.313] )
-            .translate( [width/2,height/2] );
-    
-        var geoPath = d3.geoPath()
-            .projection( albersProjection );
-            
-        g.selectAll( "path" )
-            .data( neighborhoods_json.features )
-            .enter()
-            .append( "path" )
-            .attr( "fill", "#ccc" )
-            .attr( "stroke", "#333")
-            .attr( "d", geoPath );
-        
-        var albersProjection = d3.geoAlbers()
-            .scale( 170000 )
-            .rotate( [71.057,0] )
-            .center( [0, 42.313] )
-            .translate( [width/2,height/2] );
-        
-        var stores = svg.append( "g" );
-
-        stores.selectAll( "path" )
-            .data( stores_json.features )
-            .enter()
-            .append( "path" )
-            .attr('fill', function(d) {
-                if (d.properties.name == "CVS"){
-                    return "#900" 
-                }
-                else{
-                    return "#444"
-                }
-
-             })
-            .attr( "stroke", "#111" )
-            .attr( "d", geoPath )
-            .attr( "class", "incident")
-     
-	        .on("mouseover", function(d){
-		        d3.select("h2").text(d.properties.name);
-		        d3.select(this).attr("class","incident hover");
-	        })
-	        .on("mouseout", function(d){
-		        d3.select("h2").text("");
-		        d3.select(this).attr("class","incident");
-	        });
-                
-        </script>
-    </p> -->
+            <p class="message">For more information about CVS and Walgreen,
+                click the icon on the top right corner of the map, and select the layer
+                you want to see
+            </p>
+    </p>
+    {% include "heatafter.html" %}
+</main>      
     
 
 

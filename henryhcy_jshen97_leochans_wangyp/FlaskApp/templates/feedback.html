@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2 style = "text-align: center;">Please Leave your Feedback</h2>
-
+<main>
+    <h1 class="title">Please Leave your Feedback</h1>
 
     <form action="" method="post" novalidate>
         {{ form.hidden_tag() }}
@@ -16,10 +16,13 @@
         </ul>
         {% endif %}
         {% endwith %}
+        
+
+
 
         <fieldset>
             <legend>Feedback Form</legend>
-            <div style = font-size:20px; font-weight:bold; margin-left:350px;>
+            <div style = font-size:20px; font-weight:bold; margin:auto;>
                 <p>
                     {{ form.Name.label }} <br>
                     {{ form.Name }}
@@ -39,4 +42,5 @@
             </div>
         </fieldset>
     </form>
+</main>
 {% endblock %}
