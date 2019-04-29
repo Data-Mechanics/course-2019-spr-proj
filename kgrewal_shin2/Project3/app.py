@@ -13,15 +13,14 @@ app.config['GOOGLEMAPS_KEY'] = getGoogleMapsKey()
 GoogleMaps(app)
 
 @app.route('/')
-def mapview():
+def about():
+    return render_template("about.html")
 
+@app.route('/map')
+def mapview():
     url = "https://maps.googleapis.com/maps/api/js?key=" + getGoogleMapsKey() + "&libraries=places&callback=initMap"
 
     return render_template("index.html", url=url)
-
-@app.route('/about')
-def about():
-    return render_template("about.html")
 
 @app.route('/neighborhood', methods=['GET', 'POST'])
 def neighborhood():
