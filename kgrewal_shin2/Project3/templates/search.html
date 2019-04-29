@@ -89,85 +89,85 @@
 
 
 <body style="overflow: visible">
-<div class="container text">
-    <div class="row">
-        <div class="col-sm-6">
-            <h1>Let's rename streets!</h1>
-        </div>
-
-        <div class="col-sm-4 col-sm-offset-2">
-            <a href="/about" class="btn btn-success learn-btn"> LEARN MORE </a>
-            <a href="/mapping" class="btn btn-success learn-btn"> K Means Map </a>
-        </div>
-
-    </div>
-
-    <div class="row">
-        <div class="col-sm-4">
-            <div class="row">
-                <h3> Pick a neighborhood to view possible streets to be renamed. </h3>
+    <div class="container-fluid text">
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-1">
+                <h1 class="header">Let's rename streets!</h1>
             </div>
 
-            <div class="row">
-                <form method="POST" action="/street">
-                    <!--<input list="neighborhoods" name="neighborhoods">-->
-                    <select id="sel" name="neighborhood" method="POST" action="/street">
-                        <datalist id="neighborhoods">
-                            <option value="Downtown Boston">Downtown Boston</option>
-                            <option value="Roslindale">Roslindale</option>
-                            <option value="Jamaica Plain">Jamaica Plain</option>
-                            <option value="Leather District">Leather District</option>
-                            <option value="Roxbury">Roxbury</option>
-                            <option value="Roxbury Crossing">Roxbury Crossing</option>
-                            <option value="West Roxbury">West Roxbury</option>
-                            <option value="Fenway">Fenway</option>
-                            <option value="Brighton">Brighton</option>
-                            <option value="Hyde Park">Hyde Park</option>
-                            <option value="South End">South End</option>
-                            <option value="Back Bay">Back Bay</option>
-                            <option value="Prudential">Prudential</option>
-                            <option value="Kenmore / Boston University">Kenmore / Boston University</option>
-                            <option value="East Boston">East Boston</option>
-                            <option value="Charlestown">Charlestown</option>
-                            <option value="Mission Hill">Mission Hill</option>
-                            <option value="Bay Village">Bay Village</option>
-                            <option value="Chinatown">Chinatown</option>
-                            <option value="North End">North End</option>
-                            <option value="West End">West End</option>
-                            <option value="Beacon Hill">Beacon Hill</option>
-                            <option value="Mattapan">Mattapan</option>
-                            <option value="Dorchester">Dorchester</option>
-                            <option value="South Boston Waterfront">South Boston Waterfront</option>
-                            <option value="South Boston">South Boston</option>
-                            <option value="Allston">Allston</option>
-                            <option value="Markets / Inner Harbor">Markets / Inner Harbor</option>
-                            <option value="Financial District / Wharves">Financial District / Wharves</option>
-                        </datalist>
-                    </select>
-
-                    <h3> Pick a possible street that will be renamed to view. </h3>
-                    <select name="street" size="10" id="sel2">
-                        {% for street in streets %}
-                        <option value="{{street}}">{{street}}</option>
-                        {% endfor %}
-                    </select>
-                    <input type="submit" class="btn btn-success learn-btn">
-                </form>
-
+            <div class="col-sm-3 col-sm-offset-2">
+                <a href="/" class="btn btn-success learn-btn"> LEARN MORE </a>
+                <a href="/mapping" class="btn btn-primary learn-btn"> K Means Map </a>
             </div>
+
+        </div>
+
+        <div class="row map">
+            <div class="col-sm-3 col-sm-offset-1 choose">
+                <div class="row">
+                    <h3> Pick a neighborhood to view possible streets to be renamed. </h3>
+                </div>
+
+                <div class="row form">
+                    <form method="POST" action="/street">
+                        <!--<input list="neighborhoods" name="neighborhoods">-->
+                        <select id="sel" name="neighborhood" method="POST" action="/street">
+                            <datalist id="neighborhoods">
+                                <option value="Downtown Boston">Downtown Boston</option>
+                                <option value="Roslindale">Roslindale</option>
+                                <option value="Jamaica Plain">Jamaica Plain</option>
+                                <option value="Leather District">Leather District</option>
+                                <option value="Roxbury">Roxbury</option>
+                                <option value="Roxbury Crossing">Roxbury Crossing</option>
+                                <option value="West Roxbury">West Roxbury</option>
+                                <option value="Fenway">Fenway</option>
+                                <option value="Brighton">Brighton</option>
+                                <option value="Hyde Park">Hyde Park</option>
+                                <option value="South End">South End</option>
+                                <option value="Back Bay">Back Bay</option>
+                                <option value="Prudential">Prudential</option>
+                                <option value="Kenmore / Boston University">Kenmore / Boston University</option>
+                                <option value="East Boston">East Boston</option>
+                                <option value="Charlestown">Charlestown</option>
+                                <option value="Mission Hill">Mission Hill</option>
+                                <option value="Bay Village">Bay Village</option>
+                                <option value="Chinatown">Chinatown</option>
+                                <option value="North End">North End</option>
+                                <option value="West End">West End</option>
+                                <option value="Beacon Hill">Beacon Hill</option>
+                                <option value="Mattapan">Mattapan</option>
+                                <option value="Dorchester">Dorchester</option>
+                                <option value="South Boston Waterfront">South Boston Waterfront</option>
+                                <option value="South Boston">South Boston</option>
+                                <option value="Allston">Allston</option>
+                                <option value="Markets / Inner Harbor">Markets / Inner Harbor</option>
+                                <option value="Financial District / Wharves">Financial District / Wharves</option>
+                            </datalist>
+                        </select>
+
+                        <h3> Pick a possible street that will be renamed to view. </h3>
+                        <select name="street" size="10" id="sel2">
+                            {% for street in streets %}
+                            <option value="{{street}}">{{street}}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="submit" class="btn btn-success learn-btn">
+                    </form>
+
+                </div>
 
             <script>document.getElementById('sel').value = '{{neighborhood}}';</script>
 
 
         </div>
 
-        <div class="col-sm-8">
-            <div class="row neighborhood">
-                <h4>{{neighborhood}}</h4>
+            <div class="col-sm-6 col-sm-offset-1">
+                <div class="row neighborhood">
+                    <h4>{{neighborhood}}</h4>
+                </div>
+                <div id="map"></div>
+                <script src={{url}} async defer></script>
             </div>
-            <div id="map"></div>
-            <script src={{url}} async defer></script>
-        </div>
     </div>
 </div>
 

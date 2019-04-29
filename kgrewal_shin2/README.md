@@ -10,9 +10,6 @@ by running python3.7 execute.py kgrewal_shin2 in the root project folder.
 
 <b> DATASETS USED: </b>
 
-<b>Instructions: </b>
-Run execute.py to run all data collection, transformations, and provenances
-
 <b>Datasets used: </b>
 1. Boston Street Names 
 This data was collected from last semester's project as a CSV and uploaded to datamechanics.io as a .json file. It is a list of all the street names, their genders, and their zipcodes.
@@ -52,7 +49,6 @@ transformations.py - transformation functions as outlined in class
 
 neighborhood_zipcodes.py - ran once in order to create json
 
-major_roads_cleaning.py - unused currently, major_roads json file too large to include in project currently
 
 
 <b>Transformations: </b>
@@ -71,14 +67,14 @@ transformation5.py - combines the unclaimed streets with the neighborhood zip co
 <br></br>
 <b>Project 2:</b> 
 
-kmeans.py - We preformed kmeans clustering on the data to find the areas where unclaimed streets are common. We then did a count 
+kmeans.py - We performed kmeans clustering on the data to find the areas where unclaimed streets are common. We then did a count 
 to find how many streets were exist in each cluster. We plan to map this data and use it to spread out the locations where we 
 suggest street names should be changed.
 
 statistics.py - We also took the street lengths and calculated the correlation coefficients to see if 
 there is a connection between the lengths of our unclaimed streets. We decided that longer
 roads are more likely to be "major roads" and this would tell us if we are selecting 
-mostly major roads or mostly less-significant roads. We found no correlation between length
+mostly major roads or mostly less-significant roads. We found no correlation between length and gender
 and therefore we have chosen a balance between long and short streets which will mean the streets
 we have narrowed our list down to will have plenty of significant suggestions.
 
