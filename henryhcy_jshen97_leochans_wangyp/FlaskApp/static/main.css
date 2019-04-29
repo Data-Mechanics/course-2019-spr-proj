@@ -3,16 +3,17 @@ ul {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #3ac4a6;
+    background-color: #353866;
+
   }
   
   li {
-    float: right;
+    float: left;
   }
   
   li a {
     display: block;
-    color: green;
+    color: white;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
