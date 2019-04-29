@@ -23,7 +23,8 @@ def hello():
     if request.args.get('kmeans') != None and request.args.get("neighborhood") != None:
         kmeans = compute_kmeans(request.args.get("neighborhood"), int(request.args.get('kmeans')), int(request.args.get("weight")))
         print(kmeans)
-        return render_template("index.html", neighborhoods=neighborhoods, kmeans=kmeans, censusshape=censusshape)
+        ## return render_template("index.html", neighborhoods=neighborhoods, kmeans=kmeans, censusshape=censusshape)
+        return dumps(kmeans);
     return render_template("index.html", neighborhoods=neighborhoods, censusshape=censusshape)
 
 

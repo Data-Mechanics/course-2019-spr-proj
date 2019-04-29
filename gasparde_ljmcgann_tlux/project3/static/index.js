@@ -1,7 +1,7 @@
 function postData(url = ``, data = {}) {
     // Default options are marked with *
     return fetch(url, {
-        method: "POST", // *GET, POST, PUT, DELETE, etc.
+        method: "GET", // *GET, POST, PUT, DELETE, etc.
         mode: "cors", // no-cors, cors, *same-origin
         cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
         credentials: "same-origin", // include, *same-origin, omit
@@ -122,8 +122,12 @@ function resetHighlight(e) {
 function zoomToFeatureAndAddData(e) {
     map.fitBounds(e.target.getBounds());
 
+    let num_means = prompt("Enter the number of Kmeans", "4")
 
-    postData(`http://127.0.0.1:5000/`, {'neighborhood': e.target.feature.properties.Name})
+    postData(`http://127.0.0.1:5000/`, {
+        'neighborhood': e.target.feature.properties.Name,
+        'num_means': num_means
+    })
         .then(data => console.log(JSON.stringify(data))) // JSON-string from `response.json()` call
         .catch(error => console.error(error));
 
@@ -136,8 +140,9 @@ function onEachFeature(feature, layer) {
         click: zoomToFeatureAndAddData
     });
 }
+
 if (kmeans !== null) {
-    console.log(typeof(kmeans));
+    console.log(typeof (kmeans));
     //kmeans = JSON.parse(kmeans);
     console.log(kmeans);
     for (let i = 0; i < kmeans.length; i++) {
@@ -148,7 +153,7 @@ if (kmeans !== null) {
     //             let marker = L.marker(el.means[i]).addTo(map);
     //             marker.bindPopup("I am a mean calculate using the " + el.metric + " metric!");
     // });
-}else {
+} else {
     console.log("KMEANS not defined");
 }
 
@@ -156,17 +161,10 @@ censustract_shape = L.geoJson(censusshape);
 neighborhoods_shape = L.geoJson(neighborhoods, {
     style: style,
     onEachFeature: onEachFeature
-});
+}).addTo(map);
 //L.geoJson(parcelgeo).addTo(map);
 
-let baseMaps = {
-    "Map": tile
-};
-let overlayMaps = {
-    "Census Tracts": censustract_shape,
-    "Neighborhoods": neighborhoods_shape
-};
-L.control.layers(baseMaps, overlayMaps).addTo(map);
+
 map.attributionControl.addAttribution('Population data &copy; <a href="http://census.gov/">US Census Bureau</a>');
 
 
@@ -203,6 +201,6 @@ function handleLayerClick(e) {
     current_neighborhood = neighborhood;
     var form = document.querySelector("#neighborhood_form");
     console.log(form);
-    form.value =  neighborhood;
+    form.value = neighborhood;
 
 }
