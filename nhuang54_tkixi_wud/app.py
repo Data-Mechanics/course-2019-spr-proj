@@ -11,10 +11,13 @@ def hello():
 @app.route('/map', methods=["GET", "POST"])
 def map():
   foo = minStations.minStations()
-  bar = foo.execute()
-  print("hello")
-  print(bar)
-  return render_template('map.html', bar=bar, apple="word")
+
+  if request.method == "POST":
+  	bar = foo.execute(trial=True, numberOfPoints=int(request.form['number']))
+  	return render_template('map.html', bar=bar, apple=request.form['number'])
+  else:
+  	bar = foo.execute(trial=True, numberOfPoints=30)
+  	return render_template('map.html', bar=bar, apple="30")
 
 @app.route('/analysis', methods=["GET", "POST"])
 def analyze():

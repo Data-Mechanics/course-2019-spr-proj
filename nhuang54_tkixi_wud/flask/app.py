@@ -11,7 +11,11 @@ def hello():
 @app.route('/map', methods=["GET", "POST"])
 def map():
   foo = minStations.minStations()
-  bar = foo.execute()
+
+  if request.method == "POST":
+  	bar = foo.execute(trial=True, numberOfPoints=int(request.form['number']))
+  else:
+  	bar = foo.execute(trial=True, numberOfPoints=30)
   print("hello")
   print(bar)
   return render_template('map.html', bar=bar, apple="word")

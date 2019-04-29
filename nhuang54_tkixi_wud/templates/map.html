@@ -19,6 +19,9 @@
 
 
   <script>
+    var res = {{bar|safe}} ;
+    console.log(res);
+
     var mymap = L.map('mapid').setView([42.361145, -71.057083], 12);
 
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -31,20 +34,52 @@
     // var marker = L.marker([51.5, -0.09]).addTo(mymap);
 
     // marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+    // 
+    // 
+    Object.keys(res).forEach(function(key) {
+      if (key != "total") {
+        console.log("not total");
+        console.log(res[key][1], res[key][2]);
+        console.log(res[key][0]);
+        var marker = L.marker([res[key][1], res[key][2]]).addTo(mymap);
+        marker.bindPopup("<b>" + res[key][0] + "</b>");
+      }
+
+      if (res[key][3] == "1") {
+        console.log("it was 1");
+        var circle = L.circle([res[key][1], res[key][2]], {color: 'red', fillColor: '#f03', fillOpacity: 0.5, radius: 500}).addTo(mymap);
+      }
+    });
+
+    function updateTextInput(val) {
+      document.getElementById('value').value = val;
+    }
+
   </script>
 
   <div>
+    <form method="POST" action="/map">
+      <input type="text" id="value" value="30">
+    10 <input type="range" style="width:500px;" name="number" id="number" min="10" max="31" class="slider" oninput="updateTextInput(this.value)" value="30" required> 31
+      <input type="submit" value="Submit" class="button">
+    </form>
+    {% if apple %}
+    <h1>{{apple}} biking paths, represented by blue markers on the map.</h1>
+    {% else %}
+        <h1> Biking paths, represented by blue markers on the map </h1>
+
+    {% endif %}
+    <p>Red circles under the markers represent streets that should have a hubway station on them in order to minimize amount of stations for an distance that was deemed walkable by our team.</p>
     {% for k,v in bar.items() %}
-    {% for item in v %}
-    <h1>Key: {{k}}</h1>
-    <h2>Val = {{item}}</h2>
+    <p>{{v[0]}}</p>
     {% endfor %}
-    {% endfor %}
+
   </div>
 
   <div>
     <h1>{{apple}}</h1>
   </div>
+
 </body>
 
 </html>

@@ -30,7 +30,7 @@ def geodistance(la1, lo1, la2, lo2):
 
 def findLatLongByName(path):
   # check null case
-  name = path['STREET_NAM']
+  name = path
   query = name + ", Boston, MA"
   # print("name is " + query)
 
@@ -46,7 +46,7 @@ def findLatLongByName(path):
 class minStations():
 
     @staticmethod
-    def execute(trial = False):
+    def execute(trial, numberOfPoints):
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
@@ -54,6 +54,8 @@ class minStations():
 
         # Get the data
         bikePaths = repo.nhuang54_tkixi_wud.boston_bikes.find()
+
+        # Remove duplicates
         
         # The plan: Find minimal number of hubway stations to cover entirety of bike networks
         # in boston. Multiple streets can be covered if they are close to each other
@@ -64,13 +66,19 @@ class minStations():
 
         streets = []
         counter = 0
+        used_streets = []
 
         # Implement trials
         for path in bikePaths:
-          streets.append(findLatLongByName(path))
+          if path['STREET_NAM'] in used_streets:
+            continue
+
+          streets.append(findLatLongByName(path['STREET_NAM']))
+          used_streets.append(path['STREET_NAM'])
+
           counter += 1
           if trial:
-            if counter > 19:   # trial
+            if counter > numberOfPoints:   # trial
               break 
           if counter > 40:   # limit to prevent huge computations
             break
@@ -114,7 +122,7 @@ class minStations():
 
             # If distance between streets is small, only 1 hubway station needed to cover it.
             # We do >= 1 as opposed to = 1 to allow a station in both locations.
-            if geodistance(streets[i][1], streets[i][2], streets[j][1], streets[j][2]) < .3:
+            if geodistance(streets[i][1], streets[i][2], streets[j][1], streets[j][2]) < 1:
               s.add(y[str(i)]['id'] + y[str(j)]['id'] >= 1)
 
 
@@ -155,10 +163,10 @@ class minStations():
 
         print(solution)
 
-                with open('test.json', 'w') as fp:
-          json.dump(solution, fp)
+        # with open('test.json', 'w') as fp:
+        #   json.dump(solution, fp)
 
         return solution
 
-if __name__ == '__main__':
-    minStations.execute(trial=True)
+# if __name__ == '__main__':
+#     minStations.execute(trial=True)
