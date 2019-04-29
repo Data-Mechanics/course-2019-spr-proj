@@ -8,13 +8,16 @@ from bs4 import BeautifulSoup as bs
 import pandas as pd
 import numpy as np
 
-class Male_streets(dml.Algorithm):
+class male_streets(dml.Algorithm):
     contributor = 'mmao95_Dongyihe_weijiang_zhukk'
     reads = [contributor + '.filtered_famous_people_streets']
     writes = [contributor + '.male_streets']
 
     @staticmethod
     def execute(trial = False):
+        contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+        reads = [contributor + '.filtered_famous_people_streets']
+        writes = [contributor + '.male_streets']
         startTime = datetime.datetime.now()
 
         # Set up the database connection.
