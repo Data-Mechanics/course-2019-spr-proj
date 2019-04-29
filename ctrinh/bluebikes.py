@@ -57,20 +57,21 @@ class bluebikes(dml.Algorithm):
         url12 = 'http://datamechanics.io/data/bluebikes-2018-12.csv'
         df12 = pd.read_csv(url12)
 
-        df1.append(df2)
-        df1.append(df3)
-        df1.append(df4)
-        df1.append(df5)
-        df1.append(df6)
-        df1.append(df7)
-        df1.append(df8)
-        df1.append(df9)
-        df1.append(df10)
-        df1.append(df11)
-        df1.append(df12)
+        df1 = df1.append(df2)
+        df1 = df1.append(df3)
+        df1 = df1.append(df4)
+        df1 = df1.append(df5)
+        df1 = df1.append(df6)
+        df1 = df1.append(df7)
+        df1 = df1.append(df8)
+        df1 = df1.append(df9)
+        df1 = df1.append(df10)
+        df1 = df1.append(df11)
+        df1 = df1.append(df12)
 
         df = df1.filter(['tripduration', 'starttime', 'stoptime'])
         r = df.to_dict(orient='records')
+        print(r[-2])
 
         repo.dropCollection("bluebikes")
         repo.createCollection("bluebikes")
@@ -118,7 +119,7 @@ class bluebikes(dml.Algorithm):
         repo.logout()
 
         return doc
-
+bluebikes.execute()
 '''
 # This is example code you might use for debugging this module.
 # Please remove all top-level function calls before submitting.

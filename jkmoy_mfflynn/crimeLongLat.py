@@ -58,6 +58,7 @@ class crimeLongLat(dml.Algorithm):
             if float(x[0]) == float(-1) or float(x[1]) == float(-1):
                 break
         '''
+        
         cluster_number = 23 #number of offical neighborhoods in boston
         kmeans = KMeans(n_clusters=cluster_number)
         kmeans.fit(data)

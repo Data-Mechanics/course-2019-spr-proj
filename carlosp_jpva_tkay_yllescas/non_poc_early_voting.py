@@ -1,3 +1,6 @@
+# adds a column to early_voting that says how many of early voters are white
+# not using because by towns
+
 import urllib.request
 import json
 import dml
@@ -88,6 +91,5 @@ class non_poc_early_voting(dml.Algorithm):
         repo.logout()
 
         return doc
-
 
 ## eof

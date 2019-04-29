@@ -8,7 +8,7 @@ import uuid
 class health_uber_input(dml.Algorithm):
     contributor = 'chuci_yfch_yuwan_zhurh'
     reads = []
-    writes = ['chuci_yfch_yuwan_zhurh.uber', 'chuci_yfch_yuwan_zhurh.health']
+    writes = ['chuci_yfch_yuwan_zhurh.uber', 'chuci_yfch_yuwan_zhurh.health', 'chuci_yfch_yuwan_zhurh.uber_loc']
 
     @staticmethod
     def execute(trial = False):
@@ -37,6 +37,16 @@ class health_uber_input(dml.Algorithm):
         repo.createCollection("health")
         repo['chuci_yfch_yuwan_zhurh.health'].insert_many(r2)
         repo['chuci_yfch_yuwan_zhurh.health'].metadata({'complete': True})
+
+        # For hw2, one more collection for location data
+        url2 = 'http://datamechanics.io/data/uber_lat_long_chuci.json'
+        response2 = urllib.request.urlopen(url2).read().decode("utf-8")
+        r3 = json.loads(response2)
+        s3 = json.dumps(r3, sort_keys=True, indent=2)
+        repo.dropCollection("uber_loc")
+        repo.createCollection("uber_loc")
+        repo['chuci_yfch_yuwan_zhurh.uber_loc'].insert_many(r3)
+        repo['chuci_yfch_yuwan_zhurh.uber_loc'].metadata({'complete': True})
 
         repo.logout()
 

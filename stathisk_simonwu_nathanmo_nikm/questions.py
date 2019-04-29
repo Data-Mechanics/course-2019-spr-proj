@@ -35,6 +35,7 @@ class questions(dml.Algorithm):
 
             df = koalas.read_csv(urls[i])
             collection = 'stathisk_simonwu_nathanmo_nikm.' + question
+            repo[collection].drop()
             repo[collection].insert_many(json.loads(df.to_json(orient='records')))
             repo[collection].metadata({'complete': True})
 
@@ -136,8 +137,8 @@ print(json.dumps(json.loads(doc.serialize()), indent=4))
 '''
 
 ## eof
-
-questions.execute(True)
-doc = questions.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
+#
+# questions.execute(True)
+# doc = questions.provenance()
+# print(doc.get_provn())
+# print(json.dumps(json.loads(doc.serialize()), indent=4))

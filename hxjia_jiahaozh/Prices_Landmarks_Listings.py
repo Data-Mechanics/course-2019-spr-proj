@@ -107,7 +107,13 @@ class Prices_Landmarks_Listings(dml.Algorithm):
         result_with_name = project(final_result, filterr)
         # print(result_with_name)
 
+
+        repo.dropCollection("Prices_Landmarks_Listings")
+        repo.createCollection("Prices_Landmarks_Listings")
         repo['hxjia_jiahaozh.'+new_collection_name].insert_many(result_with_name)
+        repo['hxjia_jiahaozh.Prices_Landmarks_Listings'].metadata({'complete': True})
+        print(repo['hxjia_jiahaozh.Prices_Landmarks_Listings'].metadata())
+
 
         repo.logout()
 

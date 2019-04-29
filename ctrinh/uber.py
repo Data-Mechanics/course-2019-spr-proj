@@ -33,9 +33,9 @@ class uber(dml.Algorithm):
         url4 = 'http://datamechanics.io/data/uber-2018-4.csv'
         df4 = pd.read_csv(url4)
 
-        df1.append(df2)
-        df1.append(df3)
-        df1.append(df4)
+        df1 = df1.append(df2)
+        df1 = df1.append(df3)
+        df1 = df1.append(df4)
 
         df = df1.filter(['month', 'mean_travel_time'])
         r = df.to_dict(orient='records')

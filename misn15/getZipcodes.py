@@ -47,28 +47,28 @@ class getZipcodes(dml.Algorithm):
         doc.add_namespace('dat', 'http://datamechanics.io/data/') # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
-        doc.add_namespace('census', 'https://www.census.gov/geo/reference/codes/cou.html')
+        doc.add_namespace('bdp', 'https://www.huduser.gov/portal/datasets/')
 
         this_script = doc.agent('alg:misn15#getZipcodes', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        resource = doc.entity('census:Boston_zipcodes', {'prov:label':'Boston_zipcodes', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
-        get_zipcodes = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(get_zipcodes, this_script)
-        doc.usage(get_zipcodes, resource, startTime, None,
+        resource = doc.entity('bdp:usps_crosswalk', {'prov:label':'Boston Zip Codes', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        get_zips = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(get_zips, this_script)
+        doc.usage(get_zips, resource, startTime, None,
                   {prov.model.PROV_TYPE:'ont:Retrieval'
-                  }
+                   }
                   )
-        zipcodes_data = doc.entity('dat:misn15#getZipcodes', {prov.model.PROV_LABEL:'Boston Crime', prov.model.PROV_TYPE:'ont:DataSet'})
-        doc.wasAttributedTo(zipcodes_data, this_script)
-        doc.wasGeneratedBy(zipcodes_data, get_zipcodes, endTime)
-        doc.wasDerivedFrom(zipcodes_data, resource, get_zipcodes, get_zipcodes, get_zipcodes)
+        zip_codes = doc.entity('dat:misn15#zipcodes', {prov.model.PROV_LABEL:'Boston Zip Code Data Set', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(zip_codes, this_script)
+        doc.wasGeneratedBy(zip_codes, get_zips, endTime)
+        doc.wasDerivedFrom(zip_codes, resource, get_zips, get_zips, get_zips)
                   
         return doc
 
 
-getZipcodes.execute()
-doc = getZipcodes.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
+##getZipcodes.execute()
+##doc = getZipcodes.provenance()
+##print(doc.get_provn())
+##print(json.dumps(json.loads(doc.serialize()), indent=4))
 
 
 ## eof

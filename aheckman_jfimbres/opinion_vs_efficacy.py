@@ -21,18 +21,19 @@ class opinion_vs_efficacy(dml.Algorithm):
         opinions = repo.aheckman_jfimbres.partisan_map.find({})
 
         state_ops = t.select(opinions, lambda x: x['GeoType'] == 'State')
-        ops_by_state = t.project(state_ops, lambda x: [x['GeoName'], x['Group'], x['congress'], x['congressOppose'],
+        ops_by_state = t.project(state_ops, lambda x: [x['GeoName'], x['Group'],x['TotalPop'], x['congress'], x['congressOppose'],
                                                        x['corporations'], x['corporationsOppose'], x['citizens'],  x['citizensOppose'],
                                                        x['regulate'], x['regulateOppose'], x['exp'], x['expOppose'],
                                                        x['prienv'], x['prienvOppose'], x['happening'], x['happeningOppose'],
                                                        x['human'], x['humanOppose'], x['consensus'], x['consensusOppose'],
                                                        x['worried'], x['worriedOppose'], x['harmUS'], x['harmUSOppose']])
         eff = t.project(efficacy, lambda x: x)
-        ops_w_eff = dict(t.project(ops_by_state, lambda x: [x[0], (eff[0][x[0]], x[1:])]))
+        ops_w_eff = t.project(ops_by_state, lambda x: [x[0], (eff[0][x[0]], x[1:])])
+        ops_w_eff = t.aggregate(ops_w_eff, lambda x: [x[0], x[1][1]])
 
         repo.dropCollection("opinion_by_efficacy")
         repo.createCollection("opinion_by_efficacy")
-        repo['aheckman_jfimbres.opinion_by_efficacy'].insert(ops_w_eff)
+        repo['aheckman_jfimbres.opinion_by_efficacy'].insert(dict(ops_w_eff))
 
         repo.logout()
 
