@@ -17,9 +17,24 @@
     <!--css -->
     <link rel='stylesheet' type='text/css' href='./main.css'/>
 
-    <!--js-->
-    <script src = "./script.js"></script>
+    <!-- leaflet css-->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+   integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+   crossorigin=""/>
 
+    <!-- leaflet js-->
+     <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+   integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+   crossorigin=""></script>
+
+    <!-- d3.js -->
+    <script src="http://d3js.org/d3.v4.min.js" charset="utf-8"></script>
+
+    <!-- boston neigh -->
+    <script src="http://maptimeboston.github.io/d3-maptime/example3/neighborhoods.js"></script>
+
+    <!--business data-->
+    <script src = "./businesses.js"></script>
 </head>
 <body>
     <div class = "container"><h1 class = "jumbotron">CS504 Temp Title</h1></div>
@@ -71,7 +86,17 @@
     </form>
     </div>
 
+    <!-- violation map -->
+    <div class="container">
+       <h1 class="display-4">Violation Map</h1>
+    </div>
+    <div class="container" id="viol">
+         <div class="mapid"></div>
+    </div>
     <div class  = "avgVoliation"></div>
+
+    <!--js-->
+    <script src = "./script.js"></script>
 
 </body>
 </html>
