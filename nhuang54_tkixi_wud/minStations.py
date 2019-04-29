@@ -155,6 +155,9 @@ class minStations():
 
         print(solution)
 
+                with open('test.json', 'w') as fp:
+          json.dump(solution, fp)
+
         return solution
 
 if __name__ == '__main__':
