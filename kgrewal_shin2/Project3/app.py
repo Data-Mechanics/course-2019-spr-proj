@@ -17,6 +17,12 @@ def mapview():
     return render_template("about.html")
 
 
+@app.route('/mapping')
+def clust():
+    url = "https://maps.googleapis.com/maps/api/js?key=" + getGoogleMapsKey() + "&callback=initMap"
+    print(url)
+    return render_template("mapping.html", url=url)
+
 @app.route('/map')
 def about():
     url = "https://maps.googleapis.com/maps/api/js?key=" + getGoogleMapsKey() + "&libraries=places&callback=initMap"

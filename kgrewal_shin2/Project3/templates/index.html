@@ -39,7 +39,7 @@
               var infowindow;
 
               function initMap() {
-                var boston = new google.maps.LatLng(-42.3601, -71.0589);
+                var boston = new google.maps.LatLng(42.3601, -71.0589);
 
                 infowindow = new google.maps.InfoWindow();
 
@@ -91,6 +91,7 @@
 
             <div class="col-sm-4 col-sm-offset-2">
                 <a href="/about" class="btn btn-success learn-btn"> LEARN MORE </a>
+                <a href="/mapping" class="btn btn-success learn-btn"> K Means Map </a>
             </div>
 
         </div>
@@ -146,7 +147,7 @@
 
             <div class="col-sm-8">
                 <div class="row neighborhood">
-                    Boston
+                    <h4>Boston</h4>
                 </div>
                 <div id="map"></div>
                 <script src={{url}} async defer></script>
