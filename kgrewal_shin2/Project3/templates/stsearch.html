@@ -27,6 +27,7 @@
                 width: 300 px;
               }
 
+
     </style>
 
     <script>
@@ -46,9 +47,9 @@
         infowindow = new google.maps.InfoWindow();
 
         map = new google.maps.Map(
-            document.getElementById('map'), {center: boston, zoom: 15});
+            document.getElementById('map'), {center: boston, zoom: 17});
 
-        hood = '{{neighborhood}}, Boston';
+        hood = '{{street}}, {{neighborhood}}, Boston';
         console.log(hood);
 
         var request = {
@@ -83,6 +84,7 @@
         });
       }
 
+
     </script>
 
 </head>
@@ -109,11 +111,11 @@
             </div>
 
             <div class="row">
-                <form method="POST" action="/street">
+                <form name="neighborhoods" method="POST" action="/neighborhood">
                     <!--<input list="neighborhoods" name="neighborhoods">-->
-                    <select id="sel" name="neighborhood" method="POST" action="/street">
+                    <select name=neighborhoods method="POST" action="/neighborhood">
                         <datalist id="neighborhoods">
-                            <option value="Downtown Boston">Downtown Boston</option>
+                            <option value="Downtown Boston" selected>Downtown Boston</option>
                             <option value="Roslindale">Roslindale</option>
                             <option value="Jamaica Plain">Jamaica Plain</option>
                             <option value="Leather District">Leather District</option>
@@ -144,6 +146,17 @@
                             <option value="Financial District / Wharves">Financial District / Wharves</option>
                         </datalist>
                     </select>
+                    <input type="submit" value="Change Neighborhood" class="btn btn-success learn-btn">
+                </form>
+
+                <br>
+                <br>
+
+                <form method="POST" action="/street">
+                    <!--<input list="neighborhoods" name="neighborhoods">-->
+                    <select id="sel" name="neighborhood" method="POST" action="/street">
+                        <option value="{{neighborhood}}">{{neighborhood}}</option>
+                    </select>
 
                     <h3> Pick a possible street that will be renamed to view. </h3>
                     <select name="street" size="10" id="sel2">
@@ -157,13 +170,13 @@
             </div>
 
             <script>document.getElementById('sel').value = '{{neighborhood}}';</script>
-
+            <script>document.getElementById('sel2').value = '{{street}}';</script>
 
         </div>
 
         <div class="col-sm-8">
             <div class="row neighborhood">
-                <h4>{{neighborhood}}</h4>
+                <h4>{{street}} in {{neighborhood}}</h4>
             </div>
             <div id="map"></div>
             <script src={{url}} async defer></script>
