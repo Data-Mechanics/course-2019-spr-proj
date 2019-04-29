@@ -1,8 +1,176 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h3> The Final Report</h3>
+    <h1 style="font-variant: small-caps"> The Final Report</h1>
+    <h2 style="font-variant: small-caps"> Introduction</h2>
     <p>
-        TODO: complete final report.
+        We aimed to find out the relationship between the “target” datasets and “guest” datasets. 
+        For example, we first looked for if there existed any relationship between the accessibility to the different types of food resources and average income of the neighborhood to check whether there was bias towards food distributions. In addition, by retrieving related datasets such as crime and eviction incidents in Boston, we also looked for if the number of such incidents happened would be related to nearby residents’ income. 
     </p>
+
+    <h2 style="font-variant: small-caps"> Datasets Used </h2>
+    <ol>
+        <li>Cvs stores within 15 km Boston area through querying Google Places API (Search Nearby) </li>
+        <li>Walgreen stores within 15 km Boston area through querying Google Places API (Search Nearby) </li>
+        <li>7Eleven stores within 15 km Boston area through querying Google Places API (Search Nearby) </li>
+        <li>Streetlight Locations in Boston area through querying Boston Data Portal (Analyze Boston) </li>
+        <li><a href= "http://datamechanics.io/data/evictions_boston.csv">Eviction Incidents </a> in Boston area</li>
+        <li><a href = "http://datamechanics.io/dadta/crime.csv">Crime Incidents </a>in Boston area
+        <li><a href = "http://datamechanics.io/data/henryhcy_wangyp/household_income.json">Boston house_hold income</a> summarized by neighborhood
+        <li><a href = "http://datamechanics.io/data/henryhcy_wangyp/poverty_rates.json">Boston poverty_rate</a> summarized by neighborhood
+        <li>Boston supermarket or grocery store using google API </li>
+        <li><a href= "https://data.boston.gov/dataset/active-food-establishment-licenses">Boston active food establishment</a></li>
+        <li><a href= "https://data.boston.gov/dataset/food-establishment-inspection">Boston food establishment-inspections</a></li> 
+        <li> <a href= "https://data.boston.gov/dataset/boston-neighborhoods/resource/61988228-017f-46e2-ad0c-ff602362b464">Boston neighborhood (get the boundary information of the neighborhood)</a> </li>
+    </ol>
+    <h2 style="font-variant: small-caps"> Specify Algorithms, Libraries, and Key Concepts</h2>
+    <ul>
+    <li>K-mean</li>
+    <li>Data Clustering and Relational Operations</li>
+    <li>Statistical Analysis of Correlation Coefficient and P values</li>
+    <li>Library: geopy.distance</li>
+    <li>Library: scipy.stats</li>
+    </ul>
+
+
+    <h2 style="font-variant: small-caps"> Data Transformations </h2>
+    <ul>
+    <li>Combining cvs and walgreen into a collection named as "cvsWalgreen" to provide the insight of the geo-distribution of the two competing retailer: CVS and Walgreen</li>
+    <li>Taking eviction incidences that are within 15 km of boston collection, and then combining them with cvs collection and walgreen collection in CvsWalEviction.py</li>
+    <li>Mering the income and poverty dataset, such that each neighborhood will have income and poverty information</li>
+    <li>Merging the inspection dataset with the restaurants dataset, finding information in the inspection dataset with the same 'property_id', and adding the violation level information to the restaurant dataset</li>    
+    </ul>
+
+
+    <h2 style="font-variant: small-caps">Description, Procedure, and Narrative into Four Sections </h2>
+    <h2 style="font-variant: small-caps; font-size: 25px;"> Section One: Quantify Competition between Two Major Pharmacy Brands CVS and Walgreen in Boston Area </h2>
+    <p> Question: As two of the biggest pharmacy brands, CVS and Walgreen have their stores all around Boston area. We find it interesting that some CVS and Walgreen stores are next to each other. Thus, we make the following hyphothesis: for both CVS and Walgreen, they are trying to locate their stores closer to their competitor than their own stores in order to increase their brand influence and maximize their scope of service. 
+        Then we do the following steps to test our hypothesis. </p>
+    <ol>
+    <li>For each CVS stores in boston area, we find the closest Walgreen and CVS stores and record their distances </li>
+    <li>Apply step 1. for every Walgreen stores in our dataset </li>
+    <li>Using statistical analysis running find_Distance.py to test our hypothesis </li>
+
+    </ol>   
+    <img src="../../Project2Results/find_Distance_table.jpg">
+    <p>This hypothesis about the location selection of CVS and Walgreen that depends on their competitors doesn't hold strongly enough. However, we can say that contrast with CVS, the locations of Walgreen stores are intensive because it has lower mean value and standard deviation. Also, it seems like Walgreen are more likely to locate their stores closer to CVS stores.
+            Furthermore, we plot the following histograms. It is interesting that there are around 16 pairs of CVS and Walgreen right next to each other which is consistent with our intuition. It is reasonable to believe that density of CVS and Walgreen stores is proportional with the density of population. Hopefully, we can have further investigation about the location selection in next part of the project
+    </p>
+
+<div class="histograms">
+<img src="../../Project2Results/cvs_cvs.png">
+<img src="../../Project2Results/cvs_walgreen.png">
+<img src="../../Project2Results/walgreen_walgreen.png">
+<img src="../../Project2Results/walgreen_cvs.png">
+</div>
+
+<br>
+<h3 style="font-variant: small-caps; font-size:25px;">Futher Question:
+    If we want to locate N new cvs stores or walgreen stores, how can we maximize its influence?</h3>
+<h4>Related scripe: k-means</h4>
+<h4>Descriptions of Hypothesis:</h5>
+<p>
+As two of the biggest pharmacy brands, CVS and Walgreen have their stores all around Boston area. 
+We find it interesting that some CVS and Walgreen stores are next to each other. 
+Thus, we make the following hyphothesis: for both CVS and Walgreen, they are trying to locate their stores closer to their competitor than their own stores in order to 
+increase their brand influence and maximize their scope of service. Then we do the following steps to test our hypothesis.
+</p>
+
+<h4>Solving Process:</h4>
+<p>For locating new CVS stores, we use k-means algorithm to find k clusters of Walgreen stores. The locations of the clusters are the potential locations for new CVS stores that could increase brand influence. Then we did the same for new Walgreen stores.</p>
+<p>The locations of potential new CVS and Walgreen stores are stored in our dataset for future use (new_cvs, new_wa）</p>
+
+<h4>Results:</h4>
+<p>
+Three New CVS Locations</p>
+<ol>
+<li>{ "lat" : 42.33149123333333, "lng" : -71.07000355925928 }</li>
+<li>{ "lat" : 42.36790251666666, "lng" : -71.12384277083335 } </li>
+<li>{ "lat" : 42.44012102222222, "lng" : -71.03259612222222 }</li>
+​</ol>
+
+<p>Three New Walgreens Locations</p>
+<ol>
+<li>{ "lat" : 42.30725281, "lng" : -71.15437599999998 }</li>
+<li>{ "lat" : 42.36873335, "lng" : -71.02850679999999 } </li>
+<li>{ "lat" : 42.41221626875, "lng" : -71.16324264375002 }</li>
+</ol>
+
+
+<br>
+<h3 style="font-variant: small-caps; font-size:25px;">
+    Section Two: Explore Relationships between CVS, Larceny, and Eviction in the Central Boston</h3>
+<h4> Data Retrieval and Problems Encountered by running CvsWalEviction.py, CvsWalCrime.py, CountEvictionCrimesCVS.py</h4>
+<ul>
+<li>Among all type of crimes in the dataset crimes (Simple Assault, Battery, GTA, etc.), we assume that Larceny relates with the convenient store in the most direct way. By obtaining all eviction(14k) & larceny(22k) cases within 5.5km of central Boston, we successfully clustered all of them against the cvs stores(18) within 5km of central Boston.
+    </li>
+    
+<li>Hard to include all cvs stores (60), eviction cases(25k), and crime cases(270k) within 15km of central boston. That resulted in many useless data points where there are 0 crime/eviction cases. Worse than that, the size of data and the relatively slow computation of geo distance required a fairly long time(7+ hrs) to run. The run failed when the mongodb cursor was exhausted/timeout-ed. Large and comprehensive do not necessarily mean good in data science.
+</li>
+
+<li>Problem Solved by constrain our area of interest down to 5km from the center of Boston.
+</li>
+</ul>
+
+<h4>Further Exploration of Data: </h4>
+<p>
+In this step, the rating of a store is put together with the store's number of eviction/larceny cases. 
+The data sets are refined before computation. The result stored in collection correlationCVS shows that rating and eviction cases have a pearson coefficient of 0.39326 with a 0.26090 p-value; the rating and Larceny cases have a pearson coefficient of -0.20018 with a 0.44109 p-value. Neither of them have enough evidence to reject the null hypothesis (no correlation). However, by just looking at the c.c., it is also fair to explain that Eviction implies financially instability therefore affects rating disproportionately. Larceny instead improves the security level of the store therefore can slightly affect rating proportionally. Following this explanation, we refined the model of S such that: S_i = ( (|L_i|^(c))/(|E_i|) ) times 1000, where c = |rho(rating, larceny)|/|rho(rating, eviction)|.
+</p>
+
+<h4>Problems Encountered: </h4>
+<p>
+    Some outliers (i.e. with less than 100 cases) make the p-value too high to be useful. We excluded the outliers and converted the store rating to 100 score based.
+</p>
+<br>
+
+<h3 style="font-variant: small-caps ; font-size:25px;">
+Section Three: Optimization</h3>
+<h4>Description</h4>
+<p>
+Finding the model that has the maximum (total stability S, total accessibility A) pair
+</p>
+<h4>Recap of Definitions</h4>
+<ul>
+<li>Accessibility is defined as the sum of the distances between each pair of salesmen, or each pair of stores that are assigned a salesman.</li>
+<li>(S1, A1) > (S2, A2) if S1>S2 and A1>A2</li>
+</ul>
+<h4>Results by Running Salesmen.py</h4>
+<ul>
+<li>the 3 CVS are located at
+210 Border St, East Boston
+101 Canal St suite A, Boston
+1249 Boylston St, Boston
+</li>
+<li>with a total stability S = 0.4886</li>
+<li>with a total accessibility A = 11.2147 km </li>
+</ul>
+<img src="../../Project2Results/Project2 result.JPG">
+
+<br>
+
+<h3 style="font-variant: small-caps ; font-size:25px;">
+    Section Four: Constraints Satisfaction</h3>
+<h4>Description</h4>
+<p>
+If we have the chance to send 3 salesmen (1 per store), obtained the model that has the total stability >= S, total accessibility >= A?
+</p>
+<h4>Recap of Definitions</h4>
+<ul>
+<li>Accessibility is defined as the sum of the distances between each pair of salesmen, or each pair of stores that are assigned a salesman.</li>
+</ul>
+<h4>Results by Running Salesmen.py</h4>
+<ul>
+<li>S := 0.6; A := 6.0, a possible set of 3 CVS are:
+        101 Canal St suite A, Boston
+        1249 Boylston St, Boston
+        631 Washington St, Boston
+</li>
+<li>with a total S = 0.63646</li>
+<li>with a total A = 7.91282</li>
+</ul>
+<img src="../../Project2Results/Project2 resultz3.JPG">
+
+<h2 style="font-variant: small-caps"> Conclusion of the Problem</h2>
+
 {% endblock %}
