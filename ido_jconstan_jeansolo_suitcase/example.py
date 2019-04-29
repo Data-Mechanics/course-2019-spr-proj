@@ -212,12 +212,14 @@ class example(dml.Algorithm):
         t7 = project(t5, lambda t: (t[0], t[1], t[2], 'Y') )
         t8 = select(t7, lambda t: (t[0] not in t6 ) )
 
-        catU_Y = select(t8, lambda t: (t[2] < 550000))
+        # make tuples for agreements for household value under 400k and do take the bus
+        catU_Y = select(t8, lambda t: (t[2] < 400000))
         #print('CATU_Y', catU_Y)
         proj_catU_Y = project(catU_Y,lambda t:(0,1))
         print('Under_Yes', proj_catU_Y)
 
-        catO_Y = select(t8, lambda t: (t[2] >= 550000))
+        # make tuples for agreements for household value under 400k and do take the bus
+        catO_Y = select(t8, lambda t: (t[2] >= 400000))
         #print('CATO_Y', catO_Y)
         proj_catO_Y = project(catO_Y,lambda t:(1,1))
         print('Over_Yes', proj_catO_Y)
@@ -262,17 +264,22 @@ class example(dml.Algorithm):
         t9 = project(t5, lambda t: (t[0], t[1], t[2], 'N') )
         t10 = select(t9, lambda t: (t[0] in t6) )
 
-        catU_N = select(t8, lambda t: (t[2] < 550000))
+        # make tuples for agreements for household value under 400k and don't take the bus
+        catU_N = select(t10, lambda t: (t[2] < 400000))
         #print('CATU_N', catU_N)
         proj_catU_N = project(catU_N,lambda t:(0,0))
         print('Under_No', proj_catU_N)
 
-        catO_N = select(t8, lambda t: (t[2] >= 550000))
+        # make tuples for agreements for household value over 400k and don't take the bus
+        catO_N = select(t10, lambda t: (t[2] >= 400000))
         #print('CATO_N', catO_N)
         proj_catO_N = project(catO_N,lambda t:(1,0))
         print('Over_No', proj_catO_N)
 
+        # combine into one list
         final_proj = proj_catO_N + proj_catO_Y + proj_catU_N + proj_catU_Y
+
+        # calculate proportion agreement
         result = proportionAgreement(final_proj)
         print('RESULT', result)
 
@@ -497,24 +504,32 @@ class example(dml.Algorithm):
 
 
         # read new stops from csv
-        new_stops = []
-        tswitch = False
+        NEW_STOPS = []
         strName = ''
+        count = 0
+        limit = 230080
         for i in range(5):
             strName = 'k_means_school_' + str(i) + '.csv'
-
+            NEW_STOPS.append([])
             with open(strName, mode='r') as csv_file:
                 csv_reader = csv.reader(csv_file, delimiter=',')
                 for row in csv_reader:
-                    if row and tswitch:
+                    count += 1
+                    if row: 
                         stop = row
-                        new_stops.append(row)
-                    elif not tswitch:
-                        tswitch = True
+                        #print("i: ", i)
+                        NEW_STOPS[i].append(row)
+                    
+                    if count >= limit:
+                        break
+            
 
         # parse points
-        NEW_STOPS = pointParser(new_stops)
-        print('new_stops',NEW_STOPS)
+        for x in range(len(NEW_STOPS)):
+            #for i in range(len(NEW_STOPS[x])):
+            NEW_STOPS[x] = pointParser(NEW_STOPS[x])
+        
+        NEW_STOPS.pop(0)
 
 
         print("Before loop")
@@ -544,7 +559,10 @@ class example(dml.Algorithm):
             average_OLD = count_OLD/len(POINTSC)
             print('old avg', average_OLD)
 
-            M_NEW = NEW_STOPS # new bus stops
+            MEANS = []
+            for i in range(len(NEW_STOPS[x])):
+                MEANS.append(NEW_STOPS[x][i])
+            M_NEW = MEANS # new bus stops
             print('NEW MEANS',M_NEW)
             MPD_NEW = [(m, p, dist(m,p)) for (m, p) in product(M_NEW, P)]
             PDs_NEW = [(p, dist(m,p)) for (m, p, d) in MPD_NEW]
@@ -557,34 +575,34 @@ class example(dml.Algorithm):
             print('new avg', average_NEW)
 
             
-            # with open(strFileName, mode='w') as csv_file:
-            #     fieldnames = ['new_stop']
-            #     writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-            #     writer.writeheader()
+            with open(strFileName, mode='w') as csv_file:
+                fieldnames = ['new_stop']
+                writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+                writer.writeheader()
 
-            #     while sorted(OLD) != sorted(MEANS):
-            #         print("iteration")
+                while sorted(OLD) != sorted(MEANS):
+                    print("iteration")
                     
-            #         OLD = MEANS
+                    OLD = MEANS
                     
-            #         MPD = [(m, p, dist(m,p)) for (m, p) in product(MEANS, POINTSC)]
-            #         PDs = [(p, d) for (m, p, d) in MPD]
+                    MPD = [(m, p, dist(m,p)) for (m, p) in product(MEANS, POINTSC)]
+                    PDs = [(p, d) for (m, p, d) in MPD]
                     
-            #         PD = aggregate(PDs, min)
-            #         MP = [(m, p) for ((m,p,d), (p2,d2)) in product(MPD, PD) if p==p2 and d==d2]
+                    PD = aggregate(PDs, min)
+                    MP = [(m, p) for ((m,p,d), (p2,d2)) in product(MPD, PD) if p==p2 and d==d2]
                     
-            #         MT = aggregate(MP, plus)
+                    MT = aggregate(MP, plus)
                     
-            #         M1 = [(m, 1) for (m, _) in MP]
-            #         MC = aggregate(M1, sum)
+                    M1 = [(m, 1) for (m, _) in MP]
+                    MC = aggregate(M1, sum)
                     
-            #         MEANS = [scale(t,c) for ((m,t),(m2,c)) in product(MT, MC) if m == m2]
+                    MEANS = [scale(t,c) for ((m,t),(m2,c)) in product(MT, MC) if m == m2]
 
-            #     # write MEANS to file
-            #     for i in MEANS:
-            #         writer.writerow({'new_stop': i})
+                # write MEANS to file
+                for i in MEANS:
+                    writer.writerow({'new_stop': i})
 
-            #     print("\n\nOLD = MEANS WOOHOO\n\n")
+               #print("\n\nOLD = MEANS WOOHOO\n\n")
         
         
         repo.logout()
