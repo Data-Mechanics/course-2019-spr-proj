@@ -1,10 +1,7 @@
-import urllib.request
-import json
 import dml
-from flask_pymongo import PyMongo
 from flask import Flask, render_template, request
 import flask
-from flask_googlemaps import GoogleMaps, Map
+from flask_googlemaps import GoogleMaps
 from config import getGoogleMapsKey
 import random
 
