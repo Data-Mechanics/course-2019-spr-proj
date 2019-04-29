@@ -69,6 +69,7 @@
 
             map.setCenter(results[0].geometry.location);
           }
+
         });
       }
 
@@ -82,6 +83,9 @@
           infowindow.setContent(place.name);
           infowindow.open(map, this);
         });
+
+      var trafficLayer = new google.maps.TrafficLayer();
+        trafficLayer.setMap(map);
       }
 
 
@@ -158,7 +162,7 @@
                         <option value="{{neighborhood}}">{{neighborhood}}</option>
                     </select>
 
-                    <h3> Pick a possible street that will be renamed to view. </h3>
+                    <h3> Pick a one of our recommended streets to view. </h3>
                     <select name="street" size="10" id="sel2">
                         {% for street in streets %}
                         <option value="{{street}}">{{street}}</option>

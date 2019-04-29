@@ -54,7 +54,7 @@ class transformation1():
             street_name = x['street_name']
 
             # find difference of streetnames and landmarks, while selecting only those that aren't female
-            if (full_name not in landmark_streets) and (gender != "female"):
+            if (full_name not in landmark_streets) and (gender != "female") and ("Public Alley" not in full_name):
                 streets_without_landmarks.append({"full_name": full_name, "gender": gender,
                                                   "zipcode": zipcode, "street_name": street_name})
 

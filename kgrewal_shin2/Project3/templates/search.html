@@ -81,6 +81,10 @@
           infowindow.setContent(place.name);
           infowindow.open(map, this);
         });
+
+      var trafficLayer = new google.maps.TrafficLayer();
+      trafficLayer.setMap(map);
+
       }
 
     </script>
@@ -145,7 +149,7 @@
                         </datalist>
                     </select>
 
-                    <h3> Pick a possible street that will be renamed to view. </h3>
+                    <h3> Pick a one of our recommended streets to view. </h3>
                     <select name="street" size="10" id="sel2">
                         {% for street in streets %}
                         <option value="{{street}}">{{street}}</option>
