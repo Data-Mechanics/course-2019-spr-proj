@@ -39,6 +39,7 @@ def aggregate(R, f):
     keys = {r[0] for r in R}
     return [(key, f([v for (k, v) in R if k == key])) for key in keys]
 
+
 def sum(vs):
     s = 0
     for v in vs:
@@ -63,19 +64,38 @@ def get_css(name=None):
         return css.read()
 
 
-@app.route('/zipcode')
-def words():
-    with open('./data/zipcode.json', encoding='utf-8') as words_file:
+def str2list(s, bar=1, sep=' '):
+    word_list = list(map(lambda w: (w, 1), s.split(sep)))
+    word_list = reduce(lambda k, vs: [k, sum(vs)], word_list)
+    return list(filter(lambda p: p[1] >= bar, word_list))
+
+
+def sortdict(src, des):
+    for key in sorted(src):
+        des[key] = src[key]
+    return des
+
+@app.route('/neighbourhood')
+def neighbourhood():
+    with open('./data/neighbourhood.json', encoding='utf-8') as words_file:
         words = json.load(words_file)
-        result = {}
-
+        tmp = {}
+        total = ''
         for key in words:
-            word_list = list(map(lambda w : (w, 1), words[key].split(' ')))
-            result[key] = reduce(lambda k, vs: [k, sum(vs)], word_list)
+            tmp[key] = str2list(words[key])
+            total += words[key]
+        result = {'Entire Boston': str2list(total, 2)}
+        return json.dumps(sortdict(tmp, result))
 
+
+@app.route('/cluster')
+def cluster():
+    with open('./data/cluster.json', encoding='utf-8') as words_file:
+        clusters = json.load(words_file)
+        result = {}
+        for c in clusters:
+            result['Cluster ' + str(c['Cluster'])] = str2list(c['Names'], sep=',')
         return json.dumps(result)
-
-
 
 if __name__ == '__main__':
     app.run()
