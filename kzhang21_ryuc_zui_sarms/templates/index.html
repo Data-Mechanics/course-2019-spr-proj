@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--title-->
+    <title>CS504 Data Mechanics: Restaurant Analysis</title>
+
+    <!---meta-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width-device-width, initial-scale = 1">
+
+    <!--bootstrap-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>  
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    
+    
+    <!--css -->
+    <link rel='stylesheet' type='text/css' href='./main.css'/>
+
+    <!--js-->
+    <script src = "./script.js"></script>
+
+</head>
+<body>
+    <div class = "container-fluid"><h1 class = "jumbotron">CS504 Temp Title</h1></div>
+    
+    <div class = "container">
+        <h2>About</h2>
+        <p>As of 2018, over 11,000 restaurants were operating in the Greater Boston region, 
+            and faced with the challenges to survive, each restaurant does its best to stand out. 
+            From the uniqueness of the dishes to the ambience and location, everything is utilized 
+            by restaurants to ensure that customers are satisfied and come back for more. Customers 
+            also face challenges when trying to pick 1 out of 11,000 restaurants to dine at. Preferences
+            such as cuisine, price, distance, and even time of day become important deciding factors 
+            for locals. But for tourists unfamiliar with Boston, navigating through Boston’s cityscape 
+            let alone picking a restaurant to dine at becomes a challenge. To help both tourists and locals, 
+            we utilize datasets relating to the city of Boston, and based on where the user wants to start 
+            their day in Boston, we find and recommend restaurants. To see which restaurant are safer to eat 
+            at we use a dataset from Analyze Boston containing food inspection violations that go back as far
+            as 2007. To see how popular each restaurant is, we use data from Yelp’s businesses API and collect
+            data on restaurant and bars around Boston. And finally, we use Google Maps’ Geocoding API to 
+            evaluate distances between recommended bars, and the user’s starting point. Using these datasets, 
+            we use constraints to choose restaurants to recommend.
+        </p>
+    </div>
+
+    <div class= "container">
+        <h2>Data Analysis</h2>
+        <p>Top Cuisines in Each Boston Neighborhood</p>
+        <div class = "row">
+            <select class="custom-select custom-select-lg mb-3">
+                <option selected>Open this select menu</option>
+                {% for zipCode in zipCodes %}
+                    <option value="{{zipCode}}">{{zipCode}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+    </div>
+
+</body>
+</html>
