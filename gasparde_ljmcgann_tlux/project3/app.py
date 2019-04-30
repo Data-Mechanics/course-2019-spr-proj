@@ -2,10 +2,8 @@ from bson.json_util import dumps
 import dml
 from flask import Flask, request, render_template
 from kmeans import compute_kmeans
-from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
 
 contributor = "gasparde_ljmcgann_tlux"
 client = dml.pymongo.MongoClient()
@@ -27,11 +25,13 @@ def hello():
         req_data = request.get_json()
         print(req_data)
         name = request.form["neighborhood"]
-        kmeans = int(request.form['kmeans'])
+        num = int(request.form['kmeans'])
         weight = int(request.form["weight"])
-        kmeans = dumps(compute_kmeans(name, kmeans, weight))
-        response = dumps(kmeans),
-        return render_template('index.html', neighborhoods=neighborhoods, kmeans=kmeans, name=str(name))
+        kmeans = compute_kmeans(name, num, weight)
+        print(len(kmeans))
+        kmeans = dumps(kmeans)
+        return render_template('index.html', neighborhoods=neighborhoods, kmeans=kmeans, name=str(name), weight = weight
+                               ,num = num)
 
     return render_template("index.html", neighborhoods=neighborhoods)
 

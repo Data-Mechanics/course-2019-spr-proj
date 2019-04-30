@@ -254,6 +254,7 @@ if (name !== null) {
         if (neighborhoods_shape._layers[l].feature.properties.Name === name) {
             map.fitBounds(neighborhoods_shape._layers[l].getBounds());
             neighborhoods_shape._layers[l].feature.properties.Color = "#382ac1";
+            neighborhoods_shape.resetStyle(neighborhoods_shape._layers[l]);
         }
     }
 } else {
