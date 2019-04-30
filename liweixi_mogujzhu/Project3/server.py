@@ -72,6 +72,10 @@ def serve_js(path):
 def get_index_page():
     return open('./html/index.html','r').read()
 
+@app.route('/index1', methods=['GET'])
+def get_index1_page():
+    return open('./html/index1.html','r').read()
+
 @app.errorhandler(404)
 def not_found(error):
     return make_response(jsonify({'error': 'Not found.'}), 404)
