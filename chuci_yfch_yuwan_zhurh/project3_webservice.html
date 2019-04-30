@@ -1,0 +1,151 @@
+<html>
+<head>
+  <title>A Leaflet map!</title>
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/>
+  <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+  
+  <style>
+    #map{ width: 900px; height: 500px; }
+  </style>
+</head>
+<body>
+
+  <div id="map"></div>
+
+  <script>
+
+  // initialize the map
+  var map = L.map('map').setView([42.4, -71.08], 10);
+
+
+  // load a tile layer
+  L.tileLayer('http://tiles.mapc.org/basemap/{z}/{x}/{y}.png',
+    {
+      attribution: 'Tiles by <a href="http://mapc.org">MAPC</a>, Data by <a href="http://mass.gov/mgis">MassGIS</a>',
+      maxZoom: 17,
+      minZoom: 8
+    }).addTo(map);
+
+//var marker = L.marker([42.2, -74.00]).addTo(map);
+
+
+
+
+
+var circle0 = L.circle([42.38546496730506, -71.12863810683987],500,{color: '#A93226',opacity:0.5,fillColor: '#A93226',fillOpacity: 0.5}).addTo(map);
+circle0.bindPopup("k=1");
+var circle1 = L.circle([42.5746589155779, -71.07980441758797],500,{color: '#884EA0',opacity:0.5,fillColor: '#884EA0',fillOpacity: 0.5}).addTo(map);
+circle1.bindPopup("k=2");
+var circle2 = L.circle([42.3146950505639, -71.14690484398496],500,{color: '#884EA0',opacity:0.5,fillColor: '#884EA0',fillOpacity: 0.5}).addTo(map);
+circle2.bindPopup("k=2");
+var circle3 = L.circle([42.31121337436976, -71.09528653550414],500,{color: '#2E86C1',opacity:0.5,fillColor: '#2E86C1',fillOpacity: 0.5}).addTo(map);
+circle3.bindPopup("k=3");
+var circle4 = L.circle([42.44333992121211, -71.44959410202021],500,{color: '#2E86C1',opacity:0.5,fillColor: '#2E86C1',fillOpacity: 0.5}).addTo(map);
+circle4.bindPopup("k=3");
+var circle5 = L.circle([42.57529918397436, -71.02671954551286],500,{color: '#2E86C1',opacity:0.5,fillColor: '#2E86C1',fillOpacity: 0.5}).addTo(map);
+circle5.bindPopup("k=3");
+var circle6 = L.circle([42.169470184403664, -71.04530526697249],500,{color: '#229954',opacity:0.5,fillColor: '#229954',fillOpacity: 0.5}).addTo(map);
+circle6.bindPopup("k=4");
+var circle7 = L.circle([42.59543071796874, -71.00610609609379],500,{color: '#229954',opacity:0.5,fillColor: '#229954',fillOpacity: 0.5}).addTo(map);
+circle7.bindPopup("k=4");
+var circle8 = L.circle([42.446716758163255, -71.4513407632653],500,{color: '#229954',opacity:0.5,fillColor: '#229954',fillOpacity: 0.5}).addTo(map);
+circle8.bindPopup("k=4");
+var circle9 = L.circle([42.361892087878765, -71.11132122954547],500,{color: '#229954',opacity:0.5,fillColor: '#229954',fillOpacity: 0.5}).addTo(map);
+circle9.bindPopup("k=4");
+var circle10 = L.circle([42.60730443589743, -71.0051062700855],500,{color: '#F1C40F',opacity:0.5,fillColor: '#F1C40F',fillOpacity: 0.5}).addTo(map);
+circle10.bindPopup("k=5");
+var circle11 = L.circle([42.25486849690721, -71.21735040103093],500,{color: '#F1C40F',opacity:0.5,fillColor: '#F1C40F',fillOpacity: 0.5}).addTo(map);
+circle11.bindPopup("k=5");
+var circle12 = L.circle([42.37309257853105, -71.09280874858757],500,{color: '#F1C40F',opacity:0.5,fillColor: '#F1C40F',fillOpacity: 0.5}).addTo(map);
+circle12.bindPopup("k=5");
+var circle13 = L.circle([42.461068398876385, -71.46288324382023],500,{color: '#F1C40F',opacity:0.5,fillColor: '#F1C40F',fillOpacity: 0.5}).addTo(map);
+circle13.bindPopup("k=5");
+var circle14 = L.circle([42.17416442702703, -70.97706929594598],500,{color: '#F1C40F',opacity:0.5,fillColor: '#F1C40F',fillOpacity: 0.5}).addTo(map);
+circle14.bindPopup("k=5");
+var circle15 = L.circle([42.37818882882351, -71.09134381647058],500,{color: '#E59866',opacity:0.5,fillColor: '#E59866',fillOpacity: 0.5}).addTo(map);
+circle15.bindPopup("k=6");
+var circle16 = L.circle([42.47554124303795, -71.47527352278482],500,{color: '#E59866',opacity:0.5,fillColor: '#E59866',fillOpacity: 0.5}).addTo(map);
+circle16.bindPopup("k=6");
+var circle17 = L.circle([42.20285491123595, -71.04008528988766],500,{color: '#E59866',opacity:0.5,fillColor: '#E59866',fillOpacity: 0.5}).addTo(map);
+circle17.bindPopup("k=6");
+var circle18 = L.circle([42.27843163195875, -71.24636044329897],500,{color: '#E59866',opacity:0.5,fillColor: '#E59866',fillOpacity: 0.5}).addTo(map);
+circle18.bindPopup("k=6");
+var circle19 = L.circle([42.612700637499984, -71.00374728303574],500,{color: '#E59866',opacity:0.5,fillColor: '#E59866',fillOpacity: 0.5}).addTo(map);
+circle19.bindPopup("k=6");
+var circle20 = L.circle([42.13846459285715, -70.82476433571428],500,{color: '#E59866',opacity:0.5,fillColor: '#E59866',fillOpacity: 0.5}).addTo(map);
+circle20.bindPopup("k=6");
+var circle21 = L.circle([42.571619914102556, -70.92379243461538],500,{color: '#717D7E',opacity:0.5,fillColor: '#717D7E',fillOpacity: 0.5}).addTo(map);
+circle21.bindPopup("k=7");
+var circle22 = L.circle([42.631146427160495, -71.23680633580247],500,{color: '#717D7E',opacity:0.5,fillColor: '#717D7E',fillOpacity: 0.5}).addTo(map);
+circle22.bindPopup("k=7");
+var circle23 = L.circle([42.37176313569321, -71.09241236489676],500,{color: '#717D7E',opacity:0.5,fillColor: '#717D7E',fillOpacity: 0.5}).addTo(map);
+circle23.bindPopup("k=7");
+var circle24 = L.circle([42.36726228333332, -71.6311335722222],500,{color: '#717D7E',opacity:0.5,fillColor: '#717D7E',fillOpacity: 0.5}).addTo(map);
+circle24.bindPopup("k=7");
+var circle25 = L.circle([42.29645366888888, -71.27257872222222],500,{color: '#717D7E',opacity:0.5,fillColor: '#717D7E',fillOpacity: 0.5}).addTo(map);
+circle25.bindPopup("k=7");
+var circle26 = L.circle([42.19566879032258, -71.05021448387097],500,{color: '#717D7E',opacity:0.5,fillColor: '#717D7E',fillOpacity: 0.5}).addTo(map);
+circle26.bindPopup("k=7");
+var circle27 = L.circle([42.13846459285715, -70.82476433571428],500,{color: '#717D7E',opacity:0.5,fillColor: '#717D7E',fillOpacity: 0.5}).addTo(map);
+circle27.bindPopup("k=7");
+var circle28 = L.circle([42.14086371538462, -70.81585447692308],500,{color: '#1C2833',opacity:0.5,fillColor: '#1C2833',fillOpacity: 0.5}).addTo(map);
+circle28.bindPopup("k=8");
+var circle29 = L.circle([42.85738442941175, -70.94694721176472],500,{color: '#1C2833',opacity:0.5,fillColor: '#1C2833',fillOpacity: 0.5}).addTo(map);
+circle29.bindPopup("k=8");
+var circle30 = L.circle([42.35736260818181, -71.1028092339394],500,{color: '#1C2833',opacity:0.5,fillColor: '#1C2833',fillOpacity: 0.5}).addTo(map);
+circle30.bindPopup("k=8");
+var circle31 = L.circle([42.186307666666664, -71.03184168266667],500,{color: '#1C2833',opacity:0.5,fillColor: '#1C2833',fillOpacity: 0.5}).addTo(map);
+circle31.bindPopup("k=8");
+var circle32 = L.circle([42.272418099999975, -71.28727151375],500,{color: '#1C2833',opacity:0.5,fillColor: '#1C2833',fillOpacity: 0.5}).addTo(map);
+circle32.bindPopup("k=8");
+var circle33 = L.circle([42.36747322424242, -71.64716999393939],500,{color: '#1C2833',opacity:0.5,fillColor: '#1C2833',fillOpacity: 0.5}).addTo(map);
+circle33.bindPopup("k=8");
+var circle34 = L.circle([42.60885174444444, -71.24850984320987],500,{color: '#1C2833',opacity:0.5,fillColor: '#1C2833',fillOpacity: 0.5}).addTo(map);
+circle34.bindPopup("k=8");
+var circle35 = L.circle([42.49243466764707, -70.96615140882354],500,{color: '#1C2833',opacity:0.5,fillColor: '#1C2833',fillOpacity: 0.5}).addTo(map);
+circle35.bindPopup("k=8");
+var circle36 = L.circle([42.14086371538462, -70.81585447692308],500,{color: '#D7BDE2',opacity:0.5,fillColor: '#D7BDE2',fillOpacity: 0.5}).addTo(map);
+circle36.bindPopup("k=9");
+var circle37 = L.circle([42.48405079652175, -70.97430214],500,{color: '#D7BDE2',opacity:0.5,fillColor: '#D7BDE2',fillOpacity: 0.5}).addTo(map);
+circle37.bindPopup("k=9");
+var circle38 = L.circle([42.14796313846154, -71.20316334102564],500,{color: '#D7BDE2',opacity:0.5,fillColor: '#D7BDE2',fillOpacity: 0.5}).addTo(map);
+circle38.bindPopup("k=9");
+var circle39 = L.circle([42.61027231625, -71.24606772875],500,{color: '#D7BDE2',opacity:0.5,fillColor: '#D7BDE2',fillOpacity: 0.5}).addTo(map);
+circle39.bindPopup("k=9");
+var circle40 = L.circle([42.19997726249999, -71.0096019953125],500,{color: '#D7BDE2',opacity:0.5,fillColor: '#D7BDE2',fillOpacity: 0.5}).addTo(map);
+circle40.bindPopup("k=9");
+var circle41 = L.circle([42.35376671213017, -71.11494113076921],500,{color: '#D7BDE2',opacity:0.5,fillColor: '#D7BDE2',fillOpacity: 0.5}).addTo(map);
+circle41.bindPopup("k=9");
+var circle42 = L.circle([42.337959226530614, -71.42651033469384],500,{color: '#D7BDE2',opacity:0.5,fillColor: '#D7BDE2',fillOpacity: 0.5}).addTo(map);
+circle42.bindPopup("k=9");
+var circle43 = L.circle([42.3861401625, -71.76956714375],500,{color: '#D7BDE2',opacity:0.5,fillColor: '#D7BDE2',fillOpacity: 0.5}).addTo(map);
+circle43.bindPopup("k=9");
+var circle44 = L.circle([42.85738442941175, -70.94694721176472],500,{color: '#D7BDE2',opacity:0.5,fillColor: '#D7BDE2',fillOpacity: 0.5}).addTo(map);
+circle44.bindPopup("k=9");
+var circle45 = L.circle([42.14086371538462, -70.81585447692308],500,{color: '#76D7C4',opacity:0.5,fillColor: '#76D7C4',fillOpacity: 0.5}).addTo(map);
+circle45.bindPopup("k=10");
+var circle46 = L.circle([42.27751828787879, -71.54317463333331],500,{color: '#76D7C4',opacity:0.5,fillColor: '#76D7C4',fillOpacity: 0.5}).addTo(map);
+circle46.bindPopup("k=10");
+var circle47 = L.circle([42.174681802325594, -71.21326520232557],500,{color: '#76D7C4',opacity:0.5,fillColor: '#76D7C4',fillOpacity: 0.5}).addTo(map);
+circle47.bindPopup("k=10");
+var circle48 = L.circle([42.64293513108108, -71.232818477027],500,{color: '#76D7C4',opacity:0.5,fillColor: '#76D7C4',fillOpacity: 0.5}).addTo(map);
+circle48.bindPopup("k=10");
+var circle49 = L.circle([42.35186879653977, -71.0808227276817],500,{color: '#76D7C4',opacity:0.5,fillColor: '#76D7C4',fillOpacity: 0.5}).addTo(map);
+circle49.bindPopup("k=10");
+var circle50 = L.circle([43.00885675714286, -70.80925485714286],500,{color: '#76D7C4',opacity:0.5,fillColor: '#76D7C4',fillOpacity: 0.5}).addTo(map);
+circle50.bindPopup("k=10");
+var circle51 = L.circle([42.52286514375, -71.63403499375],500,{color: '#76D7C4',opacity:0.5,fillColor: '#76D7C4',fillOpacity: 0.5}).addTo(map);
+circle51.bindPopup("k=10");
+var circle52 = L.circle([42.38680966448597, -71.21494413831775],500,{color: '#76D7C4',opacity:0.5,fillColor: '#76D7C4',fillOpacity: 0.5}).addTo(map);
+circle52.bindPopup("k=10");
+var circle53 = L.circle([42.180293767796606, -71.01070631864408],500,{color: '#76D7C4',opacity:0.5,fillColor: '#76D7C4',fillOpacity: 0.5}).addTo(map);
+circle53.bindPopup("k=10");
+var circle54 = L.circle([42.51725726555555, -70.95896451333333],500,{color: '#76D7C4',opacity:0.5,fillColor: '#76D7C4',fillOpacity: 0.5}).addTo(map);
+circle54.bindPopup("k=10");
+
+
+
+
+  </script>
+</body>
+</html>
