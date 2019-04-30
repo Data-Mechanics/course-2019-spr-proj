@@ -62,7 +62,7 @@ kmeans = JSON.parse(kmeans);
 //console.log(kmeans);
 //console.log(stats);
 neighborhoods = JSON.parse(neighborhoods);
-name = name.toString();
+//name = name.toString();
 //console.log(neighborhoods);
 // openspaces = JSON.parse(openspaces);
 //console.log(openspaces);
@@ -247,6 +247,7 @@ function handleLayerClick(e) {
 if (name !== null) {
     console.log(typeof (name));
     //kmeans = JSON.parse(kmeans);
+    name = name.toString();
     console.log(name);
     console.log(neighborhoods_shape);
     for (l in neighborhoods_shape._layers) {
