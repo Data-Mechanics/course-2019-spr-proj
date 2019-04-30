@@ -893,7 +893,7 @@ class example(dml.Algorithm):
         # Draw a line in 
         # between given coordinates 
           
-        gmapBefore.draw( "D:\\_Documents\\cs504\\Project2\\course-2019-spr-proj\\mapBefore.html" ) 
+        #gmapBefore.draw( "D:\\_Documents\\cs504\\Project2\\course-2019-spr-proj\\mapBefore.html" ) 
 
 
         latitude_list_k0 = []
@@ -957,7 +957,7 @@ class example(dml.Algorithm):
         gmapAfter.scatter( latitude_list_k5, longitude_list_k5, '# FF0000', 
                                       size = after_size, marker = False ) 
 
-        gmapAfter.draw( "D:\\_Documents\\cs504\\Project2\\course-2019-spr-proj\\mapAfter.html" ) 
+        #gmapAfter.draw( "D:\\_Documents\\cs504\\Project2\\course-2019-spr-proj\\mapAfter.html" ) 
         
         repo.logout()
         endTime = datetime.datetime.now()
@@ -972,7 +972,6 @@ class example(dml.Algorithm):
             document describing that invocation event.
             '''
 
-        # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate('ido_jconstan_jeansolo_suitcase', 'ido_jconstan_jeansolo_suitcase')
@@ -1001,6 +1000,14 @@ class example(dml.Algorithm):
         resource_StopsLatLng = doc.entity('dat:StopsLatLng', {'prov:label':'Stops Latitude and Longitude', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
 
 
+        resource_k_means_0 = doc.entity('dat:k_means_school_0', {'prov:label':'k-means_0', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        resource_k_means_1 = doc.entity('dat:k_means_school_1', {'prov:label':'k-means_1', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        resource_k_means_2 = doc.entity('dat:k_means_school_2', {'prov:label':'k-means_2', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        resource_k_means_3 = doc.entity('dat:k_means_school_3', {'prov:label':'k-means_3', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        resource_k_means_4 = doc.entity('dat:k_means_school_4', {'prov:label':'k-means_4', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        resource_k_means_5 = doc.entity('dat:k_means_school_5', {'prov:label':'k-means_5', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+
+
         get_registered_students = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         get_property_data = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         get_gas_emissions = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
@@ -1010,12 +1017,15 @@ class example(dml.Algorithm):
         get_student_address = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         get_HomesLatLng = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         get_StopsLatLng = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+
         get_k_means_0 = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         get_k_means_1 = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         get_k_means_2 = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         get_k_means_3 = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         get_k_means_4 = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         get_k_means_5 = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+
+
 
         doc.wasAssociatedWith(get_registered_students, this_script)
         doc.wasAssociatedWith(get_property_data, this_script)
@@ -1027,6 +1037,13 @@ class example(dml.Algorithm):
         doc.wasAssociatedWith(get_student_address, this_script)
         doc.wasAssociatedWith(get_HomesLatLng, this_script)
         doc.wasAssociatedWith(get_StopsLatLng, this_script)
+
+        doc.wasAssociatedWith(get_k_means_0, this_script)
+        doc.wasAssociatedWith(get_k_means_1, this_script)
+        doc.wasAssociatedWith(get_k_means_2, this_script)
+        doc.wasAssociatedWith(get_k_means_3, this_script)
+        doc.wasAssociatedWith(get_k_means_4, this_script)
+        doc.wasAssociatedWith(get_k_means_5, this_script)
 
         doc.usage(get_registered_students, resource_registeredStudents, startTime, None,
                   {prov.model.PROV_TYPE:'ont:Retrieval',
@@ -1061,6 +1078,31 @@ class example(dml.Algorithm):
                   }
                   )
         doc.usage(get_StopsLatLng, resource_StopsLatLng, startTime, None,
+                  {prov.model.PROV_TYPE:'ont:Retrieval',
+                  }
+                  )
+
+        doc.usage(get_k_means_0, resource_k_means_0, startTime, None,
+                  {prov.model.PROV_TYPE:'ont:Retrieval',
+                  }
+                  )
+        doc.usage(get_k_means_1, resource_k_means_1, startTime, None,
+                  {prov.model.PROV_TYPE:'ont:Retrieval',
+                  }
+                  )
+        doc.usage(get_k_means_2, resource_k_means_2, startTime, None,
+                  {prov.model.PROV_TYPE:'ont:Retrieval',
+                  }
+                  )
+        doc.usage(get_k_means_3, resource_k_means_3, startTime, None,
+                  {prov.model.PROV_TYPE:'ont:Retrieval',
+                  }
+                  )
+        doc.usage(get_k_means_4, resource_k_means_4, startTime, None,
+                  {prov.model.PROV_TYPE:'ont:Retrieval',
+                  }
+                  )
+        doc.usage(get_k_means_5, resource_k_means_5, startTime, None,
                   {prov.model.PROV_TYPE:'ont:Retrieval',
                   }
                   )
@@ -1113,7 +1155,7 @@ class example(dml.Algorithm):
         Stops_Lat_Lng = doc.entity('dat:ido_jconstan_jeansolo_suitcase#StopsLatLng', {prov.model.PROV_LABEL:'Stops Latitude and Longitude', prov.model.PROV_TYPE:'ont:DataSet'})
         doc.wasAttributedTo(Stops_Lat_Lng, this_script)
         doc.wasGeneratedBy(Stops_Lat_Lng, get_StopsLatLng, endTime)
-        doc.wasDerivedFrom(Stops_Lat_Lng, resource_StopsLatLng, get_StopsLatLng, get_StopsLatLng, get_StopsLatLng)
+        doc.wasDerivedFrom(Stops_Lat_Lng, resource_StopsLatLng, get_Stops_Lat_Lng, get_Stops_Lat_Lng, get_Stops_Lat_Lng)
 
         k_means_0 = doc.entity('dat:ido_jconstan_jeansolo_suitcase#k-means_0', {prov.model.PROV_LABEL:'k-means stop 0', prov.model.PROV_TYPE:'ont:DataSet'})
         doc.wasAttributedTo(k_means_0, this_script)
