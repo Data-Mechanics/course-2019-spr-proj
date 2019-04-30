@@ -26,6 +26,14 @@ class DataCollection(dml.Algorithm):
 		repo = client.repo
 		repo.authenticate('charr_hu38_npearce', 'charr_hu38_npearce')\
 		
+		if(not repo['charr_hu38_npearce.sanfran'].count() == 0):
+			repo.logout()
+
+			endTime = datetime.datetime.now()
+	
+			return {"start":startTime, "end":endTime}
+			
+		
 		url = 'https://data.cdc.gov/api/views/dxpw-cm5u/rows.csv?accessType=DOWNLOAD'									
 		repo.dropCollection("census")
 		repo.createCollection("census")

@@ -33,15 +33,15 @@ class OptimalStationNumber(dml.Algorithm):
 			X.append(int(city['stations'])/int(city['population'])) #Amount of bike stations per person
 			y.append(city['tot_bike_time']/int(city['population'])) #Time spent on bike per person
 		
-		z = LinearRegression(fit_intercept=False).fit(X,y)		#Linear regression
-        c = z.coef_[0]
-        
+		z = np.polyfit(X,y,1)		#Linear regression
+		c = z[0]
+		
 		#It is clear from our data that adding stations only increases productivity, so we add the max we can build
 		#k-means k=max_num
 		k=max_num
 		data_arry=[]
-        for i in range(len(X)):
-            data_arry.append({"opt_num":k,"coef":c,"x":X[i],"y":y[i]})
+		for i in range(len(X)):
+			data_arry.append({"opt_num":k,"coef":c,"x":X[i],"y":y[i]})
 		repo['charr_hu38_npearce.optstationnum'].insert_many(data_arry)						#Data set 0: Optimal Station Number
 		repo['charr_hu38_npearce.optstationnum'].metadata({'complete':True})
 

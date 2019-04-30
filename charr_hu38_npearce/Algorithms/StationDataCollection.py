@@ -25,6 +25,13 @@ class StationDataCollection(dml.Algorithm):
 		client = dml.pymongo.MongoClient()
 		repo = client.repo
 		repo.authenticate('charr_hu38_npearce', 'charr_hu38_npearce')
+		
+		if(not repo['charr_hu38_npearce.sanfran_s'].count() == 0):
+			repo.logout()
+
+			endTime = datetime.datetime.now()
+	
+			return {"start":startTime, "end":endTime}
 			
 		url = 'https://gbfs.bluebikes.com/gbfs/en/station_information.json'													
 		response = urllib.request.urlopen(url).read().decode("utf-8")

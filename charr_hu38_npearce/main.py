@@ -122,84 +122,85 @@ def ex_page():
 #route visualizations
 @app.route('/fig.png', methods=['GET'])
 def fig_png():
-    city = int(request.args.get('city'))
-    max_num = int(request.args.get('max_num'))
-    fig = create_figure(city, max_num)
-    output = io.BytesIO()
-    FigureCanvas(fig).print_png(output)
-    return Response(output.getvalue(), mimetype='image/png')
+	cities=["Boston", "Washington", "New York", "Chicago", "San Francisco"]
+	city = cities.index(request.args.get('city'))
+	max_num = int(request.args.get('max_num'))
+	fig = create_figure(city, max_num)
+	output = io.BytesIO()
+	FigureCanvas(fig).print_png(output)
+	return Response(output.getvalue(), mimetype='image/png')
 
 #render visualizations
 def create_figure(city, max_num):
-    #bounding box coordinates by city
-    bbox = [(-71.19126004,42.22765398,-70.8044881,42.39697748),
-            (-77.11976633,38.79163024,-76.90936606,38.99585237),
-            (-74.25909008,40.47739894,-73.70018092,40.91617849),
-            (-87.94010101,41.64391896,-87.5239841,42.02302188),
-            (-122.599628661,37.64031423,-122.28178006,37.92984427)
-            ]
-    l, d, r, u = bbox[city]
-    #connect to mongo
-    client = dml.pymongo.MongoClient()
-    repo = client.repo
-    repo.authenticate('charr_hu38_npearce', 'charr_hu38_npearce')
-    #access new station locations
-    lon_new = []
-    lat_new = []
-    new_locs = list(repo.charr_hu38_npearce.Kmeans.find())[city]["locs"]
-    for loc in new_locs:
-        lon_new.append(loc[0])
-        lat_new.append(loc[1])
-    #access old station locations
-    if city == 0:
-        old_locs = list(repo.charr_hu38_npearce.boston_s.find())
-    elif city == 1:
-        old_locs = list(repo.charr_hu38_npearce.washington_s.find())
-    elif city == 2:
-        old_locs = list(repo.charr_hu38_npearce.newyork_s.find())
-    elif city == 3:
-        old_locs = list(repo.charr_hu38_npearce.chicago_s.find())
-    else:
-        old_locs = list(repo.charr_hu38_npearce.sanfran_s.find())
-    lon_old = []
-    lat_old = []
-    for loc in old_locs:
-        lon_old.append(loc["lon"])
-        lat_old.append(loc["lat"])
-    #access population
-    population = list(repo.charr_hu38_npearce.unionpopbike.find())[city]["population"]
-    #access regression info
-    regress = list(repo.charr_hu38_npearce.optstationnum.find())
-    coef = regress[0]["coef"]
-    x1 = []
-    y1 = []
-    for city in regress:
-        x1.append(city["x"])
-        y1.appen(city["y"])
-    #instantiate figure and add map
-    fig = Figure()
-    ax = fig.add_subplot(211)
-    m = Basemap(projection='merc',llcrnrlat=d,urcrnrlat=u,llcrnrlon=l,urcrnrlon=r,\
-                resolution='f')
-    m.fillcontinents()
-    m.scatter(lon_old,lat_old,latlon=True,c='#000000',marker='o')
-    m.scatter(lon_new,lat_new,latlon=True,c='#ff0000',marker='o')
-    ax.title("Existing Station Locations (black) and Suggested Station Locations (red)")
-    #add graph
-    ax = fig.add_subplot(212)
-    bound = (len(lon_old) + max_num) / population
-    x2 = np.linspace(0,(1.2*bound))
-    y2 = coef*x2
-    y3 = np.linspace(0,(1.2*(bound*coef)))
-    x3 = np.full_like(y3,bound)
-    ax.scatter(x1,y1,c='#000000',marker='o')
-    ax.plot(x2,y2,'b-')
-    ax.plot(x3,y3,'r--')
-    ax.xlabel("Per Capita Bike Station Amount (# of bike stations/city population)")
-    ax.ylabel("Per Capita Bike Use in Sept 2018 (total bike use in minutes/city population)")
-    ax.title("Bounded Linear Regression Demonstrating Optimality of Maximizing Number of Bike Stations")
-    return fig
-    
+	#bounding box coordinates by city
+	bbox = [(-71.19126004,42.22765398,-70.8044881,42.39697748),
+			(-77.11976633,38.79163024,-76.90936606,38.99585237),
+			(-74.25909008,40.47739894,-73.70018092,40.91617849),
+			(-87.94010101,41.64391896,-87.5239841,42.02302188),
+			(-122.599628661,37.64031423,-122.28178006,37.92984427)
+			]
+	l, d, r, u = bbox[city]
+	#connect to mongo
+	client = dml.pymongo.MongoClient()
+	repo = client.repo
+	repo.authenticate('charr_hu38_npearce', 'charr_hu38_npearce')
+	#access new station locations
+	lon_new = []
+	lat_new = []
+	new_locs = list(repo.charr_hu38_npearce.Kmeans.find())[city]["locs"]
+	for loc in new_locs:
+		lon_new.append(loc[0])
+		lat_new.append(loc[1])
+	#access old station locations
+	if city == 0:
+		old_locs = list(repo.charr_hu38_npearce.boston_s.find())
+	elif city == 1:
+		old_locs = list(repo.charr_hu38_npearce.washington_s.find())
+	elif city == 2:
+		old_locs = list(repo.charr_hu38_npearce.newyork_s.find())
+	elif city == 3:
+		old_locs = list(repo.charr_hu38_npearce.chicago_s.find())
+	else:
+		old_locs = list(repo.charr_hu38_npearce.sanfran_s.find())
+	lon_old = []
+	lat_old = []
+	for loc in old_locs:
+		lon_old.append(loc["lon"])
+		lat_old.append(loc["lat"])
+	#access population
+	population = list(repo.charr_hu38_npearce.unionpopbike.find())[city]["population"]
+	#access regression info
+	regress = list(repo.charr_hu38_npearce.optstationnum.find())
+	coef = regress[0]["coef"]
+	x1 = []
+	y1 = []
+	for city in regress:
+		x1.append(city["x"])
+		y1.append(city["y"])
+	#instantiate figure and add map
+	fig = Figure()
+	ax = fig.add_subplot(211)
+	m = Basemap(projection='merc',llcrnrlat=d,urcrnrlat=u,llcrnrlon=l,urcrnrlon=r,\
+				resolution='f')
+	m.fillcontinents()
+	m.scatter(lon_old,lat_old,latlon=True,c='#000000',marker='o')
+	m.scatter(lon_new,lat_new,latlon=True,c='#ff0000',marker='o')
+	ax.set_title("Existing Station Locations (black) and Suggested Station Locations (red)")
+	#add graph
+	ax = fig.add_subplot(212)
+	bound = (len(lon_old) + max_num) / int(population)
+	x2 = np.linspace(0,(1.2*bound))
+	y2 = coef*x2
+	y3 = np.linspace(0,(1.2*(bound*coef)))
+	x3 = np.full_like(y3,bound)
+	ax.scatter(x1,y1,c='#000000',marker='o')
+	ax.plot(x2,y2,'b-')
+	ax.plot(x3,y3,'r--')
+	ax.set_xlabel("Per Capita Bike Station Amount (# of bike stations/city population)")
+	ax.set_ylabel("Per Capita Bike Use in Sept 2018 (total bike use in minutes/city population)")
+	ax.set_title("Bounded Linear Regression Demonstrating Optimality of Maximizing Number of Bike Stations")
+	return fig
+	
 
 
 if __name__ == "__main__":
