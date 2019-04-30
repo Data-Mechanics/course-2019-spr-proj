@@ -280,6 +280,7 @@ class example(dml.Algorithm):
         t7 = project(t5, lambda t: (t[0], t[1], t[2], 'Y') )
         t8 = select(t7, lambda t: (t[0] not in t6 ) )
 
+        '''
         # make tuples for agreements for household value under 400k and do take the bus
         catU_Y = select(t8, lambda t: (t[2] < 400000))
         #print('CATU_Y', catU_Y)
@@ -291,6 +292,7 @@ class example(dml.Algorithm):
         #print('CATO_Y', catO_Y)
         proj_catO_Y = project(catO_Y,lambda t:(1,1))
         print('Over_Yes', proj_catO_Y)
+        '''
 
         # cat2 = select(t8, lambda t: (t[2] >= 500000 and t[2] < 600000))
         # #print('CAT2', cat2)
@@ -424,14 +426,201 @@ class example(dml.Algorithm):
         # ('lat', 'lng', 'og') of stops r9
         t18 = project(r9, lambda t: (t['lat'], t['long']))
 
-        k0 = project(r10, lambda t: (t['lat'], t['long']))
-        k1 = project(r11, lambda t: (t['lat'], t['long']))
-        k2 = project(r12, lambda t: (t['lat'], t['long']))
-        k3 = project(r13, lambda t: (t['lat'], t['long']))
-        k4 = project(r14, lambda t: (t['lat'], t['long']))
-        k5 = project(r15, lambda t: (t['lat'], t['long']))
+        k0 = project(r10, lambda t: (t['new_stop']))
+        k1 = project(r11, lambda t: (t['new_stop']))
+        k2 = project(r12, lambda t: (t['new_stop']))
+        k3 = project(r13, lambda t: (t['new_stop']))
+        k4 = project(r14, lambda t: (t['new_stop']))
+        k5 = project(r15, lambda t: (t['new_stop']))
 
 
+        # '(42.55555, 42.5555)'
+        temp = 0
+        for i in k0:
+            list_x = []
+            list_y = []
+            
+            #for j in range(len(i)):
+            j=0
+            if i[j] == '(':
+                j+=1
+                list_x.append(i[j])
+                j+=1
+
+            while i[j] != ',':
+                list_x.append(i[j])
+                j+=1
+
+            if i[j] == ',':
+                j+=2
+
+            while i[j] != ')':
+                list_y.append(i[j])
+                j+=1
+            str_x = "".join(list_x)
+            str_y = "".join(list_y)
+            float_x = float(str_x)
+            float_y = float(str_y)
+            i = (float_x, float_y)
+
+            k0[temp] = i
+            temp += 1
+
+
+        temp = 0
+        for i in k1:
+            list_x = []
+            list_y = []
+
+            #for j in range(len(i)):
+            j=0
+            if i[j] == '(':
+                j+=1
+                list_x.append(i[j])
+                j+=1
+
+            while i[j] != ',':
+                list_x.append(i[j])
+                j+=1
+
+            if i[j] == ',':
+                j+=2
+
+            while i[j] != ')':
+                list_y.append(i[j])
+                j+=1
+            str_x = "".join(list_x)
+            str_y = "".join(list_y)
+            float_x = float(str_x)
+            float_y = float(str_y)
+            i = (float_x, float_y)
+
+            k1[temp] = i
+            temp += 1
+
+        temp = 0
+        for i in k2:
+            list_x = []
+            list_y = []
+            
+            #for j in range(len(i)):
+            j=0
+            if i[j] == '(':
+                j+=1
+                list_x.append(i[j])
+                j+=1
+
+            while i[j] != ',':
+                list_x.append(i[j])
+                j+=1
+
+            if i[j] == ',':
+                j+=2
+
+            while i[j] != ')':
+                list_y.append(i[j])
+                j+=1
+            str_x = "".join(list_x)
+            str_y = "".join(list_y)
+            float_x = float(str_x)
+            float_y = float(str_y)
+            i = (float_x, float_y)
+
+            k2[temp] = i
+            temp += 1
+
+        temp = 0
+        for i in k3:
+            list_x = []
+            list_y = []
+            
+            #for j in range(len(i)):
+            j=0
+            if i[j] == '(':
+                j+=1
+                list_x.append(i[j])
+                j+=1
+
+            while i[j] != ',':
+                list_x.append(i[j])
+                j+=1
+
+            if i[j] == ',':
+                j+=2
+
+            while i[j] != ')':
+                list_y.append(i[j])
+                j+=1
+            str_x = "".join(list_x)
+            str_y = "".join(list_y)
+            float_x = float(str_x)
+            float_y = float(str_y)
+            i = (float_x, float_y)
+
+            k3[temp] = i
+            temp += 1
+
+        temp = 0
+        for i in k4:
+            list_x = []
+            list_y = []
+            
+            #for j in range(len(i)):
+            j=0
+            if i[j] == '(':
+                j+=1
+                list_x.append(i[j])
+                j+=1
+
+            while i[j] != ',':
+                list_x.append(i[j])
+                j+=1
+
+            if i[j] == ',':
+                j+=2
+
+            while i[j] != ')':
+                list_y.append(i[j])
+                j+=1
+            str_x = "".join(list_x)
+            str_y = "".join(list_y)
+            float_x = float(str_x)
+            float_y = float(str_y)
+            i = (float_x, float_y)
+
+            k4[temp] = i
+            temp += 1
+
+        temp = 0
+        for i in k5:
+            list_x = []
+            list_y = []
+            
+            #for j in range(len(i)):
+            j=0
+            if i[j] == '(':
+                j+=1
+                list_x.append(i[j])
+                j+=1 
+
+            while i[j] != ',':
+                list_x.append(i[j])
+                j+=1
+
+            if i[j] == ',':
+                j+=2
+
+            while i[j] != ')':
+                list_y.append(i[j])
+                j+=1
+            str_x = "".join(list_x)
+            str_y = "".join(list_y)
+            float_x = float(str_x)
+            float_y = float(str_y)
+            i = (float_x, float_y)
+
+            k5[temp] = i
+            temp += 1
         
         #separate student addresses by school attended - these will be the points in k-means
         POINTS_OG = []
@@ -698,75 +887,77 @@ class example(dml.Algorithm):
                                         -71.347290, 13) 
           
         # scatter points on the google map 
-        gmapBefore.scatter( latitude_list, longitude_list, '# FF0000', 
+        gmapBefore.scatter( latitude_list, longitude_list, '# 0000FF', 
                                       size = 40, marker = False ) 
           
         # Draw a line in 
         # between given coordinates 
           
-        gmapBefore.draw("C:\\users\\const_000\\Documents\\Github\\course-2019-spr-proj\\mapBefore.html") 
+        gmapBefore.draw( "D:\\_Documents\\cs504\\Project2\\course-2019-spr-proj\\mapBefore.html" ) 
 
 
         latitude_list_k0 = []
-        longitute_list_k0 = []
+        longitude_list_k0 = []
         for (x,y) in k0:
             latitude_list_k0.append(x)
-            longitute_list_k0.append(y)
+            longitude_list_k0.append(y)
 
         latitude_list_k1 = []
-        longitute_list_k1 = []
+        longitude_list_k1 = []
         for (x,y) in k1:
             latitude_list_k1.append(x)
-            longitute_list_k1.append(y)
+            longitude_list_k1.append(y)
 
         latitude_list_k2 = []
-        longitute_list_k2 = []
+        longitude_list_k2 = []
         for (x,y) in k2:
             latitude_list_k2.append(x)
-            longitute_list_k2.append(y)
+            longitude_list_k2.append(y)
 
         latitude_list_k3 = []
-        longitute_list_k3 = []
+        longitude_list_k3 = []
         for (x,y) in k3:
             latitude_list_k3.append(x)
-            longitute_list_k3.append(y)
+            longitude_list_k3.append(y)
 
         latitude_list_k4 = []
-        longitute_list_k4 = []
+        longitude_list_k4 = []
         for (x,y) in k4:
             latitude_list_k4.append(x)
-            longitute_list_k4.append(y)
+            longitude_list_k4.append(y)
 
         latitude_list_k5 = []
-        longitute_list_k5 = []
+        longitude_list_k5 = []
         for (x,y) in k5:
-            latitude_list_k0.append(x)
-            longitute_list_k0.append(y)
+            latitude_list_k5.append(x)
+            longitude_list_k5.append(y)
 
 
         gmapAfter = gmplot.GoogleMapPlotter(42.283772, 
                                         -71.347290, 13) 
         
+        after_size = 40
+
         # scatter points on the google map 
         gmapAfter.scatter( latitude_list_k0, longitude_list_k0, '# FF0000', 
-                                      size = 40, marker = False ) 
+                                      size = after_size, marker = False ) 
         # scatter points on the google map 
         gmapAfter.scatter( latitude_list_k1, longitude_list_k1, '# FF0000', 
-                                      size = 40, marker = False ) 
+                                      size = after_size, marker = False ) 
         # scatter points on the google map 
         gmapAfter.scatter( latitude_list_k2, longitude_list_k2, '# FF0000', 
-                                      size = 40, marker = False ) 
+                                      size = after_size, marker = False ) 
         # scatter points on the google map 
         gmapAfter.scatter( latitude_list_k3, longitude_list_k3, '# FF0000', 
-                                      size = 40, marker = False ) 
+                                      size = after_size, marker = False ) 
         # scatter points on the google map 
         gmapAfter.scatter( latitude_list_k4, longitude_list_k4, '# FF0000', 
-                                      size = 40, marker = False ) 
+                                      size = after_size, marker = False ) 
         # scatter points on the google map 
         gmapAfter.scatter( latitude_list_k5, longitude_list_k5, '# FF0000', 
-                                      size = 40, marker = False ) 
-        
-        gmapAfter.draw("C:\\users\\const_000\\Documents\\Github\\course-2019-spr-proj\\mapAfter.html") 
+                                      size = after_size, marker = False ) 
+
+        gmapAfter.draw( "D:\\_Documents\\cs504\\Project2\\course-2019-spr-proj\\mapAfter.html" ) 
         
         repo.logout()
         endTime = datetime.datetime.now()
@@ -819,6 +1010,12 @@ class example(dml.Algorithm):
         get_student_address = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         get_HomesLatLng = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         get_StopsLatLng = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        get_k_means_0 = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        get_k_means_1 = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        get_k_means_2 = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        get_k_means_3 = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        get_k_means_4 = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        get_k_means_5 = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
 
         doc.wasAssociatedWith(get_registered_students, this_script)
         doc.wasAssociatedWith(get_property_data, this_script)
