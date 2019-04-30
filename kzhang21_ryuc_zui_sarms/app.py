@@ -63,7 +63,8 @@ def plot():
     data = [
         go.Bar(
             x=dups['Cuisines'], # assign x as the dataframe column 'x'
-            y=dups['count']
+            y=dups['count'],
+            name=zipCode
         )
     ]
 

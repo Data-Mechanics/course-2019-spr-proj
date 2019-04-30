@@ -1,4 +1,3 @@
-
 $(document).ready(function(){
     $("#zipCodes").change(function(){
         let zipCode = $(this).children("option:selected").val();
