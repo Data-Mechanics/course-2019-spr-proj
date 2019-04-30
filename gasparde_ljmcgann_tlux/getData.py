@@ -63,7 +63,15 @@ class getData(dml.Algorithm):
         # neighborhoods we don't want because of lack of open spaces/parcels
         # also some neighborhoods it woul make no sense to put and additional
         # park into
-        unwanted_neighborhoods = ["Leather District", "Longwood", "Harbor Islands", "West End", "Bay Village"]
+        unwanted_neighborhoods = []
+        if not trial:
+            unwanted_neighborhoods = ["Leather District", "Longwood", "Harbor Islands", "West End", "Bay Village",
+                                  "Chinatown", "Downtown", "East Boston", "North End"]
+        else:
+            for neighborhood in neighborhoods["features"]:
+                if neighborhood["properties"]["Name"] != "Allston":
+                    unwanted_neighborhoods.append(neighborhood["properties"]["Name"])
+
         wanted_neighborhoods = []
         for neighborhood in neighborhoods["features"]:
             if neighborhood["properties"]["Name"] not in unwanted_neighborhoods:

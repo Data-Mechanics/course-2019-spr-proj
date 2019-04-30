@@ -26,28 +26,6 @@ def geojson_to_polygon(geom):
             polys.append(poly)
     return polys
 
-def health_score(row):
-    average = (float(row["obesity"]) + float(row["low_phys"]) + float(row["asthma"])) // 3
-    # we implement this scale to exagerate weights
-    # in the future should implement method to change how
-    # we weight
-    if average > 20:
-        return 100
-    elif average > 15:
-        return 10
-    else:
-        return 1
-
-
-def distance_score(distance_score, stdev, mean):
-    z_score = (distance_score - mean) / (stdev)
-    if z_score > 1.5:
-        return 100
-    elif z_score > .75:
-        return 10
-    else:
-        return 1
-
 def compute_weight(dist_score, dist_mean, dist_stdev, health_score, health_mean, health_stdev, weight):
     dist_z_score = ((dist_score - dist_mean) / dist_stdev)  * (weight/100)
     #print("dist", dist_z_score)
@@ -59,9 +37,9 @@ def compute_weight(dist_score, dist_mean, dist_stdev, health_score, health_mean,
         print("average", average_z_score)
         return 100
     elif average_z_score > .5:
-        return 10
+        return 20
     else:
-        return 1
+        return 2
 
 
 
@@ -89,7 +67,7 @@ def compute_kmeans(neighborhood, num_means, passed_weight):
 
         for _ in range(weight):
             kmean.append([coords[0], coords[1]])
-
+    g = kmeans(kmean, num_means)
     output = kmeans(kmean, num_means)[0].tolist()
     return output
 

@@ -26,9 +26,16 @@
 <div id="map"></div>
 
 <div class="container">
+    <p id="neighborhood">
+        {% if kmeans is defined and kmeans %}
+        Kmeans:{{num}} <br/>
+        Neighborhood:{{name}} <br/>
+        Weight:{{weight}} <br/>
+        {% endif %}
+    </p>
     <form id="myFormId" method="post">
-        KMeans: <input type="number" id="num_kmeans" name="kmeans" step="1" min="1" value="1">
-        Neighborhood: <input type="text" id="neighborhood_form" name="neighborhood" value="Allston">
+        KMeans: <input type="number" id="num_kmeans" name="kmeans" step="1" min="1" max = "5" value="">
+        Neighborhood: <input type="text" id="neighborhood_form" name="neighborhood" value="">
         <div class="slidecontainer">
             Distance<input type="range" min="1" max="100" value="50" class="slider" id="myRange" name="weight"> Health
         </div>
@@ -43,9 +50,7 @@
             health statistics as well as access to open spaces. </h5>
     </div>
 
-    <p id="neighborhood">
 
-    </p>
     <p>
 
     </p>
