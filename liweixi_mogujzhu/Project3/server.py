@@ -5,6 +5,7 @@ from flask import Flask, jsonify, abort, make_response, request, send_from_direc
 import pymongo
 import dml
 import urllib.request
+import os
 # The project structure references https://github.com/Data-Mechanics/course-2018-spr-proj/tree/master/agoncharova_lmckone
 
 
@@ -47,13 +48,13 @@ def serve_data(path):
   # get the evictions data from the database and 
   # generate the json file
   print(path + " requested")
-  if (path == "boston_fire_department.json"):
+  if (path == "boston_fire_department.json") and (not os.path.isfile("./data/boston_fire_department.json")):
     download_fire_department_data()
     print("Generated fire department json file for the map")
-  if (path == "boston_fire_hydrants.json"):
+  if (path == "boston_fire_hydrants.json") and (not os.path.isfile("./data/boston_fire_hydrants.json")):
     download_fire_hydrants_data()
     print("Generated fire hydrants json file for the map")
-  if (path == "boston_fire_alarm_boxes.json"):
+  if (path == "boston_fire_alarm_boxes.json") and (not os.path.isfile("./data/boston_fire_alarm_boxes.json")):
     download_fire_alarm_boxes_data()
     print("Generated fire alarm boxes json file for the map")
   return send_from_directory('./data', path)
@@ -71,6 +72,10 @@ def serve_js(path):
 @app.route('/', methods=['GET'])
 def get_index_page():
     return open('./html/index.html','r').read()
+
+@app.route('/weather_incident', methods=['GET'])
+def get_weather_incident_page():
+    return open('./html/weather_incident.html','r').read()
 
 @app.errorhandler(404)
 def not_found(error):
