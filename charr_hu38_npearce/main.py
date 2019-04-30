@@ -25,6 +25,7 @@ import json
 import argparse
 import prov.model
 import dml
+import numpy as np
 
 app = Flask(__name__)
 app.secret_key = 'super secret string'	# Change this!
@@ -138,7 +139,7 @@ def create_figure(city, max_num):
             (-122.599628661,37.64031423,-122.28178006,37.92984427)
             ]
     l, d, r, u = bbox[city]
-    
+    #connect to mongo
     client = dml.pymongo.MongoClient()
     repo = client.repo
     repo.authenticate('charr_hu38_npearce', 'charr_hu38_npearce')
@@ -165,6 +166,16 @@ def create_figure(city, max_num):
     for loc in old_locs:
         lon_old.append(loc["lon"])
         lat_old.append(loc["lat"])
+    #access population
+    population = list(repo.charr_hu38_npearce.unionpopbike.find())[city]["population"]
+    #access regression info
+    regress = list(repo.charr_hu38_npearce.optstationnum.find())
+    coef = regress[0]["coef"]
+    x1 = []
+    y1 = []
+    for city in regress:
+        x1.append(city["x"])
+        y1.appen(city["y"])
     #instantiate figure and add map
     fig = Figure()
     ax = fig.add_subplot(211)
@@ -176,7 +187,17 @@ def create_figure(city, max_num):
     ax.title("Existing Station Locations (black) and Suggested Station Locations (red)")
     #add graph
     ax = fig.add_subplot(212)
-    ###DO THIS PART###
+    bound = (len(lon_old) + max_num) / population
+    x2 = np.linspace(0,(1.2*bound))
+    y2 = coef*x2
+    y3 = np.linspace(0,(1.2*(bound*coef)))
+    x3 = np.full_like(y3,bound)
+    ax.scatter(x1,y1,c='#000000',marker='o')
+    ax.plot(x2,y2,'b-')
+    ax.plot(x3,y3,'r--')
+    ax.xlabel("Per Capita Bike Station Amount (# of bike stations/city population)")
+    ax.ylabel("Per Capita Bike Use in Sept 2018 (total bike use in minutes/city population)")
+    ax.title("Bounded Linear Regression Demonstrating Optimality of Maximizing Number of Bike Stations")
     return fig
     
 
