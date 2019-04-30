@@ -13,6 +13,11 @@ import flask
 from flask import Flask, Response, request, render_template, redirect, url_for
 from datetime import date
 
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from matplotlib.figure import Figure
+from mpl_toolkits.basemap import Basemap
+
+import io
 import sys
 import os
 import importlib
@@ -77,7 +82,8 @@ def execute(max_num=10):
 @app.route("/", methods=['GET'])
 def homepage():
 	return render_template('hello.html', message="Welcome!	Click execute to run the program.")
-	
+
+#execute page
 @app.route("/execute/", methods=['GET','POST'])
 def ex_page():
 	#Render input page
@@ -111,7 +117,69 @@ def ex_page():
 	kmeans = str(list(repo.charr_hu38_npearce.Kmeans.find())[int(city)]["locs"])
 	cities=["Boston", "Washington", "New York", "Chicago", "San Francisco"]
 	return render_template('response.html', max_num=max_num, city=cities[int(city)], locs=kmeans)
-	
+
+#route visualizations
+@app.route('/fig.png', methods=['GET'])
+def fig_png():
+    city = int(request.args.get('city'))
+    max_num = int(request.args.get('max_num'))
+    fig = create_figure(city, max_num)
+    output = io.BytesIO()
+    FigureCanvas(fig).print_png(output)
+    return Response(output.getvalue(), mimetype='image/png')
+
+#render visualizations
+def create_figure(city, max_num):
+    #bounding box coordinates by city
+    bbox = [(-71.19126004,42.22765398,-70.8044881,42.39697748),
+            (-77.11976633,38.79163024,-76.90936606,38.99585237),
+            (-74.25909008,40.47739894,-73.70018092,40.91617849),
+            (-87.94010101,41.64391896,-87.5239841,42.02302188),
+            (-122.599628661,37.64031423,-122.28178006,37.92984427)
+            ]
+    l, d, r, u = bbox[city]
+    
+    client = dml.pymongo.MongoClient()
+    repo = client.repo
+    repo.authenticate('charr_hu38_npearce', 'charr_hu38_npearce')
+    #access new station locations
+    lon_new = []
+    lat_new = []
+    new_locs = list(repo.charr_hu38_npearce.Kmeans.find())[city]["locs"]
+    for loc in new_locs:
+        lon_new.append(loc[0])
+        lat_new.append(loc[1])
+    #access old station locations
+    if city == 0:
+        old_locs = list(repo.charr_hu38_npearce.boston_s.find())
+    elif city == 1:
+        old_locs = list(repo.charr_hu38_npearce.washington_s.find())
+    elif city == 2:
+        old_locs = list(repo.charr_hu38_npearce.newyork_s.find())
+    elif city == 3:
+        old_locs = list(repo.charr_hu38_npearce.chicago_s.find())
+    else:
+        old_locs = list(repo.charr_hu38_npearce.sanfran_s.find())
+    lon_old = []
+    lat_old = []
+    for loc in old_locs:
+        lon_old.append(loc["lon"])
+        lat_old.append(loc["lat"])
+    #instantiate figure and add map
+    fig = Figure()
+    ax = fig.add_subplot(211)
+    m = Basemap(projection='merc',llcrnrlat=d,urcrnrlat=u,llcrnrlon=l,urcrnrlon=r,\
+                resolution='f')
+    m.fillcontinents()
+    m.scatter(lon_old,lat_old,latlon=True,c='#000000',marker='o')
+    m.scatter(lon_new,lat_new,latlon=True,c='#ff0000',marker='o')
+    ax.title("Existing Station Locations (black) and Suggested Station Locations (red)")
+    #add graph
+    ax = fig.add_subplot(212)
+    ###DO THIS PART###
+    return fig
+    
+
 
 if __name__ == "__main__":
 	#this is invoked when in the shell	you run 
