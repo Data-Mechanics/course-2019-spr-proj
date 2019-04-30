@@ -1,10 +1,12 @@
 function postData(url = ``, data = {}) {
     // Default options are marked with *
+    console.log("this works");
+    console.log(data);
     return fetch(url, {
-        method: "GET", // *GET, POST, PUT, DELETE, etc.
+        method: "POST", // *GET, POST, PUT, DELETE, etc.
         mode: "cors", // no-cors, cors, *same-origin
         cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: "same-origin", // include, *same-origin, omit
+        credentials: "include", // include, *same-origin, omit
         headers: {
             "Content-Type": "application/json",
             // "Content-Type": "application/x-www-form-urlencoded",
@@ -13,10 +15,38 @@ function postData(url = ``, data = {}) {
         referrer: "no-referrer", // no-referrer, *client
         body: JSON.stringify(data), // body data type must match "Content-Type" header
     })
-        .then(response => response.json()); // parses JSON response into native Javascript objects
+        .then(response => console.log(response)/*response.json()*/); // parses JSON response into native Javascript objects
+
 }
 
-console.log("this works");
+/*
+
+document.forms['myFormId'].addEventListener('submit', (event) => {
+    event.preventDefault();
+    // TODO do something here to show user that form is being submitted
+    let form = new FormData(event.target);
+    // fetch( 'http://127.0.0.1:5000/'/!*event.target.action*!/, {
+    //     method: 'POST',
+    //     body: new URLSearchParams(new FormData(event.target)) // event.target is the form
+    // }).then((resp) => {
+    //     return resp.json(); // or resp.text() or whatever the server sends
+    // }).then((body) => {
+    //     // TODO handle body
+    //     console.log(body)
+    // }).catch((error) => {
+    //     console.log("rrrrrrrrrrrrrrrrrrrrreeeeeeeeeeeeeeeeeeeeeeeee");
+    // });
+    postData(event.target.action, {
+        num_means: form.get('kmeans'),
+        neighborhood: form.get('neighborhood'),
+        weight: form.get('weight')
+    })
+        .then(data => console.log(JSON.stringify(data))) // JSON-string from `response.json()` call
+        .catch(error => console.error(error));
+});
+*/
+
+
 /*
     censushealth,
     kmeans,
@@ -28,18 +58,19 @@ console.log("this works");
     censusshape
  */
 //console.log(censushealth);
-// kmeans = JSON.parse(kmeans);
+kmeans = JSON.parse(kmeans);
 //console.log(kmeans);
 //console.log(stats);
 neighborhoods = JSON.parse(neighborhoods);
+name = name.toString();
 //console.log(neighborhoods);
 // openspaces = JSON.parse(openspaces);
 //console.log(openspaces);
 //parcelgeo = JSON.parse(parcelgeo);
 // console.log(parcelgeo);
 // console.log(assessments);
-censusshape = JSON.parse(censusshape);
-console.log(censusshape);
+//censusshape = JSON.parse(censusshape);
+//console.log(censusshape);
 
 
 let map = L.map('map', {center: [42.3601, -71.0589], zoom: 15});
@@ -69,18 +100,16 @@ info.update = function (props) {
         : 'Hover over a Neighborhood');
 };
 
+
 info.addTo(map);
 
 // get color depending on population density value
-function getColor(d) {
-    return d > 1000 ? '#800026' :
-        d > 500 ? '#BD0026' :
-            d > 200 ? '#E31A1C' :
-                d > 100 ? '#FC4E2A' :
-                    d > 50 ? '#FD8D3C' :
-                        d > 20 ? '#FEB24C' :
-                            d > 10 ? '#FED976' :
-                                '#FFEDA0';
+function getColor(p) {
+    if (typeof p.Color != 'undefined') {
+        return p.Color;
+    } else {
+        return "#7fc9f4"
+    }
 }
 
 function style(feature) {
@@ -90,18 +119,18 @@ function style(feature) {
         color: 'white',
         dashArray: '3',
         fillOpacity: 0.7,
-        fillColor: getColor(feature.properties.Name)
+        fillColor: getColor(feature.properties)
     };
 }
 
 function highlightFeature(e) {
     let layer = e.target;
-
     layer.setStyle({
         weight: 5,
         color: '#666',
         dashArray: '',
-        fillOpacity: 0.7
+        fillOpacity: 0.7,
+        fillColor: getColor(layer.feature.properties)
     });
 
     if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
@@ -109,35 +138,26 @@ function highlightFeature(e) {
     }
 
     info.update(layer.feature.properties);
+
 }
 
 let neighborhoods_shape;
 let censustract_shape;
 
 function resetHighlight(e) {
-    neighborhoods_shape.resetStyle(e.target);
+    neighborhoods_shape.resetStyle(e.target)
     info.update();
 }
 
 function zoomToFeatureAndAddData(e) {
     map.fitBounds(e.target.getBounds());
-
-    let num_means = prompt("Enter the number of Kmeans", "4")
-
-    postData(`http://127.0.0.1:5000/`, {
-        'neighborhood': e.target.feature.properties.Name,
-        'num_means': num_means
-    })
-        .then(data => console.log(JSON.stringify(data))) // JSON-string from `response.json()` call
-        .catch(error => console.error(error));
-
 }
 
 function onEachFeature(feature, layer) {
     layer.on({
         mouseover: highlightFeature,
         mouseout: resetHighlight,
-        click: zoomToFeatureAndAddData
+        click: handleLayerClick,
     });
 }
 
@@ -157,13 +177,14 @@ if (kmeans !== null) {
     console.log("KMEANS not defined");
 }
 
-censustract_shape = L.geoJson(censusshape);
+
+
+//censustract_shape = L.geoJson(censusshape);
 neighborhoods_shape = L.geoJson(neighborhoods, {
     style: style,
     onEachFeature: onEachFeature
 }).addTo(map);
 //L.geoJson(parcelgeo).addTo(map);
-
 
 map.attributionControl.addAttribution('Population data &copy; <a href="http://census.gov/">US Census Bureau</a>');
 
@@ -193,14 +214,54 @@ legend.onAdd = function (map) {
 legend.addTo(map);
 console.log("Finished Executing Script!");
 
+
+let go_back = L.control({position: "bottomleft"})
+
+function goback(map) {
+    let button = L.DomUtil.create("button", "Back");
+    button.innerHTML = "Back";
+    button.onclick = resetColor;
+    return button;
+}
+
+go_back.onAdd = goback;
+
+formfocus = (id) => {
+    document.getElementById(id).focus();
+};
+
 function handleLayerClick(e) {
+    map.fitBounds(e.target.getBounds());
     var neighborhood = e.sourceTarget.feature.properties.Name;
-    console.log(e.sourceTarget.feature.properties.Name);
-    var node = document.querySelector("#neighborhood");
-    node.innerHTML = neighborhood;
+    formfocus('num_kmeans');
     current_neighborhood = neighborhood;
     var form = document.querySelector("#neighborhood_form");
-    console.log(form);
     form.value = neighborhood;
+    resetColor(e);
+    e.target.feature.properties.Color = "#382ac1";
+    neighborhoods_shape.resetStyle(e.target);
+    go_back.addTo(map);
 
+}
+
+if (name !== null) {
+    console.log(typeof (name));
+    //kmeans = JSON.parse(kmeans);
+    console.log(name);
+    console.log(neighborhoods_shape);
+    for (l in neighborhoods_shape._layers) {
+        if (neighborhoods_shape._layers[l].feature.properties.Name === name) {
+            map.fitBounds(neighborhoods_shape._layers[l].target.getBounds());
+        }
+    }
+} else {
+    console.log("name not defined");
+}
+
+function resetColor(e) {
+
+    for (l in neighborhoods_shape._layers) {
+        neighborhoods_shape._layers[l].feature.properties.Color = "#7fc9f4";
+        neighborhoods_shape.resetStyle(neighborhoods_shape._layers[l]);
+    }
 }

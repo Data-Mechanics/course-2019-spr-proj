@@ -19,16 +19,24 @@
 <body>
 <h1>HI THERE</h1>
 <div id="map"></div>
+
 <div class="container">
-    <form>
-        KMeans: <input type="text" name="kmeans">
-        Neighborhood: <input type="text" id="neighborhood_form" name="neighborhood">
+    <form id="myFormId" method="post">
+        KMeans: <input type="number" id="num_kmeans" name="kmeans" step="1" min="1" value="1">
+        Neighborhood: <input type="text" id="neighborhood_form" name="neighborhood" value="Allston">
         <div class="slidecontainer">
-            Distance<input type="range" min="1" max="100" value="50" class="slider" id="myRange" name = "weight"> Health
+            Distance<input type="range" min="1" max="100" value="50" class="slider" id="myRange" name="weight"> Health
         </div>
         <input type="submit">
 
     </form>
+
+    <div>
+        <h2>About</h2>
+        <h5>In this project, we aim to try to find the best places to add
+            new parks in each of the neighborhoods in Boston based on various
+            health statistics as well as access to open spaces. </h5>
+    </div>
 
     <p id="neighborhood">
 
@@ -46,9 +54,16 @@
     {% if assessments is defined and assessments %}
         let assessments = {{ assessments|tojson }};
     {% endif %}
+
     {% if censusshape is defined and censusshape %}
         let censusshape =  {{ censusshape|tojson }};
     {% endif %}
+    {% if name is defined and name %}
+        let name =  {{ name }};
+        {% else %}
+        let name = null;
+    {% endif %}
+
     {% if kmeans is defined and kmeans %}
         let kmeans =  {{ kmeans|tojson}};
     {% else %}
