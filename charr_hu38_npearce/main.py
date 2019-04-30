@@ -119,19 +119,29 @@ def ex_page():
 	cities=["Boston", "Washington", "New York", "Chicago", "San Francisco"]
 	return render_template('response.html', max_num=max_num, city=cities[int(city)], locs=kmeans)
 
-#route visualizations
-@app.route('/fig.png', methods=['GET'])
-def fig_png():
+#route map visualization
+@app.route('/map.png', methods=['GET'])
+def map_png():
 	cities=["Boston", "Washington", "New York", "Chicago", "San Francisco"]
 	city = cities.index(request.args.get('city'))
-	max_num = int(request.args.get('max_num'))
-	fig = create_figure(city, max_num)
+	fig = create_map(city)
 	output = io.BytesIO()
 	FigureCanvas(fig).print_png(output)
 	return Response(output.getvalue(), mimetype='image/png')
 
-#render visualizations
-def create_figure(city, max_num):
+#route graph visualization
+@app.route('/graph.png', methods=['GET'])
+def graph_png():
+	cities=["Boston", "Washington", "New York", "Chicago", "San Francisco"]
+	city = cities.index(request.args.get('city'))
+	max_num = int(request.args.get('max_num'))
+	fig = create_graph(city, max_num)
+	output = io.BytesIO()
+	FigureCanvas(fig).print_png(output)
+	return Response(output.getvalue(), mimetype='image/png')
+
+#render map visualization
+def create_map(city):
 	#bounding box coordinates by city
 	bbox = [(-71.19126004,42.22765398,-70.8044881,42.39697748),
 			(-77.11976633,38.79163024,-76.90936606,38.99585237),
@@ -167,8 +177,26 @@ def create_figure(city, max_num):
 	for loc in old_locs:
 		lon_old.append(loc["lon"])
 		lat_old.append(loc["lat"])
-	#access population
-	population = list(repo.charr_hu38_npearce.unionpopbike.find())[city]["population"]
+	#instantiate figure and add map
+	fig = Figure()
+	m = Basemap(projection='merc',llcrnrlat=d,urcrnrlat=u,llcrnrlon=l,urcrnrlon=r,\
+				resolution='f')
+	m.fillcontinents()
+	m.scatter(lon_old,lat_old,latlon=True,c='#000000',marker='o')
+	m.scatter(lon_new,lat_new,latlon=True,c='#ff0000',marker='o')
+	fig.set_title("Existing Station Locations (black) and Suggested Station Locations (red)")
+	return fig
+
+#render graph visualization
+def create_graph(city, max_num):
+    #connect to mongo
+	client = dml.pymongo.MongoClient()
+	repo = client.repo
+	repo.authenticate('charr_hu38_npearce', 'charr_hu38_npearce')
+	#access population and station number
+	unionpop = list(repo.charr_hu38_npearce.unionpopbike.find())[city]
+    population = int(unionpop["population"])
+    stations = int(unionpop["stations"])
 	#access regression info
 	regress = list(repo.charr_hu38_npearce.optstationnum.find())
 	coef = regress[0]["coef"]
@@ -177,30 +205,21 @@ def create_figure(city, max_num):
 	for city in regress:
 		x1.append(city["x"])
 		y1.append(city["y"])
-	#instantiate figure and add map
+    #instantiate figure and add graph
 	fig = Figure()
-	ax = fig.add_subplot(211)
-	m = Basemap(projection='merc',llcrnrlat=d,urcrnrlat=u,llcrnrlon=l,urcrnrlon=r,\
-				resolution='f')
-	m.fillcontinents()
-	m.scatter(lon_old,lat_old,latlon=True,c='#000000',marker='o')
-	m.scatter(lon_new,lat_new,latlon=True,c='#ff0000',marker='o')
-	ax.set_title("Existing Station Locations (black) and Suggested Station Locations (red)")
-	#add graph
-	ax = fig.add_subplot(212)
-	bound = (len(lon_old) + max_num) / int(population)
+	bound = (stations + max_num) / population
 	x2 = np.linspace(0,(1.2*bound))
 	y2 = coef*x2
 	y3 = np.linspace(0,(1.2*(bound*coef)))
 	x3 = np.full_like(y3,bound)
-	ax.scatter(x1,y1,c='#000000',marker='o')
-	ax.plot(x2,y2,'b-')
-	ax.plot(x3,y3,'r--')
-	ax.set_xlabel("Per Capita Bike Station Amount (# of bike stations/city population)")
-	ax.set_ylabel("Per Capita Bike Use in Sept 2018 (total bike use in minutes/city population)")
-	ax.set_title("Bounded Linear Regression Demonstrating Optimality of Maximizing Number of Bike Stations")
+	fig.scatter(x1,y1,c='#000000',marker='o')
+	fig.plot(x2,y2,'b-')
+	fig.plot(x3,y3,'r--')
+	fig.set_xlabel("Per Capita Bike Station Amount (# of bike stations/city population)")
+	fig.set_ylabel("Per Capita Bike Use in Sept 2018 (total bike use in minutes/city population)")
+	fig.set_title("Constrained Linear Regression Demonstrating Optimality of Maximizing Number of Bike Stations")
 	return fig
-	
+    
 
 
 if __name__ == "__main__":
