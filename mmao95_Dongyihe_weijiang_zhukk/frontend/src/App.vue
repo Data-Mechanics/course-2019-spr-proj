@@ -4,6 +4,7 @@
     <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
     <Header/>
     <div class="container">
+    <MapViewer/>
     <CloudsList title="Candidates by Neighbourhoods" :words="neighbourhood" id="neighbouthood"/>
     <CloudsList title="Candidates by K-Means Cluster" :words="cluster" id="cluster"/>
     </div>
@@ -14,6 +15,7 @@
 <script>
 import Header from './components/Header.vue'
 import CloudsList from './components/CloudsList'
+import MapViewer from './components/MapViewer'
 import Footer from './components/Footer'
 import axios from 'axios'
 export default {
@@ -21,6 +23,7 @@ export default {
   components: {
     Header,
     CloudsList,
+    MapViewer,
     Footer
   },
   created () {

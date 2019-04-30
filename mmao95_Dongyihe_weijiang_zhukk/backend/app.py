@@ -1,9 +1,9 @@
-from flask import Flask, url_for
-from flask_cors import *
+from flask import Flask, url_for, send_file
+# from flask_cors import *
 import json
 
 app = Flask(__name__)
-CORS(app, resources=r'/*')
+# CORS(app, resources=r'/*')
 
 
 def reduce(f, R):
@@ -46,22 +46,25 @@ def sum(vs):
         s += v
     return s
 
+
 @app.route('/')
 def index():
-    with open('./static/index.html', encoding='utf-8') as html:
-        return html.read()
+    return send_file('./static/index.html')
+
+
+@app.route('/data/<file>')
+def get_data(file):
+    return send_file('./data/' + file)
 
 
 @app.route('/js/<name>')
 def get_js(name=None):
-    with open('./static/js/'+name, encoding='utf-8') as js:
-        return js.read()
+    return send_file('./static/js/'+name)
 
 
 @app.route('/css/<name>')
 def get_css(name=None):
-    with open('./static/css/'+name, encoding='utf-8') as css:
-        return css.read()
+    return send_file('./static/css/'+name)
 
 
 def str2list(s, bar=1, sep=' '):
@@ -74,6 +77,7 @@ def sortdict(src, des):
     for key in sorted(src):
         des[key] = src[key]
     return des
+
 
 @app.route('/neighbourhood')
 def neighbourhood():
