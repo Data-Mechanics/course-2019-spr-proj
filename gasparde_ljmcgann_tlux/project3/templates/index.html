@@ -59,9 +59,9 @@
         let censusshape =  {{ censusshape|tojson }};
     {% endif %}
     {% if name is defined and name %}
-        let name123 =  {{ name123}};
+        let name =  "{{ name }}";
         {% else %}
-        let name123 = null;
+        let name = null;
     {% endif %}
 
     {% if kmeans is defined and kmeans %}

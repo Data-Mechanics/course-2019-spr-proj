@@ -62,7 +62,7 @@ document.forms['myFormId'].addEventListener('submit', (event) => {
 //console.log(kmeans);
 //console.log(stats);
 neighborhoods = JSON.parse(neighborhoods);
-
+//name = name.toString();
 //console.log(neighborhoods);
 // openspaces = JSON.parse(openspaces);
 //console.log(openspaces);
@@ -142,6 +142,7 @@ function highlightFeature(e) {
 }
 
 let neighborhoods_shape;
+let censustract_shape;
 
 function resetHighlight(e) {
     neighborhoods_shape.resetStyle(e.target)
@@ -243,15 +244,16 @@ function handleLayerClick(e) {
 
 }
 
-if (name123 !== null) {
-    console.log(typeof (name123));
+if (name !== null) {
+    console.log(typeof (name));
     //kmeans = JSON.parse(kmeans);
-    name123 = name123.toString();
-    console.log(name123);
+    name = name.toString();
+    console.log(name);
     console.log(neighborhoods_shape);
     for (l in neighborhoods_shape._layers) {
-        if (neighborhoods_shape._layers[l].feature.properties.Name === name123) {
+        if (neighborhoods_shape._layers[l].feature.properties.Name === name) {
             map.fitBounds(neighborhoods_shape._layers[l].getBounds());
+            neighborhoods_shape._layers[l].feature.properties.Color = "#382ac1";
         }
     }
 } else {
