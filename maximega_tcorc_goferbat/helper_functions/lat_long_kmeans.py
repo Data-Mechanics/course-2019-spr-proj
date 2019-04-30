@@ -5,6 +5,7 @@ import sklearn
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.metrics import pairwise_distances_argmin_min
 from sklearn.metrics.pairwise import euclidean_distances
+import matplotlib.pyplot as plt
 
 from sklearn.cluster import KMeans
 
@@ -22,6 +23,10 @@ def vectorizeAndCluster(data, labels, k):
     v = DictVectorizer(sparse=False)
     # running k means
     X = v.fit_transform(data)
+
+    #error function to find optimal k
+    # plotErrors(X)
+
     kmeans = KMeans(n_clusters=k)
     pred = kmeans.fit_predict(X)
     # print labels
@@ -88,24 +93,24 @@ def plotRealAndClustered(df, clusters):
     #     print(labels[i] + " = " + color_list[i])
     colors = np.array(color_list)
     matplot.subplot(1,2,1)
-    matplot.scatter(x=df['latitude'], y=df['longitude'], c=colors[clusters.labels_], s=10)
+    matplot.scatter(x=df['longitude'], y=df['latitude'], c=colors[clusters.labels_], s=10)
     matplot.title('Clusters')
     matplot.show()
 
 
-def plotErrors():
+def plotErrors(X):
     print("plotting errors")
     # ----------------- Error
-    # error = np.zeros(25)
-    # for k in range(1,25):
-    #   kmeans = KMeans(init='k-means++', n_clusters=k, n_init=100)
-    #   kmeans.fit(X)
-    #   error[k] = kmeans.inertia_
+    error = np.zeros(25)
+    for k in range(1,25):
+      kmeans = KMeans(init='k-means++', n_clusters=k, n_init=100)
+      kmeans.fit(X)
+      error[k] = kmeans.inertia_
 
-    # plt.scatter(range(1,len(error)),error[1:])
-    # plt.xlabel('Number of clusters')
-    # dummy = plt.ylabel('Error')
-    # plt.show()
+    plt.scatter(range(1,len(error)),error[1:])
+    plt.xlabel('Number of clusters')
+    dummy = plt.ylabel('Error')
+    plt.show()
     
 def detectOutliers(df, labels, centroids, X):
     count = 0

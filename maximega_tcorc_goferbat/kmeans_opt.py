@@ -158,3 +158,5 @@ class kmeans_opt(dml.Algorithm):
 		repo.logout()
 				
 		return doc
+
+kmeans_opt.execute()
