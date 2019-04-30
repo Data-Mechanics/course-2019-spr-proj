@@ -16,7 +16,7 @@ def Mapping():
                 control_scale = True)
     cvs_group = folium.FeatureGroup(name='CVS Stores',show = False,control = True)
     wal_group = folium.FeatureGroup(name = ' Walgreen Stores',show = False,control = True)
-    overlap_group = folium.FeatureGroup(name = ' CVS and Walgreen',show = False,control = True)
+    overlap_group = folium.FeatureGroup(name = ' CVS and Walgreen',show = True,control = True)
     cvs_wal = repo.henryhcy_jshen97_leochans_wangyp.wal_wal_cvs.find_one()
     
     overlap = []
@@ -26,7 +26,6 @@ def Mapping():
             if value['cvs'][1] == 0.0:
                 location = repo['henryhcy_jshen97_leochans_wangyp.walgreen'].find_one({"place_id":key})['geometry']['location']
                 overlap.append([location['lat'],location['lng']])
-    print(overlap)
                 
 
 

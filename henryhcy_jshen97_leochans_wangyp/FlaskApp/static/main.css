@@ -5,7 +5,7 @@ ul.intro {
     padding: 0;
     overflow: hidden;
     background-color: #E71D36;
-    width: 66.66667%;
+    width: 100%;
 
   }
   li.intro {
@@ -35,11 +35,16 @@ ul.intro {
     background-color: #FDC68A;
     border-left: .75rem solid #F26C4F;
     padding: .75rem 1.5rem;
-    font-size:2.0rem;
-  }
+    font-size:2.0rem;}
   
-  h1 {
-    font-size: 3em;
-    margin: 20px  20px 40px 20px;
-   }
+  .note{
+    background-color: #FDC68A;
+    border-left: .75rem solid #F26C4F;
+    padding: .75rem 1.5rem;
+    font-size: .85rem;
+    background-color: #7BCDC8;
+    border-color: #00A99D;
+  }
+
+  
   
