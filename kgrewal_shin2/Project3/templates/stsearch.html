@@ -95,26 +95,26 @@
 
 
 <body style="overflow: visible">
-<div class="container text">
+<div class="container-fluid text">
     <div class="row">
-        <div class="col-sm-6">
-            <h1>Let's rename streets!</h1>
+        <div class="col-sm-6 col-sm-offset-1">
+            <h1 class="header">Let's rename streets!</h1>
         </div>
 
-        <div class="col-sm-4 col-sm-offset-2">
+        <div class="col-sm-3 col-sm-offset-2">
             <a href="/" class="btn btn-success learn-btn"> LEARN MORE </a>
-            <a href="/mapping" class="btn btn-success learn-btn"> K Means Map </a>
+            <a href="/mapping" class="btn btn-primary learn-btn"> K Means Map </a>
         </div>
 
     </div>
 
-    <div class="row">
-        <div class="col-sm-4">
+    <div class="row map">
+        <div class="col-sm-3 col-sm-offset-1">
             <div class="row">
                 <h3> Pick a neighborhood to view possible streets to be renamed. </h3>
             </div>
 
-            <div class="row">
+            <div class="row form">
                 <form name="neighborhoods" method="POST" action="/neighborhood">
                     <!--<input list="neighborhoods" name="neighborhoods">-->
                     <select name=neighborhoods method="POST" action="/neighborhood">
@@ -162,8 +162,8 @@
                         <option value="{{neighborhood}}">{{neighborhood}}</option>
                     </select>
 
-                    <h3> Pick a one of our recommended streets to view. </h3>
-                    <select name="street" size="10" id="sel2">
+                    <h3> View one of the recommended streets to be renamed. </h3>
+                    <select name="street" size="10" id="sel2" class="streets">
                         {% for street in streets %}
                         <option value="{{street}}">{{street}}</option>
                         {% endfor %}
@@ -178,7 +178,7 @@
 
         </div>
 
-        <div class="col-sm-8">
+        <div class="col-sm-6 col-sm-offset-1">
             <div class="row neighborhood">
                 <h4>{{street}} in {{neighborhood}}</h4>
             </div>
