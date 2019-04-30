@@ -58,11 +58,11 @@ document.forms['myFormId'].addEventListener('submit', (event) => {
     censusshape
  */
 //console.log(censushealth);
-kmeans = JSON.parse(kmeans);
+//kmeans = JSON.parse(kmeans);
 //console.log(kmeans);
 //console.log(stats);
 neighborhoods = JSON.parse(neighborhoods);
-//name = name.toString();
+
 //console.log(neighborhoods);
 // openspaces = JSON.parse(openspaces);
 //console.log(openspaces);
@@ -142,7 +142,6 @@ function highlightFeature(e) {
 }
 
 let neighborhoods_shape;
-let censustract_shape;
 
 function resetHighlight(e) {
     neighborhoods_shape.resetStyle(e.target)
@@ -163,7 +162,7 @@ function onEachFeature(feature, layer) {
 
 if (kmeans !== null) {
     console.log(typeof (kmeans));
-    //kmeans = JSON.parse(kmeans);
+    kmeans = JSON.parse(kmeans);
     console.log(kmeans);
     for (let i = 0; i < kmeans.length; i++) {
         let marker = L.marker(kmeans[i]).addTo(map);
@@ -244,15 +243,15 @@ function handleLayerClick(e) {
 
 }
 
-if (name !== null) {
-    console.log(typeof (name));
+if (name123 !== null) {
+    console.log(typeof (name123));
     //kmeans = JSON.parse(kmeans);
-    name = name.toString();
-    console.log(name);
+    name123 = name123.toString();
+    console.log(name123);
     console.log(neighborhoods_shape);
     for (l in neighborhoods_shape._layers) {
-        if (neighborhoods_shape._layers[l].feature.properties.Name === name) {
-            map.fitBounds(neighborhoods_shape._layers[l].target.getBounds());
+        if (neighborhoods_shape._layers[l].feature.properties.Name === name123) {
+            map.fitBounds(neighborhoods_shape._layers[l].getBounds());
         }
     }
 } else {
