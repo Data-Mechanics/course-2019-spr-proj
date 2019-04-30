@@ -704,7 +704,7 @@ class example(dml.Algorithm):
         # Draw a line in 
         # between given coordinates 
           
-        gmapBefore.draw( "D:\\_Documents\\cs504\\Project2\\course-2019-spr-proj\\mapBefore.html" ) 
+        gmapBefore.draw("C:\\users\\const_000\\Documents\\Github\\course-2019-spr-proj\\mapBefore.html") 
 
 
         latitude_list_k0 = []
@@ -748,24 +748,25 @@ class example(dml.Algorithm):
                                         -71.347290, 13) 
         
         # scatter points on the google map 
-        gmapBefore.scatter( latitude_list_k0, longitude_list_k0, '# FF0000', 
+        gmapAfter.scatter( latitude_list_k0, longitude_list_k0, '# FF0000', 
                                       size = 40, marker = False ) 
         # scatter points on the google map 
-        gmapBefore.scatter( latitude_list_k1, longitude_list_k1, '# FF0000', 
+        gmapAfter.scatter( latitude_list_k1, longitude_list_k1, '# FF0000', 
                                       size = 40, marker = False ) 
         # scatter points on the google map 
-        gmapBefore.scatter( latitude_list_k2, longitude_list_k2, '# FF0000', 
+        gmapAfter.scatter( latitude_list_k2, longitude_list_k2, '# FF0000', 
                                       size = 40, marker = False ) 
         # scatter points on the google map 
-        gmapBefore.scatter( latitude_list_k3, longitude_list_k3, '# FF0000', 
+        gmapAfter.scatter( latitude_list_k3, longitude_list_k3, '# FF0000', 
                                       size = 40, marker = False ) 
         # scatter points on the google map 
-        gmapBefore.scatter( latitude_list_k4, longitude_list_k4, '# FF0000', 
+        gmapAfter.scatter( latitude_list_k4, longitude_list_k4, '# FF0000', 
                                       size = 40, marker = False ) 
         # scatter points on the google map 
-        gmapBefore.scatter( latitude_list_k5, longitude_list_k5, '# FF0000', 
+        gmapAfter.scatter( latitude_list_k5, longitude_list_k5, '# FF0000', 
                                       size = 40, marker = False ) 
         
+        gmapAfter.draw("C:\\users\\const_000\\Documents\\Github\\course-2019-spr-proj\\mapAfter.html") 
         
         repo.logout()
         endTime = datetime.datetime.now()
