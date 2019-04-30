@@ -127,15 +127,12 @@ map.on('load', function() {
     map.addLayer({ 
         "id": "candidate", 
         "source": "CAN", 
-        "type": "line", 
+        "type": "symbol", 
         "layout": {
-            "visibility": "visible",
-            "line-join": "round",
-            "line-cap": "round"
-        },
-        "paint": {
-            "line-color": "#fff",
-            "line-width": 3
+            "icon-image": "marker-15",
+            "icon-size": 2.5,
+            "visibility": "visible"
+
         }
     }); 
     map.addLayer({ 
