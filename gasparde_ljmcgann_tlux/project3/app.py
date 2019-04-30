@@ -31,7 +31,7 @@ def hello():
         weight = int(request.form["weight"])
         kmeans = dumps(compute_kmeans(name, kmeans, weight))
         response = dumps(kmeans),
-        return render_template('index.html', neighborhoods=neighborhoods, kmeans=kmeans, name=name)
+        return render_template('index.html', neighborhoods=neighborhoods, kmeans=kmeans, name=str(name))
 
     return render_template("index.html", neighborhoods=neighborhoods)
 
