@@ -83,6 +83,19 @@ var getColorMap = function(){
     return list
 }
 
+var getClusterMap = function(){
+    list = []
+    list.push("match")
+    list.push(["get","Cluster"])
+    var i
+    for (i=0;i<34;i++){
+        list.push(i)
+        list.push(getRandomColor())
+    }
+    list.push('#66ccff')
+    return list
+}
+
 var getRandomColor = function(){
   return '#'+('00000'+ (Math.random()*0x1000000<<0).toString(16)).substr(-6); 
 }
@@ -114,11 +127,15 @@ map.on('load', function() {
     map.addLayer({ 
         "id": "candidate", 
         "source": "CAN", 
-        "type": "symbol", 
+        "type": "line", 
         "layout": {
-            "icon-image": "marker-15",
-            "icon-size": 2.5,
-            "visibility": "visible"
+            "visibility": "visible",
+            "line-join": "round",
+            "line-cap": "round"
+        },
+        "paint": {
+            "line-color": "#fff",
+            "line-width": 3
         }
     }); 
     map.addLayer({ 
@@ -130,39 +147,7 @@ map.on('load', function() {
         }, 
         "paint": { 
             "circle-radius": 3,
-            "circle-color": [
-                "match",
-                ["get", "Cluster"],
-                0,"#F1C40F",
-                1,"#800080",
-                2,"#EC7063",
-                3,"#85C1E9",
-                4,"#F1C40F",
-                6,"#EC7063",
-                7,"#85C1E9",
-                8,"#F1C40F",
-                9,"#EC7063",
-                10,"#85C1E9",
-                12,"#A3E4D7",
-                13,"#EC7063",
-                15,"#85C1E9",
-                16,"#F1C40F",
-                17,"#EC7063",
-                19,"#85C1E9",
-                20,"#A3E4D7",
-                21,"#EC7063",
-                23,"#85C1E9",
-                24,"#F1C40F",
-                25,"#EC7063",
-                26,"#85C1E9",
-                27,"#F1C40F",
-                28,"#EC7063",
-                30,"#A3E4D7",
-                31,"#EC7063",
-                33,"#F1C40F",
-                34,"#85C1E9",
-                /*other*/ "#800080"
-            ]
+            "circle-color": getClusterMap()
      },
      "filter": ["==", "$type", "Point"],
     }); 
