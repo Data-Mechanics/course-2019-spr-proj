@@ -11,6 +11,8 @@ import mapdata as md
 import csv
 from random import shuffle
 from math import sqrt
+import gmplot
+
 
 class example(dml.Algorithm):
     contributor = 'ido_jconstan_jeansolo_suitcase'
@@ -503,106 +505,136 @@ class example(dml.Algorithm):
 
 
 
-        # read new stops from csv
-        NEW_STOPS = []
-        strName = ''
-        count = 0
-        limit = 230080
-        for i in range(5):
-            strName = 'k_means_school_' + str(i) + '.csv'
-            NEW_STOPS.append([])
-            with open(strName, mode='r') as csv_file:
-                csv_reader = csv.reader(csv_file, delimiter=',')
-                for row in csv_reader:
-                    count += 1
-                    if row: 
-                        stop = row
-                        #print("i: ", i)
-                        NEW_STOPS[i].append(row)
+        # # read new stops from csv
+        # NEW_STOPS = []
+        # strName = ''
+        # count = 0
+        # limit = 230080
+        # for i in range(5):
+            # strName = 'k_means_school_' + str(i) + '.csv'
+            # NEW_STOPS.append([])
+            # with open(strName, mode='r') as csv_file:
+                # csv_reader = csv.reader(csv_file, delimiter=',')
+                # for row in csv_reader:
+                    # count += 1
+                    # if row: 
+                        # stop = row
+                        # #print("i: ", i)
+                        # NEW_STOPS[i].append(row)
                     
-                    if count >= limit:
-                        break
+                    # if count >= limit:
+                        # break
             
 
-        # parse points
-        for x in range(len(NEW_STOPS)):
-            #for i in range(len(NEW_STOPS[x])):
-            NEW_STOPS[x] = pointParser(NEW_STOPS[x])
+        # # parse points
+        # for x in range(len(NEW_STOPS)):
+            # #for i in range(len(NEW_STOPS[x])):
+            # NEW_STOPS[x] = pointParser(NEW_STOPS[x])
         
-        NEW_STOPS.pop(0)
+        # NEW_STOPS.pop(0)
 
 
-        print("Before loop")
-        for x in range(len(STOPS_NEW)):
-            print("STOPS_NEW[",x,"]")
-            strFileName = 'k_means_school_' + str(x) + '.csv'
-            MEANS = []
-            POINTSC = []
-            OLD = []
+        # print("Before loop")
+        # for x in range(len(STOPS_NEW)):
+            # print("STOPS_NEW[",x,"]")
+            # strFileName = 'k_means_school_' + str(x) + '.csv'
+            # MEANS = []
+            # POINTSC = []
+            # OLD = []
             
             
-            for i in range(len(STOPS_NEW[x])):
-                MEANS.append(STOPS_NEW[x][i])
-            for i in range(len(POINTS_NEW[x])):
-                POINTSC.append(POINTS_NEW[x][i])
+            # for i in range(len(STOPS_NEW[x])):
+                # MEANS.append(STOPS_NEW[x][i])
+            # for i in range(len(POINTS_NEW[x])):
+                # POINTSC.append(POINTS_NEW[x][i])
 
-            M_OLD = MEANS # old bus stops
-            print('OLD MEANS',M_OLD)
-            P = POINTSC # student addresses
-            MPD_OLD = [(m, p, dist(m,p)) for (m, p) in product(M_OLD, P)]
-            PDs_OLD = [(p, dist(m,p)) for (m, p, d) in MPD_OLD]
-            PD_OLD = aggregate(PDs_OLD, min)
-            MP_OLD = [(d) for ((m,p,d), (p2,d2)) in product(MPD_OLD, PD_OLD) if p==p2 and d==d2]
-            count_OLD = 0
-            for d in MP_OLD:
-                count_OLD += d 
-            average_OLD = count_OLD/len(POINTSC)
-            print('old avg', average_OLD)
+            # M_OLD = MEANS # old bus stops
+            # print('OLD MEANS',M_OLD)
+            # P = POINTSC # student addresses
+            # MPD_OLD = [(m, p, dist(m,p)) for (m, p) in product(M_OLD, P)]
+            # PDs_OLD = [(p, dist(m,p)) for (m, p, d) in MPD_OLD]
+            # PD_OLD = aggregate(PDs_OLD, min)
+            # MP_OLD = [(d) for ((m,p,d), (p2,d2)) in product(MPD_OLD, PD_OLD) if p==p2 and d==d2]
+            # count_OLD = 0
+            # for d in MP_OLD:
+                # count_OLD += d 
+            # average_OLD = count_OLD/len(POINTSC)
+            # print('old avg', average_OLD)
 
-            MEANS = []
-            for i in range(len(NEW_STOPS[x])):
-                MEANS.append(NEW_STOPS[x][i])
-            M_NEW = MEANS # new bus stops
-            print('NEW MEANS',M_NEW)
-            MPD_NEW = [(m, p, dist(m,p)) for (m, p) in product(M_NEW, P)]
-            PDs_NEW = [(p, dist(m,p)) for (m, p, d) in MPD_NEW]
-            PD_NEW = aggregate(PDs_NEW, min)
-            MP_NEW = [(d) for ((m,p,d), (p2,d2)) in product(MPD_NEW, PD_NEW) if p==p2 and d==d2]
-            count_NEW = 0
-            for d in MP_NEW:
-                count_NEW += d 
-            average_NEW = count_NEW/len(POINTSC)
-            print('new avg', average_NEW)
+            # MEANS = []
+            # for i in range(len(NEW_STOPS[x])):
+                # MEANS.append(NEW_STOPS[x][i])
+            # M_NEW = MEANS # new bus stops
+            # print('NEW MEANS',M_NEW)
+            # MPD_NEW = [(m, p, dist(m,p)) for (m, p) in product(M_NEW, P)]
+            # PDs_NEW = [(p, dist(m,p)) for (m, p, d) in MPD_NEW]
+            # PD_NEW = aggregate(PDs_NEW, min)
+            # MP_NEW = [(d) for ((m,p,d), (p2,d2)) in product(MPD_NEW, PD_NEW) if p==p2 and d==d2]
+            # count_NEW = 0
+            # for d in MP_NEW:
+                # count_NEW += d 
+            # average_NEW = count_NEW/len(POINTSC)
+            # print('new avg', average_NEW)
 
             
-            with open(strFileName, mode='w') as csv_file:
-                fieldnames = ['new_stop']
-                writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-                writer.writeheader()
+            # with open(strFileName, mode='w') as csv_file:
+                # fieldnames = ['new_stop']
+                # writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+                # writer.writeheader()
 
-                while sorted(OLD) != sorted(MEANS):
-                    print("iteration")
+                # while sorted(OLD) != sorted(MEANS):
+                    # print("iteration")
                     
-                    OLD = MEANS
+                    # OLD = MEANS
                     
-                    MPD = [(m, p, dist(m,p)) for (m, p) in product(MEANS, POINTSC)]
-                    PDs = [(p, d) for (m, p, d) in MPD]
+                    # MPD = [(m, p, dist(m,p)) for (m, p) in product(MEANS, POINTSC)]
+                    # PDs = [(p, d) for (m, p, d) in MPD]
                     
-                    PD = aggregate(PDs, min)
-                    MP = [(m, p) for ((m,p,d), (p2,d2)) in product(MPD, PD) if p==p2 and d==d2]
+                    # PD = aggregate(PDs, min)
+                    # MP = [(m, p) for ((m,p,d), (p2,d2)) in product(MPD, PD) if p==p2 and d==d2]
                     
-                    MT = aggregate(MP, plus)
+                    # MT = aggregate(MP, plus)
                     
-                    M1 = [(m, 1) for (m, _) in MP]
-                    MC = aggregate(M1, sum)
+                    # M1 = [(m, 1) for (m, _) in MP]
+                    # MC = aggregate(M1, sum)
                     
-                    MEANS = [scale(t,c) for ((m,t),(m2,c)) in product(MT, MC) if m == m2]
+                    # MEANS = [scale(t,c) for ((m,t),(m2,c)) in product(MT, MC) if m == m2]
 
-                # write MEANS to file
-                for i in MEANS:
-                    writer.writerow({'new_stop': i})
+                # # write MEANS to file
+                # for i in MEANS:
+                    # writer.writerow({'new_stop': i})
 
                #print("\n\nOLD = MEANS WOOHOO\n\n")
+        
+        
+                  
+                  
+        with open() as the_file:
+            #parse r9 and plot the points on a map
+            latitude_list = [] 
+            longitude_list = [] 
+            
+            for (x,y) in t18:
+                latitude_list.append(x)
+                longitude_list.append(y)
+            
+              
+            gmap3 = gmplot.GoogleMapPlotter(42.283772, 
+                                            -71.347290, 13) 
+              
+            # scatter points on the google map 
+            gmap3.scatter( latitude_list, longitude_list, '# FF0000', 
+                                          size = 40, marker = False ) 
+              
+            # Draw a line in 
+            # between given coordinates 
+            gmap3.plot(latitude_list, longitude_list,  
+                       'cornflowerblue', edge_width = 2.5) 
+              
+            gmap3.draw( "C:\\Users\\const_000\\Desktop\\map13.html" ) 
+        
+        
+        
         
         
         repo.logout()
