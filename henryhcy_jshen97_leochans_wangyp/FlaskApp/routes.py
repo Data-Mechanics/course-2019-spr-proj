@@ -1,6 +1,18 @@
 from flask import render_template, redirect, request, flash
 from FlaskApp import app, db, repo
 from FlaskApp.models import User
+from FlaskApp.forms import RateForm
+from bson.json_util import dumps
+from urllib.request import urlopen
+from mapping import Mapping
+import dml
+import datetime
+import geopy.distance
+import json
+import prov.model
+import pprint
+import random
+import uuid
 from FlaskApp.forms import RateForm, Task2From
 import geopy.distance
 import itertools
@@ -15,8 +27,33 @@ def index():
 
 
 @app.route('/task1')
-def task1():
-    return render_template('task1.html', title='Quantify Rivalry')
+def task1():        
+    Mapping()
+    return render_template('task1.html')
+
+
+    
+#     map_data = repo.henryhcy_jshen97_leochans_wangyp.neighborhoods.find_one()
+#     map_data = dumps(map_data)
+#     map_data_ = dumps(data)
+#     print(data)
+#     geojson_stores = {
+#     "type": "FeatureCollection",
+#     "features": [
+#     {
+#         "type": "Feature",
+#         "geometry" : {
+#             "type": "Point",
+#             "coordinates": [item['location']["lng"], item['location']["lat"]],
+#             },
+#         "properties" : {
+#             'name': item["name"]
+#         }
+#      } for item in repo.henryhcy_jshen97_leochans_wangyp.cvsWalgreen.find()]
+# }
+    
+#     stores = dumps(geojson_stores)
+#     return render_template('task1.html', map_data = map_data_,store_data=stores, title='Quantify Rivalry')
 
 
 @app.route('/task2', methods=['GET', 'POST'])

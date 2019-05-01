@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <main>
     <h3>Project Task II--CVS, Eviction, & Larceny in Central Boston: A Casual Exploration</h3>
 
     <h4>
@@ -10,11 +11,12 @@
     <p>
         <ul>
             <li>
+
                 <b>For results to be displayed, users should at least select a store in the first selection.</b>
                 Results will be displayed under the CVS Stores Lookup Form after hitting the [Find] button at
                 the end of the form. If you want to check the locations on the <a href="/task2/map">GeoMap</a>,
                 before you go the the map page, remember to duplicate the results somewhere either on paper
-                or you devices. The results will be gone after refreshing.
+                or you devices. The results will be gone after refreshing.  
             </li>
             <li>
                 <b>The first selection</b> returns a store's address along with its rating and the number of
@@ -99,4 +101,5 @@
         {% endif %}
         {% endwith %}
     </form>
+</main>
 {% endblock %}

@@ -1,4 +1,4 @@
-###cs504 Project 2 Modeling, Optimization, and Statistical Analysis
+###Boston Pharmacy
 
 ####Team Formation
 - **JiaJia shen (jshen97@bu.edu)**
@@ -20,7 +20,6 @@
 - MBTA stops in boston area
     - (http://datamechanics.io/data/MBTA_Stops.json)
 - **File rlated**: DataRetrieval.py
-  
 ####General Description, Procedure, and Narrative
 The project is divided into two tasks:
 - **Task One: Quantify Competition Between two major pharmacy brands CVS and Walgreen in Boston area **
@@ -33,7 +32,7 @@ The project is divided into two tasks:
 
         3. Using **statistical analysis** to test our hypothesis.
 
-            
+             
 
            1. Related script: **find_Distance**
 
@@ -53,13 +52,13 @@ The project is divided into two tasks:
 
            3. For further analsis, we plot the following histograms. It is interesting that there are around 16 pairs of CVS and Walgreen right next to each other which is consistent with our intuition.   It is reasonable to believe that density of CVS and Walgreen stores is proportional with the density of population. Hopefully, we can have further investigation about the location selction in next part of the project. 
 
-               ![](Visualizatoins/cvs_cvs.png)
+               ![](/cvs_cvs.png)
 
-               ![](Visualizatoins/cvs_walgreen.png)
+               ![](/cvs_walgreen.png)
 
-               ![](Visualizatoins/walgreen_walgreen.png)
+               ![](/walgreen_walgreen.png)
 
-               ![](Visualizatoins/walgreen_cvs.png)
+               ![](/walgreen_cvs.png)
 
                
 
