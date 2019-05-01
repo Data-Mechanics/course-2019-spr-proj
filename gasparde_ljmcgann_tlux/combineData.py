@@ -117,10 +117,6 @@ class combineData(dml.Algorithm):
 
         ####################################################################
 
-        # putting opens spaces into their respective neighborhoods
-        # if an open spaces is in or overlaps a neighborhoods we put this
-        # into the neighborhood, thus allows for an open space to be in
-        # multiple neighborhoods
         open_spaces = list(repo[combineData.contributor + ".OpenSpaces"].find())
 
         neighborhoods = list(repo[combineData.contributor + ".Neighborhoods"].find({"properties.Name":"Allston"})) if trial \
