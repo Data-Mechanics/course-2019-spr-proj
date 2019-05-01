@@ -37,7 +37,8 @@
 
     .bg-image {
       /* The image used */
-      background-image: url("../boston.jpg");
+      background-image: url("./img/boston.jpg");
+      /*background-image: url({{ url_for('static', filename='img/boston.jpg') }})*/
 
       /* Add the blur effect */
       filter: blur(8px);
