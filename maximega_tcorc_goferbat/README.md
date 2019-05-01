@@ -1,3 +1,5 @@
+POSTER GOOGLE DRIVE LINK: https://drive.google.com/file/d/1VeH-4jInEzbjpf3ReXB93rjId6mEwQep/view?usp=sharing
+
 How to Run Web App:
   1.) Run Flask app (python app.py) make sure to run on 8080
   2.) Open a chrome browser with security disabled (CORS issue):
