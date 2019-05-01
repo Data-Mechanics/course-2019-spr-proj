@@ -2,7 +2,7 @@
   margin: auto;
   padding-top: 40px;
   position: relative;
-  width: 1000px;
+  width: 600px;
 }
 
 .font {
@@ -10,7 +10,7 @@
 }
 
 #map {
-  width: 1000px;
+  width: 600px;
   height: 600px;
   position: relative;
   margin: 0 auto;

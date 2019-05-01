@@ -1,6 +1,6 @@
 (function() {
 
-  var map = L.map('map').setView([42.36, -71.03], 12);
+  var map = L.map('map').setView([42.36, -71.03], 13);
   L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.{ext}', {
     attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     subdomains: 'abcd',
@@ -48,25 +48,50 @@
     opacity: 1,
     fillOpacity: 0.8
   }
-
-  L.geoJson(boston_fire_hydrants_json, {
+  var fire_department_btn= document.getElementById('fire_department_btn');
+  var fire_department_layer = L.geoJson(boston_fire_department_json, {
     pointToLayer: function (feature, latlng){
-        return L.circleMarker(latlng, marker_fire_hydrants);
+        return L.circleMarker(latlng, marker_fire_department);
     }
   },
-  ).addTo(map);
+  );
+  fire_department_btn.addEventListener("click", function(){
+    if ((map.hasLayer(fire_department_layer))){
+        fire_department_layer.remove();
+    }
+    else fire_department_layer.addTo(map);
+  });
 
-  L.geoJson(boston_fire_alarm_boxes_json, {
+
+  var fire_alarm_boxes_btn = document.getElementById('fire_alarm_boxes_btn');
+  var fire_alarm_boxes_layer = L.geoJson(boston_fire_alarm_boxes_json, {
     pointToLayer: function (feature, latlng){
         return L.circleMarker(latlng, marker_fire_alarm_boxes);
     }
   },
-  ).addTo(map);
+  );
+  fire_alarm_boxes_btn.addEventListener("click", function(){
+    if (map.hasLayer(fire_alarm_boxes_layer)){
+        fire_alarm_boxes_layer.remove();
+    }
+    else fire_alarm_boxes_layer.addTo(map);
+  });
 
-  L.geoJson(boston_fire_department_json, {
+
+  var fire_hydrants_btn= document.getElementById('fire_hydrants_btn');
+  console.log(fire_hydrants_btn);
+  var fire_hydrants_layer = L.geoJson(boston_fire_hydrants_json, {
     pointToLayer: function (feature, latlng){
-        return L.circleMarker(latlng, marker_fire_department);
+        return L.circleMarker(latlng, marker_fire_hydrants);
     },
   },
-  ).addTo(map);
+  );
+  fire_hydrants_btn.addEventListener("click", function(){
+    if (map.hasLayer(fire_hydrants_layer)){
+        fire_hydrants_layer.remove();
+    }
+    else fire_hydrants_layer.addTo(map);
+  });
+
+
 })();
