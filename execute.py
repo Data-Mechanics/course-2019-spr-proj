@@ -27,8 +27,6 @@ path = args.contributor_folder
 algorithms = []
 for r,d,f in os.walk(path):
     for file in f:
-        if file == 'app.py' or file == 'kmeans_app.py':
-            continue
         if r.find(os.sep) == -1 and file.split(".")[-1] == "py":
             name_module = ".".join(file.split(".")[0:-1])
             module = importlib.import_module(path + "." + name_module)
