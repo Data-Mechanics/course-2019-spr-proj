@@ -180,7 +180,7 @@ def create_map(city):
 	#instantiate figure and add map
 	fig = Figure()
 	m = Basemap(projection='merc',llcrnrlat=d,urcrnrlat=u,llcrnrlon=l,urcrnrlon=r,\
-				resolution='f')
+				resolution='c')
 	m.fillcontinents()
 	m.scatter(lon_old,lat_old,latlon=True,c='#000000',marker='o')
 	m.scatter(lon_new,lat_new,latlon=True,c='#ff0000',marker='o')
