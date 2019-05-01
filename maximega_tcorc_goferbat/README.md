@@ -1,19 +1,19 @@
 POSTER GOOGLE DRIVE LINK: https://drive.google.com/file/d/1VeH-4jInEzbjpf3ReXB93rjId6mEwQep/view?usp=sharing
 
-Project #3:
-index.html (Front End with map visualization)
-app.py (Back End with Flask to handle requests)
-We created both an interactive web-based visualization that can be displayed in a standard web browser and a web service with a RESTful web API
+Project #3:  
+index.html (Front End with map visualization)  
+app.py (Back End with Flask to handle requests)  
+We created both an interactive web-based visualization that can be displayed in a standard web browser and a web service with a RESTful web API  
+  
+How to Run Web App:  
+  1.) Run Flask app (python app.py) make sure to run on 8080  
+  2.) Open a chrome browser with security disabled (CORS issue):  
+  
+  For PC: chrome.exe --user-data-dir="C://Chrome dev session" --disable-web-security  
+  For Mac: open -n -a /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --args --user-data-dir="/tmp/chrome_dev_test" --disable-web-security  
 
-How to Run Web App:
-  1.) Run Flask app (python app.py) make sure to run on 8080
-  2.) Open a chrome browser with security disabled (CORS issue):
-
-  For PC: chrome.exe --user-data-dir="C://Chrome dev session" --disable-web-security
-  For Mac: open -n -a /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --args --user-data-dir="/tmp/chrome_dev_test" --disable-web-security
-
-  3.) Open index.html inside that chrome browser (whole AngularJS front end is in this file; all js libraries are accessed with CDN's)  
-  4.) If that doesn't work, either try quitting chrome, or using Firefox with a CORS plugin
+  3.) Open index.html inside that chrome browser (whole AngularJS front end is in this file; all js libraries are accessed with CDN's)    
+  4.) If that doesn't work, either try quitting chrome, or using Firefox with a CORS plugin  
 
 Data Sets Used:
 
