@@ -61,7 +61,7 @@ def Mapping():
     overlap_group.add_to(m)   
      
     
-    m.add_children(plugins.HeatMap(heat, radius=30,name = 'heatmap',show = False))
+    m.add_child(plugins.HeatMap(heat, radius=30,name = 'heatmap',show = False))
 
     mc = plugins.MarkerCluster(name = 'CVS_Wal_Clustering',show = False)
     cvs_cluster = plugins.MarkerCluster(name = 'CVS_Clustering',show = False)

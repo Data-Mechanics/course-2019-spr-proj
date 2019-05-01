@@ -4,7 +4,7 @@ import dml
 import prov.model
 import datetime
 import uuid
-import io
+
 #get the data about neighborhoods
 
 class neighborhoods(dml.Algorithm):
@@ -79,15 +79,5 @@ class neighborhoods(dml.Algorithm):
         repo.logout()
                   
         return doc
-
-'''
-# This is example code you might use for debugging this module.
-# Please remove all top-level function calls before submitting.
-example.execute()
-doc = example.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
-'''
-neighborhoods.execute()
 
 ## eof

@@ -1,19 +1,8 @@
 from flask import render_template, redirect, request, flash
 from FlaskApp import app, db, repo
-from FlaskApp.models import User
-from FlaskApp.forms import RateForm
-from bson.json_util import dumps
-from urllib.request import urlopen
-from mapping import Mapping
-import dml
-import datetime
-import geopy.distance
-import json
-import prov.model
-import pprint
-import random
-import uuid
 from FlaskApp.forms import RateForm, Task2From
+from FlaskApp.mapping import Mapping
+from FlaskApp.models import User
 import geopy.distance
 import itertools
 import math
@@ -29,31 +18,7 @@ def index():
 @app.route('/task1')
 def task1():        
     Mapping()
-    return render_template('task1.html')
-
-
-    
-#     map_data = repo.henryhcy_jshen97_leochans_wangyp.neighborhoods.find_one()
-#     map_data = dumps(map_data)
-#     map_data_ = dumps(data)
-#     print(data)
-#     geojson_stores = {
-#     "type": "FeatureCollection",
-#     "features": [
-#     {
-#         "type": "Feature",
-#         "geometry" : {
-#             "type": "Point",
-#             "coordinates": [item['location']["lng"], item['location']["lat"]],
-#             },
-#         "properties" : {
-#             'name': item["name"]
-#         }
-#      } for item in repo.henryhcy_jshen97_leochans_wangyp.cvsWalgreen.find()]
-# }
-    
-#     stores = dumps(geojson_stores)
-#     return render_template('task1.html', map_data = map_data_,store_data=stores, title='Quantify Rivalry')
+    return render_template('task1.html', title='Quantify the Rivalry')
 
 
 @app.route('/task2', methods=['GET', 'POST'])
@@ -64,7 +29,7 @@ def task2():
         return render_template('task2.html', title='A Casual Exploration', form=form)
     elif request.method == 'POST':
         if form.validate_on_submit():
-            #first selection--------------------------------------------------------------------------------------------
+            # first selection-------------------------------------------------------------------------------------------
             place_id1 = form.Stores.data
             if place_id1 != 'None':
                 evi_cases1 = 0
@@ -85,7 +50,7 @@ def task2():
 
                 flash("Result1--Store1: {}; Rating: {}; Evictions: {}; Larcenies: {}.".format(vicinity1, rating1, evi_cases1, cri_cases1), 'error')
 
-            #second selection-------------------------------------------------------------------------------------------
+            # second selection------------------------------------------------------------------------------------------
             place_id2 = form.Compare.data
             if (place_id2 != 'None' and place_id1!= 'None'):
                 if (place_id2 == place_id1):
@@ -116,7 +81,7 @@ def task2():
 
                     flash("Result2--Store2: {}; Rating {}; DistanceTo: {}; Store1: {}; Evictions diff: {} Larcenies diff {}.".format(vicinity2, rating2, distance, vicinity1, evi_case_diff, cri_case_diff))
 
-            #third selection--------------------------------------------------------------------------------------------
+            # third selection-------------------------------------------------------------------------------------------
             place_id3 = form.Total.data
             if (place_id3 != "None" and place_id1 != 'None' and place_id2 != 'None'):
                 if (place_id3 == place_id1):
@@ -152,62 +117,67 @@ def task2():
 
                     flash("Result3--Store1: {}; Store2: {}; Store3: {}; Total Stability S: {}; Total Accessibilty A = {}; Respective Ratings: {}, {}, {}.".format(vicinity1, vicinity2, vicinity3, total_stab, total_access, rating_list[0], rating_list[1], rating_list[2]))
 
-            #fourth, fifth, and sixth selection--------------------------------------------------------------------------------------------
+            # fourth, fifth, and sixth selection------------------------------------------------------------------------
             K = int(form.K.data)
             S = form.S.data
             A = form.A.data
+            if S != '' and A != '':
+                try:
+                    S = int(form.S.data)
+                    A = int(form.A.data)
+                except ValueError:
+                    flash("Invalid inputs on Filed 5 & 6.")
+                    return redirect("/task2")
 
-            corr_evi = 0.0
-            corr_cri = 0.0
-            for document in repo.henryhcy_jshen97_leochans_wangyp.correlationCVS.find():
-                if document['document_type'] == 'rating_eviction_correlation':
-                    corr_evi = document['corr']
-                elif document['document_type'] == 'rating_crime_correlation':
-                    corr_cri = document['corr']
-            c = corr_cri / corr_evi
+                corr_evi = 0.0
+                corr_cri = 0.0
+                for document in repo.henryhcy_jshen97_leochans_wangyp.correlationCVS.find():
+                    if document['document_type'] == 'rating_eviction_correlation':
+                        corr_evi = document['corr']
+                    elif document['document_type'] == 'rating_crime_correlation':
+                        corr_cri = document['corr']
+                c = corr_cri / corr_evi
 
-            pid_list = []
-            geo_list = []
-            stab_list = []
-            for document in repo.henryhcy_jshen97_leochans_wangyp.countEvictionCrimeCVS.find():
-                pid = document['place_id']
-                location_coordinate = (document['location']['lat'], document['location']['lng'])
-                stability = (math.pow(document['crime_case'], c) / document['eviction_case']) * 1000
+                pid_list = []
+                geo_list = []
+                stab_list = []
+                for document in repo.henryhcy_jshen97_leochans_wangyp.countEvictionCrimeCVS.find():
+                    pid = document['place_id']
+                    location_coordinate = (document['location']['lat'], document['location']['lng'])
+                    stability = (math.pow(document['crime_case'], c) / document['eviction_case']) * 1000
 
-                pid_list.append(pid)
-                geo_list.append(location_coordinate)
-                stab_list.append(stability)
-            addr_list = []
-            for document in repo.henryhcy_jshen97_leochans_wangyp.cvs.find({'place_id': {'$in': pid_list}}):
-                addr_list.append(document['vicinity'])
+                    pid_list.append(pid)
+                    geo_list.append(location_coordinate)
+                    stab_list.append(stability)
+                addr_list = []
+                for document in repo.henryhcy_jshen97_leochans_wangyp.cvs.find({'place_id': {'$in': pid_list}}):
+                    addr_list.append(document['vicinity'])
 
-            print(max(stab_list), min(stab_list))
+                solver = z3.Solver()
+                X = [z3.Real('x{}'.format(i)) for i in range(len(pid_list))]
 
-            solver = z3.Solver()
-            X = [z3.Real('x{}'.format(i)) for i in range(len(pid_list))]
+                # constraints:
+                # (1) choose exactly K stores
+                for i in X:
+                    solver.add(z3.Or(i == 0, i == 1))
+                solver.add(sum(X) == K)
+                # (2) the total stability of K stores must greater than or equal to S
+                solver.add(sum([X[i]*stab_list[i] for i in range(len(pid_list))]) >= S)
+                # (3) the total accessibility of k stores must greater than or equal to A
+                two_subset = list(itertools.combinations([i for i in range(len(pid_list))], 2))
+                solver.add(sum([X[i[0]] * X[i[1]] * (geopy.distance.distance(geo_list[i[0]], geo_list[i[1]]).km) for i in two_subset]) >= A)
 
-            # constraints:
-            # (1) choose exactly K stores
-            for i in X:
-                solver.add(z3.Or(i == 0, i == 1))
-            solver.add(sum(X) == K)
-            # (2) the total stability of K stores must greater than or equal to S
-            solver.add(sum([X[i]*stab_list[i] for i in range(len(pid_list))]) >= S)
-            # (3) the total accessibility of k stores must greater than or equal to A
-            two_subset = list(itertools.combinations([i for i in range(len(pid_list))], 2))
-            solver.add(sum([X[i[0]] * X[i[1]] * (geopy.distance.distance(geo_list[i[0]], geo_list[i[1]]).km) for i in two_subset]) >= A)
-
-            # get the solution and return their address
-            solution_list = []
-            if (solver.check() == z3.sat):
-                m = solver.model()
-                for i in range(len(pid_list)):
-                    name = 'x{}'.format(i)
-                    if (m[z3.Real(name)] == 1):
-                        solution_list.append(addr_list[i])
-            else:
-                solution_list.append('not solution found')
-            flash("The solution for K-salesmen is: {}".format(str(solution_list)))
+                # get the solution and return their address
+                solution_list = []
+                if (solver.check() == z3.sat):
+                    m = solver.model()
+                    for i in range(len(pid_list)):
+                        name = 'x{}'.format(i)
+                        if (m[z3.Real(name)] == 1):
+                            solution_list.append(addr_list[i])
+                else:
+                    solution_list.append('not solution found')
+                flash("The solution for K-salesmen is: {}".format(str(solution_list)))
 
             return redirect('/task2')
         else:
@@ -234,10 +204,15 @@ def feedback():
     elif request.method == 'POST':
         if form.validate_on_submit():
             user = User(name=form.Name.data, ratings=form.Ratings.data, comments=form.Comments.data)
-            db.session.add(user)
-            db.session.commit()
-            flash("Thank you for your time!")
-            return redirect('/index')
+            try:
+                db.session.add(user)
+                db.session.commit()
+                flash("Thank you for your time!")
+                return redirect("/index")
+            except Exception:
+                flash("Name already exist. Please choose a different one.")
+                return redirect("/feedback")
+
         else:
-            flash("Name field is required.")
+            flash("Name and Rating are required.")
             return render_template('feedback.html', title='Project3-Feedback', form=form)

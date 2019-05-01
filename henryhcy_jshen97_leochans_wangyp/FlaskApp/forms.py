@@ -1,12 +1,12 @@
 from flask_wtf import FlaskForm
-from wtforms import RadioField, SelectField, SubmitField, StringField, IntegerField, TextAreaField
+from wtforms import RadioField, SelectField, SubmitField, StringField, TextAreaField
 from wtforms.validators import DataRequired
 
 
 class RateForm(FlaskForm):
     Name = StringField('Please enter your name or nickname:', [DataRequired()])
     Ratings = RadioField('Please rate our project out of 5:', choices=[('5', '5'), ('4', '4'), ('3', '3'), ('2', '2'), ('1', '1')])
-    Comments = TextAreaField('Please leave your comments or advices:', render_kw={"rows": 25, "cols": 50})
+    Comments = TextAreaField('Please leave your comments or advices:', render_kw={"rows": 7, "cols": 50})
     Submit = SubmitField('Submit')
 
 
@@ -79,7 +79,7 @@ class Task2From(FlaskForm):
         ('7', '7'), ('8', '8'), ('9', '9'), ('10', '10')
     ])
 
-    S = IntegerField('Stability Threshold (must be an int):', [DataRequired()])
-    A = IntegerField('Accessibility Threshold (must be an int):', [DataRequired()])
+    S = StringField('Stability Threshold (must be an int):')
+    A = StringField('Accessibility Threshold (must be an int):')
 
     Submit = SubmitField('Find')

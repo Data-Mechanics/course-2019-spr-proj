@@ -1,18 +1,8 @@
-import dml
-
 from flask import Flask
 from FlaskApp.config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from bson.json_util import dumps
 import dml
-import datetime
-import geopy.distance
-import json
-import prov.model
-import pprint
-import random
-import uuid
 
 app = Flask(__name__)
 app.config.from_object(Config)
