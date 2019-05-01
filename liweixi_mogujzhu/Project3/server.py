@@ -9,7 +9,22 @@ import os
 # The project structure references https://github.com/Data-Mechanics/course-2018-spr-proj/tree/master/agoncharova_lmckone
 
 
-
+def get_fire_incident_data():
+  # Set up the database connection.
+  client = dml.pymongo.MongoClient()
+  repo = client.repo
+  repo.authenticate('liweixi_mogujzhu', 'liweixi_mogujzhu')
+  fire_incident_data = repo["liweixi_mogujzhu.fire_incident_report"].find()
+  fire_count = {}
+  for data in fire_incident_data:
+    zip_code = "0"+str(data["Zip"])
+    if zip_code in fire_count:
+      fire_count[zip_code]+=1
+    else:
+      fire_count[zip_code]=1
+  ff_file = open("./data/fire_incident_count.json","w+")
+  ff_file.write('var fire_incident_count = ')
+  json.dump(fire_count, ff_file)
 
 def download_fire_alarm_boxes_data():
   url = 'https://opendata.arcgis.com/datasets/3a0f4db1e63a4a98a456fdb71dc37a81_1.geojson'
@@ -57,6 +72,9 @@ def serve_data(path):
   if (path == "boston_fire_alarm_boxes.json") and (not os.path.isfile("./data/boston_fire_alarm_boxes.json")):
     download_fire_alarm_boxes_data()
     print("Generated fire alarm boxes json file for the map")
+  if (path == "fire_incident_count.json") and (not os.path.isfile("./data/fire_incident_count.json")):
+    get_fire_incident_data()
+    print("Count the number of incident ...")
   return send_from_directory('./data', path)
 
 # main css file
@@ -71,15 +89,20 @@ def serve_js(path):
 
 @app.route('/', methods=['GET'])
 def get_index_page():
-    return open('./html/index.html','r').read()
+  return open('./html/index.html','r').read()
 
 @app.route('/weather_incident', methods=['GET'])
 def get_weather_incident_page():
-    return open('./html/weather_incident.html','r').read()
+  return open('./html/weather_incident.html','r').read()
+
+@app.route('/fire_count', methods=['GET'])
+def get_fire_count_page():
+  return open('./html/fire_count.html','r').read()
+
 
 @app.errorhandler(404)
 def not_found(error):
-    return make_response(jsonify({'error': 'Not found.'}), 404)
+  return make_response(jsonify({'error': 'Not found.'}), 404)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+  app.run(debug=True)
