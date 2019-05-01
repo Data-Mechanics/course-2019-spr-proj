@@ -8,6 +8,9 @@ app = Flask(__name__, static_url_path='')
 def welcome():
 	return render_template('welcome.html')
 
+@app.route("/chart", methods=['GET'])
+def get_chart():
+	return render_template('chart.html')
 
 @app.route("/score", methods=['GET'])
 def get_avgScore():
