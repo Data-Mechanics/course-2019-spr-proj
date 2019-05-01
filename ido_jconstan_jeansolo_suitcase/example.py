@@ -13,7 +13,6 @@ from random import shuffle
 from math import sqrt
 import gmplot
 
-
 class example(dml.Algorithm):
     contributor = 'ido_jconstan_jeansolo_suitcase'
     reads = []
@@ -333,6 +332,7 @@ class example(dml.Algorithm):
         # ('Address', 'School Name', 'Assessed Total', 'N') ; students who do not take the bus
         t9 = project(t5, lambda t: (t[0], t[1], t[2], 'N') )
         t10 = select(t9, lambda t: (t[0] in t6) )
+        
         '''
 
         # make tuples for agreements for household value under 400k and don't take the bus
