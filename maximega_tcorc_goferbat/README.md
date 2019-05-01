@@ -1,4 +1,9 @@
-POSTER GOOGLE DRIVE LINK: https://drive.google.com/file/d/1VeH-4jInEzbjpf3ReXB93rjId6mEwQep/view?usp=sharing
+POSTER GOOGLE DRIVE LINK: https://drive.google.com/file/d/1VeH-4jInEzbjpf3ReXB93rjId6mEwQep/view?usp=sharing  
+
+In line 30 of execute.py, need to add:  
+  
+if file == 'app.py' or file == 'kmeans_app.py':  
+    continue
 
 Project #3:  
 index.html (Front End with map visualization)  
