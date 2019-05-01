@@ -12,27 +12,27 @@ while using our web services, please follow the following instructions.
   where the files "execute.py" and "auth.json" resides.**
     * Enter your API credentials in "auth.json" and save.
     * Open a terminal and enter: 
-        * '''python execute.py henryhcy_jshen97_leochans_wangyp'''
+        * ```python execute.py henryhcy_jshen97_leochans_wangyp```
     * This might take 5-10 minutes. (We did not implement trial mode because the data we
     retrieve are relatively small)
   * **To run the we application, make sure you are in the directory where the file 
   "_DataApp.py" resides.**
-    * '''cd ../henryhcy_jshen97_leochans_wangyp'''
+    * ```cd ../henryhcy_jshen97_leochans_wangyp```
   * **Then we need to let flask know where is the application.**
     * if you are in UNIX/LINUX environment, enter the command:
-        * '''export FLASK_APP=_DataApp.py'''
+        * ```export FLASK_APP=_DataApp.py```
     * if you are on Windows, enter the command:
-        * '''set FLASK_APP=_DataApp.py'''
+        * ```set FLASK_APP=_DataApp.py```
   * **After the successful executions of the previous steps, enter:**
-    * '''flask run'''
+    * ```flask run```
   * **The web application will run in backend.**
   * **Click on the link generated, or open a browser and go to http://127.0.0.1:5000/ or 
     http://localhost:5000/ to see the web pages.**
 * **We made a flask shell for you to easily access the embedded SQL database to see 
 ratings and comments of our project.** Simply cd to the folder where "_DataApp.py" resides
-, '''set FLASK_APP=_DataApp.py''' if you are on a new terminal, then enter '''flask shell'''
+, ```set/export FLASK_APP=_DataApp.py``` if you are on a new terminal, then enter ```flask shell```
 you can interact with the database "db" and table "User" using standard sql commands (i.e. 
-'''users = User.query.all()''', '''db.session.commit()'').
+```users = User.query.all()```, ```db.session.commit()```).
 ###Boston Pharmacy
 
 ####Team Formation
