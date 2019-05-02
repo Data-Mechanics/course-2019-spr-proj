@@ -57,7 +57,8 @@ class transformation3():
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')  # The scripts are in <folder>#<filename> format.
         doc.add_namespace('dat', 'http://datamechanics.io/data/')  # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont',
-                          'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
+                          'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet', 'Retrieval',
+                                                                # 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/')  # The event log.
         doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
 
@@ -72,7 +73,8 @@ class transformation3():
         doc.usage(get_ubers, resource, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:Retrieval',
                    'ont:Query': '?type=Uber+Data&$select=Origin Display Name,Destination Display Name,Mean Travel Time '
-                                '(Seconds),Range - Lower Bound Travel Time (Seconds),Range - Upper Bound Travel Time (Seconds)'
+                                '(Seconds),Range - Lower Bound Travel Time (Seconds),Range - Upper Bound Travel Time '
+                                '(Seconds)'
                    }
                   )
 

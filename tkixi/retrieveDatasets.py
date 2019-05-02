@@ -85,7 +85,7 @@ class retrieveDatasets(dml.Algorithm):
 
         #Dataset #5: Boston Vision Zero Crash Records
         print("Inserting Dataset #5: Boston Collisions")
-        url = 'https://data.boston.gov/dataset/7b29c1b2-7ec2-4023-8292-c24f5d8f0905/resource/e4bfe397-6bfc-49c5-9367-c879fac7401d/download/crash_open_data.csv'
+        url = 'http://datamechanics.io/data/tkixi/crash_open_data.csv'
         data = pd.read_csv(url)
         repo.dropCollection("tkixi.boston_collisions")
         repo.createCollection("tkixi.boston_collisions")

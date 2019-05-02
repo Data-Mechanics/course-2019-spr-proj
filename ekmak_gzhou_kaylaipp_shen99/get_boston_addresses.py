@@ -8,6 +8,7 @@ import zillow
 import requests
 import xmltodict
 import csv
+from tqdm import tqdm
 
 
 class get_boston_addresses(dml.Algorithm):
@@ -24,6 +25,8 @@ class get_boston_addresses(dml.Algorithm):
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate('ekmak_gzhou_kaylaipp_shen99','ekmak_gzhou_kaylaipp_shen99')
+        print('')
+        print('inserting address data...')
         
         # #Retrieve all boston addresses and add to monogo - source: Analyze Boston
         url = 'https://data.boston.gov/api/3/action/datastore_search?resource_id=26933f1b-bcaa-4241-b0f2-7933570fd52d&limit=40000&q=02127'
@@ -32,11 +35,11 @@ class get_boston_addresses(dml.Algorithm):
         r = r['result']['records']
         repo.dropCollection("address_data")
         repo.createCollection("address_data")
-        for info in r: 
+        for info in tqdm(r): 
             repo['ekmak_gzhou_kaylaipp_shen99.address_data'].insert_one(info)
         repo['ekmak_gzhou_kaylaipp_shen99.address_data'].metadata({'complete':True})
         print(repo['ekmak_gzhou_kaylaipp_shen99.address_data'].metadata())
-        print('inserted address data')
+        # print('inserted address data')
 
         repo.logout()
         endTime = datetime.datetime.now()
@@ -89,4 +92,7 @@ print(doc.get_provn())
 print(json.dumps(json.loads(doc.serialize()), indent=4))
 '''
 # get_boston_addresses.execute()
+# get_boston_addresses.provenance()
+# print('done')
+
 ## eof

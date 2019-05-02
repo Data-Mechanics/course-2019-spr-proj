@@ -25,7 +25,10 @@ class Get_Boston_Reviews(dml.Algorithm):
         repo.authenticate('hxjia_jiahaozh', 'hxjia_jiahaozh')
 
         url = 'http://data.insideairbnb.com/united-states/ma/boston/2019-01-17/data/reviews.csv.gz'
-        df_reviews = pd.read_csv(url)
+        if trial:
+            df_reviews = pd.read_csv(url)[:500]
+        else:
+            df_reviews = pd.read_csv(url)
         # response = urllib.request.urlopen(url).read().decode("utf-8")
         r = json.loads(df_reviews.to_json(orient='records'))
         #s = json.dumps(r, sort_keys=True, indent=2)

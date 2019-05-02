@@ -75,9 +75,9 @@ class weather_fire_incident_transformation(dml.Algorithm):
         repo.createCollection("weather_fire_incident_transformation")
         data_list = ['liweixi_mogujzhu.weather', 'liweixi_mogujzhu.fire_incident_report']
         data = weather_fire_incident_transformation.merge_data(data_list, repo)
-        repo['weather_fire_incident_transformation'].insert_many(data)
-        repo['weather_fire_incident_transformation'].metadata({'complete': True})
-        print(repo['weather_fire_incident_transformation'].metadata())
+        repo['liweixi_mogujzhu.weather_fire_incident_transformation'].insert_many(data)
+        repo['liweixi_mogujzhu.weather_fire_incident_transformation'].metadata({'complete': True})
+        print(repo['liweixi_mogujzhu.weather_fire_incident_transformation'].metadata())
 
         repo.logout()
 
@@ -131,13 +131,14 @@ class weather_fire_incident_transformation(dml.Algorithm):
         return doc
 
 
-# '''
-# # This is example code you might use for debugging this module.
-# # Please remove all top-level function calls before submitting.
-# '''
-# weather_fire_incident_transormation.execute()
-# doc = weather_fire_incident_transormation.provenance()
+'''
+# This is example code you might use for debugging this module.
+# Please remove all top-level function calls before submitting.
+'''
+if __name__ == "__main__":
+    weather_fire_incident_transformation.execute()
+# doc = weather_fire_incident_transformation.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))
-#
-# ## eof
+
+## eof

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <Placemark>
+      <Description>Headquarters</Description>
+      <Point>
+	<coordinates>-71.067437,42.379875,0</coordinates>
+      </Point>
+    </Placemark>
+    
+    <Placemark>
+      <Description>A-1 and A-15</Description>
+      <Point>
+	<coordinates>-71.060117,42.361751,0</coordinates>
+      </Point>
+    </Placemark>
+
+    <Placemark>
+      <Description>A-7</Description>
+      <Point>
+	<coordinates>-71.0388061,42.3710345,0</coordinates>
+      </Point>
+    </Placemark>
+
+    <Placemark>
+      <Description>B-2</Description>
+      <Point>
+	<coordinates>-71.0862445,42.3284313,0</coordinates>
+      </Point>
+    </Placemark>
+
+    <Placemark>
+      <Description>B-3</Description>
+      <Point>
+	<coordinates>-71.0916905,42.2846826,0</coordinates>
+      </Point>
+    </Placemark>
+
+    <Placemark>
+      <Description>C-6</Description>
+      <Point>
+	<coordinates>-71.060117,42.361751,0</coordinates>
+      </Point>
+    </Placemark>
+    
+    <Placemark>
+      <Description>C-11</Description>
+      <Point>
+	<coordinates>-71.0590886,42.2980276,0</coordinates>
+      </Point>
+    </Placemark>
+
+    <Placemark>
+      <Description>D-4</Description>
+      <Point>
+	<coordinates>-71.0692247,42.3394369,0</coordinates>
+      </Point>
+    </Placemark>
+
+    <Placemark>
+      <Description>D-14</Description>
+      <Point>
+	<coordinates>-71.1505902,42.3493611,0</coordinates>
+      </Point>
+    </Placemark>
+
+    <Placemark>
+      <Description>E-5</Description>
+      <Point>
+	<coordinates>-71.1484246,42.2867829,0</coordinates>
+      </Point>
+    </Placemark>
+    
+    <Placemark>
+      <Description>E-13</Description>
+      <Point>
+	<coordinates>-71.115235,42.299275,0</coordinates>
+      </Point>
+    </Placemark>
+
+    <Placemark>
+      <Description>E-18</Description>
+      <Point>
+	<coordinates>-71.1242782,42.2564288,0</coordinates>
+      </Point>
+    </Placemark>
+    
+  </Document>
+</kml>

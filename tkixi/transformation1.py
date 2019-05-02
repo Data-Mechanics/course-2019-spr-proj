@@ -51,6 +51,7 @@ class transformation1(dml.Algorithm):
         bike_filter = lambda x: {'street': x['STREET_NAM'],
                                     'installed': x['InstallDat']}
         bike_project = project(bikeNetwork, bike_filter)
+        pprint(bike_project)
         # remove duplicate streets
         no_dupes = [i for n, i in enumerate(bike_project) if i not in bike_project[n + 1:]]
 
@@ -162,7 +163,7 @@ class transformation1(dml.Algorithm):
         
         return doc
 
-# transformation1.execute()
+transformation1.execute()
 # doc = transformation1.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))

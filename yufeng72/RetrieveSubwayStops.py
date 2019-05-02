@@ -25,9 +25,16 @@ class RetrieveSubwayStops(dml.Algorithm):
         response = urllib.request.urlopen(url).read().decode("utf-8")
         r = json.loads(response)
 
+        if not trial:
+            result = list(r)
+        else:
+            result = []
+            for i in range(20):
+                result.append(r[i])
+
         repo.dropCollection("subwayStops")
         repo.createCollection("subwayStops")
-        repo['yufeng72.subwayStops'].insert_many(r)
+        repo['yufeng72.subwayStops'].insert_many(result)
         repo['yufeng72.subwayStops'].metadata({'complete': True})
         print(repo['yufeng72.subwayStops'].metadata())
 
@@ -75,7 +82,7 @@ class RetrieveSubwayStops(dml.Algorithm):
                           {prov.model.PROV_LABEL: 'Subway Stops', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(subwayStops, this_script)
         doc.wasGeneratedBy(subwayStops, get_subwayStops, endTime)
-        doc.wasDerivedFrom(subwayStops, resource, get_subwayStops, get_subwayStops, get_subwayStops)
+        doc.wasDerivedFrom(resource, subwayStops, get_subwayStops, get_subwayStops, get_subwayStops)
 
         repo.logout()
 

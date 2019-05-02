@@ -1,5 +1,7 @@
 # Commuting in Boston
 
+# Project 1
+
 ## Why
 
 Commuting in Boston hits close to home for me - I commute every day from home to school. I feel bad for driving every day but from where I live there's no better alternative. I would rather take public transit or a carbon neutral alternative like biking, but it's too inconvenient. Factors like traffic, the weather, and distances play a role.
@@ -62,3 +64,47 @@ The auth.json file should have a key to access the MBTA data. A free and unprote
 	}
 }
 ```
+
+# Project 2
+
+## Why 
+
+To help me answer questions about the good, the bad, and the ugly of commuting in Boston, I'll analyze the data I collected in Project 1 to draw some conclusions about our transportation. I use that data to answer a few questions
+
+* Surely the amount of cyclists goes down in the Winter, but by what extent? Is there a strong correlation between the weather and the number of cyclists? Can we model this predictively with a regression?
+* Do the MBTA trains run more or less reliably depending on the weather? I suspect extreme cold can slow our trains down - is that the case? Could we model it so that we can predict delays depending on the weather?
+* How can Bluebike place stations in a way to expand their network and provide better service to users?
+
+## Process
+
+To see the relationship between cycling and the weather, we can calculate the correlation between 1) the number of cyclists on a given day, and 2) the average temperative on that day. I use SciPy to calculate a correlation coefficient and p-value between these two datasets, and I have 365 data points (one for each day of 2018). I use Numpy to do a linear regression and calculate a line of best fit. I do this against both 1) the average number of trips in a day, and 2) the average trip duration for that day.
+
+I repeat the above process with my dataset of weather and MBTA train alerts. The weather dataset and time period (all of 2018) are the same.
+
+I ran the current bluebike stations through the z3-solver to optimize the placement of a potential new stations in the bluebike network. I wanted to maximize the distance of the new station to other stations in order to expand the network, but keep the station within a certain distance of several other stations, so that the network isn't too fragmented. This involved a maximization optimization along with constraints on how far a station gets placed from other stations, and a constraint so that it doesn't get placed in the ocean, since Boston is on the water.
+
+The optimization problem also required that I implement a new "distance" metric. Traditionally euclidean distance requires squares and square roots, but linear programming optimizers can't deal with non-linear objectives. I created a z3 optimizer-friendly absolute value function and used that for a distance-like metric.
+
+I also used k-means to reduce the number of stations to simplify the objective. There are over 300 stations which meant that the objective function had over 600 variables (longitude and latitude), which really slowed down my solution. By using k-means I could preserve the shape and distribution of the data while reducing the number of points to 50, resulting in quicker optimizer outputs.
+
+## Conclusions
+
+Unsurprisingly, there's a correlation between temperature and average number of daily trips, as well as between temperature and average trip duration. We conclude that colder weather leads to, on average, fewer and shorter rides.
+
+The correlation coefficient between temperature and ride count is 0.83 with a p-value of 0.3e-94 (extremely close to zero). Between temperature and ride duration there's a correlation of 0.42 with a p-value of 0.4e-17 (also almost zero).
+
+The correlation coefficient for MBTA alerts and temperative is -0.14, with a p-value of 0.16. This is as we suspected - the warmer it is, the fewer alerts there are. The p-value isn't significant, though.
+
+We also obtained a line of best fit for all above datasets. It'll be included in Project 3.
+
+The new bluebike station optimization answered that the new station should go in Cambridge, which makes sense given that Cambridge has lots of close-together stations which end abruptly near Medford. Placing a station just beyond this artificial bound of the network gives us a good result - more users can now access the bikes, and the station isn't too removed from the remainder of the network.
+
+## File Changes (and Project Requirements)
+
+`ride_weather_stats.py` is the algorithm to get the correlation coefficient, p-value, and best fit line for bicycle rides and weather datasets. It writes all of the obtained statistics to a Mongo collection `kgarber.bluebikes.ride_weather_stats`.
+
+`alert_weather_stats.py` is the algorithm to get the correlation coefficient, p-value, and best fit line for mbta alerts and weather datasets. It writes all of the obtained statistics to a Mongo collection `kgarber.alert_weather_stats`.
+
+I modified `alerts_and_weather.py` to output an intermediary dataset with a datapoint for each day that has the alert count and temperature. 
+
+`new_station.py` has the z3-optimizer logic. It writes the latitude and longitude of the new station to a collection in Mongo named "new_station".

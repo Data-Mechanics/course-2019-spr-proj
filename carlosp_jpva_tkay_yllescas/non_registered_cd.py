@@ -1,3 +1,7 @@
+# writes to database
+# congressional districts
+# not using
+
 import urllib.request
 import json
 import dml
@@ -13,6 +17,7 @@ class non_registered_cd(dml.Algorithm):
 
     @staticmethod
     def execute(trial=False):
+        print("non_registered_cd")
         '''Retrieve some data sets (without API).'''
         startTime = datetime.datetime.now()
 
