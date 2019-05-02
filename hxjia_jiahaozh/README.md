@@ -121,7 +121,7 @@ We made three webpages.
 ### 3. Recommendation Results Page
 * Marked in map using Leaflet
 * Urls listed as hyperlink
-<img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/web_visualization/Recommendation_page.png	" /><p align="center">Figure 10</p>
+<img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/web_visualization/Recommendation_page.png" /><p align="center">Figure 10</p>
 # Tools and Libraries
 Pandas
 <br />dml
