@@ -20,27 +20,15 @@
 </head>
 <body>
 <div class="intro">
-    <h1>Intro</h1>
-    <p class="h4">The place of public resources is never an easy task. Allocating resources in for a population will
-        always present a
-        myriad of challenges, because depending on the reason chosen one can always find a different way of distributing
-        said resources.Tackling the problem of park placement in Boston is no different </p>
-    <h1>About</h1>
+
+    <h1>Welcome to our New Park Optimizer</h1>
     <p class="h4">
-        In this project, we aim to try to find the best places to add
-        new parks in each of the neighborhoods in Boston based on various health statistics as well as access to open
-        spaces.
-        In completing this project we have only presented one of the ways we believe that parks can be placed in Boston
-        Neighborhoods. We built a framework which can be extended given the data-sets and metrics prioritized for these
-        decisions.
-    </p>
-    <h1>Use</h1>
-    <p class="h4">
-        To use this tool first click on a neighborhood. Then the Kmeans input box will be highlighted. Enter the number
+        To use this tool first click on a neighborhood. Then the K-Means input box will be highlighted. Enter the number
         of
-        parks you would want to place in that neighborhood. Then use the slider to weight the metric that you most
-        prioritize, then press submit. The location where our algorithm has determined would be best to place these park
-        will be shown on the map as markers.
+        parks you would want to place in that neighborhood (from 1 to 5). Then use the slider to apply weights ranging
+        from 0 to 100 where 0 is weighting fully on Distance and 100 is weighting fully on Health, then press submit.
+        The location where our algorithm has determined would be best to place these park according to weighted K-Means algorithm
+        will be shown on the map as markers. Click on a marker to get that location's statistics.
     </p>
 </div>
 <div class="container-fluid">
@@ -80,7 +68,7 @@
                     <div class="input-group input-group-sm  mb-3" id="slidecontainer">
                         <div class="input-group-prepend border-0"><span class="input-group-text  border-0"
                                                                         id="basic-addon1">Distance</span></div>
-                        <input type="range" class="custom-range form-control border-0" min="1" max="100" value="50"
+                        <input type="range" class="custom-range form-control border-0" min="0" max="100" value="50"
                                class="slider"
                                id="myRange" name="weight">
                         <div class="input-group-append border-0"><span class="input-group-text  border-0"
@@ -93,6 +81,15 @@
             </div>
         </div>
     </div>
+    <h1>About</h1>
+    <p class="h4">
+        In this project, we aim to try to find the best places to add
+        new parks in each of the neighborhoods in Boston based on various health statistics as well as access to open
+        spaces.
+        In completing this project we have only presented one of the ways we believe that parks can be placed in Boston
+        Neighborhoods. We built a framework which can be extended given the data-sets and metrics prioritized for these
+        decisions.
+    </p>
 </div>
 </body>
 <script type="application/javascript">
