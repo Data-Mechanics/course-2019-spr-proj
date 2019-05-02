@@ -1,0 +1,77 @@
+<div class=" center">
+<h1>Revere Crash Data Analysis</h1>
+<h3>Choose Your Baseline</h3>
+<input type="radio" name="base" value="Weather Condition" (click)="setradio('weather')"> Weather Condition
+<input type="radio" name="base" value="Severity" (click)="setradio('severity')"> Severity
+<input type="radio" name="base" value="Road Surface" (click)="setradio('surface')"> Road Surface
+<input type="radio" name="base" value="Ambient Light" (click)="setradio('ambient')"> Ambient Light
+<h3>Choose Your Variables</h3>
+<ul>
+  <li>Weather Condition<br>
+    Cloudy
+    <input type="checkbox" id="weather1" value="Cloudy" checked (click)="Weather1()"> <br>
+    Clear
+    <input type="checkbox" id="weather2" value="Clear" checked (click)="Weather2()"> <br>
+    Rain
+    <input type="checkbox" id="weather3" value="Rain" checked (click)="Weather3()"> <br>
+    Sleet, hail (freezing rain or drizzle)
+    <input type="checkbox" id="weather4" value="Sleet" checked (click)="Weather4()"> <br>
+    Fog, smog, smoke
+    <input type="checkbox" id="weather5" value="Fog" checked (click)="Weather5()"> <br>
+    Unknown/Not Reported
+    <input type="checkbox" id="weather6" value="Unknown" checked (click)="Weather6()"><br>
+  </li>
+  <li>Severity<br>
+    Non-fatal injury
+    <input type="checkbox" id="severity1" value="Non-fatal" checked (click)="Severity1()"> <br>
+    Property damage only (none injured)
+    <input type="checkbox" id="severity2" value="Property" checked (click)="Severity2()"> <br>
+    Fatal injury
+    <input type="checkbox" id="severity3" value="Fatal" checked (click)="Severity3()"><br>
+    Unknown/Not Reported
+    <input type="checkbox" id="severity4" value="Unknown" checked (click)="Severity4()"> <br>
+
+  <li>Road Surface<br>
+  Wet
+  <input type="checkbox" id="surface1" value="Wet" checked> <br>
+  Dry
+  <input type="checkbox" id="surface2" value="Dry" checked> <br>
+  Snow
+  <input type="checkbox" id="surface3" value="Snow" checked><br>
+  Ice
+  <input type="checkbox" id="surface4" value="Ice" checked> <br>
+  Water
+  <input type="checkbox" id="surface5" value="Water" checked> <br>
+  Sand, mud, dirt, oil, gravel
+  <input type="checkbox" id="surface6" value="Sand" checked><br>
+  Slush
+  <input type="checkbox" id="surface7" value="Slush" checked> <br>
+  Other
+  <input type="checkbox" id="surface8" value="Unknown" checked> <br></li>
+  <li>Ambient Light<br>
+    Dark - lighted roadway
+    <input type="checkbox" id="ambient1" value="DarkLighted" checked> <br>
+    Dark - roadway not lighted
+    <input type="checkbox" id="ambient2" value="Dark" checked> <br>
+    Dark - unknown roadway lighting
+    <input type="checkbox" id="ambient3" value="DarkUnknown" checked><br>
+    Daylight
+    <input type="checkbox" id="ambient4" value="DayLight" checked> <br>
+    Dusk
+    <input type="checkbox" id="ambient5" value="Dusk" checked> <br>
+    Dawn
+    <input type="checkbox" id="ambient6" value="Dawn" checked><br>
+    Other
+    <input type="checkbox" id="ambient7" value="Unknown" checked> <br>
+  </li>
+</ul>
+
+
+
+<div class = "container">
+  <button type="submit" class = "btn btn-success" (click)="chartDataRequest()">Draw Chart</button>
+</div>
+<div class = "container">
+  <a href="/data" class = "btn btn-success" >Search Data</a>
+</div>
+</div>
