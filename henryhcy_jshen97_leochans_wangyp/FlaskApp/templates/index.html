@@ -3,16 +3,6 @@
 {% block content %}
 
     <main>
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <ul>
-                    {% for message in messages %}
-                        <li>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        {% endwith %}
-
         <h3>Welcome to the homepage of Project Pharmacy </h3>
         <p fontsize="12">
             This semester-long project puts the spot light on the two most famous pharmacy stores in

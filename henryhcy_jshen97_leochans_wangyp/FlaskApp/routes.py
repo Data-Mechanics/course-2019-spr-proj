@@ -203,16 +203,40 @@ def feedback():
         return render_template('feedback.html', title='Project3-Feedback', form=form)
     elif request.method == 'POST':
         if form.validate_on_submit():
-            user = User(name=form.Name.data, ratings=form.Ratings.data, comments=form.Comments.data)
-            try:
-                db.session.add(user)
+            if form.Name.data == 'DELETE_ALL' and form.Ratings.data == '1':
+                for i in User.query.all():
+                    db.session.delete(i)
                 db.session.commit()
-                flash("Thank you for your time!")
-                return redirect("/index")
-            except Exception:
-                flash("Name already exist. Please choose a different one.")
-                return redirect("/feedback")
+                flash("All comments deleted")
+                return redirect('/feedback')
+            else:
+                user = User(name=form.Name.data, ratings=form.Ratings.data, comments=form.Comments.data)
+                try:
+                    db.session.add(user)
+                    db.session.commit()
+                    thank = "Thank you for your time! Back to homepage in 5 seconds."
+                    return render_template('feedback.html', title="Thanks", thankyou=thank, form=form)
+                except Exception:
+                    flash("Name already exist. Please choose a different one.")
+                    return redirect("/feedback")
 
         else:
             flash("Name and Rating are required.")
             return render_template('feedback.html', title='Project3-Feedback', form=form)
+
+@app.route('/feedback/ratings')
+def ratings():
+    users = User.query.all()
+    if users == []:
+        return render_template('ratings.html', average='0', title='Ratings&Comments')
+    else:
+        count = 0
+        total_ratings = 0
+        messages = []
+        for i in users:
+            count += 1
+            total_ratings += int(i.ratings)
+            m = (i.name, " rates {}/5 and says: {}".format(i.ratings, i.comments))
+            messages.append(m)
+        average_rating = total_ratings/count
+        return render_template('ratings.html', messages=messages, average=average_rating, title='Ratings&Comments')

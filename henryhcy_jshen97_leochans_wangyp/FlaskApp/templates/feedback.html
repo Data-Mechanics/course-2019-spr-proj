@@ -3,7 +3,21 @@
 {% block content %}
 
     <main>
+        {% if thankyou %}
+            <ul>
+                <p style="color: red">{{ thankyou }}</p>
+            </ul>
+            <script>
+                setTimeout(function(){
+                    window.location.href = '/index';
+                }, 5000);
+            </script>
+        {% endif %}
+
+
         <h1 class="title">Please Leave your Feedback</h1>
+
+        <p>--or see <a href="/feedback/ratings">What other people say</a></p>
 
         <form action="" method="post" novalidate>
             {{ form.hidden_tag() }}
@@ -12,7 +26,7 @@
                 {% if messages %}
                     <ul>
                         {% for message in messages %}
-                            <li>{{ message }}</li>
+                            <li><p style="color: red">{{ message }}</p></li>
                         {% endfor %}
                     </ul>
                 {% endif %}

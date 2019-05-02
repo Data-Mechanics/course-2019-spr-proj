@@ -28,7 +28,8 @@ while using our web services, please follow the following instructions.
   * **The web application will run in backend.**
   * **Click on the link generated, or open a browser and go to http://127.0.0.1:5000/ or 
     http://localhost:5000/ to see the web pages.**
-* **We made a flask shell for you to easily access the embedded SQL database to see 
+* **You can see all the comments and ratings in our web app.
+We also made a flask shell for you to easily access the embedded SQL database to see 
 ratings and comments of our project.** Simply cd to the folder where "_DataApp.py" resides
 , ```set/export FLASK_APP=_DataApp.py``` if you are on a new terminal, then enter ```flask shell```
 you can interact with the database "db" and table "User" using standard sql commands (i.e. 
