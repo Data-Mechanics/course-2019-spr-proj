@@ -108,14 +108,6 @@
      map.addLayer(layer);
   </script>
 
-  <form action="javascript:putPoint()">
-    Month:<br>
-    <input type="text" name="month"><br>
-    List of (lat, longs):<br>
-    <input type="text" name="coord" id="latlong">
-    <input type="submit" name="Submit">
-  </form>
-
   <form id='month'>
 	  <input type="radio" name="month" id='month1' onclick = "filterMonth(document.getElementById('month1').value);" value="January">January<br>
 	  <input type="radio" name="month" id='month2' onclick = "filterMonth(document.getElementById('month2').value);" value="February">February<br>
