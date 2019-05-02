@@ -1,6 +1,7 @@
 from scipy.cluster.vq import kmeans
 import dml
 from shapely.geometry import Polygon
+from rtree import index
 
 def geojson_to_polygon(geom):
     """
@@ -34,7 +35,6 @@ def compute_weight(dist_score, dist_mean, dist_stdev, health_score, health_mean,
     average_z_score = (dist_z_score + health_z_score)
 
     if average_z_score > 1:
-        print("average", average_z_score)
         return 100
     elif average_z_score > .5:
         return 20
@@ -56,9 +56,10 @@ def compute_kmeans(neighborhood, num_means, passed_weight):
     health_stdev = float(stats.find_one({"Neighborhood": neighborhood, "variable": "health_score", "statistic": "std_dev"})["value"])
 
     kmean = []
-
-    for i in range(100):
+    parcel_index = index.Index()
+    for i in range(len(neighborhood_parcels)):
         shape = geojson_to_polygon(neighborhood_parcels[i]["geometry"])[0]
+        parcel_index.insert(i, shape.bounds)
         # out of order, want [latitude, longitude]
         coords = [shape.centroid.coords[0][1], shape.centroid.coords[0][0]]
         weight = compute_weight(neighborhood_parcels[i]["distance_score"], dist_mean, dist_stdev,
@@ -67,8 +68,25 @@ def compute_kmeans(neighborhood, num_means, passed_weight):
 
         for _ in range(weight):
             kmean.append([coords[0], coords[1]])
-    g = kmeans(kmean, num_means)
     output = kmeans(kmean, num_means)[0].tolist()
-    return output
+    dict = {"kmeans": str(output)}
+    dict["Avg_Land_Val"] = []
+    dict["Dist_To_Park"] = []
+    for mean in output:
+        point = (mean[1], mean[0], mean[1], mean[0])
+
+        bounds = [i for i in parcel_index.nearest(point, 5)] #ties return two, only want 1
+        avg_val = 0
+        dist_to_park = 0
+        for ij in bounds[:5]:
+            avg_val += round(float(neighborhood_parcels[ij]["AV_TOTAL"])/ float(neighborhood_parcels[ij]["LAND_SF"]), 2)
+            dist_to_park += float(neighborhood_parcels[ij]["min_distance_km"])
+        dict["Avg_Land_Val"].append(round(avg_val/5, 2))
+        dict["Dist_To_Park"].append(round(dist_to_park / 5, 2))
+
+
+
+    print(dict)
+    return dict
 
 #print(compute_kmeans("Allston", 10))

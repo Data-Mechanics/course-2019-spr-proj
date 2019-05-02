@@ -76,8 +76,13 @@ function onEachFeature(feature, layer) {
 
 if (kmeans !== null) {
     kmeans = JSON.parse(kmeans);
-    for (let i = 0; i < kmeans.length; i++) {
-        let marker = L.marker(kmeans[i]).addTo(map);
+    console.log(kmeans);
+    let list_means = JSON.parse(kmeans["kmeans"]);
+    for (let i = 0; i < list_means.length; i++) {
+        var marker = L.marker(list_means[i]).addTo(map);
+        var popup = L.popup().setContent("<h5>Cost per Square Feet: $" + kmeans["Avg_Land_Val"][i].toString() + "</h5>"
+            + "<br><h5>Closest Park: " + kmeans["Dist_To_Park"][i].toString() + "km</h5>");
+        marker.bindPopup(popup).openPopup();
     }
 }
 neighborhoods_shape = L.geoJson(neighborhoods, {
