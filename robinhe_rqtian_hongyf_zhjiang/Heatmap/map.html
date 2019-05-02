@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Heatmaps</title>
+    <style>
+        /* Always set the map height explicitly to define the size of the div
+         * element that contains the map. */
+        #map {
+            height: 100%;
+        }
+        /* Optional: Makes the sample page fill the window. */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        #floating-panel {
+            position: absolute;
+            top: 10px;
+            left: 25%;
+            z-index: 5;
+            background-color: #fff;
+            padding: 5px;
+            border: 1px solid #999;
+            text-align: center;
+            font-family: 'Roboto','sans-serif';
+            line-height: 30px;
+            padding-left: 10px;
+        }
+        #floating-panel {
+            background-color: #fff;
+            border: 1px solid #999;
+            left: 25%;
+            padding: 5px;
+            position: absolute;
+            top: 10px;
+            z-index: 5;
+        }
+    </style>
+    <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+</head>
+
+<body>
+<div id="floating-panel">
+    <button onclick="yearHeatMap()">Year Heatmap</button>
+    <button onclick="monthHeatMap()">Month Heatmap</button>
+    <button onclick="yearMonthHeatMap()">Year-Month Heatmap</button>
+    <button onclick="hourHeatMap()">Hour Heatmap</button>
+    <button onclick="dangerousPlace()">Dangerous Place</button>
+    <button onclick="interrupt()">Interrupt</button>
+    <button onclick="back()">Back to Homepage</button>
+    <p id="time_span"></p>
+</div>
+<div id="map"></div>
+<script>
+
+    // This example requires the Visualization library. Include the libraries=visualization
+    // parameter when you first load the API. For example:
+    // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=visualization">
+
+    var map, heatmap;
+    var crashDataAll = [];
+    var dangerous = [];
+    var markers = []
+    var marked = 0;
+    var yearMonthCrash = {};
+    var hourCrash = {};
+    var yearCrash = {};
+    var monthCrash = {};
+    var crashData = [];
+    var crashData2 = [];
+    var year_month_set = [];
+    var year_month_idx = 0;
+    var hour_set = [];
+    var hour_idx = 0;
+    var year_set = [];
+    var year_idx = 0;
+    var month_set = [];
+    var month_idx = 0;
+    var interrupt_flag = 0;
+    var running = 0;
+    
+    function initMap() {
+        // alert("hello");
+        // makeCorsRequest();
+        getPoints3();
+        map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 14,
+            // center: {lat: 37.775, lng: -122.434},
+            center: new google.maps.LatLng(42.42259498441518,-71.01730469726671),
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+        var pointArray = new google.maps.MVCArray(crashData);
+        heatmap = new google.maps.visualization.HeatmapLayer({
+            data: pointArray,
+            map: map
+        });
+        var i;
+        for (i=0; i<10000; i++){
+            crashData.push(crashDataAll[i]);
+        }
+
+    }
+    
+    function back() {
+        window.location.href="/filter";
+    }    
+    
+    function interrupt(){
+        interrupt_flag = 1;
+    }
+    
+    function dangerousPlace() {
+        if (marked == 0){
+            markers.forEach(function(item){
+                item.setMap(map);
+            });
+            marked = 1;
+        }else{
+            markers.forEach(function(item){
+                item.setMap(null);
+            });
+            marked = 0;
+        }
+    }
+    
+    function yearHeatMap(){
+        if (running == 1){
+            return;
+        }
+        var timer = setInterval(function() {
+            // heatmap.setMap(null);
+            // var pointArray2 = new google.maps.MVCArray(crashData2);
+            // heatmap = new google.maps.visualization.HeatmapLayer({
+            //     data: pointArray2,
+            //     map: map
+            // });
+            // var i;
+            // for (i=dynamic_idx; i<dynamic_idx+500; i++){
+            //     crashData2.push(crashDataAll[i]);
+            // }
+            // document.getElementById("time_span").innerText = 'hello' + '11s' + String(dynamic_idx);
+            // crashData2 = [];
+            // dynamic_idx += 200;
+            running = 1;
+            if(year_idx == year_set.length){
+                clearInterval(timer);
+                year_idx = 0;
+                document.getElementById("time_span").innerText = '';
+                running = 0;
+                return;
+            }
+            if (interrupt_flag == 1){
+                interrupt_flag = 0;
+                year_idx = 0;
+                clearInterval(timer);
+                running = 0;
+                return;
+            }
+
+            heatmap.setMap(null);
+            var pointArray2 = new google.maps.MVCArray(crashData2);
+            heatmap = new google.maps.visualization.HeatmapLayer({
+                data: pointArray2,
+                map: map
+            });
+            var crashes_iter = yearCrash[year_set[year_idx]];
+            var i;
+            for (i = 0; i<crashes_iter.length; i++){
+                crashData2.push(crashes_iter[i]);
+            }
+            document.getElementById("time_span").innerText = year_set[year_idx];
+            crashData2 = [];
+            year_idx ++;
+            if (interrupt_flag == 1){
+                interrupt_flag = 0;
+                year_idx = 0;
+                clearInterval(timer);
+            }
+        }, 1000);
+    }
+
+    function monthHeatMap(){
+        if (running == 1){
+            return;
+        }
+        var timer = setInterval(function() {
+            // heatmap.setMap(null);
+            // var pointArray2 = new google.maps.MVCArray(crashData2);
+            // heatmap = new google.maps.visualization.HeatmapLayer({
+            //     data: pointArray2,
+            //     map: map
+            // });
+            // var i;
+            // for (i=dynamic_idx; i<dynamic_idx+500; i++){
+            //     crashData2.push(crashDataAll[i]);
+            // }
+            // document.getElementById("time_span").innerText = 'hello' + '11s' + String(dynamic_idx);
+            // crashData2 = [];
+            // dynamic_idx += 200;
+            running = 1;
+            if(month_idx == month_set.length){
+                clearInterval(timer);
+                month_idx = 0;
+                document.getElementById("time_span").innerText = '';
+                running = 0;
+                return;
+            }
+            if (interrupt_flag == 1){
+                interrupt_flag = 0;
+                month_idx = 0;
+                clearInterval(timer);
+                running = 0;
+                return;
+            }
+
+            heatmap.setMap(null);
+            var pointArray2 = new google.maps.MVCArray(crashData2);
+            heatmap = new google.maps.visualization.HeatmapLayer({
+                data: pointArray2,
+                map: map
+            });
+            var crashes_iter = monthCrash[month_set[month_idx]];
+            var i;
+            for (i = 0; i<crashes_iter.length; i++){
+                crashData2.push(crashes_iter[i]);
+            }
+            document.getElementById("time_span").innerText = month_set[month_idx];
+            crashData2 = [];
+            month_idx ++;
+        }, 1000);
+    }
+
+    function yearMonthHeatMap() {
+        if (running == 1){
+            return;
+        }
+        var timer = setInterval(function() {
+            // heatmap.setMap(null);
+            // var pointArray2 = new google.maps.MVCArray(crashData2);
+            // heatmap = new google.maps.visualization.HeatmapLayer({
+            //     data: pointArray2,
+            //     map: map
+            // });
+            // var i;
+            // for (i=dynamic_idx; i<dynamic_idx+500; i++){
+            //     crashData2.push(crashDataAll[i]);
+            // }
+            // document.getElementById("time_span").innerText = 'hello' + '11s' + String(dynamic_idx);
+            // crashData2 = [];
+            // dynamic_idx += 200;
+            running = 1;
+            if(year_month_idx == year_month_set.length){
+                clearInterval(timer);
+                year_month_idx = 0;
+                document.getElementById("time_span").innerText = '';
+                running = 0;
+                return;
+            }
+            if (interrupt_flag == 1){
+                interrupt_flag = 0;
+                year_month_idx = 0;
+                clearInterval(timer);
+                running = 0;
+                return;
+            }
+
+            heatmap.setMap(null);
+            var pointArray2 = new google.maps.MVCArray(crashData2);
+            heatmap = new google.maps.visualization.HeatmapLayer({
+                data: pointArray2,
+                map: map
+            });
+            var crashes_iter = yearMonthCrash[year_month_set[year_month_idx]];
+            var i;
+            for (i = 0; i<crashes_iter.length; i++){
+                crashData2.push(crashes_iter[i]);
+            }
+            document.getElementById("time_span").innerText = year_month_set[year_month_idx];
+            crashData2 = [];
+            year_month_idx ++;
+
+        }, 1000);
+        // heatmap.setMap(heatmap.getMap() ? null : map);
+        // alert("next");
+        // var i = 0;
+        // for (i=1000;i<2000;i++){
+        //     crashData.push(crashDataAll[i]);
+        // }
+    }
+
+    function hourHeatMap(){
+        if (running == 1){
+            return;
+        }
+        var timer = setInterval(function() {
+            // heatmap.setMap(null);
+            // var pointArray2 = new google.maps.MVCArray(crashData2);
+            // heatmap = new google.maps.visualization.HeatmapLayer({
+            //     data: pointArray2,
+            //     map: map
+            // });
+            // var i;
+            // for (i=dynamic_idx; i<dynamic_idx+500; i++){
+            //     crashData2.push(crashDataAll[i]);
+            // }
+            // document.getElementById("time_span").innerText = 'hello' + '11s' + String(dynamic_idx);
+            // crashData2 = [];
+            // dynamic_idx += 200;
+            running = 1;
+            if(hour_idx == hour_set.length){
+                clearInterval(timer);
+                hour_idx = 0;
+                document.getElementById("time_span").innerText = '';
+                running = 0;
+                return;
+            }
+            if (interrupt_flag == 1){
+                interrupt_flag = 0;
+                hour_idx = 0;
+                clearInterval(timer);
+                running = 0;
+                return;
+            }
+
+            heatmap.setMap(null);
+            var pointArray2 = new google.maps.MVCArray(crashData2);
+            heatmap = new google.maps.visualization.HeatmapLayer({
+                data: pointArray2,
+                map: map
+            });
+            var crashes_iter = hourCrash[hour_set[hour_idx]];
+            var i;
+            for (i = 0; i<crashes_iter.length; i++){
+                crashData2.push(crashes_iter[i]);
+            }
+            document.getElementById("time_span").innerText = hour_set[hour_idx];
+            crashData2 = [];
+            hour_idx ++;
+
+        }, 1000);
+    }
+
+    function changeGradient() {
+        var gradient = [
+            'rgba(0, 255, 255, 0)',
+            'rgba(0, 255, 255, 1)',
+            'rgba(0, 191, 255, 1)',
+            'rgba(0, 127, 255, 1)',
+            'rgba(0, 63, 255, 1)',
+            'rgba(0, 0, 255, 1)',
+            'rgba(0, 0, 223, 1)',
+            'rgba(0, 0, 191, 1)',
+            'rgba(0, 0, 159, 1)',
+            'rgba(0, 0, 127, 1)',
+            'rgba(63, 0, 91, 1)',
+            'rgba(127, 0, 63, 1)',
+            'rgba(191, 0, 31, 1)',
+            'rgba(255, 0, 0, 1)'
+        ]
+        heatmap.set('gradient', heatmap.get('gradient') ? null : gradient);
+    }
+
+    function changeRadius() {
+        heatmap.set('radius', heatmap.get('radius') ? null : 20);
+    }
+
+    function changeOpacity() {
+        heatmap.set('opacity', heatmap.get('opacity') ? null : 0.2);
+    }
+
+    // Heatmap data: 500 Points
+    function getPoints3(){
+        $.ajax({
+            type:"GET",
+            dataType: "json",
+            url: '/revere/api/v1/locations',
+            async: false,
+            success:function(data){
+                data.forEach(function(item){
+                    // alert(item["lat"]);
+                    var date = new Date(item['date']);
+                    var month = date.getMonth()+1;
+                    var year = date.getFullYear();
+                    var year_month = year + "-" + month;
+                    var hour = date.getHours();
+
+                    lat = item['lat']
+                    lon = item['lon']
+                    if (yearCrash.hasOwnProperty(year)){
+                        yearCrash[year].push(new google.maps.LatLng(lat, lon));
+                    }
+                    else{
+                        yearCrash[year] = [new google.maps.LatLng(lat, lon)];
+                    }
+                    if (monthCrash.hasOwnProperty(month)){
+                        monthCrash[month].push(new google.maps.LatLng(lat, lon));
+                    }
+                    else{
+                        monthCrash[month] = [new google.maps.LatLng(lat, lon)];
+                    }
+                    if (yearMonthCrash.hasOwnProperty(year_month)){
+                        yearMonthCrash[year_month].push(new google.maps.LatLng(lat,lon));
+                    }
+                    else{
+                        yearMonthCrash[year_month] = [new google.maps.LatLng(lat,lon)];
+                    }
+                    if (hourCrash.hasOwnProperty(hour)){
+                        hourCrash[hour].push(new google.maps.LatLng(lat,lon));
+                    }else{
+                        hourCrash[hour] = [new google.maps.LatLng(lat,lon)];
+                    }
+                    crashDataAll.push(new google.maps.LatLng(lat,lon));
+                });
+            }
+        });
+        $.ajax({
+            type:"GET",
+            dataType: "json",
+            url: '/revere/api/v1/locations/dangerous',
+            async: false,
+            success:function(data){
+                data.forEach(function(item){
+                    lat = item['lat']
+                    lon = item['lon']
+                    dangerous.push(new google.maps.LatLng(lat,lon));
+                });
+                dangerous.forEach(function(item){
+                    var marker = new google.maps.Marker({
+                        position: item,
+                        title:"dangerous"
+                    });
+                    markers.push(marker);
+                });
+            }
+        });
+        for (var item in yearCrash){
+            year_set.push(item);
+        }
+        for (var item in monthCrash){
+            month_set.push(item);
+        }
+        for (var item in yearMonthCrash){
+            year_month_set.push(item);
+        }
+        for (var item in hourCrash){
+            hour_set.push(item);
+        }
+
+    }
+
+</script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCywz1VNujVeJWPatJ3B6B3qAwXhHjjMF8&libraries=visualization&sensor=false&callback=initMap">
+</script>
+</body>
+</html>

@@ -1,5 +1,37 @@
-<p>{{data['10']}}</p>
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {background-color: whitesmoke;font-family: -apple-system, BlinkMacSystemFont, sans-serif;}
+    h1   {color: #555555;}
+    p    {color: red;}
+    hr {height:3px; border:none; color:rgb(60,90,180); background-color:powderblue;}
+    font {}
 
+    /* Hide the browser's default checkbox */
+    .container input {
+      opacity: 80%;
+      cursor: pointer;
+      height: 22px;
+      width: 22px;
+      background-color: #eee;
+    }
+
+    .container
+    {
+      background-color: gray();
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+
+    button {height:40px;
+      width:150px;
+      position:relative;
+      font-size: 20px; background-color: floralwhite;}
+  </style>
+</head>
+<div *ngIf="filtersLoaded | async">
 <div>
   <div style="display: block">
     <canvas baseChart
@@ -10,4 +42,9 @@
             [chartType] = "chartType"></canvas>
 
   </div>
+</div>
+</div>
+<div class = "container">
+  <button type="submit"  class = "btn btn-primary" onclick="location.href='/filter'">Back to Filter</button><br><br>
+  <button type="submit"  class = "btn btn-primary" onclick="location.href='/main'">Back to Index</button><br><br>
 </div>

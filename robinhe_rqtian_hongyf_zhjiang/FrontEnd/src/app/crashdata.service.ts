@@ -11,7 +11,7 @@ export class CrashdataService {
 
   getData() {
 
-    // console.log('data from ' + url);
+    // console.log('index from ' + url);
     // $http
 
     return this.http.get(this.url ).pipe(map((crashdata) => {

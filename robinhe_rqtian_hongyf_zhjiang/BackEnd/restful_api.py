@@ -2,6 +2,7 @@ import jsonschema
 from flask import Flask, jsonify, abort, make_response, request
 from flask_httpauth import HTTPBasicAuth
 import dbsetup
+import copy
 
 app = Flask(__name__)
 auth = HTTPBasicAuth()
@@ -48,48 +49,62 @@ def get_dangerous_locations():
         dangerous.append({'lat': lat, 'lon': lon})
     return jsonify(dangerous)
 
+
 @app.route('/revere/api/v1/statistics', methods=['GET'])
 def get_statistics():
-    query_dict = {'$and':[]}
-    for item in request.args.items():
+    category_dict = {'weather':['Cloudy', 'Rain', 'Clear', 'Sleet', 'Fog', 'Unknown'],
+                     'severity':['Fatal', 'Non-fatal', 'Property', 'Unknown'],
+                     'surface':['Dry', 'Wet', 'Snow', 'Ice', 'Water', 'Sand', 'Slush', 'Unknown'],
+                     'ambient':['DarkLighted', 'Dark', 'DarkUnknown', 'DayLight', 'Dusk', 'Dawn', 'Unknown']}
+
+    iter_args = request.args.items();
+    baseline = next(iter_args)[1]
+    query_list = []
+    query_dict = {'$and': []}
+    outputs = {}
+
+    for item in iter_args:
         vals = item[1].split(',')
         query_item = {'$or':[]}
         for val in vals:
             query_item['$or'].append({item[0]:val})
         query_dict['$and'].append(query_item)
+
     print(query_dict)
-
-    reader = db['robinhe_rqtian_hongyf_zhjiang.crash_simplify'].find(query_dict, {'_id': 0});
-    year_count = {
-        '01' : 0,
-        '02' : 0,
-        '03' : 0,
-        '04' : 0,
-        '05' : 0,
-        '06': 0,
-        '07': 0,
-        '08': 0,
-        '09': 0,
-        '10': 0,
-        '11': 0,
-        '12': 0,
-        '13': 0,
-        '14': 0,
-        '15': 0,
-        '16': 0,
-        '17': 0,
-        '18': 0,
-        }
-    for item in reader:
-        year = item['date'].split('/')[2]
-        if year in year_count.keys():
-            year_count[year] += 1
-
-    # response = make_response(jsonify(year_count))
-    # response.headers['Access-Control-Allow-Origin'] = '*'
-    # response.headers['Access-Control-Allow-Methods'] = 'POST'
-    # response.headers['Access-Control-Allow-Headers'] = 'x-requested-with,content-type'
-    return jsonify(year_count)
+    for baseline_condition in category_dict[baseline]:
+        query_each = copy.deepcopy(query_dict)
+        query_each['$and'].append({baseline:baseline_condition})
+        print(query_each)
+        reader = db['robinhe_rqtian_hongyf_zhjiang.crash_simplify'].find(query_each, {'_id': 0});
+        year_count = {
+            '01':0,
+            '02':0,
+            '03':0,
+            '04':0,
+            '05':0,
+            '06': 0,
+            '07': 0,
+            '08': 0,
+            '09': 0,
+            '10': 0,
+            '11': 0,
+            '12': 0,
+            '13': 0,
+            '14': 0,
+            '15': 0,
+            '16': 0,
+            '17': 0,
+            '18': 0,
+            }
+        for item in reader:
+            year = item['date'].split('/')[2]
+            if year in year_count.keys():
+                year_count[year] += 1
+        year_arr = list(year_count.values())
+        print(baseline_condition + str(sum(year_arr)))
+        outputs[baseline_condition] = year_arr
+    print(outputs)
+    return jsonify(outputs)
 
 @app.errorhandler(404)
 def not_found(error):

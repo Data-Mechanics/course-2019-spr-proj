@@ -1,15 +1,56 @@
-<div class=" center">
-<h1>Revere Crash Data Analysis</h1>
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {background-color: whitesmoke;font-family: -apple-system, BlinkMacSystemFont, sans-serif;}
+    h1   {color: #555555;}
+    p    {color: red;}
+    hr {height:3px; border:none; color:rgb(60,90,180); background-color:powderblue;}
+    font {}
+
+    /* Hide the browser's default checkbox */
+    .container input {
+      opacity: 80%;
+      cursor: pointer;
+      height: 22px;
+      width: 22px;
+      background-color: #eee;
+    }
+    .card
+    {
+      background-color: gray();
+      padding: 5px;
+      margin-top: 5px;
+    }
+    .container
+    {
+      background-color: gray();
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+
+    button {height:40px;
+      width:150px;
+      position:relative;
+      font-size: 20px; background-color: floralwhite;}
+  </style>
+</head>
+<body>
+<h1 style="padding: 20px;">Revere Crash Data Chart</h1><hr>
+<div class = 'card'>
 <h3>Choose Your Baseline</h3>
 <input type="radio" name="base" value="Weather Condition" (click)="setradio('weather')"> Weather Condition
 <input type="radio" name="base" value="Severity" (click)="setradio('severity')"> Severity
 <input type="radio" name="base" value="Road Surface" (click)="setradio('surface')"> Road Surface
 <input type="radio" name="base" value="Ambient Light" (click)="setradio('ambient')"> Ambient Light
+</div>
+<div class="card">
 <h3>Choose Your Variables</h3>
 <ul>
-  <li>Weather Condition<br>
+  <li id = 'weather' class="container">Weather Condition<br>
     Cloudy
-    <input type="checkbox" id="weather1" value="Cloudy" checked (click)="Weather1()"> <br>
+    <input type="checkbox" id="weather1" value="Cloudy" checked (click)="Weather1()" > <br>
     Clear
     <input type="checkbox" id="weather2" value="Clear" checked (click)="Weather2()"> <br>
     Rain
@@ -21,7 +62,7 @@
     Unknown/Not Reported
     <input type="checkbox" id="weather6" value="Unknown" checked (click)="Weather6()"><br>
   </li>
-  <li>Severity<br>
+  <li id="severity" class="container">Severity<br>
     Non-fatal injury
     <input type="checkbox" id="severity1" value="Non-fatal" checked (click)="Severity1()"> <br>
     Property damage only (none injured)
@@ -31,47 +72,46 @@
     Unknown/Not Reported
     <input type="checkbox" id="severity4" value="Unknown" checked (click)="Severity4()"> <br>
 
-  <li>Road Surface<br>
+  <li id = 'surface' class="container">Road Surface<br>
   Wet
-  <input type="checkbox" id="surface1" value="Wet" checked> <br>
+  <input type="checkbox" id="surface1" value="Wet" checked (click)="Surface1()"> <br>
   Dry
-  <input type="checkbox" id="surface2" value="Dry" checked> <br>
+  <input type="checkbox" id="surface2" value="Dry" checked (click)="Surface2()"> <br>
   Snow
-  <input type="checkbox" id="surface3" value="Snow" checked><br>
+  <input type="checkbox" id="surface3" value="Snow" checked (click)="Surface3()"><br>
   Ice
-  <input type="checkbox" id="surface4" value="Ice" checked> <br>
+  <input type="checkbox" id="surface4" value="Ice" checked (click)="Surface4()"> <br>
   Water
-  <input type="checkbox" id="surface5" value="Water" checked> <br>
+  <input type="checkbox" id="surface5" value="Water" checked (click)="Surface5()"> <br>
   Sand, mud, dirt, oil, gravel
-  <input type="checkbox" id="surface6" value="Sand" checked><br>
+  <input type="checkbox" id="surface6" value="Sand" checked (click)="Surface6()"><br>
   Slush
-  <input type="checkbox" id="surface7" value="Slush" checked> <br>
+  <input type="checkbox" id="surface7" value="Slush" checked (click)="Surface7()"> <br>
   Other
-  <input type="checkbox" id="surface8" value="Unknown" checked> <br></li>
-  <li>Ambient Light<br>
+  <input type="checkbox" id="surface8" value="Unknown" checked (click)="Surface8()"> <br></li>
+  <li id="ambient" class="container">Ambient Light<br>
     Dark - lighted roadway
-    <input type="checkbox" id="ambient1" value="DarkLighted" checked> <br>
+    <input type="checkbox" id="ambient1" value="DarkLighted" checked (click)="Ambient1()"> <br>
     Dark - roadway not lighted
-    <input type="checkbox" id="ambient2" value="Dark" checked> <br>
+    <input type="checkbox" id="ambient2" value="Dark" checked (click)="Ambient2()"> <br>
     Dark - unknown roadway lighting
-    <input type="checkbox" id="ambient3" value="DarkUnknown" checked><br>
+    <input type="checkbox" id="ambient3" value="DarkUnknown" checked (click)="Ambient3()"><br>
     Daylight
-    <input type="checkbox" id="ambient4" value="DayLight" checked> <br>
+    <input type="checkbox" id="ambient4" value="DayLight" checked (click)="Ambient4()"> <br>
     Dusk
-    <input type="checkbox" id="ambient5" value="Dusk" checked> <br>
+    <input type="checkbox" id="ambient5" value="Dusk" checked (click)="Ambient5()"> <br>
     Dawn
-    <input type="checkbox" id="ambient6" value="Dawn" checked><br>
+    <input type="checkbox" id="ambient6" value="Dawn" checked (click)="Ambient6()"><br>
     Other
-    <input type="checkbox" id="ambient7" value="Unknown" checked> <br>
+    <input type="checkbox" id="ambient7" value="Unknown" checked (click)="Ambient7()"> <br>
   </li>
 </ul>
 
 
 
 <div class = "container">
-  <button type="submit" class = "btn btn-success" (click)="chartDataRequest()">Draw Chart</button>
+  <button type="submit"  class = "btn btn-primary" (click)="chartDataRequest()">Show in Chart</button><br><br>
+    <button type="submit"  class = "btn btn-secondary" onclick="location.href='/main'">Back to Index</button>
+  </div>
 </div>
-<div class = "container">
-  <a href="/data" class = "btn btn-success" >Search Data</a>
-</div>
-</div>
+</body>

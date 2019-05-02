@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from '@angular/router';
+import {CrashdataService} from '../crashdata.service';
 
 import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-filter',
   templateUrl: './filter.component.html',
-  styleUrls: ['./filter.component.css']
+  styleUrls: ['./filter.component.css'],
+  providers: [CrashdataService]
 })
 export class FilterComponent implements OnInit {
 
@@ -23,9 +25,18 @@ export class FilterComponent implements OnInit {
 
 
   setradio(e: string): void {
-
+    if(this.selectedLink !== '') {
+      const lastParent = document.getElementById(this.selectedLink).children ;
+      for (let i = 0; i < lastParent.length; i++) {
+        lastParent[i].removeAttribute('disabled') ;
+      }
+    }
     this.selectedLink = e;
     console.log(this.selectedLink) ;
+    const parent = document.getElementById(this.selectedLink).children ;
+    for (let i = 0; i < parent.length; i++) {
+        parent[i].setAttribute('disabled', 'disabled') ;
+    }
 
 
   }
@@ -163,6 +174,195 @@ export class FilterComponent implements OnInit {
     }
     console.log(this.severity) ;
   }
+  Surface1() {
+
+    const mybox = document.getElementById('surface1') as HTMLInputElement ;
+    if (mybox.checked) {
+      this.surface.push(mybox.value) ;
+    } else {
+      const index: number = this.surface.indexOf(mybox.value);
+      if (index !== -1) {
+        this.surface.splice(index, 1);
+      }
+    }
+    console.log(this.surface) ;
+  }
+  Surface2() {
+
+    const mybox = document.getElementById('surface2') as HTMLInputElement ;
+    if (mybox.checked) {
+      this.surface.push(mybox.value) ;
+    } else {
+      const index: number = this.surface.indexOf(mybox.value);
+      if (index !== -1) {
+        this.surface.splice(index, 1);
+      }
+    }
+    console.log(this.surface) ;
+  }Surface3() {
+
+    const mybox = document.getElementById('surface3') as HTMLInputElement ;
+    if (mybox.checked) {
+      this.surface.push(mybox.value) ;
+    } else {
+      const index: number = this.surface.indexOf(mybox.value);
+      if (index !== -1) {
+        this.surface.splice(index, 1);
+      }
+    }
+    console.log(this.surface) ;
+  }Surface4() {
+
+    const mybox = document.getElementById('surface4') as HTMLInputElement ;
+    if (mybox.checked) {
+      this.surface.push(mybox.value) ;
+    } else {
+      const index: number = this.surface.indexOf(mybox.value);
+      if (index !== -1) {
+        this.surface.splice(index, 1);
+      }
+    }
+    console.log(this.surface) ;
+  }Surface5() {
+
+    const mybox = document.getElementById('surface5') as HTMLInputElement ;
+    if (mybox.checked) {
+      this.surface.push(mybox.value) ;
+    } else {
+      const index: number = this.surface.indexOf(mybox.value);
+      if (index !== -1) {
+        this.surface.splice(index, 1);
+      }
+    }
+    console.log(this.surface) ;
+  }Surface6() {
+
+    const mybox = document.getElementById('surface6') as HTMLInputElement ;
+    if (mybox.checked) {
+      this.surface.push(mybox.value) ;
+    } else {
+      const index: number = this.surface.indexOf(mybox.value);
+      if (index !== -1) {
+        this.surface.splice(index, 1);
+      }
+    }
+    console.log(this.surface) ;
+  }Surface7() {
+
+    const mybox = document.getElementById('surface7') as HTMLInputElement ;
+    if (mybox.checked) {
+      this.surface.push(mybox.value) ;
+    } else {
+      const index: number = this.surface.indexOf(mybox.value);
+      if (index !== -1) {
+        this.surface.splice(index, 1);
+      }
+    }
+    console.log(this.surface) ;
+  }Surface8() {
+
+    const mybox = document.getElementById('surface8') as HTMLInputElement ;
+    if (mybox.checked) {
+      this.surface.push(mybox.value) ;
+    } else {
+      const index: number = this.surface.indexOf(mybox.value);
+      if (index !== -1) {
+        this.surface.splice(index, 1);
+      }
+    }
+    console.log(this.surface) ;
+  }
+  Ambient1() {
+
+    const mybox = document.getElementById('ambient1') as HTMLInputElement ;
+    if (mybox.checked) {
+      this.ambient.push(mybox.value) ;
+    } else {
+      const index: number = this.ambient.indexOf(mybox.value);
+      if (index !== -1) {
+        this.ambient.splice(index, 1);
+      }
+    }
+    console.log(this.ambient) ;
+  }
+  Ambient2() {
+
+    const mybox = document.getElementById('ambient2') as HTMLInputElement ;
+    if (mybox.checked) {
+      this.ambient.push(mybox.value) ;
+    } else {
+      const index: number = this.ambient.indexOf(mybox.value);
+      if (index !== -1) {
+        this.ambient.splice(index, 1);
+      }
+    }
+    console.log(this.ambient) ;
+  }
+  Ambient3() {
+
+    const mybox = document.getElementById('ambient3') as HTMLInputElement ;
+    if (mybox.checked) {
+      this.ambient.push(mybox.value) ;
+    } else {
+      const index: number = this.ambient.indexOf(mybox.value);
+      if (index !== -1) {
+        this.ambient.splice(index, 1);
+      }
+    }
+    console.log(this.ambient) ;
+  }
+  Ambient4() {
+
+    const mybox = document.getElementById('ambient4') as HTMLInputElement ;
+    if (mybox.checked) {
+      this.ambient.push(mybox.value) ;
+    } else {
+      const index: number = this.ambient.indexOf(mybox.value);
+      if (index !== -1) {
+        this.ambient.splice(index, 1);
+      }
+    }
+    console.log(this.ambient) ;
+  }
+  Ambient5() {
+
+    const mybox = document.getElementById('ambient5') as HTMLInputElement ;
+    if (mybox.checked) {
+      this.ambient.push(mybox.value) ;
+    } else {
+      const index: number = this.ambient.indexOf(mybox.value);
+      if (index !== -1) {
+        this.ambient.splice(index, 1);
+      }
+    }
+    console.log(this.ambient) ;
+  }
+  Ambient6() {
+
+    const mybox = document.getElementById('ambient6') as HTMLInputElement ;
+    if (mybox.checked) {
+      this.ambient.push(mybox.value) ;
+    } else {
+      const index: number = this.ambient.indexOf(mybox.value);
+      if (index !== -1) {
+        this.ambient.splice(index, 1);
+      }
+    }
+    console.log(this.ambient) ;
+  }
+  Ambient7() {
+
+    const mybox = document.getElementById('ambient7') as HTMLInputElement ;
+    if (mybox.checked) {
+      this.ambient.push(mybox.value) ;
+    } else {
+      const index: number = this.ambient.indexOf(mybox.value);
+      if (index !== -1) {
+        this.ambient.splice(index, 1);
+      }
+    }
+    console.log(this.ambient) ;
+  }
   chartDataRequest() {
     if (this.selectedLink === 'weather') { this.baseline = this.weather ; }
     if (this.selectedLink === 'severity') { this.baseline = this.severity ; }
@@ -204,7 +404,12 @@ export class FilterComponent implements OnInit {
     url = url.substring(0, url.length - 1 ) ;
     console.log(url) ;
     localStorage.setItem('url', url) ;
-    this.route.navigate(['chart']);
-    localStorage.setItem('baseline', this.baseline) ;
+    if (this.selectedLink === '') {
+      alert('You have to choose one baseline') ;
+    } else {
+      this.route.navigate(['chart']);
+    }
+
+    localStorage.setItem('baseline', this.selectedLink) ;
   }
 }
