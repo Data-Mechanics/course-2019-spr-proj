@@ -114,7 +114,6 @@ class kmeans(dml.Algorithm):
         return doc
 
 
-# kmeans.execute()
 # doc = kmeans.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))
