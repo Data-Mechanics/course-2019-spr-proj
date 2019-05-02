@@ -1,9 +1,15 @@
 
-# CS504 Data-Mechanics Project 1
+# CS504 Data-Mechanics Project
 
 ## Authors
 Haoxuan Jia(hxjia@bu.edu)
 Jiahao Zhang(jiahaozh@bu.edu)
+
+## Purpose
+With the datasets above, we can combine them to answer 3 interesting questions:
+<br />1.	What is the impact of holidays on the prices of Boston Airbnb houses? Is there any pattern that the average price is highest or lowest on some holiday?
+<br />2.	What is the impact of Boston landmarks on the number of houses and on the average prices of houses?
+<br />3.	What is the relationship between the prices of houses and traveler's reviews.
 
 ## Datasets
 ### Boston Airbnb Calendar
@@ -21,12 +27,6 @@ A csv file containing landmarks in different neighborhoods of Boston
 ### US Holidays
 A csv file containing date and holidays from 1966 to 2011
 <br />http://datamechanics.io/data/hxjia_jiahaozh/US_Holidays.csv
-
-## Purpose
-With the datasets above, we can combine them to answer 3 interesting questions:
-<br />1.	What is the impact of holidays on the prices of Boston Airbnb houses? Is there any pattern that the average price is highest or lowest on some holiday?
-<br />2.	What is the impact of Boston landmarks on the number of houses and on the average prices of houses?
-<br />3.	What is the relationship between the prices of houses and traveler's reviews.
 
 ## Data Transformation
 ### Price_and_Comments
@@ -47,9 +47,13 @@ Generated from Boston Airbnb Listings and Boston Landmarks
 <br />Boston Airbnb Listing: Select, Project  Aggregate to get (neighbourhood, the number of houses in that neighbourhood), Select, Project and Aggregate to get (neighbourhood, the mean price of houses in that neighbourhood).
 <br />Boston Landmarks: Select, Project and Aggregate to get (neighbourhood, the number of landmarks in that neighbourhood)
 <br />Combiantion: project to get  (neighbourhood, the number of landmarks,  the number of houses, the mean prices of houses in that neighbourhood)
+### id_month_price_score_lat_long
+This part was implemented in id_month_price_score_lat_long.py
+<br />Generated from Boston Airbnb Listings and Boston Airbnb Calendar 
+<br />Boston Airbnb Calendar: Select, Project and Aggregate to get (id, mean price of all dates of the year) 
+<br />Boston Airbnb Listing: Select, Project to get (id, review scores, the number of reviews, longitude, latitude) 
+<br />Combination: Select, Project to get (id, mean price, review scores, the number of reviews, longitude, latitude)
 
-
-# CS504 Data-Mechanics Project 2
 ## Narrative
 The idea of this project was to categorize the airbnb houses based on reviews and prices. We decided the best way as choosing houses with lower prices and higher review scores. Figure 1 and Figure 2 show the basic housing distribution scatter plot on Google map and the corresponding heatmap to show the housing density in areas. At first, for statistical analysis part, we used seaborn library to plot prices distribution and review scores distribution. And we calculated the correlation coefficient between prices and review scores and the the correlation coefficient between prices and the number of reviews. For optimization and constraint satisfaction part, we needed only those houses, the number of reviews of which is larger than 10 because small number of reviews is not representative. Then we calculated Within-Cluster-Sum-of-Squares(WCSS) under different K values to choose best K to do kmeans based on prices and review scores. Next we did kmeans to cluster houses.  Finally, we plotted each cluster according to latitudes and longtitudes on googlemap using different colors.
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Housing_Scatter_Map.png" />
@@ -63,12 +67,6 @@ We used Google Map API in KMEANS.py to plot googlemap and the api key is require
 ## Trial mode
 For trial mode, we used 100 Boston Airbnb Listings data, 36500 Boston Airbnb Calendar data and 500 Boston Airbnb Reviews data. Since Boston Landmarks and US Holidays are quite small, we used all the data of these two dataset.
 
-## Data Transformation
-This part was implemented in id_month_price_score_lat_long.py
-<br />Generated from Boston Airbnb Listings and Boston Airbnb Calendar 
-<br />Boston Airbnb Calendar: Select, Project and Aggregate to get (id, mean price of all dates of the year) 
-<br />Boston Airbnb Listing: Select, Project to get (id, review scores, the number of reviews, longitude, latitude) 
-<br />Combination: Select, Project to get (id, mean price, review scores, the number of reviews, longitude, latitude)
 ## Statistical Analysis
 This part was implemented in KMEANS.py
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Price_Distribution.png" />
