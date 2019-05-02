@@ -5,6 +5,9 @@
 Haoxuan Jia(hxjia@bu.edu)
 Jiahao Zhang(jiahaozh@bu.edu)
 
+## Framework and Programming Languages:
+Flask, Python, HTML, CSS, Javascript
+
 ## Introduction
 Since 2008, guests and hosts have used Airbnb to travel in a more unique, personalized way. Boston as a famous city for travel, the number of Airbnb houses has increased greatly these years, making Airbnb house choosing a time consuming thing to do.
 <br />
@@ -125,8 +128,9 @@ For features, we considered only prices and review scores in the projected. We w
 <br />For algorithm, K-Means is a naive classification algorithm. We can use more complicated classification methods.
 <br />For web application, it is not very user-friendly right now. We can add some interesting function like multiple login ways, search lists, add friends, etc.
 
+
 # Tools and Libraries
-Pandas
+<br />Pandas
 <br />dml
 <br />prov
 <br />protoql
@@ -138,3 +142,7 @@ Pandas
 <br />gmplot
 <br />matplotlib
 <br />seaborn
+<br />folium
+<br />Leaflet
+
+# If you have any problems, please feel free to contact us.
