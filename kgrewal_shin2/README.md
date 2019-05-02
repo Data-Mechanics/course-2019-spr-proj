@@ -82,4 +82,6 @@ we have narrowed our list down to will have plenty of significant suggestions.
 <br></br>
 <b>Project 3:</b> 
 
+<h4><b>Must run app.py in Project3 folder to view our final webpage.</b></h4>
+
 Library used for google maps API: https://github.com/rochacbruno/Flask-GoogleMaps
