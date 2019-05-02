@@ -17,6 +17,7 @@ class Get_Boston_Calendar(dml.Algorithm):
         """
             Retrieve some data sets (not using the API here for the sake of simplicity).
         """
+
         startTime = datetime.datetime.now()
 
         # Set up the database connection.
@@ -25,10 +26,11 @@ class Get_Boston_Calendar(dml.Algorithm):
         repo.authenticate('hxjia_jiahaozh', 'hxjia_jiahaozh')
 
         url = 'http://datamechanics.io/data/hxjia_jiahaozh/Calendar.csv'
-        df_calendar = pd.read_csv(url)
-        # response = urllib.request.urlopen(url).read().decode("utf-8")
+        if trial:
+            df_calendar = pd.read_csv(url)[:36500]
+        else:
+            df_calendar = pd.read_csv(url)
         r = json.loads(df_calendar.to_json(orient='records'))
-        #s = json.dumps(r, sort_keys=True, indent=2)
         repo.dropCollection("calendar")
         repo.createCollection("calendar")
         repo['hxjia_jiahaozh.calendar'].insert_many(r)

@@ -91,7 +91,3 @@ class get_pop_data(dml.Algorithm):
         repo.logout()
 
         return doc
-
-
-get_pop_data.execute()
-## eof

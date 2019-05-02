@@ -8,8 +8,8 @@ import uuid
 
 class masterList(dml.Algorithm):
     contributor = 'ashwini_gdukuray_justini_utdesai'
-    reads = ['ashwini_gdukuray_justini_utdesai.massHousing', 'ashwini_gdukuray_justini_utdesai.secretary', 'ashwini_gdukuray_justini_utdesai.validZipCodes'] # is going to have to read in the master list from mongodb
-    writes = ['ashwini_gdukuray_justini_utdesai.masterList'] # will write a dataset that is companies in top 25 that are also certified MBE
+    reads = ['ashwini_gdukuray_justini_utdesai.massHousing', 'ashwini_gdukuray_justini_utdesai.secretary', 'ashwini_gdukuray_justini_utdesai.validZipCodes']
+    writes = ['ashwini_gdukuray_justini_utdesai.masterList']
 
     @staticmethod
     def execute(trial=False):
@@ -28,10 +28,15 @@ class masterList(dml.Algorithm):
         secretary = repo['ashwini_gdukuray_justini_utdesai.secretary']
         validZips = repo['ashwini_gdukuray_justini_utdesai.validZipCodes']
 
+        if (trial):
+            massHousingDF = pd.DataFrame(list(massHousing.find()))[:100]
+            secretaryDF = pd.DataFrame(list(secretary.find()))[:100]
+            validZipsDF = pd.DataFrame(list(validZips.find()))[:100]
+        else:
+            massHousingDF = pd.DataFrame(list(massHousing.find()))
+            secretaryDF = pd.DataFrame(list(secretary.find()))
+            validZipsDF = pd.DataFrame(list(validZips.find()))
 
-        massHousingDF = pd.DataFrame(list(massHousing.find()))
-        secretaryDF = pd.DataFrame(list(secretary.find()))
-        validZipsDF = pd.DataFrame(list(validZips.find()))
 
         # clean up secretary dataset
         # convert zip codes to strings and 5 digits long
@@ -40,6 +45,7 @@ class masterList(dml.Algorithm):
                                                         if len(zipCode) < 5 else zipCode)[:5])
         secretaryDF = secretaryDF.loc[secretaryDF['MBE - Y/N'] == 'Y']
         secretaryDF = secretaryDF[['Business Name', 'Address', 'City', 'Zip', 'State', 'Description of Services']]
+        secretaryDF = secretaryDF.rename(index=str, columns={'Description of Services': 'Industry'})
 
         # create a more uniform ID
         businessIDs = []
@@ -53,6 +59,7 @@ class masterList(dml.Algorithm):
 
         # clean up massHousing dataset
         massHousingDF['Zip'] = massHousingDF['Zip'].apply(lambda zipCode: zipCode[:5])
+        massHousingDF = massHousingDF.loc[massHousingDF['Ownership and Certification Information'].str.contains('Ownership: Minority')]
         massHousingDF = massHousingDF[['Business Name', 'Address', 'City', 'Zip', 'State', 'Primary Trade', 'Primary Other/Consulting Description']]
 
         businessIDs = []
@@ -61,23 +68,23 @@ class masterList(dml.Algorithm):
             cleanedText = busName.upper().strip().replace(' ','').replace('.','').replace(',','').replace('-','')
             businessIDs.append(cleanedText)
 
-            if (row['Primary Trade'] == 'Other: Specify'):
+            if (row['Primary Trade'] == 'Other: Specify' or row['Primary Trade'] == 'Consultant: Specify'):
                 row['Primary Trade'] = row['Primary Other/Consulting Description']
 
         massHousingDF['B_ID'] = pd.Series(businessIDs, index=massHousingDF.index)
 
-        massHousingDF = massHousingDF.rename(index=str, columns={'Primary Trade': 'Description of Services'})
+        massHousingDF = massHousingDF.rename(index=str, columns={'Primary Trade': 'Industry'})
         massHousingDF = massHousingDF.drop(columns=['Primary Other/Consulting Description'])
 
 
         # merge and create masterList
         preMasterList = pd.merge(massHousingDF, secretaryDF, how='outer', on=['B_ID', 'City', 'Zip'])
 
-        preDict = {'B_ID': [], 'Business Name': [], 'Address': [], 'City': [], 'Zip': [], 'State': [], 'Description of Services': []}
+        preDict = {'B_ID': [], 'Business Name': [], 'Address': [], 'City': [], 'Zip': [], 'State': [], 'Industry': []}
 
         for index, row in preMasterList.iterrows():
 
-            desc = row['Description of Services_x']
+            desc = row['Industry_x']
 
             preDict['B_ID'].append(row['B_ID'])
             preDict['City'].append(row['City'])
@@ -87,12 +94,12 @@ class masterList(dml.Algorithm):
                 preDict['Business Name'].append(row['Business Name_y'])
                 preDict['State'].append(row['State_y'])
                 preDict['Address'].append(row['Address_y'])
-                preDict['Description of Services'].append(row['Description of Services_y'])
+                preDict['Industry'].append(row['Industry_y'])
             else:
                 preDict['Business Name'].append(row['Business Name_x'])
                 preDict['State'].append(row['State_x'])
                 preDict['Address'].append(row['Address_x'])
-                preDict['Description of Services'].append(row['Description of Services_x'])
+                preDict['Industry'].append(row['Industry_x'])
 
 
         masterList = pd.DataFrame(preDict)

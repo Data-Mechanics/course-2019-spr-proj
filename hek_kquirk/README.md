@@ -1,3 +1,16 @@
+Project Two
+------------
+After browsing through Boston’s Open Data Portal, we noticed that police compensation was a lot higher than we expected for officers in the city of Boston. As a result, we became interested in the allocation and distribution of police resources within the city. Towards a solution to that problem, we’ve looked at both: where crimes are centered among Boston’s 12 police districts, and which demographics might correlate with crime incidents across districts. With this information, we can determine which point in a given police district minimizes the mean distance to where crimes are occuring in that district and ways we might allocate police resources in those districts to better address criminal activity.
+
+Something else that we decided to look at was if there were any ways that we could predict the number of incidents within a district. We investigated three main factors taken from Boston census data: per capita income, education level (bachelor’s degree or higher attained), and percentage of white non-hispanics in a neighborhood. For each of these factors we calculated the IQR to see if there were any outliers at the neighborhood level and also at the district level. Then, we calculated the correlation coefficient for each of the factors for each district against the number of crime incidents per district to see if there was any connection. Finally, we found the districts with the highest and lowest number of incidents and stored the details of those specific districts in our database for later reference.
+
+The libraries that are needed for this part of the project are numpy, pandas, sklearn, scipy, geopandas.
+
+--------------------
+
+Project One
+------------
+
 Data Set One
 ---------------
 One data set we pulled was a zipped shape file from Harvard Dataverse that contained information about the police districts within Boston. In order to better use the data, we then converted it into a GeoJSON format. In this way, the data will store nicely within MongoDB and will be easier to query. As for the significance of this data, while the data set itself is not interesting, it can be combined with some of our other data sets. One data sets that we could combine are the crime statistics for each district with this data set. This would allow us to better visualize the crime per district. We could also use the race and ethinicity or general neighborhood statistics for us to store more information about each district.

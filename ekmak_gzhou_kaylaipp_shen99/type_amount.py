@@ -8,6 +8,7 @@ import uuid
 import requests
 import xmltodict
 import csv
+from tqdm import tqdm,trange
 
 #number of buildings per street in south boston 
 class type_amount(dml.Algorithm):
@@ -22,6 +23,8 @@ class type_amount(dml.Algorithm):
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate('ekmak_gzhou_kaylaipp_shen99','ekmak_gzhou_kaylaipp_shen99')
+        print('')
+        print('inserting type amount data (this one takes awhile)...')
 
         #list of tuples in format (street name, street num, 1) aka (beacon st  , 362, 1)                  
         #contains all street names for accessing & address data = union 
@@ -32,29 +35,34 @@ class type_amount(dml.Algorithm):
         for info in property_data:
             st_full = info['address']['street'] 
             types = info['editedFacts']['useCode']
-
             unit_bed_bath.append((st_full, types))
 
         search_results_data = repo.ekmak_gzhou_kaylaipp_shen99.zillow_getsearchresults_data.find()
         for info in search_results_data: 
             st_full = info['full_address']['street']     
             amount = info['zestimate']['amount']
-  
             unit_amount.append((st_full, amount))
 
+        # remove any none value tuples 
         selected = select(unit_amount, lambda t: t[1] != None)
+        unit_bed_bath = select(unit_bed_bath, lambda t: t[1] != None)
 
-        all_units = [(t,u) for t in selected for u in unit_bed_bath]
+        all_units = [(t,u) for t in tqdm(selected) for u in unit_bed_bath]
     
         combine = select(all_units, lambda t: t[0][0] == t[1][0])
 
+        # filter out any none valued tuples
+        combine = select(combine, lambda t: t[0][0] is not None and t[0][1] is not None and t[1][0] is not None and t[1][1] is not None) 
+        
         concatonate = project(combine, lambda t: (t[1][1], (t[0][1], 1)))
 
-        #print(concatonate[2])
+        # filter out any none valued tuples
+        # concatenate in form ('Triplex', (2448502, 1))
+        concatonate = select(concatonate, lambda t: t[1][0] is not None and t[1][1] is not None)
 
-        avgagg = reduce(lambda k,v: (k,sum(v[0])/sum(v[1])), concatonate)
+        #avgagg = reduce(lambda k,v: (k,sum(v[0])/sum(v[1])), concatonate)
+        avgagg = reduce(lambda k,v: (k,sum(v[0])), concatonate)
 
-        #print(avgagg[0])
 
         #create new database 
         repo.dropCollection("type_amount")
@@ -64,7 +72,6 @@ class type_amount(dml.Algorithm):
         for t in avgagg: 
             repo['ekmak_gzhou_kaylaipp_shen99.type_amount'].insert_one({t[0]:t[1]})
 
-        print('inserted number of bedrooms, bathrooms, and amount')
         repo.logout()
         endTime = datetime.datetime.now()
         return {"start":startTime, "end":endTime}
@@ -141,8 +148,5 @@ print(json.dumps(json.loads(doc.serialize()), indent=4))
 '''
 
 # type_amount.execute()
-# print('generating num houses per street provenance...')
-# print('')
-# doc = type_amount.provenance()
-# print(doc.get_provn())
-# print(json.dumps(json.loads(doc.serialize()), indent=4))
+# type_amount.provenance()
+# print('prov done!')

@@ -19,9 +19,6 @@ class uber_movement_data(dml.Algorithm):
         start_time = datetime.datetime.now()
         contributor = 'mmao95_Dongyihe_weijiang_zhukk'
         writes = [contributor + '.uber_data', contributor + '.boston_censustracts',contributor + '.boston_traffic']
-        def aggregate(R, f):
-            keys = {r[0] for r in R}
-            return [(key, f([v for (k,v) in R if k == key])) for key in keys]
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
@@ -72,7 +69,7 @@ class uber_movement_data(dml.Algorithm):
         repo.dropCollection('boston_traffic')
         repo.createCollection('boston_traffic')
         columnName2 = ['Street Name','Traffic Count']
-        df2 = pd.DataFrame(columns=columnName1, data=l4)
+        df2 = pd.DataFrame(columns=columnName2, data=l4)
         data2 = json.loads(df2.to_json(orient="records"))
         repo[writes[2]].insert_many(data2)
         repo[writes[2]].metadata({'complete': True})

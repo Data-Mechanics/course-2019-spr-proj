@@ -8,16 +8,25 @@ import zillow
 import requests
 import xmltodict
 import csv
+from geopy.geocoders import Nominatim
+from geopy.extra.rate_limiter import RateLimiter
+import time
+from tqdm import tqdm
 
+geolocator = Nominatim(user_agent='myapplication')
+geocode = RateLimiter(geolocator.geocode, min_delay_seconds=2)
 
 class get_boston_accessing_data(dml.Algorithm):
 
     contributor = 'ekmak_gzhou_kaylaipp_shen99'
     reads = []
+    # writes = ['ekmak_gzhou_kaylaipp_shen99.accessing_data', 'ekmak_gzhou_kaylaipp_shen99.south_boston_accessing_data']
     writes = ['ekmak_gzhou_kaylaipp_shen99.accessing_data']
 
     @staticmethod
     def execute(trial = False):
+        print('')
+        print('inserting accessing data...')
         '''Retrieve some data sets (not using the API here for the sake of simplicity).'''
         startTime = datetime.datetime.now()
 
@@ -32,11 +41,11 @@ class get_boston_accessing_data(dml.Algorithm):
         r = r['result']['records']
         repo.dropCollection("accessing_data")
         repo.createCollection("accessing_data")
-        for info in r: 
+        for info in tqdm(r): 
             repo['ekmak_gzhou_kaylaipp_shen99.accessing_data'].insert_one(info)
         repo['ekmak_gzhou_kaylaipp_shen99.accessing_data'].metadata({'complete':True})
         print(repo['ekmak_gzhou_kaylaipp_shen99.accessing_data'].metadata())
-        print('inserted accessing data')
+        # print('inserted accessing data')
 
         repo.logout()
         endTime = datetime.datetime.now()
@@ -88,7 +97,9 @@ print(doc.get_provn())
 print(json.dumps(json.loads(doc.serialize()), indent=4))
 '''
 # get_boston_accessing_data.execute()
-# doc = get_boston_accessing_data.provenance()
+# get_boston_accessing_data.provenance()
+# print('done')
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))
 ## eof
+

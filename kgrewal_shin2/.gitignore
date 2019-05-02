@@ -1,0 +1,11 @@
+MassDOT_Roads_SHP/
+
+__pycache__/
+
+.DS_Store
+
+*.json
+*.csv
+
+cleaning/.DS_Store
+cleaning/__pycache__/

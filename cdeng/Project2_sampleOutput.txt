@@ -1,0 +1,272 @@
+Chengyus-MacBook-Pro:course-2019-spr-proj chengyudeng$ python3.6 execute.py cdeng --trial
+<class 'cdeng.Project2_data_analysis.Project2_data_analysis'>
+<class 'cdeng.Project2_optimal_allocation.Project2_optimal_allocation'>
+<class 'cdeng.Project2_most_popular_stations.Project2_most_popular_stations'>
+<class 'cdeng.Project2_load_data.Project2_load_data'>
+<class 'cdeng.Project2_data_analysis.Project2_data_analysis'>
+<class 'cdeng.Project2_optimal_allocation.Project2_optimal_allocation'>
+<class 'cdeng.Project2_most_popular_stations.Project2_most_popular_stations'>
+<class 'cdeng.Project2_data_analysis.Project2_data_analysis'>
+<class 'cdeng.Project2_optimal_allocation.Project2_optimal_allocation'>
+Algorithm 1: load data for project 2
+(1). Load station data here...
+(2). Load 201801 bike trip data here...
+(3). Load 201802 bike trip data here...
+(4). Combine trip data here...
+Finish data provenance here...
+Algorithm 2: find popular stations for project 2
+Finish data provenance here...
+Algorithm 4: Data analysis for project 2
+NOTICE: the trial mode will take around 8-10 seconds to run while the normal mode will take around 16-20 seconds to run.
+Trial mode...
+Loading data for analysis...
+Calculating statistical results...
+Calculation finished. Storing results into a collection in MongoDB...
+---Results---
+1. Bike stations # of docks and incoming trip (x: dock, y: incoming):
+Correlation coefficient: 0.4508402258944675
+P values: 0.0
+
+2. Bike stations # of docks and outgoing trip (x: dock, y: outgoing):
+Correlation coefficient: 0.4234264595179165
+P values: 0.0
+
+3. Outgoing trip and incoming trip (x: outgoing, y: incoming):
+Correlation coefficient: 0.9915974890511886
+P values: 0.0
+
+Finish data provenance here...
+Algorithm 3: Optimal allocation for the most 2 popular stations for project 2
+NOTICE: the trial mode will take around 2-3 mins to run while the normal mode will take around 4.5 hrs to run.
+Trial mode...
+[{'_id': 'MIT at Mass Ave / Amherst St', 'outgoing_trip': 3818, 'dock': 27, 'avg_outgoing_trip': 7}, {'_id': 'MIT Stata Center at Vassar St / Main St', 'outgoing_trip': 2918, 'dock': 27, 'avg_outgoing_trip': 5}]
+[{'_id': 'MIT at Mass Ave / Amherst St', 'incoming_trip': 3657, 'dock': 27, 'avg_incomming_trip': 6}, {'_id': 'MIT Stata Center at Vassar St / Main St', 'incoming_trip': 3397, 'dock': 27, 'avg_incomming_trip': 6}]
+Here is the parameters for the polict iteration optimization algorithm:
+reward: 2
+cost: 1
+discount_factor: 0.9
+move_bike_num: 5
+possion_limit: 14
+station_1_dock_num: 27
+station_2_dock_num: 27
+station_1_incoming_rate: 6
+station_1_outgoing_rate: 7
+station_2_incoming_rate: 6
+station_2_outgoing_rate: 5
+-------------------------------------------------
+Algorithm begins...
+Evaluation step: 0, change: 31272.3954053
+Evaluation step: 2, change: 21918.6303938
+Evaluation step: 4, change: 13587.3525655
+Evaluation step: 6, change: 8650.72769042
+Evaluation step: 8, change: 5660.95797357
+Evaluation step: 10, change: 3794.06480917
+Evaluation step: 12, change: 2592.29576647
+Evaluation step: 14, change: 1797.50637103
+Evaluation step: 16, change: 1260.04560028
+Evaluation step: 18, change: 890.234238933
+Evaluation step: 20, change: 632.44761137
+Evaluation step: 22, change: 451.044176113
+Evaluation step: 24, change: 322.529910305
+Evaluation step: 26, change: 231.054615645
+Evaluation step: 28, change: 165.730246905
+Evaluation step: 30, change: 118.975781352
+Evaluation step: 32, change: 85.4607579074
+Evaluation step: 34, change: 61.4109237362
+Evaluation step: 36, change: 44.1408142664
+Evaluation step: 38, change: 31.7331785083
+Evaluation step: 40, change: 22.8160269896
+Evaluation step: 42, change: 16.4059928157
+Evaluation step: 44, change: 11.797484793
+Evaluation step: 46, change: 8.48384777053
+Evaluation step: 48, change: 6.10109097566
+Evaluation step: 50, change: 4.3876271184
+Evaluation step: 52, change: 3.15541911655
+Evaluation step: 54, change: 2.26927884419
+Evaluation step: 56, change: 1.632003276
+Evaluation step: 58, change: 1.17369641583
+Evaluation step: 60, change: 0.84409554233
+Evaluation step: 62, change: 0.607055171924
+Evaluation step: 64, change: 0.436581383876
+Evaluation step: 66, change: 0.313980441842
+Evaluation step: 68, change: 0.225808457993
+Evaluation step: 70, change: 0.162396986664
+Evaluation step: 72, change: 0.116792735691
+Evaluation step: 74, change: 0.0839950641166
+Evaluation step: 76, change: 0.0604076231779
+Evaluation step: 78, change: 0.0434439956823
+Evaluation step: 80, change: 0.0312440840707
+Evaluation step: 82, change: 0.0224701435941
+Evaluation step: 84, change: 0.0161600949487
+Evaluation step: 86, change: 0.0116220295516
+Evaluation step: 88, change: 0.00835834025492
+Evaluation step: 90, change: 0.00601115770218
+Evaluation step: 92, change: 0.00432310911128
+Evaluation step: 94, change: 0.00310909702608
+Evaluation step: 96, change: 0.00223600285904
+Evaluation step: 98, change: 0.00160809032212
+Evaluation step: 100, change: 0.0011565076417
+Evaluation step: 102, change: 0.000831738097617
+Evaluation step: 104, change: 0.000598170077438
+Evaluation step: 106, change: 0.000430192418861
+Evaluation step: 108, change: 0.000309386128833
+Evaluation step: 110, change: 0.000222504553903
+Evaluation step: 112, change: 0.000160020981895
+Evaluation step: 114, change: 0.000115084027414
+Evaluation step: 115, change: 9.75964487395e-05 - evaluation finished
+Policy changed at total steps 0! Policy improvement finished!
+Evaluation step: 0, change: 236.641892392
+Evaluation step: 2, change: 0.689144244308
+Evaluation step: 4, change: 0.144105529011
+Evaluation step: 6, change: 0.0348801977362
+Evaluation step: 8, change: 0.00910740691441
+Evaluation step: 10, change: 0.00250152214187
+Evaluation step: 12, change: 0.000715387389619
+Evaluation step: 14, change: 0.000212848997052
+Evaluation step: 16, change: 6.6635910656e-05
+Evaluation step: 16, change: 6.6635910656e-05 - evaluation finished
+Policy changed at total steps 1! Policy improvement finished!
+Evaluation step: 0, change: 2.46671593346
+Evaluation step: 2, change: 0.210648336843
+Evaluation step: 4, change: 0.0361152325798
+Evaluation step: 6, change: 0.00761213765392
+Evaluation step: 8, change: 0.00169810336354
+Evaluation step: 10, change: 0.000386802176735
+Evaluation step: 12, change: 8.90478889346e-05
+Evaluation step: 12, change: 8.90478889346e-05 - evaluation finished
+Policy changed at total steps 2! Policy improvement finished!
+Evaluation step: 0, change: 0.131880633846
+Evaluation step: 2, change: 0.00975161995476
+Evaluation step: 4, change: 0.00139600205262
+Evaluation step: 6, change: 0.000209337645458
+Evaluation step: 7, change: 8.06257750128e-05 - evaluation finished
+Policy changed at total steps 3! Policy improvement finished!
+Policy converged at total steps 3! Policy iteration finished!
+Store output polict strategy and values into MongoDB...
+Done!
+Finish data provenance here...
+document
+  prefix alg <http://datamechanics.io/algorithm/>
+  prefix dat <http://datamechanics.io/data/>
+  prefix ont <http://datamechanics.io/ontology#>
+  prefix log <http://datamechanics.io/log/>
+  prefix bdp2 <https://s3.amazonaws.com/hubway-data>
+  
+  agent(alg:cdeng#Project2_load_data, [prov:type='prov:SoftwareAgent', ont:Extension="py"])
+  entity(dat:201801_hubway_tripdata, [prov:label="311, Service Requests", prov:type="ont:DataResource", ont:Extension="csv"])
+  entity(dat:201802_hubway_tripdata, [prov:label="311, Service Requests", prov:type="ont:DataResource", ont:Extension="csv"])
+  entity(bdp2:Hubway_Stations_as_of_July_2017, [prov:label="311, Service Requests", prov:type="ont:DataResource", ont:Extension="csv"])
+  activity(log:uuidc5265f3d-cae4-4347-988e-37b282cc2b1a, -, -)
+  activity(log:uuidb3b6cca3-bbeb-4d96-9005-a842be02b459, -, -)
+  wasAssociatedWith(log:uuidc5265f3d-cae4-4347-988e-37b282cc2b1a, alg:cdeng#Project2_load_data, -)
+  wasAssociatedWith(log:uuidb3b6cca3-bbeb-4d96-9005-a842be02b459, alg:cdeng#Project2_load_data, -)
+  used(log:uuidb3b6cca3-bbeb-4d96-9005-a842be02b459, dat:201801_hubway_tripdata, -, [prov:type="ont:Retrieval", ont:Query=""])
+  used(log:uuidb3b6cca3-bbeb-4d96-9005-a842be02b459, dat:201802_hubway_tripdata, -, [prov:type="ont:Retrieval", ont:Query=""])
+  used(log:uuidc5265f3d-cae4-4347-988e-37b282cc2b1a, bdp2:Hubway_Stations_as_of_July_2017, -, [prov:type="ont:Retrieval", ont:Query=""])
+  entity(dat:cdeng#bike_trip, [prov:label="bike_trip", prov:type="ont:DataSet"])
+  wasAttributedTo(dat:cdeng#bike_trip, alg:cdeng#Project2_load_data)
+  wasGeneratedBy(dat:cdeng#bike_trip, log:uuidb3b6cca3-bbeb-4d96-9005-a842be02b459, -)
+  wasDerivedFrom(dat:cdeng#bike_trip, dat:201801_hubway_tripdata, log:uuidb3b6cca3-bbeb-4d96-9005-a842be02b459, log:uuidb3b6cca3-bbeb-4d96-9005-a842be02b459, log:uuidb3b6cca3-bbeb-4d96-9005-a842be02b459)
+  wasDerivedFrom(dat:cdeng#bike_trip, dat:201802_hubway_tripdata, log:uuidb3b6cca3-bbeb-4d96-9005-a842be02b459, log:uuidb3b6cca3-bbeb-4d96-9005-a842be02b459, log:uuidb3b6cca3-bbeb-4d96-9005-a842be02b459)
+  entity(dat:cdeng#stations_info, [prov:label="stations_info", prov:type="ont:DataSet"])
+  wasAttributedTo(dat:cdeng#stations_info, alg:cdeng#Project2_load_data)
+  wasGeneratedBy(dat:cdeng#stations_info, log:uuidc5265f3d-cae4-4347-988e-37b282cc2b1a, -)
+  wasDerivedFrom(dat:cdeng#stations_info, bdp2:Hubway_Stations_as_of_July_2017, log:uuidc5265f3d-cae4-4347-988e-37b282cc2b1a, log:uuidc5265f3d-cae4-4347-988e-37b282cc2b1a, log:uuidc5265f3d-cae4-4347-988e-37b282cc2b1a)
+  entity(dat:201801_hubway_tripdata, [prov:label="311, Service Requests", prov:type="ont:DataResource", ont:Extension="csv"])
+  entity(dat:201802_hubway_tripdata, [prov:label="311, Service Requests", prov:type="ont:DataResource", ont:Extension="csv"])
+  entity(bdp2:Hubway_Stations_as_of_July_2017, [prov:label="311, Service Requests", prov:type="ont:DataResource", ont:Extension="csv"])
+  activity(log:uuid6953bd30-6bd4-45b7-bfdf-efb05462ca8f, -, -)
+  activity(log:uuidebdc8b18-ec2d-4caf-b567-f68be39399c3, -, -)
+  agent(alg:cdeng#Project2_most_popular_stations, [prov:type='prov:SoftwareAgent', ont:Extension="py"])
+  wasAssociatedWith(log:uuid6953bd30-6bd4-45b7-bfdf-efb05462ca8f, alg:cdeng#Project2_most_popular_stations, -)
+  wasAssociatedWith(log:uuidebdc8b18-ec2d-4caf-b567-f68be39399c3, alg:cdeng#Project2_most_popular_stations, -)
+  used(log:uuid6953bd30-6bd4-45b7-bfdf-efb05462ca8f, dat:201801_hubway_tripdata, -, [prov:type="ont:Retrieval", ont:Query=""])
+  used(log:uuid6953bd30-6bd4-45b7-bfdf-efb05462ca8f, dat:201802_hubway_tripdata, -, [prov:type="ont:Retrieval", ont:Query=""])
+  used(log:uuid6953bd30-6bd4-45b7-bfdf-efb05462ca8f, bdp2:Hubway_Stations_as_of_July_2017, -, [prov:type="ont:Retrieval", ont:Query=""])
+  used(log:uuidebdc8b18-ec2d-4caf-b567-f68be39399c3, dat:201801_hubway_tripdata, -, [prov:type="ont:Retrieval", ont:Query=""])
+  used(log:uuidebdc8b18-ec2d-4caf-b567-f68be39399c3, dat:201802_hubway_tripdata, -, [prov:type="ont:Retrieval", ont:Query=""])
+  used(log:uuidebdc8b18-ec2d-4caf-b567-f68be39399c3, bdp2:Hubway_Stations_as_of_July_2017, -, [prov:type="ont:Retrieval", ont:Query=""])
+  entity(dat:cdeng#stations_popular_start, [prov:label="stations_popular_start", prov:type="ont:DataSet"])
+  wasAttributedTo(dat:cdeng#stations_popular_start, alg:cdeng#Project2_most_popular_stations)
+  wasGeneratedBy(dat:cdeng#stations_popular_start, log:uuid6953bd30-6bd4-45b7-bfdf-efb05462ca8f, -)
+  wasDerivedFrom(dat:cdeng#stations_popular_start, dat:201801_hubway_tripdata, log:uuid6953bd30-6bd4-45b7-bfdf-efb05462ca8f, log:uuid6953bd30-6bd4-45b7-bfdf-efb05462ca8f, log:uuid6953bd30-6bd4-45b7-bfdf-efb05462ca8f)
+  wasDerivedFrom(dat:cdeng#stations_popular_start, dat:201802_hubway_tripdata, log:uuid6953bd30-6bd4-45b7-bfdf-efb05462ca8f, log:uuid6953bd30-6bd4-45b7-bfdf-efb05462ca8f, log:uuid6953bd30-6bd4-45b7-bfdf-efb05462ca8f)
+  wasDerivedFrom(dat:cdeng#stations_popular_start, bdp2:Hubway_Stations_as_of_July_2017, log:uuid6953bd30-6bd4-45b7-bfdf-efb05462ca8f, log:uuid6953bd30-6bd4-45b7-bfdf-efb05462ca8f, log:uuid6953bd30-6bd4-45b7-bfdf-efb05462ca8f)
+  entity(dat:cdeng#stations_popular_end, [prov:label="stations_popular_end", prov:type="ont:DataSet"])
+  wasAttributedTo(dat:cdeng#stations_popular_end, alg:cdeng#Project2_most_popular_stations)
+  wasGeneratedBy(dat:cdeng#stations_popular_end, log:uuidebdc8b18-ec2d-4caf-b567-f68be39399c3, -)
+  wasDerivedFrom(dat:cdeng#stations_popular_end, dat:201801_hubway_tripdata, log:uuidebdc8b18-ec2d-4caf-b567-f68be39399c3, log:uuidebdc8b18-ec2d-4caf-b567-f68be39399c3, log:uuidebdc8b18-ec2d-4caf-b567-f68be39399c3)
+  wasDerivedFrom(dat:cdeng#stations_popular_end, dat:201802_hubway_tripdata, log:uuidebdc8b18-ec2d-4caf-b567-f68be39399c3, log:uuidebdc8b18-ec2d-4caf-b567-f68be39399c3, log:uuidebdc8b18-ec2d-4caf-b567-f68be39399c3)
+  wasDerivedFrom(dat:cdeng#stations_popular_end, bdp2:Hubway_Stations_as_of_July_2017, log:uuidebdc8b18-ec2d-4caf-b567-f68be39399c3, log:uuidebdc8b18-ec2d-4caf-b567-f68be39399c3, log:uuidebdc8b18-ec2d-4caf-b567-f68be39399c3)
+  agent(alg:cdeng#Project2_data_analysis, [prov:type='prov:SoftwareAgent', ont:Extension="py"])
+  entity(dat:201801_hubway_tripdata, [prov:label="311, Service Requests", prov:type="ont:DataResource", ont:Extension="csv"])
+  entity(dat:201802_hubway_tripdata, [prov:label="311, Service Requests", prov:type="ont:DataResource", ont:Extension="csv"])
+  entity(bdp2:Hubway_Stations_as_of_July_2017, [prov:label="311, Service Requests", prov:type="ont:DataResource", ont:Extension="csv"])
+  activity(log:uuida682903f-87da-4560-871f-78a25ab5014d, -, -)
+  activity(log:uuidf9cb650f-a830-4286-8ef1-f934f9abd847, -, -)
+  activity(log:uuid7d350888-53cc-40d9-8c16-558db0376c76, -, -)
+  activity(log:uuide8f42d1c-a7b3-41db-9f7f-aaec97fef67f, -, -)
+  activity(log:uuid0f179b59-eff6-4f81-962d-bb25a6780b13, -, -)
+  activity(log:uuidf3efdccc-67f5-4b5b-9934-423727d5c8b2, -, -)
+  activity(log:uuid9b10ecd7-9d5b-4951-b1bd-590507f67ca3, -, -)
+  wasAssociatedWith(log:uuida682903f-87da-4560-871f-78a25ab5014d, alg:cdeng#Project2_data_analysis, -)
+  wasAssociatedWith(log:uuidf9cb650f-a830-4286-8ef1-f934f9abd847, alg:cdeng#Project2_data_analysis, -)
+  wasAssociatedWith(log:uuid7d350888-53cc-40d9-8c16-558db0376c76, alg:cdeng#Project2_data_analysis, -)
+  wasAssociatedWith(log:uuide8f42d1c-a7b3-41db-9f7f-aaec97fef67f, alg:cdeng#Project2_data_analysis, -)
+  wasAssociatedWith(log:uuid0f179b59-eff6-4f81-962d-bb25a6780b13, alg:cdeng#Project2_data_analysis, -)
+  wasAssociatedWith(log:uuidf3efdccc-67f5-4b5b-9934-423727d5c8b2, alg:cdeng#Project2_data_analysis, -)
+  wasAssociatedWith(log:uuid9b10ecd7-9d5b-4951-b1bd-590507f67ca3, alg:cdeng#Project2_data_analysis, -)
+  used(log:uuida682903f-87da-4560-871f-78a25ab5014d, dat:201801_hubway_tripdata, -, [prov:type="ont:Retrieval", ont:Query=""])
+  used(log:uuida682903f-87da-4560-871f-78a25ab5014d, dat:201802_hubway_tripdata, -, [prov:type="ont:Retrieval", ont:Query=""])
+  used(log:uuida682903f-87da-4560-871f-78a25ab5014d, bdp2:Hubway_Stations_as_of_July_2017, -, [prov:type="ont:Retrieval", ont:Query=""])
+  used(log:uuidf9cb650f-a830-4286-8ef1-f934f9abd847, dat:201801_hubway_tripdata, -, [prov:type="ont:Retrieval", ont:Query=""])
+  used(log:uuidf9cb650f-a830-4286-8ef1-f934f9abd847, dat:201802_hubway_tripdata, -, [prov:type="ont:Retrieval", ont:Query=""])
+  used(log:uuidf9cb650f-a830-4286-8ef1-f934f9abd847, bdp2:Hubway_Stations_as_of_July_2017, -, [prov:type="ont:Retrieval", ont:Query=""])
+  used(log:uuid7d350888-53cc-40d9-8c16-558db0376c76, dat:201801_hubway_tripdata, -, [prov:type="ont:Retrieval", ont:Query=""])
+  used(log:uuid7d350888-53cc-40d9-8c16-558db0376c76, dat:201802_hubway_tripdata, -, [prov:type="ont:Retrieval", ont:Query=""])
+  used(log:uuid7d350888-53cc-40d9-8c16-558db0376c76, bdp2:Hubway_Stations_as_of_July_2017, -, [prov:type="ont:Retrieval", ont:Query=""])
+  used(log:uuide8f42d1c-a7b3-41db-9f7f-aaec97fef67f, dat:201801_hubway_tripdata, -, [prov:type="ont:Retrieval", ont:Query=""])
+  used(log:uuide8f42d1c-a7b3-41db-9f7f-aaec97fef67f, dat:201802_hubway_tripdata, -, [prov:type="ont:Retrieval", ont:Query=""])
+  used(log:uuide8f42d1c-a7b3-41db-9f7f-aaec97fef67f, bdp2:Hubway_Stations_as_of_July_2017, -, [prov:type="ont:Retrieval", ont:Query=""])
+  used(log:uuid0f179b59-eff6-4f81-962d-bb25a6780b13, dat:201801_hubway_tripdata, -, [prov:type="ont:Retrieval", ont:Query=""])
+  used(log:uuid0f179b59-eff6-4f81-962d-bb25a6780b13, dat:201802_hubway_tripdata, -, [prov:type="ont:Retrieval", ont:Query=""])
+  used(log:uuid0f179b59-eff6-4f81-962d-bb25a6780b13, bdp2:Hubway_Stations_as_of_July_2017, -, [prov:type="ont:Retrieval", ont:Query=""])
+  used(log:uuidf3efdccc-67f5-4b5b-9934-423727d5c8b2, dat:201801_hubway_tripdata, -, [prov:type="ont:Retrieval", ont:Query=""])
+  used(log:uuidf3efdccc-67f5-4b5b-9934-423727d5c8b2, dat:201802_hubway_tripdata, -, [prov:type="ont:Retrieval", ont:Query=""])
+  used(log:uuidf3efdccc-67f5-4b5b-9934-423727d5c8b2, bdp2:Hubway_Stations_as_of_July_2017, -, [prov:type="ont:Retrieval", ont:Query=""])
+  used(log:uuid9b10ecd7-9d5b-4951-b1bd-590507f67ca3, dat:201801_hubway_tripdata, -, [prov:type="ont:Retrieval", ont:Query=""])
+  used(log:uuid9b10ecd7-9d5b-4951-b1bd-590507f67ca3, dat:201802_hubway_tripdata, -, [prov:type="ont:Retrieval", ont:Query=""])
+  used(log:uuid9b10ecd7-9d5b-4951-b1bd-590507f67ca3, bdp2:Hubway_Stations_as_of_July_2017, -, [prov:type="ont:Retrieval", ont:Query=""])
+  entity(dat:cdeng#stations_dock_incoming_outgoing_stats, [prov:label="stations_dock_incoming_outgoing_stats", prov:type="ont:DataSet"])
+  wasAttributedTo(dat:cdeng#stations_dock_incoming_outgoing_stats, alg:cdeng#Project2_data_analysis)
+  wasGeneratedBy(dat:cdeng#stations_dock_incoming_outgoing_stats, log:uuid9b10ecd7-9d5b-4951-b1bd-590507f67ca3, -)
+  wasDerivedFrom(dat:cdeng#stations_dock_incoming_outgoing_stats, dat:201801_hubway_tripdata, log:uuid9b10ecd7-9d5b-4951-b1bd-590507f67ca3, log:uuid9b10ecd7-9d5b-4951-b1bd-590507f67ca3, log:uuid9b10ecd7-9d5b-4951-b1bd-590507f67ca3)
+  wasDerivedFrom(dat:cdeng#stations_dock_incoming_outgoing_stats, dat:201802_hubway_tripdata, log:uuid9b10ecd7-9d5b-4951-b1bd-590507f67ca3, log:uuid9b10ecd7-9d5b-4951-b1bd-590507f67ca3, log:uuid9b10ecd7-9d5b-4951-b1bd-590507f67ca3)
+  wasDerivedFrom(dat:cdeng#stations_dock_incoming_outgoing_stats, bdp2:Hubway_Stations_as_of_July_2017, log:uuid9b10ecd7-9d5b-4951-b1bd-590507f67ca3, log:uuid9b10ecd7-9d5b-4951-b1bd-590507f67ca3, log:uuid9b10ecd7-9d5b-4951-b1bd-590507f67ca3)
+  agent(alg:cdeng#Project2_optimal_allocation, [prov:type='prov:SoftwareAgent', ont:Extension="py"])
+  entity(dat:201801_hubway_tripdata, [prov:label="311, Service Requests", prov:type="ont:DataResource", ont:Extension="csv"])
+  entity(dat:201802_hubway_tripdata, [prov:label="311, Service Requests", prov:type="ont:DataResource", ont:Extension="csv"])
+  entity(bdp2:Hubway_Stations_as_of_July_2017, [prov:label="311, Service Requests", prov:type="ont:DataResource", ont:Extension="csv"])
+  activity(log:uuid33dbd753-071c-4955-97c0-3350b51098c2, -, -)
+  activity(log:uuid4c42669f-957f-4bee-842f-a2b4d63c8226, -, -)
+  activity(log:uuid0b89b0c5-45c8-4c66-a0ee-393c1fdb7ba5, -, -)
+  wasAssociatedWith(log:uuid33dbd753-071c-4955-97c0-3350b51098c2, alg:cdeng#Project2_optimal_allocation, -)
+  wasAssociatedWith(log:uuid4c42669f-957f-4bee-842f-a2b4d63c8226, alg:cdeng#Project2_optimal_allocation, -)
+  wasAssociatedWith(log:uuid0b89b0c5-45c8-4c66-a0ee-393c1fdb7ba5, alg:cdeng#Project2_optimal_allocation, -)
+  used(log:uuid4c42669f-957f-4bee-842f-a2b4d63c8226, dat:201801_hubway_tripdata, -, [prov:type="ont:Retrieval", ont:Query=""])
+  used(log:uuid4c42669f-957f-4bee-842f-a2b4d63c8226, dat:201802_hubway_tripdata, -, [prov:type="ont:Retrieval", ont:Query=""])
+  used(log:uuid4c42669f-957f-4bee-842f-a2b4d63c8226, bdp2:Hubway_Stations_as_of_July_2017, -, [prov:type="ont:Retrieval", ont:Query=""])
+  used(log:uuid33dbd753-071c-4955-97c0-3350b51098c2, dat:201801_hubway_tripdata, -, [prov:type="ont:Retrieval", ont:Query=""])
+  used(log:uuid33dbd753-071c-4955-97c0-3350b51098c2, dat:201802_hubway_tripdata, -, [prov:type="ont:Retrieval", ont:Query=""])
+  used(log:uuid33dbd753-071c-4955-97c0-3350b51098c2, bdp2:Hubway_Stations_as_of_July_2017, -, [prov:type="ont:Retrieval", ont:Query=""])
+  used(log:uuid0b89b0c5-45c8-4c66-a0ee-393c1fdb7ba5, dat:201801_hubway_tripdata, -, [prov:type="ont:Retrieval", ont:Query=""])
+  used(log:uuid0b89b0c5-45c8-4c66-a0ee-393c1fdb7ba5, dat:201802_hubway_tripdata, -, [prov:type="ont:Retrieval", ont:Query=""])
+  used(log:uuid0b89b0c5-45c8-4c66-a0ee-393c1fdb7ba5, bdp2:Hubway_Stations_as_of_July_2017, -, [prov:type="ont:Retrieval", ont:Query=""])
+  entity(dat:cdeng#allocation_strategies, [prov:label="allocation_strategies", prov:type="ont:DataSet"])
+  wasAttributedTo(dat:cdeng#allocation_strategies, alg:cdeng#Project2_optimal_allocation)
+  wasGeneratedBy(dat:cdeng#allocation_strategies, log:uuid0b89b0c5-45c8-4c66-a0ee-393c1fdb7ba5, -)
+  wasDerivedFrom(dat:cdeng#allocation_strategies, dat:201801_hubway_tripdata, log:uuid0b89b0c5-45c8-4c66-a0ee-393c1fdb7ba5, log:uuid0b89b0c5-45c8-4c66-a0ee-393c1fdb7ba5, log:uuid0b89b0c5-45c8-4c66-a0ee-393c1fdb7ba5)
+  wasDerivedFrom(dat:cdeng#allocation_strategies, dat:201802_hubway_tripdata, log:uuid0b89b0c5-45c8-4c66-a0ee-393c1fdb7ba5, log:uuid0b89b0c5-45c8-4c66-a0ee-393c1fdb7ba5, log:uuid0b89b0c5-45c8-4c66-a0ee-393c1fdb7ba5)
+  wasDerivedFrom(dat:cdeng#allocation_strategies, bdp2:Hubway_Stations_as_of_July_2017, log:uuid0b89b0c5-45c8-4c66-a0ee-393c1fdb7ba5, log:uuid0b89b0c5-45c8-4c66-a0ee-393c1fdb7ba5, log:uuid0b89b0c5-45c8-4c66-a0ee-393c1fdb7ba5)
+endDocument
+Chengyus-MacBook-Pro:course-2019-spr-proj chengyudeng$ 

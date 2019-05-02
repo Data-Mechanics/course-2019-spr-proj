@@ -25,7 +25,10 @@ class Get_Boston_Listings(dml.Algorithm):
         repo.authenticate('hxjia_jiahaozh', 'hxjia_jiahaozh')
 
         url = 'http://datamechanics.io/data/hxjia_jiahaozh/Listings.csv'
-        df_listings = pd.read_csv(url)
+        if trial:
+            df_listings = pd.read_csv(url)[:36500]
+        else:
+            df_listings = pd.read_csv(url)
         # response = urllib.request.urlopen(url).read().decode("utf-8")
         r = json.loads(df_listings.to_json(orient='records'))
         #s = json.dumps(r, sort_keys=True, indent=2)
@@ -89,7 +92,7 @@ class Get_Boston_Listings(dml.Algorithm):
 # This is example code you might use for debugging this module.
 # Please remove all top-level function calls before submitting.
 # Get_Boston_Listings.execute()
-# doc = bostonlistings.provenance()
+# doc = Get_Boston_Listings.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))
 

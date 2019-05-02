@@ -8,6 +8,7 @@ import zillow
 import requests
 import xmltodict
 import csv
+from tqdm import tqdm
 
 
 class get_permit_data(dml.Algorithm):
@@ -25,6 +26,8 @@ class get_permit_data(dml.Algorithm):
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate('ekmak_gzhou_kaylaipp_shen99','ekmak_gzhou_kaylaipp_shen99')
+        print('')
+        print('inserting permit data...')
 
         # #Retrive permit database data and add to mongo - source: Analyze Boston
         url = 'https://data.boston.gov/api/3/action/datastore_search?resource_id=6ddcd912-32a0-43df-9908-63574f8c7e77&limit=105750&q=02127'
@@ -33,11 +36,11 @@ class get_permit_data(dml.Algorithm):
         r = r['result']['records']
         repo.dropCollection("permit_data")
         repo.createCollection("permit_data")
-        for info in r: 
+        for info in tqdm(r): 
             repo['ekmak_gzhou_kaylaipp_shen99.permit_data'].insert_one(info)
         repo['ekmak_gzhou_kaylaipp_shen99.permit_data'].metadata({'complete':True})
         print(repo['ekmak_gzhou_kaylaipp_shen99.permit_data'].metadata())
-        print('inserted permit data')
+        # print('inserted permit data')
 
         repo.logout()
         endTime = datetime.datetime.now()
@@ -91,4 +94,6 @@ print(doc.get_provn())
 print(json.dumps(json.loads(doc.serialize()), indent=4))
 '''
 # get_permit_data.execute()
+# get_permit_data.provenance()
+# print('done')
 ## eof

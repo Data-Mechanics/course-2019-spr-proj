@@ -12,7 +12,7 @@ class getData(dml.Algorithm):
     contributor = 'asadeg02_gxy9598'
     reads = []
     writes = ['asadeg02_gxy9598.building_permits', 'asadeg02_gxy9598.crime_incident_report', 
-              'asadeg02_gxy9598.active_food_stablishment', 'asadeg02_gxy9598.Get_Boston_Streets', 'asadeg02_gxy9598.Get_Zillow_Search']
+              'asadeg02_gxy9598.active_food_stablishment', 'asadeg02_gxy9598.Boston_street_segments', 'asadeg02_gxy9598.Get_Zillow_Search']
 
     @staticmethod
     def execute(trial = False):
@@ -38,27 +38,7 @@ class getData(dml.Algorithm):
         repo["asadeg02_gxy9598.building_permits"].metadata({'complete':True})
         print(repo["asadeg02_gxy9598.building_permits"].metadata())
         print('Load Building Permits')
-
-        ##################################################################################
-
-        ''' data = repo["asadeg02_gxy9598.building_permits"].find()
-        address_list = [row['ADDRESS'] for row in data]
-        print(address_list)
-        results = getDataByScaping(address_list[:5])
-        repo.dropCollection("asadeg02_gxy9598.property_details")
-        repo.createCollection("asadeg02_gxy9598.property_details")
         
-        _id = 0
-        for r in results:
-            r['_id'] = _id
-            repo["asadeg02_gxy9598.property_details"].insert(r)
-            _id += 1
-        repo["asadeg02_gxy9598.property_details"].metadata({'complete':True})
-        print(repo["asadeg02_gxy9598.property_details"].metadata())
-        print('Finish scraping')
-
-        '''
-
        #################################----------------Get crime incident data --------------###############################################
        
         url = 'https://data.boston.gov/api/3/action/datastore_search?resource_id=12cb3883-56f5-47de-afa5-3b1cf61b257b&limit=366640'
@@ -105,12 +85,12 @@ class getData(dml.Algorithm):
             record_addrs.sort()
         
         s = json.dumps(r, sort_keys=True, indent=2)
-        repo.dropCollection("Get_Boston_Streets")
-        repo.createCollection("Get_Boston_Streets")
-        repo["asadeg02_gxy9598.Get_Boston_Streets"].insert_many(r)
-        repo["asadeg02_gxy9598.Get_Boston_Streets"].metadata({'complete':True})
-        print(repo["asadeg02_gxy9598.Get_Boston_Streets"].metadata())
-        print("Load GBoston Streets")
+        repo.dropCollection("Boston_street_segments")
+        repo.createCollection("Boston_street_segments")
+        repo["asadeg02_gxy9598.Boston_street_segments"].insert_many(r)
+        repo["asadeg02_gxy9598.Boston_street_segments"].metadata({'complete':True})
+        print(repo["asadeg02_gxy9598.Boston_street_segments"].metadata())
+        print("Load Boston Streets Segments")
 
        ################################################### get housing per Street #########################
         repo.dropCollection("Get_Zillow_Search")
@@ -151,9 +131,7 @@ class getData(dml.Algorithm):
 
     @staticmethod
     def provenance(doc = prov.model.ProvDocument(), startTime = None, endTime = None):
-        client = dml.pymongo.MongoClient()
-        repo = client.repo
-        repo.authenticate('asadeg02_gxy9598', 'asadeg02_gxy9598')
+        
 
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/') # The scripts are in <folder>#<filename> format.
         doc.add_namespace('dat', 'http://datamechanics.io/data/') # The data sets are in <user>#<collection> format.
@@ -194,14 +172,14 @@ class getData(dml.Algorithm):
         doc.wasDerivedFrom(active_food_stablishment, resource_active_food_stablishment, get_active_food_stablishment, get_active_food_stablishment, get_active_food_stablishment)
         
         
-        resource_Get_Boston_Streets = doc.entity('cob:a07cc1c6-aa78-4eb3-a005-dcf7a949249f', {'prov:label':'Boston Street Name', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
-        get_Get_Boston_Streets = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime, {'prov:label':'Get_Boston_Streets', prov.model.PROV_TYPE:'ont:Retrieval'})
-        doc.wasAssociatedWith(get_Get_Boston_Streets, this_script)
-        doc.usage(get_Get_Boston_Streets, resource_Get_Boston_Streets, startTime)
-        Get_Boston_Streets = doc.entity('dat:asadeg02_gxy9598#Get_Boston_Streets', {prov.model.PROV_LABEL:'Boston Street Segments', prov.model.PROV_TYPE:'ont:DataSet'})
-        doc.wasAttributedTo(Get_Boston_Streets, this_script)
-        doc.wasGeneratedBy(Get_Boston_Streets, get_Get_Boston_Streets, endTime)
-        doc.wasDerivedFrom(Get_Boston_Streets, resource_Get_Boston_Streets, get_Get_Boston_Streets ,get_Get_Boston_Streets ,get_Get_Boston_Streets)
+        resource_Boston_street_segmentss = doc.entity('cob:a07cc1c6-aa78-4eb3-a005-dcf7a949249f', {'prov:label':'Boston Street Name', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        get_Boston_street_segmentss = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime, {'prov:label':'Boston_street_segmentss', prov.model.PROV_TYPE:'ont:Retrieval'})
+        doc.wasAssociatedWith(get_Boston_street_segmentss, this_script)
+        doc.usage(get_Boston_street_segmentss, resource_Boston_street_segmentss, startTime)
+        Boston_street_segmentss = doc.entity('dat:asadeg02_gxy9598#Boston_street_segmentss', {prov.model.PROV_LABEL:'Boston Street Segments', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(Boston_street_segmentss, this_script)
+        doc.wasGeneratedBy(Boston_street_segmentss, get_Boston_street_segmentss, endTime)
+        doc.wasDerivedFrom(Boston_street_segmentss, resource_Boston_street_segmentss, get_Boston_street_segmentss ,get_Boston_street_segmentss ,get_Boston_street_segmentss)
 
 
 
@@ -214,16 +192,5 @@ class getData(dml.Algorithm):
         doc.wasGeneratedBy(Get_Zillow_Search, get_Get_Zillow_Search, endTime)
         doc.wasDerivedFrom(Get_Zillow_Search, resource_Get_Zillow_Search, get_Get_Zillow_Search,get_Get_Zillow_Search,get_Get_Zillow_Search)
 
-        repo.logout()
+        
         return doc
-
-
-
-
-
-
-getData.execute()
-doc = getData.provenance()
-#print(doc.get_provn())
-#print(json.dumps(json.loads(doc.serialize()), indent=4))
-## eof

@@ -33,7 +33,7 @@ class foodStablishmentClusters(dml.Algorithm):
         # Get locations data
         locations = []
         for doc in food_stablishments:
-            location = doc['location'].replace('(', '').replace(')', '').split(', ')
+            location = doc['Location'].replace('(', '').replace(')', '').split(', ')
             location = [float(location[0]), float(location[1])]            
             locations.append(location)
 
@@ -55,20 +55,21 @@ class foodStablishmentClusters(dml.Algorithm):
         # Find buildings in each cluster 
         clusters_buildings = {}  
         for doc in building_permits:            
-            location = doc['Location'].replace('(', '').replace(')', '').split(', ')
-            if len(location) == 2:
-                location = [float(location[0]), float(location[1])]
-                min = float("inf")
-                closest_center = None
-                for i in range(0, len(kmeans_centers)):
-                    dist = np.linalg.norm(np.array(kmeans_centers[i])-np.array(location))
-                    if dist <= min:
-                        min = dist
-                        closest_center = i
-                if closest_center in clusters_buildings:
-                    clusters_buildings[closest_center].append(doc)
-                else:
-                    clusters_buildings[closest_center] = [doc]
+            if doc['location'] != None:          
+                location = doc['location'].replace('(', '').replace(')', '').split(', ')
+                if len(location) == 2:
+                    location = [float(location[0]), float(location[1])]
+                    min = float("inf")
+                    closest_center = None
+                    for i in range(0, len(kmeans_centers)):
+                        dist = np.linalg.norm(np.array(kmeans_centers[i])-np.array(location))
+                        if dist <= min:
+                            min = dist
+                            closest_center = i
+                    if closest_center in clusters_buildings:
+                        clusters_buildings[closest_center].append(doc)
+                    else:
+                        clusters_buildings[closest_center] = [doc]
  
         # Get properties in the most populated food stablishment cluster 
         properties_in_most_populated_cluster = None
@@ -92,10 +93,7 @@ class foodStablishmentClusters(dml.Algorithm):
 
     @staticmethod
     def provenance(doc = prov.model.ProvDocument(), startTime = None, endTime = None):
-        client = dml.pymongo.MongoClient()
-        repo = client.repo
-        repo.authenticate('asadeg02_gxy9598', 'asadeg02_gxy9598')
-
+        
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/') # The scripts are in <folder>#<filename> format.
         doc.add_namespace('dat', 'http://datamechanics.io/data/') # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
@@ -122,16 +120,4 @@ class foodStablishmentClusters(dml.Algorithm):
         doc.wasDerivedFrom(properties_within_most_compact_cluster, resource_food_stablishments, findFoodStablishmentClusters, findFoodStablishmentClusters, findFoodStablishmentClusters)
         doc.wasDerivedFrom(properties_within_most_compact_cluster, resource_buiding_permits, findFoodStablishmentClusters, findFoodStablishmentClusters, findFoodStablishmentClusters)
         
-        repo.logout()
         return doc
-
-
-
-
-
-
-foodStablishmentClusters.execute()
-doc = foodStablishmentClusters.provenance()
-#print(doc.get_provn())
-#print(json.dumps(json.loads(doc.serialize()), indent=4))
-## eof

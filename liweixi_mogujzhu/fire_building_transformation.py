@@ -61,9 +61,9 @@ class fire_building_transformation(dml.Algorithm):
             if key.title() not in building_street_dict:
                 new_combined_dataset.append({'Street Name':key, 'Fire Incident Number':fire_street_dict[key], 'Building Violation Number':0})
 
-        repo['fire_building_transformation'].insert_many(new_combined_dataset)
-        repo['fire_building_transformation'].metadata({'complete': True})
-        print(repo['fire_building_transformation'].metadata())
+        repo['liweixi_mogujzhu.fire_building_transformation'].insert_many(new_combined_dataset)
+        repo['liweixi_mogujzhu.fire_building_transformation'].metadata({'complete': True})
+        print(repo['liweixi_mogujzhu.fire_building_transformation'].metadata())
 
         repo.logout()
 

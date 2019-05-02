@@ -6,10 +6,10 @@ import datetime
 import uuid
 import csv
 import io
-class PublicSchool(dml.Algorithm):
+class publicSchool(dml.Algorithm):
     contributor = 'ruipang_zhou482'
     reads = []
-    writes = ['ruipang_zhou482.PublicSchool']
+    writes = ['ruipang_zhou482.publicSchool']
 
     @staticmethod
     def execute(trial = False):
@@ -45,14 +45,14 @@ class PublicSchool(dml.Algorithm):
             c['num_school']=dic[i]
             ps.append(c)
     
-        repo.dropCollection("PublicSchool")
-        repo.createCollection("PublicSchool")
+        repo.dropCollection("publicSchool")
+        repo.createCollection("publicSchool")
         
         
-        repo['ruipang_zhou482.PublicSchool'].insert_many(ps)
-        repo['ruipang_zhou482.PublicSchool'].metadata({'complete':True})
+        repo['ruipang_zhou482.publicSchool'].insert_many(ps)
+        repo['ruipang_zhou482.publicSchool'].metadata({'complete':True})
         
-        print(repo['ruipang_zhou482.PublicSchool'].metadata())
+        print(repo['ruipang_zhou482.publicSchool'].metadata())
         
         repo.logout()
         
@@ -79,27 +79,22 @@ class PublicSchool(dml.Algorithm):
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
         doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
 
-        this_script = doc.agent('alg:ruipang_zhou482#PublicSchool', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        this_script = doc.agent('alg:ruipang_zhou482#publicSchool', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
         resource = doc.entity('dat:Boston Property Values',
-                              {'prov:label': 'Boston Public School Data', prov.model.PROV_TYPE: 'ont:DataResource',
+                              {'prov:label': 'Boston public School Data', prov.model.PROV_TYPE: 'ont:DataResource',
                                'ont:Extension': 'json'})
-        get_PublicSchool = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(get_PublicSchool, this_script)
-        doc.usage(get_PublicSchool, resource, startTime, None,
+        get_publicSchool = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(get_publicSchool, this_script)
+        doc.usage(get_publicSchool, resource, startTime, None,
                   {prov.model.PROV_TYPE:'ont:Retrieval',
                   }
                   )
 
-        PublicSchool = doc.entity('dat:ruipang_zhou482#PublicSchool', {prov.model.PROV_LABEL:'Boston PublicSchool ', prov.model.PROV_TYPE:'ont:DataSet'})
-        doc.wasAttributedTo(PublicSchool, this_script)
-        doc.wasGeneratedBy(PublicSchool, get_PublicSchool, endTime)
-        doc.wasDerivedFrom(PublicSchool, resource, get_PublicSchool, get_PublicSchool, get_PublicSchool)
+        publicSchool = doc.entity('dat:ruipang_zhou482#publicSchool', {prov.model.PROV_LABEL:'Boston publicSchool ', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(publicSchool, this_script)
+        doc.wasGeneratedBy(publicSchool, get_publicSchool, endTime)
+        doc.wasDerivedFrom(publicSchool, resource, get_publicSchool, get_publicSchool, get_publicSchool)
 
         repo.logout()
 
         return doc
-
-PublicSchool.execute()
-doc = PublicSchool.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))

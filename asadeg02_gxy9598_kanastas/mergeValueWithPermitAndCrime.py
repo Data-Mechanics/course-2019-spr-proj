@@ -35,27 +35,27 @@ class mergeValueWithPermitAndCrime(dml.Algorithm):
         #create a dictionary for buiding permits with parcel id as key
         buidling_permits_dict = {}        
         for doc in building_permits:
-            key = doc['Parcel_ID'] 
+            key = doc['parcel_id'] 
             buidling_permits_dict[key]  = doc               
         
         #merge with building permit data base
         address_crime_rate_permit_number_data = []
-        for doc in property_value_for_dangerous_neighbourhoods:            
+        for doc in property_value_for_dangerous_neighbourhoods:                        
             if doc['PARCEL ID'] in buidling_permits_dict:
                 building_permit_doc = buidling_permits_dict[doc['PARCEL ID']]
-                doc['PermitNumber'] = building_permit_doc['PermitNumber']
-                doc['city'] = building_permit_doc['CITY']
-                doc['applicant'] = building_permit_doc['APPLICANT']
-                doc['status'] = building_permit_doc['STATUS']
-                doc['comments'] = building_permit_doc['Comments']
-                doc['work_type'] = building_permit_doc['WORKTYPE']
+                doc['PermitNumber'] = building_permit_doc['permitnumber']
+                doc['city'] = building_permit_doc['city']
+                doc['applicant'] = building_permit_doc['applicant']
+                doc['status'] = building_permit_doc['status']
+                doc['comments'] = building_permit_doc['comments']
+                doc['work_type'] = building_permit_doc['worktype']
                 address_crime_rate_permit_number_data.append(doc)      
         
 
         #create a dictionary for crime incidents with street name as address
         crime_incidents_dict = {}        
         for doc in crime_incidents:
-            key = doc['street']
+            key = doc['STREET']
             if key in crime_incidents_dict: 
                 crime_incidents_dict[key].append(doc)
             else:
@@ -67,8 +67,8 @@ class mergeValueWithPermitAndCrime(dml.Algorithm):
             street = data['ADDRESS'].split(" ", 1)[1]            
             if street in crime_incidents_dict:
                 for doc in crime_incidents_dict[street]:                                    
-                    data['offense_description']  = doc['offense_description']
-                    data['offense_code_group']  = doc['offense_code_group']            
+                    data['offense_description']  = doc['OFFENSE_DESCRIPTION']
+                    data['offense_code_group']  = doc['OFFENSE_CODE_GROUP']            
                     merged_data.append(data)        
 
        
@@ -92,10 +92,7 @@ class mergeValueWithPermitAndCrime(dml.Algorithm):
       ###############################################################################################################################################
 
     @staticmethod
-    def provenance(doc = prov.model.ProvDocument(), startTime = None, endTime = None):
-        client = dml.pymongo.MongoClient()
-        repo = client.repo
-        repo.authenticate('asadeg02_gxy9598', 'asadeg02_gxy9598')
+    def provenance(doc = prov.model.ProvDocument(), startTime = None, endTime = None):        
 
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/') # The scripts are in <folder>#<filename> format.
         doc.add_namespace('dat', 'http://datamechanics.io/data/') # The data sets are in <user>#<collection> format.
@@ -125,16 +122,5 @@ class mergeValueWithPermitAndCrime(dml.Algorithm):
         doc.wasDerivedFrom(address_value_crime_rate_permit_number, resource_buiding_permits, mergeValueWithPermitAndCrime, mergeValueWithPermitAndCrime, mergeValueWithPermitAndCrime)
         doc.wasDerivedFrom(address_value_crime_rate_permit_number, resource_property_value_for_dangerous_neighbourhoods, mergeValueWithPermitAndCrime, mergeValueWithPermitAndCrime, mergeValueWithPermitAndCrime)
         
-        repo.logout()
+        
         return doc
-
-
-
-
-
-
-mergeValueWithPermitAndCrime.execute()
-doc = mergeValueWithPermitAndCrime.provenance()
-#print(doc.get_provn())
-#print(json.dumps(json.loads(doc.serialize()), indent=4))
-## eof

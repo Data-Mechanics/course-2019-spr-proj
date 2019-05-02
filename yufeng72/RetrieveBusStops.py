@@ -62,12 +62,12 @@ class RetrieveBusStops(dml.Algorithm):
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet',
         # 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/')  # The event log.
-        doc.add_namespace('bdp', 'http://datamechanics.io/data/yufeng72/')
+        doc.add_namespace('bdp1', 'http://datamechanics.io/data/yufeng72/')
 
         this_script = doc.agent('alg:yufeng72#RetrieveBusStops',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
 
-        resource = doc.entity('bdp:Bus_Stops',
+        resource = doc.entity('bdp1:Bus_Stops',
                               {'prov:label': 'Bus Stops', prov.model.PROV_TYPE: 'ont:DataResource',
                                'ont:Extension': 'csv'})
 
@@ -83,7 +83,7 @@ class RetrieveBusStops(dml.Algorithm):
                           {prov.model.PROV_LABEL: 'Bus Stops', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(busStops, this_script)
         doc.wasGeneratedBy(busStops, get_busStops, endTime)
-        doc.wasDerivedFrom(busStops, resource, get_busStops, get_busStops, get_busStops)
+        doc.wasDerivedFrom(resource, busStops, get_busStops, get_busStops, get_busStops)
 
         repo.logout()
 

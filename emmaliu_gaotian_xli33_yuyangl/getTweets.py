@@ -23,6 +23,7 @@ class getTweets(dml.Algorithm):
 
         url = 'http://datamechanics.io/data/tweets_amman.json'
         response = urllib.request.urlopen(url).read().decode("utf-8")
+        # print(response)
         r = json.loads(response)
         s = json.dumps(r, sort_keys=True, indent=2)
         repo.dropCollection("tweets")
@@ -79,7 +80,7 @@ class getTweets(dml.Algorithm):
         return doc
 
 
-# getTweets.execute()
+getTweets.execute()
 # doc = getTweets.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))

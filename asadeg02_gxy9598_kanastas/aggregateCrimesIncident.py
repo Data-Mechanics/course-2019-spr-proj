@@ -33,7 +33,7 @@ class aggregateCrimesIncident(dml.Algorithm):
         
         #count aggregation using address as keys
         mapper = Code("function () {"                   
-                   "   emit(this.street, 1);"
+                   "   emit(this.STREET, 1);"
                    "}")
 
         reducer = Code("function (key, values) {"
@@ -53,10 +53,7 @@ class aggregateCrimesIncident(dml.Algorithm):
 
     @staticmethod
     def provenance(doc = prov.model.ProvDocument(), startTime = None, endTime = None):
-        client = dml.pymongo.MongoClient()
-        repo = client.repo
-        repo.authenticate('asadeg02_gxy9598', 'asadeg02_gxy9598')
-
+        
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/') # The scripts are in <folder>#<filename> format.
         doc.add_namespace('dat', 'http://datamechanics.io/data/') # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
@@ -76,16 +73,4 @@ class aggregateCrimesIncident(dml.Algorithm):
         doc.wasGeneratedBy(address_crime_rate, aggregate_crimes_incident, endTime)
         doc.wasDerivedFrom(address_crime_rate, resource_crimes_incident, aggregate_crimes_incident, aggregate_crimes_incident, aggregate_crimes_incident)
         
-        repo.logout()
         return doc
-
-
-
-
-
-
-aggregateCrimesIncident.execute()
-doc = aggregateCrimesIncident.provenance()
-#print(doc.get_provn())
-#print(json.dumps(json.loads(doc.serialize()), indent=4))
-## eof
