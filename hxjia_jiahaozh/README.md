@@ -8,7 +8,14 @@ Jiahao Zhang(jiahaozh@bu.edu)
 ## Introduction
 Since 2008, guests and hosts have used Airbnb to travel in a more unique, personalized way. Boston as a famous city for travel, the number of Airbnb houses has increased greatly these years, making Airbnb house choosing a time consuming thing to do.
 <br />
-The purpose of our project is to pick out the best houses with low price as well as high review score for users and save their time of going through the whole list of Airbnb houses.
+The purpose of our project is to pick out houses with the best values for users and save their time of going through the whole list of Airbnb houses. We decided the best way as choosing houses with lower prices and higher review scores. Figure 1 and Figure 2 show the basic housing distribution scatter plot on Google map and the corresponding heatmap to show the housing density in areas. At first, for statistical analysis part, we used seaborn library to plot prices distribution and review scores distribution. And we calculated the correlation coefficient between prices and review scores and the the correlation coefficient between prices and the number of reviews. For optimization and constraint satisfaction part, we needed only those houses, the number of reviews of which is larger than 10 because small number of reviews is not representative. Then we calculated Within-Cluster-Sum-of-Squares(WCSS) under different K values to choose best K to do kmeans based on prices and review scores. Next we did kmeans to cluster houses.  Finally, we plotted each cluster according to latitudes and longtitudes on googlemap using different colors.
+<img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Housing_Scatter_Map.png" />
+<p align="center">Figure 1</p>
+<img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Housing_Heap_Map.png" />
+<p align="center">Figure 2</p>
+
+## Authentication
+We used Google Map API in KMEANS.py to plot googlemap and the api key is required.
 
 ## Datasets
 ### Boston Airbnb Calendar
@@ -52,16 +59,6 @@ This part was implemented in id_month_price_score_lat_long.py
 <br />Boston Airbnb Calendar: Select, Project and Aggregate to get (id, mean price of all dates of the year) 
 <br />Boston Airbnb Listing: Select, Project to get (id, review scores, the number of reviews, longitude, latitude) 
 <br />Combination: Select, Project to get (id, mean price, review scores, the number of reviews, longitude, latitude)
-
-## Narrative
-The idea of this project was to categorize the airbnb houses based on reviews and prices. We decided the best way as choosing houses with lower prices and higher review scores. Figure 1 and Figure 2 show the basic housing distribution scatter plot on Google map and the corresponding heatmap to show the housing density in areas. At first, for statistical analysis part, we used seaborn library to plot prices distribution and review scores distribution. And we calculated the correlation coefficient between prices and review scores and the the correlation coefficient between prices and the number of reviews. For optimization and constraint satisfaction part, we needed only those houses, the number of reviews of which is larger than 10 because small number of reviews is not representative. Then we calculated Within-Cluster-Sum-of-Squares(WCSS) under different K values to choose best K to do kmeans based on prices and review scores. Next we did kmeans to cluster houses.  Finally, we plotted each cluster according to latitudes and longtitudes on googlemap using different colors.
-<img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Housing_Scatter_Map.png" />
-<p align="center">Figure 1</p>
-<img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Housing_Heap_Map.png" />
-<p align="center">Figure 2</p>
-
-## Authentication
-We used Google Map API in KMEANS.py to plot googlemap and the api key is required.
 
 ## Trial mode
 For trial mode, we used 100 Boston Airbnb Listings data, 36500 Boston Airbnb Calendar data and 500 Boston Airbnb Reviews data. Since Boston Landmarks and US Holidays are quite small, we used all the data of these two dataset.
@@ -122,6 +119,12 @@ We made three webpages.
 * Marked in map using Leaflet
 * Urls listed as hyperlink
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/web_visualization/Recommendation_page.png" /><p align="center">Figure 10</p>
+
+## Future work
+For features, we considered only prices and review scores in the projected. We will research into previous customers’ comments and used modern NLP technique to pick out highly rated houses more accurately.
+<br />For algorithm, K-Means is a naive classification algorithm. We can use more complicated classification methods.
+<br />For web application, it is not very user-friendly right now. We can add some interesting function like multiple login ways, search lists, add friends, etc.
+
 # Tools and Libraries
 Pandas
 <br />dml
