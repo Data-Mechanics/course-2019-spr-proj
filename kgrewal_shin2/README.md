@@ -95,3 +95,10 @@ and therefore we have chosen a balance between long and short streets which will
 we have narrowed our list down to will have plenty of significant suggestions.
 
 
+<br></br>
+<b> PROJECT 3: </b>
+Our end result is an interactive web application where you are able to first select one of all the neighborhoods in Boston
+and see a list of the streets that are good candidates for renaming within each neighborhood. Then, you are able to locate 
+them and view them on the map to visualize and assess the possibility of this street being renamed. 
+
+
