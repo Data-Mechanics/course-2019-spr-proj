@@ -38,6 +38,8 @@ Finally I asked - if Bluebike were to add a station to their network, where shou
 
 One constraint was that the new station had to be within a mile of at least 3 other stations. This prevented the station from being placed too far away, unreachable by the rest of the network. Another constraint was a simple longitude constraint because Boston is on the coast and several times the solver placed the new station in the ocean.
 
+The solver ran quite slowly the first few times so one thing I did to reduce the number of constraints and the complexity of the objective is to cluster all 300 stations into 50 clusters using k-means. This means that instead of maximizing the distance from the new station to all 300 stations, we're maximizing the distance to the 50 clusters, but the algorithm still works because those 50 clusters are located approximately where all of the stations are.
+
 ## Results
 
 There was a strong correlation between temperature and bike ride count (correlation of 0.831 with a p-value of 0 to 10 digits after the decimal). There was also a strong correlation between bike ride duration and temperature (correlation of 0.421 with a p-value of 0 to 5 decimal places). This was expected, it's not a great discovery, but it's good to be able to quantify the exact relationship between the two.
