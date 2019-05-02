@@ -5,6 +5,7 @@ import dml
 import prov.model
 from scipy.cluster.vq import kmeans
 from shapely.geometry import Polygon
+from rtree import index
 
 
 class optimize(dml.Algorithm):
@@ -36,6 +37,20 @@ class optimize(dml.Algorithm):
             return 1
 
     @staticmethod
+    def compute_weight(dist_score, dist_mean, dist_stdev, health_score, health_mean, health_stdev, weight):
+        dist_z_score = ((dist_score - dist_mean) / dist_stdev) * (1 - (weight / 100))
+        # print("dist", dist_z_score)
+        health_z_score = ((health_score - health_mean) / health_stdev) * ((weight / 100))
+        # print("health", health_z_score)
+        average_z_score = (dist_z_score + health_z_score)
+
+        if average_z_score > 1.5:
+            return 100
+        elif average_z_score > 1:
+            return 10
+        else:
+            return 1
+    @staticmethod
     def geojson_to_polygon(geom):
         """
 
@@ -61,54 +76,82 @@ class optimize(dml.Algorithm):
         return polys
 
     @staticmethod
+    def compute_kmeans(neighborhood, num_means, passed_weight):
+        client = dml.pymongo.MongoClient()
+        repo = client.repo
+        repo.authenticate('gasparde_ljmcgann_tlux', 'gasparde_ljmcgann_tlux')
+        parcels = repo['gasparde_ljmcgann_tlux' + ".ParcelsCombined"]
+        neighborhood_parcels = list(parcels.find({"Neighborhood": neighborhood}))
+        stats = repo['gasparde_ljmcgann_tlux' + ".Statistics"]
+        dist_mean = float(
+            stats.find_one({"Neighborhood": neighborhood, "variable": "distance_score", "statistic": "mean"})["value"])
+        dist_stdev = float(
+            stats.find_one({"Neighborhood": neighborhood, "variable": "distance_score", "statistic": "std_dev"})[
+                "value"])
+        health_mean = float(
+            stats.find_one({"Neighborhood": neighborhood, "variable": "health_score", "statistic": "mean"})["value"])
+        health_stdev = float(
+            stats.find_one({"Neighborhood": neighborhood, "variable": "health_score", "statistic": "std_dev"})["value"])
+
+        kmean = []
+        parcel_index = index.Index()
+        for i in range(len(neighborhood_parcels)):
+            shape = optimize.geojson_to_polygon(neighborhood_parcels[i]["geometry"])[0]
+            parcel_index.insert(i, shape.bounds)
+            # out of order, want [latitude, longitude]
+            coords = [shape.centroid.coords[0][1], shape.centroid.coords[0][0]]
+            weight = optimize.compute_weight(neighborhood_parcels[i]["distance_score"], dist_mean, dist_stdev,
+                                    neighborhood_parcels[i]["health_score"], health_mean, health_stdev, passed_weight)
+
+            for _ in range(weight):
+                kmean.append([coords[0], coords[1]])
+        output = kmeans(kmean, num_means)[0].tolist()
+        dict = {"kmeans": str(output)}
+        dict["Avg_Land_Val"] = []
+        dict["Dist_To_Park"] = []
+        dict["Avg_Health"] = []
+        for mean in output:
+            print(mean)
+            point = (mean[1], mean[0], mean[1], mean[0])
+
+            bounds = [i for i in parcel_index.nearest(point, 5)]  # ties return two, only want 1
+            avg_val = 0
+            dist_to_park = 0
+            health_score = 0
+            for ij in bounds[:5]:
+                print(neighborhood_parcels[ij])
+                avg_val += round(
+                    float(neighborhood_parcels[ij]["AV_TOTAL"]) / float(neighborhood_parcels[ij]["LAND_SF"]), 2)
+                dist_to_park += float(neighborhood_parcels[ij]["min_distance_km"])
+                health_score += float(neighborhood_parcels[ij]["health_score"])
+            dict["Avg_Land_Val"].append(round(avg_val / 5, 2))
+            dict["Dist_To_Park"].append(round(dist_to_park / 5, 2))
+            dict["Avg_Health"].append(round(health_score / 5, 2))
+
+        print(dict)
+        return dict
+
+    @staticmethod
     def execute(trial=False):
         startTime = datetime.datetime.now()
 
-        # Set up the database connection.
+        # # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate(optimize.contributor, optimize.contributor)
-        # read in neighborhoods to get the list of their names
+        # # read in neighborhoods to get the list of their names
         neighborhoods = list(repo[optimize.contributor + ".Neighborhoods"].find())
-        # load in parcels as we will iterate kmeans from this data
-        parcels = repo[optimize.contributor + ".ParcelsCombined"]
-        stats = repo[optimize.contributor + ".Statistics"]
         repo.dropCollection(optimize.contributor + ".KMeans")
         repo.createCollection(optimize.contributor + ".KMeans")
         for i in range(len(neighborhoods)):
             name = neighborhoods[i]["properties"]["Name"]
-            neighborhood = list(parcels.find({"Neighborhood": name}))
-            distance_kmeans = []
-            health_score_kmeans = []
-            if stats.find_one({"Neighborhood": name, "variable": "distance_score"}) is not None:
-                dist_mean = float(
-                    stats.find_one({"Neighborhood": name, "variable": "distance_score", "statistic": "mean"})["value"])
-                dist_stdev = float(
-                    stats.find_one({"Neighborhood": name, "variable": "distance_score", "statistic": "std_dev"})[
-                        "value"])
-                for j in range(len(neighborhood)):
-
-                    shape = optimize.geojson_to_polygon(neighborhood[j]["geometry"])[0]
-                    # out of order, want [latitude, longitude]
-                    coords = [shape.centroid.coords[0][1], shape.centroid.coords[0][0]]
-
-                    # do weighted kmeans by adding additional points based on weights
-                    dist_weight = optimize.distance_score(neighborhood[j]["distance_score"], dist_stdev, dist_mean)
-                    health_weight = optimize.health_score(neighborhood[j])
-                    for _ in range(dist_weight):
-                        distance_kmeans.append([coords[0], coords[1]])
-                    for _ in range(health_weight):
-                        health_score_kmeans.append([coords[0], coords[1]])
-
-            # this check is to be compatible with trial mode as other neighborhoods
-            # will be empty
+            distance_kmeans = optimize.compute_kmeans(name, 5, 0)
+            health_kmeans = optimize.compute_kmeans(name, 5, 0)
+            distance_kmeans["metric"] = "distance_score"
+            health_kmeans["metric"] = "health_score"
             if len(distance_kmeans) > 0:
-                dist_output = kmeans(distance_kmeans, 5)[0].tolist()
-                repo[optimize.contributor + ".KMeans"].insert_one(
-                    {"Neighborhood": name, "metric": "distance", "means": dist_output})
-                health_output = kmeans(health_score_kmeans, 5)[0].tolist()
-                repo[optimize.contributor + ".KMeans"].insert_one(
-                    {"Neighborhood": name, "metric": "health", "means": health_output})
+                repo[optimize.contributor + ".KMeans"].insert_one(distance_kmeans)
+                repo[optimize.contributor + ".KMeans"].insert_one(health_kmeans)
 
         repo[optimize.contributor + ".KMeans"].metadata({'complete': True})
 
@@ -161,3 +204,4 @@ class optimize(dml.Algorithm):
         doc.wasDerivedFrom(Optimization, Stats, getOptimization, getOptimization,
                            getOptimization)
         return doc
+

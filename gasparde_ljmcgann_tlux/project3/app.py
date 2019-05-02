@@ -1,7 +1,11 @@
 from bson.json_util import dumps
 import dml
 from flask import Flask, request, render_template
-from kmeans import compute_kmeans
+import sys
+
+# need to import kmeans algorithm from optimize.py
+sys.path.insert(0, '../')
+from optimize import *
 
 app = Flask(__name__)
 
@@ -21,14 +25,10 @@ censusshape = dumps(repo[contributor + ".CensusTractShape"].find())
 @app.route('/index', methods=['GET', 'POST'])
 def hello():
     if request.method == 'POST':
-        print("hello a post happened")
-        req_data = request.get_json()
-        print(req_data)
         name = request.form["neighborhood"]
         num = int(request.form['kmeans'])
         weight = int(request.form["weight"])
-        kmeans = compute_kmeans(name, num, weight)
-        print(len(kmeans))
+        kmeans = optimize.compute_kmeans(name, num, weight)
         kmeans = dumps(kmeans)
         return render_template('index.html', neighborhoods=neighborhoods, kmeans=kmeans, name=str(name), weight = weight
                                ,num = num)
