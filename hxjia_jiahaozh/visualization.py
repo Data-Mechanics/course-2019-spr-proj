@@ -50,11 +50,6 @@ mongo = PyMongo(app)
 
 @app.route('/')
 def index():
-	# session.clear()
-	#     if 'username' in session:
-	# #        session.pop('tony')
-	#         return 'You are logged in as ' + session['username']
-
 	return render_template('index.html')
 
 
