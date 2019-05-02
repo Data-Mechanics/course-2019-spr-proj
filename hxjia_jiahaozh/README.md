@@ -77,26 +77,25 @@ This part was implemented in KMEANS.py
 <br />Prices and the numbers of Reviews: -0.1565 
 <br />In the project we used price and review score to do kmeans in the next step.
 
-## Optimization
+## Methodology and Results
 This part was also implemented in KMEANS.py
-<br />We calculated the Within-Cluster-Sum-of-Squares(WCSS) for k-means and found the best k value is 4, so we did a 4-means and plotted each cluster onto googlemap to reveal the relationship between each cluster and their geolocation.
-
-
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/K_WCSS.png" />
 <p align="center">Figure 5</p>
 The x-axis of Figure 5 is the range of k we ran.
 <br />The y-axis within-cluster sum of squares is the sum of the squared deviations between each observation and the cluster center.
 <br />The method we used to get the best value of k is the elbow method. This method plots a line chart of WCSS for each value of k. The "elbow" which is the most significant change point of the line chart, is the best k.
+<br />We calculated the Within-Cluster-Sum-of-Squares(WCSS) for k-means and found the best k value is 4, so we did a 4-means and plotted each cluster onto googlemap to reveal the relationship between each cluster and their geolocation.
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Kmeans_Result.png" />
 <p align="center">Figure 6</p>
 This is the Kmeans result we got using the best k value(4). In the figure we can see that the houses are divided into four clusters and the cluster with the best value of money and review scores is the one in red.
 
 <img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/Experimental_Results/Classified_Map.png" />
 <p align="center">Figure 7</p>
-From Figure 6 we can see that the houses are basicly divided by price. In Figure 7 the houses with the smallest price is in red and has the most number, most of which are distributed in Allston, East Boston and Mission Hill area.
-<br />The houses with the second smallest price is in yellow and has the second largest number, most of which are distributed in Back Bay and Downtown area.
-<br />The houses with the second largest price is in blue and is mostly distributed in north-east corner of Boston.
-<br />The houses with the largest price is in green and has the smallest number.
+From Figure 6 we can see that the houses are basicly divided by price. <br />
+In Figure 7 the houses with the highest recommendation are in red, most of which are distributed in Allston, East Boston and Mission Hill area.<br />
+The houses with the second highest recommendation are yellow, most of which are distributed in Back Bay and Downtown area.<br />
+The houses with the second least recommendation are in blue, most of which are mostly distributed in north-east corner of Boston.<br />
+The houses with the least recommendation are in green. They are rare and have no specific distribution pattern.
 
 ## Improvements
 We did 2 improvements on K-Means.
