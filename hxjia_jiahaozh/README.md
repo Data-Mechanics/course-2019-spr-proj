@@ -7,8 +7,7 @@ Jiahao Zhang(jiahaozh@bu.edu)
 
 ## Introduction
 Since 2008, guests and hosts have used Airbnb to travel in a more unique, personalized way. Boston as a famous city for travel, the number of Airbnb houses has increased greatly these years, making Airbnb house choosing a time consuming thing to do.
-
-## Purpose
+<br />
 The purpose of our project is to pick out the best houses with low price as well as high review score for users and save their time of going through the whole list of Airbnb houses.
 
 ## Datasets
@@ -17,7 +16,7 @@ A csv file containing the price on a cetain day between year 2016 and 2017
 <br />http://datamechanics.io/data/hxjia_jiahaozh/Calendar.csv
 ### Boston Airbnb Listings
 A csv file containing detailed information about a house
-<br />http://datamechanics.io/data/hxjia_jiahaozh/Listings.csv
+chttp://datamechanics.io/data/hxjia_jiahaozh/Listings.csv
 ### Boston Airbnb Reviews
 A csv file containing reviews given by users to a specific house
 <br />http://data.insideairbnb.com/united-states/ma/boston/2019-01-17/data/reviews.csv.gz
