@@ -4,10 +4,10 @@
 application we built. The pdf file is in the folder "PosterReport"** if you want to read it
 while using our web services, please follow the following instructions. 
   * **Make sure you have Python 3.7.x installed in your environment.**
-  * **Make sure you have all the latest dependencies downloaded.** (We did not anticipate that we will use so many
-    libraries other than the standard ones. Next time we will adequately pack our application with a requirement file)
+  * **Make sure you have all the latest dependencies downloaded.** 
     * dml, json, flask, flask-migrate, flask-sqlalchemy, flask-wtf, folium
-      geopy, math, math, numpy, pandas, prov, pprint, scipy, uuid, wtforms, z3-solver.
+      geopy, numpy, pandas, prov, pprint, scipy, uuid, wtforms, z3-solver.
+    * ```pip install requirements.txt```
   * **To run the data retrievals and operations, make sure you are in the directory 
   where the files "execute.py" and "auth.json" resides.**
     * Enter your API credentials in "auth.json" and save.
