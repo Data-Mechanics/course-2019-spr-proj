@@ -28,7 +28,6 @@ dml, flask, flask-googlemaps (https://github.com/rochacbruno/Flask-GoogleMaps)
 
 <b> DATASETS USED: </b>
 
-<b>Datasets used: </b>
 1. Boston Street Names 
 This data was collected from last semester's project as a CSV and uploaded to datamechanics.io as a .json file. It is a list of all the street names, their genders, and their zipcodes.
 This is the base of our information (all of the street names in Boston). 
@@ -56,7 +55,6 @@ it into a CSV. This tells us which boston zip codes belong to which neighborhood
 
 <b> FILES: </b>
 
-<b>Files: </b>
 street_name_cleaning.py - ran once in order to create json
 
 uber_data_cleaning.py - ran once in order to create json 
@@ -69,7 +67,7 @@ neighborhood_zipcodes.py - ran once in order to create json
 
 
 
-<b>Transformations: </b>
+<b> TRANSFORMATIONS: </b>
 
 transformation1.py - finding the difference between street names, and streets with landmarks on them, selecting only those that are not female street names
 
@@ -83,7 +81,7 @@ transformation5.py - combines the unclaimed streets with the neighborhood zip co
 
 
 <br></br>
-<b>Project 2:</b> 
+<b>PROJECT 2: </b> 
 
 kmeans.py - We performed kmeans clustering on the data to find the areas where unclaimed streets are common. We then did a count 
 to find how many streets were exist in each cluster. We plan to map this data and use it to spread out the locations where we 
