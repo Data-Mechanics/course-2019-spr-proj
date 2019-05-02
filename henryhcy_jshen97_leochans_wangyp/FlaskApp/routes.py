@@ -214,7 +214,7 @@ def feedback():
                 try:
                     db.session.add(user)
                     db.session.commit()
-                    thank = "Thank you for your time! Back to homepage in 5 seconds."
+                    thank = "Thank you for your time! Back to Homepage in 3 seconds."
                     return render_template('feedback.html', title="Thanks", thankyou=thank, form=form)
                 except Exception:
                     flash("Name already exist. Please choose a different one.")
@@ -238,5 +238,5 @@ def ratings():
             total_ratings += int(i.ratings)
             m = (i.name, " rates {}/5 and says: {}".format(i.ratings, i.comments))
             messages.append(m)
-        average_rating = total_ratings/count
+        average_rating = str(total_ratings/count)[0:3]
         return render_template('ratings.html', messages=messages, average=average_rating, title='Ratings&Comments')
