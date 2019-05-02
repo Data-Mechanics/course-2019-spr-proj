@@ -14,7 +14,7 @@ from flask import Flask, Response, request, render_template, redirect, url_for
 from datetime import date
 
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-from matplotlib.figure import Figure
+import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
 
 import io
@@ -178,13 +178,15 @@ def create_map(city):
 		lon_old.append(loc["lon"])
 		lat_old.append(loc["lat"])
 	#instantiate figure and add map
-	fig = Figure()
+	fig = plt.figure(figsize=(12,12))
+	ax = fig.add_subplot(111)
 	m = Basemap(projection='merc',llcrnrlat=d,urcrnrlat=u,llcrnrlon=l,urcrnrlon=r,\
-				resolution='c')
-	m.fillcontinents()
-	m.scatter(lon_old,lat_old,latlon=True,c='#000000',marker='o')
-	m.scatter(lon_new,lat_new,latlon=True,c='#ff0000',marker='o')
-	fig.set_title("Existing Station Locations (black) and Suggested Station Locations (red)")
+				resolution='i',lat_0=(((u-d)/2)+d),lon_0=(((r-l)/2)+l))
+	m.drawmapboundary(fill_color='lightblue')
+	m.fillcontinents(color='palegreen',lake_color='lightblue',zorder=1)
+	m.scatter(lon_old,lat_old,latlon=True,c='k',marker='o',zorder=10)
+	m.scatter(lon_new,lat_new,latlon=True,c='r',marker='o',zorder=11)
+	ax.set_title("Existing Station Locations (black) and Suggested Station Locations (red)")
 	return fig
 
 #render graph visualization
@@ -195,8 +197,8 @@ def create_graph(city, max_num):
 	repo.authenticate('charr_hu38_npearce', 'charr_hu38_npearce')
 	#access population and station number
 	unionpop = list(repo.charr_hu38_npearce.unionpopbike.find())[city]
-    population = int(unionpop["population"])
-    stations = int(unionpop["stations"])
+	population = int(unionpop["population"])
+	stations = int(unionpop["stations"])
 	#access regression info
 	regress = list(repo.charr_hu38_npearce.optstationnum.find())
 	coef = regress[0]["coef"]
@@ -206,18 +208,21 @@ def create_graph(city, max_num):
 		x1.append(city["x"])
 		y1.append(city["y"])
     #instantiate figure and add graph
-	fig = Figure()
+	fig = plt.figure(figsize=(8,8))
+	ax = fig.add_subplot(111,xlim=(0.000,0.002))
 	bound = (stations + max_num) / population
-	x2 = np.linspace(0,(1.2*bound))
+	max_x = max(bound, x1[1])
+	max_y = max(bound*coef, y1[1])
+	x2 = np.linspace(0,(1.2*max_x))
 	y2 = coef*x2
-	y3 = np.linspace(0,(1.2*(bound*coef)))
+	y3 = np.linspace(0,(1.2*max_y))
 	x3 = np.full_like(y3,bound)
-	fig.scatter(x1,y1,c='#000000',marker='o')
-	fig.plot(x2,y2,'b-')
-	fig.plot(x3,y3,'r--')
-	fig.set_xlabel("Per Capita Bike Station Amount (# of bike stations/city population)")
-	fig.set_ylabel("Per Capita Bike Use in Sept 2018 (total bike use in minutes/city population)")
-	fig.set_title("Constrained Linear Regression Demonstrating Optimality of Maximizing Number of Bike Stations")
+	ax.scatter(x1,y1,c='k',marker='o')
+	ax.plot(x2,y2,'b-')
+	ax.plot(x3,y3,'r--')
+	ax.set_xlabel("Per Capita Bike Station Amount (# of bike stations/city population)")
+	ax.set_ylabel("Per Capita Bike Use in Sept 2018 (total bike use in minutes/city population)")
+	ax.set_title("Constrained Linear Regression Demonstrating Optimality of Maximizing Number of Bike Stations")
 	return fig
     
 
