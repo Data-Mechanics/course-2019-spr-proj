@@ -5,11 +5,11 @@
 Haoxuan Jia(hxjia@bu.edu)
 Jiahao Zhang(jiahaozh@bu.edu)
 
+## Introduction
+Since 2008, guests and hosts have used Airbnb to travel in a more unique, personalized way. Boston as a famous city for travel, the number of Airbnb houses has increased greatly these years, making Airbnb house choosing a time consuming thing to do.
+
 ## Purpose
-With the datasets above, we can combine them to answer 3 interesting questions:
-<br />1.	What is the impact of holidays on the prices of Boston Airbnb houses? Is there any pattern that the average price is highest or lowest on some holiday?
-<br />2.	What is the impact of Boston landmarks on the number of houses and on the average prices of houses?
-<br />3.	What is the relationship between the prices of houses and traveler's reviews.
+The purpose of our project is to pick out the best houses with low price as well as high review score for users and save their time of going through the whole list of Airbnb houses.
 
 ## Datasets
 ### Boston Airbnb Calendar
