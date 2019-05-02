@@ -159,8 +159,8 @@ def create_map(city):
 	lat_new = []
 	new_locs = list(repo.charr_hu38_npearce.Kmeans.find())[city]["locs"]
 	for loc in new_locs:
-		lon_new.append(loc[0])
-		lat_new.append(loc[1])
+		lat_new.append(loc[0])
+		lon_new.append(loc[1])
 	#access old station locations
 	if city == 0:
 		old_locs = list(repo.charr_hu38_npearce.boston_s.find())
