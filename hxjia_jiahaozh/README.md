@@ -113,15 +113,15 @@ As a result, the computation was shortened to its half while the WCSSs differed 
 ## Web Visualization
 We made three webpages.
 ### 1. Register/Login Page
-<img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/web_visualization/Login_page.png" /><p align="center">Figure 5</p>
+<img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/web_visualization/Login_page.png" /><p align="center">Figure 8</p>
 ### 2. User Parameter Input Page
 * Users can select price ranges: $ 0 ~ 100, $ 100 ~ 200, $ 200 ~ 300, $ 300+ <br />
 * Users can select review score ranges: ! 85 -, !! 85 - 90, !!! 90 - 95, !!!! 95 - 100
-<img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/web_visualization/Search_page.png" /><p align="center">Figure 5</p>
+<img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/web_visualization/Search_page.png" /><p align="center">Figure 9</p>
 ### 3. Recommendation Results Page
 * Marked in map using Leaflet
 * Urls listed as hyperlink
-<img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/web_visualization/Recommendation_page.png	" /><p align="center">Figure 5</p>
+<img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/web_visualization/Recommendation_page.png	" /><p align="center">Figure 10</p>
 # Tools and Libraries
 Pandas
 <br />dml
