@@ -28,18 +28,18 @@ def geojson_to_polygon(geom):
     return polys
 
 def compute_weight(dist_score, dist_mean, dist_stdev, health_score, health_mean, health_stdev, weight):
-    dist_z_score = ((dist_score - dist_mean) / dist_stdev)  * (weight/100)
+    dist_z_score = ((dist_score - dist_mean) / dist_stdev)  * (1-(weight/100))
     #print("dist", dist_z_score)
-    health_z_score = ((health_score - health_mean) / health_stdev) * (1-(weight/100))
+    health_z_score = ((health_score - health_mean) / health_stdev) * ((weight/100))
     #print("health", health_z_score)
     average_z_score = (dist_z_score + health_z_score)
 
-    if average_z_score > 1:
+    if average_z_score > 1.5:
         return 100
-    elif average_z_score > .5:
-        return 20
+    elif average_z_score > 1:
+        return 10
     else:
-        return 2
+        return 1
 
 
 
@@ -72,17 +72,21 @@ def compute_kmeans(neighborhood, num_means, passed_weight):
     dict = {"kmeans": str(output)}
     dict["Avg_Land_Val"] = []
     dict["Dist_To_Park"] = []
+    dict["Avg_Health"] = []
     for mean in output:
         point = (mean[1], mean[0], mean[1], mean[0])
 
         bounds = [i for i in parcel_index.nearest(point, 5)] #ties return two, only want 1
         avg_val = 0
         dist_to_park = 0
+        health_score = 0
         for ij in bounds[:5]:
             avg_val += round(float(neighborhood_parcels[ij]["AV_TOTAL"])/ float(neighborhood_parcels[ij]["LAND_SF"]), 2)
             dist_to_park += float(neighborhood_parcels[ij]["min_distance_km"])
+            health_score += float(neighborhood_parcels[ij]["health_score"])
         dict["Avg_Land_Val"].append(round(avg_val/5, 2))
         dict["Dist_To_Park"].append(round(dist_to_park / 5, 2))
+        dict["Avg_Health"].append(round(health_score / 5, 2))
 
 
 

@@ -81,7 +81,8 @@ if (kmeans !== null) {
     for (let i = 0; i < list_means.length; i++) {
         var marker = L.marker(list_means[i]).addTo(map);
         var popup = L.popup().setContent("<h5>Cost per Square Feet: $" + kmeans["Avg_Land_Val"][i].toString() + "</h5>"
-            + "<br><h5>Closest Park: " + kmeans["Dist_To_Park"][i].toString() + "km</h5>");
+            + "<h5>Closest Park: " + kmeans["Dist_To_Park"][i].toString() + "km</h5>"
+        + "<h5>Avg Health Score: " + kmeans["Avg_Health"][i].toString() + "</h5>");
         marker.bindPopup(popup).openPopup();
     }
 }
