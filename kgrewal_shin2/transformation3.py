@@ -1,4 +1,4 @@
-import json
+
 import dml
 import prov.model
 import datetime
@@ -91,8 +91,8 @@ class transformation3():
         return doc
 
 
-transformation3.execute()
-doc = transformation3.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
+# transformation3.execute()
+# doc = transformation3.provenance()
+# print(doc.get_provn())
+# print(json.dumps(json.loads(doc.serialize()), indent=4))
 

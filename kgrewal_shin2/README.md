@@ -1,12 +1,26 @@
 Kerin Grewal and Stephanie Shin 
+github link: https://github.com/keringrewal/course-2019-spr-proj/tree/master/kgrewal_shin2
 
 
 <b> INSTRUCTIONS: </b>
 
 Run execute.py to run all data collection, transformations, and provenances, 
 by running python3.7 execute.py kgrewal_shin2 in the root project folder. 
-
  
+<b> LIBRARIES/dependencies: </b>
+In data insertions and transformations: 
+urllib.request, requests, json, dml, prov.model, datetime, uuid
+
+For statistics.py: 
+dml, prov.model, datetime, uuid, scipy.stats
+
+For kmeans.py: 
+dml, prov.model, datetime, uuid, scipy.cluster.vq
+
+Project3: 
+dml, flask, flask-googlemaps (https://github.com/rochacbruno/Flask-GoogleMaps)
+
+
 
 <b> DATASETS USED: </b>
 
@@ -79,7 +93,6 @@ and therefore we have chosen a balance between long and short streets which will
 we have narrowed our list down to will have plenty of significant suggestions.
 
 
-<br></br>
-<b>Project 3:</b> 
 
-Library used for google maps API: https://github.com/rochacbruno/Flask-GoogleMaps
+
+

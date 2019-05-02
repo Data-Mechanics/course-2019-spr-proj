@@ -1,7 +1,5 @@
 # Problem- To learn if bigger streets are generally male or unknown gendered? - correlation coefficient of gender vs. length of street
 
-import urllib.request
-import json
 import dml
 import prov.model
 import datetime
@@ -9,7 +7,6 @@ import uuid
 from math import *
 from random import random
 import scipy.stats
-
 
 class statistics(dml.Algorithm):
     contributor = 'kgrewal_shin2'
@@ -87,7 +84,7 @@ class statistics(dml.Algorithm):
 
         repo['kgrewal_shin2.street_length_vs_gender'].insert_many(corrInfo)
         repo['kgrewal_shin2.street_length_vs_gender'].metadata({'complete': True})
-        print(repo['kgrewal_shin2.street_length_vs_gender'].metadata())
+        # print(repo['kgrewal_shin2.street_length_vs_gender'].metadata())
 
         repo.logout()
 
@@ -133,9 +130,9 @@ class statistics(dml.Algorithm):
         return doc
 
 
-statistics.execute()
-doc = statistics.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
+# statistics.execute()
+# # doc = statistics.provenance()
+# print(doc.get_provn())
+# print(json.dumps(json.loads(doc.serialize()), indent=4))
 
 
