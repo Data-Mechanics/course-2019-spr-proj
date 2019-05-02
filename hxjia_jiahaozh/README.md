@@ -145,4 +145,4 @@ For features, we considered only prices and review scores in the projected. We w
 <br />folium
 <br />Leaflet
 
-# If you have any problems, please feel free to contact us.
+### If you have any problems, please feel free to contact us.
