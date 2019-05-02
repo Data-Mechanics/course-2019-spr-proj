@@ -184,7 +184,7 @@ def create_map(city):
 				resolution='i',lat_0=(((u-d)/2)+d),lon_0=(((r-l)/2)+l))
 	m.drawmapboundary(fill_color='lightblue')
 	m.fillcontinents(color='palegreen',lake_color='lightblue',zorder=1)
-	m.scatter(lon_old,lat_old,latlon=True,c='k',marker='o',zorder=10)
+	m.scatter(lon_old,lat_old,latlon=True,c='k',marker='.',zorder=10)
 	m.scatter(lon_new,lat_new,latlon=True,c='r',marker='o',zorder=11)
 	ax.set_title("Existing Station Locations (black) and Suggested Station Locations (red)")
 	return fig
