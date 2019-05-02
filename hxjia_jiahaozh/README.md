@@ -109,6 +109,19 @@ speed up converging.
 The Mini Batch K-Means is a variant of K-Meanns, which uses mini-batches to shorten computation time. In contrast to other algorithms that reduce the convergence time of k-Means, mini-batch k-Means produces results that are generally only slightly worse than the standard algorithm.
 As a result, the computation was shortened to its half while the WCSSs differed slightly.
 
+
+## Web Visualization
+We made three webpages.
+### 1. Register/Login Page
+<img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/web_visualization/Login_page.png" /><p align="center">Figure 5</p>
+### 2. User Parameter Input Page
+* Users can select price ranges: $ 0 ~ 100, $ 100 ~ 200, $ 200 ~ 300, $ 300+ <br />
+* Users can select review score ranges: ! 85 -, !! 85 - 90, !!! 90 - 95, !!!! 95 - 100
+<img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/web_visualization/Search_page.png" /><p align="center">Figure 5</p>
+### 3. Recommendation Results Page
+* Marked in map using Leaflet
+* Urls listed as hyperlink
+<img src="https://github.com/jiahaozh/course-2019-spr-proj/blob/master/hxjia_jiahaozh/web_visualization/Recommendation_page.png	" /><p align="center">Figure 5</p>
 # Tools and Libraries
 Pandas
 <br />dml
