@@ -1,4 +1,4 @@
-# Project 3
+### Project 3 Yuan Zhang, 
 
 ## Introduction
 ### Data sets:
