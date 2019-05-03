@@ -30,7 +30,7 @@ class schools(dml.Algorithm):
         college['City'] = college['City'].mask(college['Name'] == 'Saint John\'s Seminary', 'Brighton')
         college['City'] = college['City'].mask(college['Name'] == 'Harvard Business School', 'Allston')
         college['City'] = college['City'].replace('Chinatown', 'Downtown')
-        colleges = pd.concat([college.Latitude, college.Longitude, college.City], axis = 1) # select columns
+        colleges = pd.concat([college.Longitude, college.Latitude, college.City], axis = 1) # select columns
 
         # Dataset 2: Public Schools in Boston
         url = 'http://bostonopendata-boston.opendata.arcgis.com/datasets/1d9509a8b2fd485d9ad471ba2fdb1f90_0.csv'
@@ -53,12 +53,12 @@ class schools(dml.Algorithm):
         school['City'] = school['City'].replace('Chinatown', 'Downtown')
         # Merge latitudes, longitudes, and neighborhoods of all colleges and public schools in Boston
         school = school[school['SCH_TYPE'] != 'ELC']
-        schools = pd.concat([school.Y, school.X, school.City], axis = 1) # select columns 
-        schools.columns = ['Latitude', 'Longitude', 'City']
+        schools = pd.concat([school.X, school.Y, school.City], axis = 1) # select columns 
+        schools.columns = ['Longitude', 'Latitude', 'City']
         all_schools = colleges.append(schools) # aggregate data 
         all_schools = pd.DataFrame(all_schools)
         all_schools = json.loads(all_schools.to_json(orient = 'records'))
-        
+    
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
