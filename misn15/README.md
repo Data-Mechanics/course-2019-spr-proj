@@ -90,8 +90,7 @@ In project 3, I created a web application that exposes all of my results from su
 #### Dependencies
 pyproj   
 uszipcode   
-geopy   
-math   
+geopy      
 census    
 us   
 sklearn   
