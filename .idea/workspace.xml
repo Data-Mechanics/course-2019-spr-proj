@@ -2,23 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5fa84993-6dd7-460b-848f-034815251ce2" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/504_Poster.pptx" beforeDir="false" afterPath="$PROJECT_DIR$/504_Poster.pptx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/airbnbvisual.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/center.py" beforeDir="false" afterPath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/center.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/centerPool.py" beforeDir="false" afterPath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/centerPool.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/center_to_policeStation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/center_to_policeStation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/correlation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/correlation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/crime.py" beforeDir="false" afterPath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/crime.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/crimeVisual.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/crime_priceCorrelation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/crime_priceCorrelation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/join_by_ZIP.py" beforeDir="false" afterPath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/join_by_ZIP.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/newCorrelation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/newCorrelation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/optimization.py" beforeDir="false" afterPath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/optimization.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/policeStation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/policeStation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/property.py" beforeDir="false" afterPath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/property.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/property_to_school.py" beforeDir="false" afterPath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/property_to_school.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/school.py" beforeDir="false" afterPath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/school.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/priceMap.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/priceMap.jpg" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -296,12 +280,12 @@
       <workItem from="1556660863876" duration="1535000" />
       <workItem from="1556667659859" duration="3368000" />
       <workItem from="1556686517495" duration="5469000" />
-      <workItem from="1556908243646" duration="3233000" />
+      <workItem from="1556908243646" duration="3535000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="27063000" />
+    <option name="totallyTimeSpent" value="27365000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
