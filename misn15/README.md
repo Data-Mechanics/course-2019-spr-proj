@@ -82,3 +82,16 @@ If waste turned out to be a significant factor affecting health, I wanted to cal
 
 Finally, I find the correlations between health and factors such as waste, open spaces and crimes to see if there is a relationship and how strong that relationship is. I also create a custom metric that gives you a sense of how healthy a certain area is. I hoped that by doing this conclusion I could determine what sort of external factors affect a person's health and thereby, pinpointing areas where the city could help improve the quality of life for its citizens.
 
+#### Dependencies
+pyproj
+uszipcode
+geopy
+math
+census 
+us
+sklearn
+statsmodels
+scipy
+shapely
+copy
+requests

@@ -123,10 +123,16 @@ class transformWasteAll(dml.Algorithm):
             waste_all = hwgen_list + aul_list + waste_list
 
         else:
-            # filter hwgen
+
+            # filter hwgen because can only make a certain number of requests from geolocator
+            i = 0
             hwgen_list = []
             for x in hwgen:
-                hwgen_list += [[x['Name'], x['Address'], x['Town'], x['ZIP Code'], x['RCRA Gen Status']]]
+                if i < 25:
+                    hwgen_list += [[x['Name'], x['Address'], x['Town'], x['ZIP Code'], x['RCRA Gen Status']]]
+                    i+=1
+                else:
+                    break
 
             # get coordinates for hwgen
             for x in hwgen_list:
@@ -140,6 +146,9 @@ class transformWasteAll(dml.Algorithm):
                     response = requests.get(url)
                     data = response.json()
                     geoid = data['Block']['FIPS'][0:11]
+                    x += [geoid]
+                else:
+                    x+= [0]
 
             # get zipcodes in correct format
             for x in hwgen_list:
@@ -237,9 +246,9 @@ class transformWasteAll(dml.Algorithm):
 
         return doc
 
-##transformWasteAll.execute(trial=True)
-##doc = transformWasteAll.provenance()
-##print(doc.get_provn())
-##print(json.dumps(json.loads(doc.serialize()), indent=4))
+#transformWasteAll.execute()
+#doc = transformWasteAll.provenance()
+#print(doc.get_provn())
+#print(json.dumps(json.loads(doc.serialize()), indent=4))
 
 ## eof

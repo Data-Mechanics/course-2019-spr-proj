@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Boston Analysis</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script> 
+
+    <style>
+        #map {
+         width: 800px; height: 500px; 
+        }
+        .info { 
+            padding: 6px 8px; font: 14px/16px Arial, Helvetica, 
+            sans-serif; 
+            background: white; 
+            background: rgba(255,255,255,0.8); 
+            box-shadow: 0 0 15px rgba(0,0,0,0.2); 
+            border-radius: 5px; 
+        } 
+        .info h4 { 
+            margin: 0 0 5px; 
+            color: #777; 
+        }
+
+        .legend { 
+        text-align: left; 
+        line-height: 18px; 
+        color: #555; 
+        } 
+
+        .legend i { 
+        width: 18px; 
+        height: 18px; 
+        float: left; 
+        margin-right: 8px; 
+        opacity: 0.7; 
+        }
+
+        .bg {
+          background-image: url('static/blur.jpg');
+
+           /* Full height */
+
+          min-height: 100%;
+          min-height: 100vh;
+
+          /* Center and scale the image nicely */
+          
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: cover;
+          background-attachment: fixed;
+        }
+
+        .card {
+            margin: 0 auto; 
+            float: none; 
+            margin-bottom: 10px; 
+        }
+
+    .legend i {
+            width: 20px;
+            height: 20px;
+            float: left;
+
+    </style>
+</head>
+{% include 'navbar.html' %}
+<body>
+    <div class = "bg">
+        <div style = "padding-top: 40px;"></div>
+            <div class="card text-center" style = "width: 50rem;">
+                <div class="card-body">
+                    Below is a map that plots all of the green space locations and waste sites in Boston.
+                </div>
+            </div>
+    <div id="map" style="margin-left: 270px; margin-top: 20px; width: 1000px; height: 500px; float: left;"></div>
+
+        <script>
+
+            // create map
+            var map = L.map('map').setView([42.35408, -71.052], 12);
+
+            mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+            L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; ' + mapLink + ' Contributors',
+                maxZoom: 18,
+                }).addTo(map);
+
+            // fetch waste data for the map
+            fetch('/waste_data')
+              .then(function(response) {
+                return response.json();
+              })
+              .then(function(data) {
+                console.log(data[0]);
+
+            // create a dot for every coordinate
+            for (var i = 0; i < data.length; i ++){
+                var circle = L.circle(data[i], {
+                    color: 'red',
+                    fillColor: '#f03',
+                    fillOpacity: 0.9,
+                    radius: 80
+                }).addTo(map);
+                }
+
+            });
+
+            // fetch open space data for the map
+            fetch('/openSpace_data')
+              .then(function(response) {
+                return response.json();
+              })
+              .then(function(data) {
+                console.log(data[0]);
+
+            // create a dot for every coordinate
+            for (var i = 0; i < data.length; i ++){
+                var circle = L.circle(data[i], {
+                    color: 'blue',
+                    fillColor: 'blue',
+                    fillOpacity: 0.9,
+                    radius: 80
+                }).addTo(map);
+                }
+
+            });
+
+    var legend = L.control({position: 'bottomright'});
+
+    legend.onAdd = function (map) {
+
+    var div = L.DomUtil.create('div', 'info legend');
+
+    function getColor(d) {
+    return d == 'Waste' ? 'red' :
+           d == 'Open Spaces' ? 'blue' :
+                      '#FFEDA0';
+}
+
+    categories = ['Waste','Open Spaces'];
+
+    for (var i = 0; i < categories.length; i++) {
+        div.innerHTML +=
+            '<i style="background:' + getColor(categories[i]) + '"></i>' + (categories[i] ? categories[i]  + '<br>': '+');
+    }
+    return div;
+      };
+      legend.addTo(map);
+
+        </script>
+    </div>
+</body>
+</html>

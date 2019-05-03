@@ -65,10 +65,10 @@ class getZipcodes(dml.Algorithm):
         return doc
 
 
-##getZipcodes.execute()
-##doc = getZipcodes.provenance()
-##print(doc.get_provn())
-##print(json.dumps(json.loads(doc.serialize()), indent=4))
+#getZipcodes.execute()
+#doc = getZipcodes.provenance()
+#print(doc.get_provn())
+#print(json.dumps(json.loads(doc.serialize()), indent=4))
 
 
 ## eof

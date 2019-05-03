@@ -66,10 +66,10 @@ class getCrime(dml.Algorithm):
                   
         return doc
 
-##getCrime.execute()
-##doc = getCrime.provenance()
-##print(doc.get_provn())
-##print(json.dumps(json.loads(doc.serialize()), indent=4))
+#getCrime.execute()
+#doc = getCrime.provenance()
+#print(doc.get_provn())
+#print(json.dumps(json.loads(doc.serialize()), indent=4))
 
 
 ## eof

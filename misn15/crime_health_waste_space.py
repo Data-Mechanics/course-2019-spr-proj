@@ -43,8 +43,8 @@ class crime_health_waste_space(dml.Algorithm):
         if trial:
             waste_all = waste_all[0:40]
             clean_health = clean_health[0:40]
-            open_space = open_space[0:40]
-            crime = crime[0:40]
+            open_space = open_space[0:800]
+            crime = crime[0:400]
 
         # get crime coordinates and classify them into fips tracts
         crime_fips = []
@@ -63,7 +63,11 @@ class crime_health_waste_space(dml.Algorithm):
         # get number of open spaces for each fips tract
         openSpace_project = project(open_space, lambda t: (t['FIPS'], t['Coordinates'], 1))
         keys = [r[0] for r in openSpace_project]
-        openSpace_sum = [(key, sum([v for (k, u, v) in openSpace_project if k == key])) for key in keys]
+        unique_keys = []
+        for x in keys:
+            if x not in unique_keys:
+                unique_keys.append(x)
+        openSpace_sum = [(key, sum([v for (k, u, v) in openSpace_project if k == key])) for key in unique_keys]
 
         # get income for each fips tract code
         income_list = []
@@ -71,7 +75,7 @@ class crime_health_waste_space(dml.Algorithm):
             if x['B06011_001E'] != -666666666.0:
                 income_list += [(x['state']+x['county']+x['tract'], x['B06011_001E'])]
 
-        # trial mode
+        # filter waste
         waste_list = []
         for x in waste_all:
             waste_list += [[x['Name'], x['Address'], x['Zip Code'], x['Coordinates'], x['Status'], x['FIPS']]]
@@ -85,17 +89,22 @@ class crime_health_waste_space(dml.Algorithm):
         income_pd = pd.DataFrame(income_list, columns=['fips', 'income'])
         waste_income = wasteSum_pd.merge(income_pd, left_on= 'fips', right_on = 'fips', how = 'outer')
 
-        # get average probability of disease
+        # get average probability of disease and total occurrences
         health_pd = pd.DataFrame(clean_health)
-        total_prev_list = []
-        for x in range(len(health_pd)):
-            total_prev = 0
-            for y in range(0, 11):
-                total_prev += float(health_pd.iloc[x,y])/100
-            total_prev /= 12
-            total_prev_list.append(total_prev)
+        avg_prev_list = []
 
-        health_pd['probability of disease'] = total_prev_list
+        for x in range(len(health_pd)):
+
+            avg_prev = 0
+            for y in range(0, 11):
+                avg_prev += float(health_pd.iloc[x,y])/100
+
+            avg_prev /= 12
+            avg_prev_list.append(round(avg_prev, 3))
+
+
+        health_pd['probability of disease'] = avg_prev_list
+
 
         # combine waste, income and health
         health_pd = health_pd.drop(columns =['_id', 'coordinates', 'Physical Health', 'Teeth Loss'])
@@ -105,6 +114,7 @@ class crime_health_waste_space(dml.Algorithm):
         crime_pd = pd.DataFrame(crime_sum, columns=['fips', 'crime'])
         crime_health = waste_health_pd.merge(crime_pd, left_on='fips', right_on='fips', how = 'outer')
         crime_health['Occur_Cancer'] = (pd.to_numeric(crime_health['Cancer (except skin)'])/100) * pd.to_numeric(crime_health['populationcount'])
+        crime_health['Cancer_prev'] = (pd.to_numeric(crime_health['Cancer (except skin)']))
         crime_health['Occur_Asthma'] = (pd.to_numeric(crime_health['Current Asthma']) / 100) * pd.to_numeric(crime_health['populationcount'])
         crime_health['Occur_COPD'] = (pd.to_numeric(crime_health['COPD']) / 100) * pd.to_numeric(crime_health['populationcount'])
         crime_health = crime_health.drop(columns=['tractfips'])
@@ -114,7 +124,7 @@ class crime_health_waste_space(dml.Algorithm):
         for x in range(len(crime_health)):
             total_occur = 0
             for y in range(3, 14):
-                occur = float(crime_health.iloc[x, y])/100 * float(crime_health.iloc[x, -5])
+                occur = float(crime_health.iloc[x, y])/100 * float(crime_health.iloc[x, -7])
                 total_occur += occur
             health_occur.append(total_occur)
 
@@ -130,9 +140,9 @@ class crime_health_waste_space(dml.Algorithm):
 
         for x in range(len(final_df)):
             entry = {'fips': final_df.iloc[x,0], 'open space': final_df.iloc[x, 1], 'waste': final_df.iloc[x, 2], 'income': final_df.iloc[x, 3],
-                     'crime': final_df.iloc[x,-5], 'cancer occurrences': final_df.iloc[x, -4], 'asthma occurrences': final_df.iloc[x, -3],
-                     'COPD occurrences': final_df.iloc[x,-2], 'total occurrences': final_df.iloc[x, -1], 'population': final_df.iloc[x,-7],
-                     'probability of disease': final_df.iloc[x,-6]}
+                     'crime': final_df.iloc[x,-6], 'cancer prevalence': final_df.iloc[x, -4], 'cancer occurrences': final_df.iloc[x, -5],
+                     'asthma occurrences': final_df.iloc[x, -3], 'COPD occurrences': final_df.iloc[x,-2], 'total occurrences': final_df.iloc[x, -1],
+                     'population': final_df.iloc[x,-8], 'probability of disease': final_df.iloc[x,-7]}
             repo['misn15.crime_health_waste_space'].insert_one(entry)
 
         repo['misn15.crime_health_waste_space'].metadata({'complete':True})
@@ -196,7 +206,7 @@ class crime_health_waste_space(dml.Algorithm):
 
         return doc
 
-##crime_health_waste_space.execute(trial = True)
+crime_health_waste_space.execute(trial=True)
 ##doc = crime_health_waste_space.provenance()
 ##print(doc.get_provn())
 ##print(json.dumps(json.loads(doc.serialize()), indent=4))
