@@ -46,10 +46,15 @@ request.onload = function () {
   buttonAfter.innerHTML = "Bus Stops After";
   buttonAfter.setAttribute('class', 'card');
 
+  var buttonProperty = document.createElement("button");
+  buttonProperty.innerHTML = "Property Assessment";
+  buttonProperty.setAttribute('class', 'card');
+
   // 2. Append somewhere
   var body = document.getElementsByTagName("body")[0];
   body.appendChild(buttonBefore);
   body.appendChild(buttonAfter);
+  body.appendChild(buttonProperty);
 
   // 3. Add event handler
   buttonBefore.addEventListener ("click", function() {
@@ -57,6 +62,21 @@ request.onload = function () {
   });
   buttonAfter.addEventListener ("click", function() {
     window.location.href = "mapAfter.html";
+  });
+  buttonProperty.addEventListener ("click", function() {
+    $.ajax({
+      type:'get',
+      url:'/URLToTriggerGetRequestHandler',
+      cache:false,
+      async:'asynchronous',
+      dataType:'json',
+      success: function(data) {
+        console.log(JSON.stringify(data))
+      },
+      error: function(request, status, error) {
+        console.log("Error: " + error)
+      }
+   });
   });
   
   }
