@@ -5,10 +5,13 @@ github link: https://github.com/keringrewal/course-2019-spr-proj/tree/master/kgr
 <b> INSTRUCTIONS: </b>
 
 Run execute.py to run all data collection, transformations, and provenances, 
-by running python3.7 execute.py kgrewal_shin2 in the root project folder. 
+by running 'python3.7 execute.py kgrewal_shin2' in the root project folder. 
 
 <h4><b>Must run app.py in Project3 folder to view our final webpage.</b></h4>
-
+Make sure that you have ran execute.py as stated in previous steps, and that mongodb is running (which it should be when running execute). 
+In order to run the web application, you need to retrieve a google maps api key and insert it into config.py. 
+A key can be retrieved here: https://developers.google.com/maps/documentation/javascript/get-api-key
+You may run the application by running 'flask run' in the kgrewal_shin2/Project3 folder. 
 
  
 <b> LIBRARIES/dependencies: </b>
@@ -22,7 +25,7 @@ For kmeans.py:
 dml, prov.model, datetime, uuid, scipy.cluster.vq
 
 Project3: 
-dml, flask, flask-googlemaps (https://github.com/rochacbruno/Flask-GoogleMaps)
+dml, flask, flask-googlemaps (https://github.com/rochacbruno/Flask-GoogleMaps), google maps api key from: https://developers.google.com/maps/documentation/javascript/get-api-key
 
 
 
