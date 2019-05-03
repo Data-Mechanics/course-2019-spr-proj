@@ -1155,7 +1155,7 @@ class example(dml.Algorithm):
         Stops_Lat_Lng = doc.entity('dat:ido_jconstan_jeansolo_suitcase#StopsLatLng', {prov.model.PROV_LABEL:'Stops Latitude and Longitude', prov.model.PROV_TYPE:'ont:DataSet'})
         doc.wasAttributedTo(Stops_Lat_Lng, this_script)
         doc.wasGeneratedBy(Stops_Lat_Lng, get_StopsLatLng, endTime)
-        doc.wasDerivedFrom(Stops_Lat_Lng, resource_StopsLatLng, get_Stops_Lat_Lng, get_Stops_Lat_Lng, get_Stops_Lat_Lng)
+        doc.wasDerivedFrom(Stops_Lat_Lng, resource_StopsLatLng, get_StopsLatLng, get_StopsLatLng, get_StopsLatLng)
 
         k_means_0 = doc.entity('dat:ido_jconstan_jeansolo_suitcase#k-means_0', {prov.model.PROV_LABEL:'k-means stop 0', prov.model.PROV_TYPE:'ont:DataSet'})
         doc.wasAttributedTo(k_means_0, this_script)
