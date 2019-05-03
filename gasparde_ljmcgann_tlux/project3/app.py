@@ -27,7 +27,7 @@ def hello():
         name = request.form["neighborhood"]
         num = int(request.form['kmeans'])
         weight = int(request.form["weight"])
-        kmeans = optimize.compute_kmeans(name, num, weight)
+        kmeans = compute_kmeans(name, num, weight)
         kmeans = dumps(kmeans)
         return render_template('index.html', neighborhoods=neighborhoods, kmeans=kmeans, name=str(name), weight = weight
                                ,num = num)

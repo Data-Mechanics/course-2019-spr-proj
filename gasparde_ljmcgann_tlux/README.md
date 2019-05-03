@@ -2,7 +2,7 @@ Project 3
 ================================================================================
 This README is for the purpose of explaining how to run execute.py
 and our visualization rendered using Flask. For more details about the
-methodology read our Report.pdf which can be found in the directory.
+methodology read our Report.pdf which can be found this directory.
 
 ### Dependencies
 Besides the dependencies needed by **execute.py** outline by the Data Mechanics Course, 
@@ -50,10 +50,12 @@ execute.py script so that Flask has the data within
 the MongoDB cluster needed to render the website. The
 visualization will also work if you run trial mode, but
 you will be limited only to the neighborhood of Allston.
-To render rhe visualization simply run the app.py file found in the project3 
+To render the visualization simply run the app.py file found in the project3 
 subdirectory. This should render html locally on your machine.
 
-Note: we use sys.path.insert to reference the code
-found in optimize.py to compute kmeans. This should
-work fine on your system but if not
-all app.py needs is a reference to the optimize module.
+Note: We've added some redundant code in the project3 folder in the 
+kmeans.py file. This was because we wanted to make sure
+our app.py was able to reference the necessary
+code to run the kmeans and trying to reference
+optimize.py in the parent directory has been known to
+be buggy.
