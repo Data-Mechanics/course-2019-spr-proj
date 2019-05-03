@@ -1,11 +1,10 @@
 from bson.json_util import dumps
 import dml
 from flask import Flask, request, render_template
-import sys
-
+from kmeans import *
 # need to import kmeans algorithm from optimize.py
-sys.path.insert(0, '../')
-from optimize import *
+
+
 
 app = Flask(__name__)
 
