@@ -1,0 +1,5 @@
+https://www.kaggle.com/ankkur13/boston-crime-data
+https://data.boston.gov/dataset/community-centers1/resource/f793c76f-145c-4755-9f07-7b73ac2d724b
+https://data.boston.gov/dataset/community-center-pools/resource/6b8beff9-4d7d-4612-a824-fdfef631724c
+https://data.boston.gov/dataset/public-schools/resource/16c8f02c-e32a-423a-8e27-0080117e6845
+https://data.boston.gov/dataset/boston-police-stations/resource/0b2be5cb-89c6-4328-93be-c54ba723f8db

@@ -1,0 +1,177 @@
+[
+ {
+   "neighborhood": "Allston",
+   "crime_rate": 9569,
+   "price": 132.2969696969697,
+   "longitude": -71.13237984198553,
+   "latitude": 42.35541307635124
+ },
+ {
+   "neighborhood": "Back Bay",
+   "crime_rate": 14192,
+   "price": 323.3996023856859,
+   "longitude": -71.08187614227043,
+   "latitude": 42.34901842891106
+ },
+ {
+   "neighborhood": "Bay Village",
+   "crime_rate": 899,
+   "price": 209.45945945945945,
+   "longitude": -71.06864106173984,
+   "latitude": 42.34922721207583
+ },
+ {
+   "neighborhood": "Beacon Hill",
+   "crime_rate": 3132,
+   "price": 190.78571428571428,
+   "longitude": -71.06776963475299,
+   "latitude": 42.35935688577789
+ },
+ {
+   "neighborhood": "Brighton",
+   "crime_rate": 12394,
+   "price": 112.48760330578513,
+   "longitude": -71.1527360400802,
+   "latitude": 42.3477974759738
+ },
+ {
+   "neighborhood": "Charlestown",
+   "crime_rate": 6681,
+   "price": 225.70440251572327,
+   "longitude": -71.06539640781266,
+   "latitude": 42.37820833200621
+ },
+ {
+   "neighborhood": "Chinatown",
+   "crime_rate": 3387,
+   "price": 235.56617647058823,
+   "longitude": -71.0614518930441,
+   "latitude": 42.35052321369261
+ },
+ {
+   "neighborhood": "Dorchester",
+   "crime_rate": 85675,
+   "price": 157.4641577060932,
+   "longitude": -71.06305024407544,
+   "latitude": 42.30318059210459
+ },
+ {
+   "neighborhood": "Downtown",
+   "crime_rate": 22753,
+   "price": 255.04956896551724,
+   "longitude": -71.06115411417446,
+   "latitude": 42.35571997506933
+ },
+ {
+   "neighborhood": "East Boston",
+   "crime_rate": 14641,
+   "price": 132.2046204620462,
+   "longitude": -71.0296249144161,
+   "latitude": 42.37568635215658
+ },
+ {
+   "neighborhood": "Fenway",
+   "crime_rate": 9884,
+   "price": 203.33484162895928,
+   "longitude": -71.09771928324622,
+   "latitude": 42.344984369402205
+ },
+ {
+   "neighborhood": "Hyde Park",
+   "crime_rate": 14642,
+   "price": 84.82539682539682,
+   "longitude": -71.12067478300743,
+   "latitude": 42.254384834751825
+ },
+ {
+   "neighborhood": "Jamaica Plain",
+   "crime_rate": 17039,
+   "price": 145.59474671669793,
+   "longitude": -71.10987978460886,
+   "latitude": 42.3149234459156
+ },
+ {
+   "neighborhood": "Leather District",
+   "crime_rate": 503,
+   "price": 751.7142857142857,
+   "longitude": -71.05752753009726,
+   "latitude": 42.35125639551725
+ },
+ {
+   "neighborhood": "Longwood",
+   "crime_rate": 1580,
+   "price": 105.66666666666667,
+   "longitude": -71.10512174527605,
+   "latitude": 42.33959277566469
+ },
+ {
+   "neighborhood": "Mattapan",
+   "crime_rate": 15455,
+   "price": 81.57894736842105,
+   "longitude": -71.0844240307179,
+   "latitude": 42.2760257593922
+ },
+ {
+   "neighborhood": "Mission Hill",
+   "crime_rate": 6842,
+   "price": 269.59447004608296,
+   "longitude": -71.10762113770538,
+   "latitude": 42.33135479313157
+ },
+ {
+   "neighborhood": "North End",
+   "crime_rate": 3110,
+   "price": 226.7829457364341,
+   "longitude": -71.0547015551623,
+   "latitude": 42.36532397851262
+ },
+ {
+   "neighborhood": "Roslindale",
+   "crime_rate": 10105,
+   "price": 84.3716814159292,
+   "longitude": -71.12980548787482,
+   "latitude": 42.28168128082687
+ },
+ {
+   "neighborhood": "Roxbury",
+   "crime_rate": 44744,
+   "price": 245.86918604651163,
+   "longitude": -71.08582587808597,
+   "latitude": 42.32490752613424
+ },
+ {
+   "neighborhood": "South Boston",
+   "crime_rate": 17292,
+   "price": 262.4516129032258,
+   "longitude": -71.04609249522659,
+   "latitude": 42.33559561842502
+ },
+ {
+   "neighborhood": "South Boston Waterfront",
+   "crime_rate": 1895,
+   "price": 279.9871794871795,
+   "longitude": -71.04524590626251,
+   "latitude": 42.34917376873307
+ },
+ {
+   "neighborhood": "South End",
+   "crime_rate": 14608,
+   "price": 199.24829157175398,
+   "longitude": -71.07375936938305,
+   "latitude": 42.342142632693495
+ },
+ {
+   "neighborhood": "West End",
+   "crime_rate": 4015,
+   "price": 283.4026845637584,
+   "longitude": -71.06764840573346,
+   "latitude": 42.36401643781113
+ },
+ {
+   "neighborhood": "West Roxbury",
+   "crime_rate": 7291,
+   "price": 107.55714285714286,
+   "longitude": -71.15654350841298,
+   "latitude": 42.28003263782437
+ }
+]

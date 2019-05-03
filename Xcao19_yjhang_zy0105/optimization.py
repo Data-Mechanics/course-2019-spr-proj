@@ -1,5 +1,3 @@
-import urllib.request
-import json
 import dml
 import prov.model
 import datetime
@@ -7,9 +5,9 @@ import uuid
 
 
 class optimization(dml.Algorithm):
-    contributor = 'Jinghang_Yuan'
-    reads = ['Jinghang_Yuan.ZIPCounter']
-    writes = ['Jinghang_Yuan.optimization']
+    contributor = 'xcao19_yjhang_zy0105'
+    reads = ['xcao19_yjhang_zy0105.ZIPCounter']
+    writes = ['xcao19_yjhang_zy0105.optimization']
 
     @staticmethod
     def execute(trial=False):
@@ -20,9 +18,12 @@ class optimization(dml.Algorithm):
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('Jinghang_Yuan', 'Jinghang_Yuan')
+        repo.authenticate('xcao19_yjhang_zy0105', 'xcao19_yjhang_zy0105')
 
-        data = list(repo['Jinghang_Yuan.ZIPCounter'].find())
+        data = list(repo['xcao19_yjhang_zy0105.ZIPCounter'].find())
+
+        if trial:
+            data = data[0:20:1]
 
         # select and project all the zip with more or one center,policeStation,centerPool and school
         # the constraint is the four number should be larger than 0
@@ -43,7 +44,7 @@ class optimization(dml.Algorithm):
 
         repo.dropCollection("optimization")
         repo.createCollection("optimization")
-        repo['Jinghang_Yuan.optimization'].insert_many([o])
+        repo['xcao19_yjhang_zy0105.optimization'].insert_many([o])
 
         repo.logout()
         endTime = datetime.datetime.now()
@@ -60,7 +61,7 @@ class optimization(dml.Algorithm):
         doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
 
 
-        this_script = doc.agent('alg:Xcao19_yjhang_zy0105#optimization',
+        this_script = doc.agent('alg:xcao19_yjhang_zy0105#optimization',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
         resource = doc.entity('dat:Jinghang_Yuan#Jinghang_Yuan.ZIPCounter',
                               {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource',
@@ -78,8 +79,7 @@ class optimization(dml.Algorithm):
                    'ont:Query': 'FID,OBJECTID,SITE,PHONE,FAX,STREET,NEIGH,ZIP'
                    }
                   )
-
-        resZip = doc.entity('dat:Jinghang_Yuan#Jinghang_Yuan.optimization',
+        resZip = doc.entity('dat:xcao19_yjhang_zy0105#result',
                           {prov.model.PROV_LABEL: 'result', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(resZip, this_script)
         doc.wasGeneratedBy(resZip, activity, endTime)
@@ -88,7 +88,7 @@ class optimization(dml.Algorithm):
         return doc
 
 #optimization.execute()
-# optimization.provenance()
+#optimization.provenance()
 # doc = optimization.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))
