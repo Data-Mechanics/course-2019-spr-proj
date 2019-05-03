@@ -2,8 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5fa84993-6dd7-460b-848f-034815251ce2" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/504_Poster.pptx" beforeDir="false" afterPath="$PROJECT_DIR$/504_Poster.pptx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crime.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/airbnbvisual.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/center.py" beforeDir="false" afterPath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/center.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/centerPool.py" beforeDir="false" afterPath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/centerPool.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/center_to_policeStation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/center_to_policeStation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/correlation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/correlation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/crime.py" beforeDir="false" afterPath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/crime.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/crimeVisual.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/crime_priceCorrelation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/crime_priceCorrelation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/join_by_ZIP.py" beforeDir="false" afterPath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/join_by_ZIP.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/newCorrelation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/newCorrelation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/optimization.py" beforeDir="false" afterPath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/optimization.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/policeStation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/policeStation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/property.py" beforeDir="false" afterPath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/property.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/property_to_school.py" beforeDir="false" afterPath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/property_to_school.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/school.py" beforeDir="false" afterPath="$PROJECT_DIR$/Xcao19_yjhang_zy0105/school.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -13,14 +28,35 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Xcao19_yjhang_zy0105/newCorrelation.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="284">
-              <caret line="41" column="19" lean-forward="true" selection-start-line="41" selection-start-column="19" selection-end-line="41" selection-end-column="19" />
+            <state relative-caret-position="1060">
+              <caret line="145" lean-forward="true" selection-start-line="145" selection-end-line="145" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Xcao19_yjhang_zy0105/crime.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1763">
+              <caret line="5" column="11" lean-forward="true" selection-start-line="5" selection-start-column="11" selection-end-line="5" selection-end-column="11" />
+              <folding>
+                <element signature="e#0#21#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Xcao19_yjhang_zy0105/crime_priceCorrelation.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="82">
+              <caret line="2" column="10" lean-forward="true" selection-start-line="2" selection-start-column="10" selection-end-line="2" selection-end-column="10" />
             </state>
           </provider>
         </entry>
@@ -40,15 +76,25 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Xcao19_yjhang_zy0105/correlation.py" />
         <option value="$PROJECT_DIR$/crime.py" />
         <option value="$PROJECT_DIR$/Xcao19_yjhang_zy0105/crimeVisual.py" />
-        <option value="$PROJECT_DIR$/Xcao19_yjhang_zy0105/airbnbvisual.py" />
         <option value="$PROJECT_DIR$/Xcao19_yjhang_zy0105/Crime_PriceCorrelation.py" />
-        <option value="$PROJECT_DIR$/Xcao19_yjhang_zy0105/crime_priceCorrelation.py" />
         <option value="$PROJECT_DIR$/Xcao19_yjhang_zy0105/policeStation_priceCorrelation.py" />
         <option value="$PROJECT_DIR$/Xcao19_yjhang_zy0105/school_priceCorrelation.py" />
+        <option value="$PROJECT_DIR$/Xcao19_yjhang_zy0105/airbnbvisual.py" />
+        <option value="$PROJECT_DIR$/Xcao19_yjhang_zy0105/center.py" />
+        <option value="$PROJECT_DIR$/Xcao19_yjhang_zy0105/centerPool.py" />
+        <option value="$PROJECT_DIR$/Xcao19_yjhang_zy0105/school.py" />
+        <option value="$PROJECT_DIR$/Xcao19_yjhang_zy0105/property.py" />
+        <option value="$PROJECT_DIR$/Xcao19_yjhang_zy0105/policeStation.py" />
+        <option value="$PROJECT_DIR$/Xcao19_yjhang_zy0105/crime.py" />
+        <option value="$PROJECT_DIR$/Xcao19_yjhang_zy0105/correlation.py" />
+        <option value="$PROJECT_DIR$/Xcao19_yjhang_zy0105/optimization.py" />
+        <option value="$PROJECT_DIR$/Xcao19_yjhang_zy0105/property_to_school.py" />
+        <option value="$PROJECT_DIR$/Xcao19_yjhang_zy0105/center_to_policeStation.py" />
         <option value="$PROJECT_DIR$/Xcao19_yjhang_zy0105/newCorrelation.py" />
+        <option value="$PROJECT_DIR$/Xcao19_yjhang_zy0105/crime_priceCorrelation.py" />
+        <option value="$PROJECT_DIR$/Xcao19_yjhang_zy0105/join_by_ZIP.py" />
       </list>
     </option>
   </component>
@@ -250,16 +296,18 @@
       <workItem from="1556660863876" duration="1535000" />
       <workItem from="1556667659859" duration="3368000" />
       <workItem from="1556686517495" duration="5469000" />
+      <workItem from="1556908243646" duration="3233000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="23830000" />
+    <option name="totallyTimeSpent" value="27063000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16044776" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16204691" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -294,42 +342,7 @@
     <SUITE FILE_PATH="coverage/course_2019_spr_proj$airbnbvisual.coverage" NAME="airbnbvisual Coverage Results" MODIFIED="1556670385074" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Xcao19_yjhang_zy0105" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Xcao19_yjhang_zy0105/center_to_policeStation.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#21#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Xcao19_yjhang_zy0105/join_by_ZIP.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Xcao19_yjhang_zy0105/optimization.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#21#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/crime.csv">
-      <provider selected="true" editor-type-id="LargeFileEditor">
-        <state relative-caret-position="-369" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Xcao19_yjhang_zy0105/school.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="287">
-          <caret line="22" column="25" selection-start-line="22" selection-start-column="25" selection-end-line="22" selection-end-column="25" />
-          <folding>
-            <element signature="e#0#21#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/crime.csv" />
     <entry file="file://$PROJECT_DIR$/../AppData/Local/Programs/Python/Python37-32/Lib/site-packages/folium/utilities.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="218">
@@ -358,70 +371,32 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Xcao19_yjhang_zy0105/airbnbvisual.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="23" lean-forward="true" selection-start-line="23" selection-end-line="23" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/Xcao19_yjhang_zy0105/school_priceCorrelation.py" />
+    <entry file="file://$PROJECT_DIR$/Xcao19_yjhang_zy0105/policeStation_priceCorrelation.py" />
     <entry file="file://$PROJECT_DIR$/Xcao19_yjhang_zy0105/crimeVisual.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1558">
-          <caret line="38" column="14" lean-forward="true" selection-start-line="38" selection-start-column="14" selection-end-line="38" selection-end-column="14" />
+        <state relative-caret-position="164">
+          <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Xcao19_yjhang_zy0105/correlation.py">
+    <entry file="file://$PROJECT_DIR$/Xcao19_yjhang_zy0105/airbnbvisual.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4756">
-          <caret line="137" selection-start-line="137" selection-end-line="137" />
+        <state relative-caret-position="164">
+          <caret line="4" selection-start-line="4" selection-end-line="4" />
           <folding>
-            <element signature="e#0#21#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Xcao19_yjhang_zy0105/center.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1866">
-          <caret line="58" column="24" lean-forward="true" selection-start-line="58" selection-start-column="24" selection-end-line="58" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#21#0" expanded="true" />
+            <element signature="e#0#9#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Xcao19_yjhang_zy0105/centerPool.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="410">
-          <caret line="25" column="32" selection-start-line="25" selection-start-column="32" selection-end-line="25" selection-end-column="32" />
-          <folding>
-            <element signature="e#0#21#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Xcao19_yjhang_zy0105/crime.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-205">
-          <caret line="6" selection-start-line="6" selection-end-line="6" />
-          <folding>
-            <element signature="e#0#21#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Xcao19_yjhang_zy0105/policeStation.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="369">
-          <caret line="26" column="8" selection-start-line="26" selection-start-column="8" selection-end-line="26" selection-end-column="51" />
+        <state relative-caret-position="3034">
+          <caret line="74" lean-forward="true" selection-start-line="74" selection-end-line="74" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
           </folding>
@@ -430,45 +405,115 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Xcao19_yjhang_zy0105/property.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1148">
-          <caret line="28" lean-forward="true" selection-start-line="28" selection-end-line="28" />
+        <state relative-caret-position="246">
+          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Xcao19_yjhang_zy0105/policeStation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3034">
+          <caret line="74" column="4" selection-start-line="74" selection-start-column="4" selection-end-line="74" selection-end-column="4" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Xcao19_yjhang_zy0105/school_priceCorrelation.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="82">
-          <caret line="10" column="29" selection-start-line="10" selection-start-column="6" selection-end-line="10" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Xcao19_yjhang_zy0105/policeStation_priceCorrelation.py">
+    <entry file="file://$PROJECT_DIR$/Xcao19_yjhang_zy0105/school.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
-          <caret line="8" column="21" lean-forward="true" selection-end-line="109" selection-end-column="40" />
+          <caret line="5" column="13" lean-forward="true" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Xcao19_yjhang_zy0105/crime_priceCorrelation.py">
+    <entry file="file://$PROJECT_DIR$/Xcao19_yjhang_zy0105/optimization.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1312">
-          <caret line="31" column="22" lean-forward="true" selection-start-line="31" selection-start-column="22" selection-end-line="31" selection-end-column="22" />
+        <state relative-caret-position="164">
+          <caret line="82" column="53" selection-start-line="82" selection-start-column="53" selection-end-line="82" selection-end-column="53" />
           <folding>
-            <element signature="e#0#21#0" expanded="true" />
+            <element signature="e#5#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Xcao19_yjhang_zy0105/property_to_school.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1183">
+          <caret line="88" selection-start-line="88" selection-end-line="88" />
+          <folding>
+            <element signature="e#1#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Xcao19_yjhang_zy0105/center_to_policeStation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="322">
+          <caret line="86" lean-forward="true" selection-start-line="86" selection-end-line="86" />
+          <folding>
+            <element signature="e#4#14#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Xcao19_yjhang_zy0105/newCorrelation.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="284">
-          <caret line="41" column="19" lean-forward="true" selection-start-line="41" selection-start-column="19" selection-end-line="41" selection-end-column="19" />
+        <state relative-caret-position="1060">
+          <caret line="145" lean-forward="true" selection-start-line="145" selection-end-line="145" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Xcao19_yjhang_zy0105/center.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="650">
+          <caret line="55" column="48" selection-start-line="55" selection-start-column="48" selection-end-line="55" selection-end-column="48" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Xcao19_yjhang_zy0105/join_by_ZIP.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="246">
+          <caret line="99" column="15" lean-forward="true" selection-start-line="99" selection-start-column="15" selection-end-line="99" selection-end-column="15" />
+          <folding>
+            <element signature="e#39#49#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Xcao19_yjhang_zy0105/correlation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3895">
+          <caret line="10" column="28" lean-forward="true" selection-start-line="10" selection-start-column="28" selection-end-line="10" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Xcao19_yjhang_zy0105/crime.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1763">
+          <caret line="5" column="11" lean-forward="true" selection-start-line="5" selection-start-column="11" selection-end-line="5" selection-end-column="11" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Xcao19_yjhang_zy0105/crime_priceCorrelation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="82">
+          <caret line="2" column="10" lean-forward="true" selection-start-line="2" selection-start-column="10" selection-end-line="2" selection-end-column="10" />
         </state>
       </provider>
     </entry>

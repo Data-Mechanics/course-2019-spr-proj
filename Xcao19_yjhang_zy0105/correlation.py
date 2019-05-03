@@ -1,21 +1,17 @@
-import urllib.request
-import json
 import dml
 import prov.model
 import datetime
 import uuid
-import numpy as np
 
 from random import shuffle
 from math import sqrt
 
 class correlation(dml.Algorithm):
-    # contributor = 'Jinghang_Yuan'
 
     #project 2 contributors:
     contributor = 'xcao19_yjhang_zy0105'
-    reads = ['Jinghang_Yuan.ZIPCounter']
-    writes = ['Jinghang_Yuan.correlation']
+    reads = ['xcao19_yjhang_zy0105.ZIPCounter']
+    writes = ['xcao19_yjhang_zy0105.correlation']
 
     @staticmethod
     def execute(trial=False):
@@ -26,11 +22,13 @@ class correlation(dml.Algorithm):
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('Jinghang_Yuan', 'Jinghang_Yuan')
+        repo.authenticate('xcao19_yjhang_zy0105', 'xcao19_yjhang_zy0105')
 
         data=repo['Jinghang_Yuan.ZIPCounter'].find()
+
         if trial:
-            data = data.head(20)
+            data = data[0:20:1]
+
         ave_val = []
         centerNum = []
         centerPoolNum = []
@@ -97,7 +95,7 @@ class correlation(dml.Algorithm):
 
         repo.dropCollection("correlation")
         repo.createCollection("correlation")
-        repo["Jinghang_Yuan.correlation"].insert_many(res)
+        repo["xcao19_yjhang_zy0105.correlation"].insert_many(res)
 
         # print(list(repo['Jinghang_Yuan.correlation'].find()))
 
@@ -111,7 +109,7 @@ class correlation(dml.Algorithm):
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('Jinghang_Yuan', 'Jinghang_Yuan')
+        repo.authenticate('xcao19_yjhang_zy0105', 'xcao19_yjhang_zy0105')
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')  # The scripts are in <folder>#<filename> format.
         doc.add_namespace('dat', 'http://datamechanics.io/data/')  # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont',
@@ -121,8 +119,8 @@ class correlation(dml.Algorithm):
 
 
         #---entities---
-        resource = doc.entity('dat: Jinghang_Yuan#Jinghang_Yuan.ZIPCounter', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
-        res = doc.entity('dat:Jinghang_Yuan#Jinghang_Yuan.correlation',
+        resource = doc.entity('dat: xcao19_yjhang_zy0105#xcao19_yjhang_zy0105.ZIPCounter', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        res = doc.entity('dat:xcao19_yjhang_zy0105#xcao19_yjhang_zy0105.correlation',
                             {prov.model.PROV_LABEL: 'result', prov.model.PROV_TYPE: 'ont:DataSet'})
         #---agents---
         this_script = doc.agent('alg:Xcao19_yjhang_zy0105#correlation',
@@ -144,4 +142,10 @@ class correlation(dml.Algorithm):
 
         return doc
 
-correlation.execute()
+#correlation.execute()
+#correlation.provenance()
+# doc = correlation.provenance()
+# print(doc.get_provn())
+# print(json.dumps(json.loads(doc.serialize()), indent=4))
+
+#eof

@@ -107,4 +107,10 @@ class crime_priceCorrelation(dml.Algorithm):# contributor = 'Jinghang_Yuan'
 
         return doc
 
-crime_priceCorrelation.execute()
+#crime_priceCorrelation.execute()
+#crime_priceCorrelation.provenance()
+# doc = crime_priceCorrelation.provenance()
+# print(doc.get_provn())
+# print(json.dumps(json.loads(doc.serialize()), indent=4))
+
+#eof

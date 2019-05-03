@@ -1,4 +1,3 @@
-import urllib.request
 import json
 import dml
 import prov.model
@@ -7,9 +6,9 @@ import uuid
 import pandas
 
 class school(dml.Algorithm):
-    contributor = 'Jinghang_Yuan'
+    contributor = 'xcao19_yjhang_zy0105'
     reads = []
-    writes = ['Jinghang_Yuan.school']
+    writes = ['xcao19_yjhang_zy0105.school']
 
     @staticmethod
     def execute(trial=False):
@@ -18,7 +17,7 @@ class school(dml.Algorithm):
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('Jinghang_Yuan', 'Jinghang_Yuan')
+        repo.authenticate('xcao19_yjhang_zy0105', 'xcao19_yjhang_zy0105')
 
         url = 'https://opendata.arcgis.com/datasets/0046426a3e4340a6b025ad52b41be70a_1.csv'
         df = pandas.read_csv(url)
@@ -27,8 +26,8 @@ class school(dml.Algorithm):
 
         repo.dropCollection("school")
         repo.createCollection("school")
-        repo['Jinghang_Yuan.school'].insert_many(r)
-        repo['Jinghang_Yuan.school'].metadata({'complete': True})
+        repo['xcao19_yjhang_zy0105.school'].insert_many(r)
+        repo['xcao19_yjhang_zy0105.school'].metadata({'complete': True})
         # print('-----------------')
         # print(list(repo['Jinghang_Yuan.school'].find()))
         # print('-----------------')
@@ -45,7 +44,7 @@ class school(dml.Algorithm):
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('Jinghang_Yuan', 'Jinghang_Yuan')
+        repo.authenticate('xcao19_yjhang_zy0105', 'xcao19_yjhang_zy0105')
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')
         doc.add_namespace('dat', 'http://datamechanics.io/data/')
         doc.add_namespace('ont',
@@ -53,7 +52,7 @@ class school(dml.Algorithm):
         doc.add_namespace('log', 'http://datamechanics.io/log/')
         doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
 
-        this_script = doc.agent('alg:Jinghang_Yuan#school',
+        this_script = doc.agent('alg:xcao19_yjhang_zy0105#school',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
         resource = doc.entity('bdp:wc8w-nujj',
                               {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource',
@@ -65,7 +64,7 @@ class school(dml.Algorithm):
                    'ont:Query': 'X,Y,OBJECTID_1,OBJECTID,SCHID,NAME,ADDRESS,TOWN_MAIL,TOWN,STATE,ZIP,PRINCIPAL,PHONE,FAX,GRADES,TYPE'
                    }
                   )
-        school = doc.entity('dat:Jinghang_Yuan#school',
+        school = doc.entity('dat:xcao19_yjhang_zy0105#school',
                           {prov.model.PROV_LABEL: 'school', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(school, this_script)
         doc.wasGeneratedBy(school, get_school, endTime)
@@ -74,7 +73,9 @@ class school(dml.Algorithm):
         repo.logout()
 
         return doc
-school.execute()
+
+# school.execute()
+# school.provenance()
 # doc = school.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))

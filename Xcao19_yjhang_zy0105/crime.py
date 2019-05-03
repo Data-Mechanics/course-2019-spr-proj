@@ -5,11 +5,10 @@ import prov.model
 import datetime
 import uuid
 
-
 class crime(dml.Algorithm):
-    contributor = 'Jinghang_Yuan'
+    contributor = 'xcao19_yjhang_zy0105'
     reads = []
-    writes = ['Jinghang_Yuan.crime']
+    writes = ['xcao19_yjhang_zy0105.crime']
 
     @staticmethod
     def execute(trial=False):
@@ -18,7 +17,7 @@ class crime(dml.Algorithm):
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('Jinghang_Yuan', 'Jinghang_Yuan')
+        repo.authenticate('xcao19_yjhang_zy0105', 'xcao19_yjhang_zy0105')
 
         url = 'http://datamechanics.io/data/Jinghang_Yuan/newCrime.json'
         response = urllib.request.urlopen(url).read().decode("utf-8")
@@ -27,8 +26,8 @@ class crime(dml.Algorithm):
 
         repo.dropCollection("crime")
         repo.createCollection("crime")
-        repo['Jinghang_Yuan.crime'].insert_many(r)
-        repo['Jinghang_Yuan.crime'].metadata({'complete': True})
+        repo['xcao19_yjhang_zy0105.crime'].insert_many(r)
+        repo['xcao19_yjhang_zy0105.crime'].metadata({'complete': True})
         # print('-----------------')
         # print(list(repo['Jinghang_Yuan.crime'].find()))
         # print('-----------------')
@@ -45,7 +44,7 @@ class crime(dml.Algorithm):
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('Jinghang_Yuan', 'Jinghang_Yuan')
+        repo.authenticate('xcao19_yjhang_zy0105', 'xcao19_yjhang_zy0105')
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')
         doc.add_namespace('dat', 'http://datamechanics.io/data/')
         doc.add_namespace('ont',
@@ -53,7 +52,7 @@ class crime(dml.Algorithm):
         doc.add_namespace('log', 'http://datamechanics.io/log/')
         doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
 
-        this_script = doc.agent('alg:Jinghang_Yuan#policeStation',
+        this_script = doc.agent('alg:xcao19_yjhang_zy0105#policeStation',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
         resource = doc.entity('bdp:wc8w-nujj',
                               {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource',
@@ -65,7 +64,7 @@ class crime(dml.Algorithm):
                    'ont:Query': 'OBJECTID,BLDG_ID,BID,ADDRESS,POINT_X,POINT_Y,NAME,NEIGHBOTHOOD,CITY,ZIP,FT_SOFT,STORY_HT,PARCEL_ID'
                    }
                   )
-        policeStation = doc.entity('dat:Jinghang_Yuan#policeStation',
+        policeStation = doc.entity('dat:xcao19_yjhang_zy0105#policeStation',
                           {prov.model.PROV_LABEL: 'policeStation', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(policeStation, this_script)
         doc.wasGeneratedBy(policeStation, get_policeStation, endTime)
@@ -75,7 +74,8 @@ class crime(dml.Algorithm):
 
         return doc
 
-crime.execute()
+# crime.execute()
+# crime.provenance()
 # doc = crime.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))

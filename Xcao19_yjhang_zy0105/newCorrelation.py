@@ -2,14 +2,12 @@ import urllib.request
 import json
 import dml
 import prov.model
-import datetime
 import uuid
 
 from random import shuffle
 from math import sqrt
 
 class newCorrelation(dml.Algorithm):
-    # contributor = 'Jinghang_Yuan'
 
     contributor = 'xcao19_yjhang_zy0105'
     reads = []
@@ -113,7 +111,7 @@ class newCorrelation(dml.Algorithm):
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('Jinghang_Yuan', 'Jinghang_Yuan')
+        repo.authenticate('xcao19_yjhang_zy0105', 'xcao19_yjhang_zy0105')
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')  # The scripts are in <folder>#<filename> format.
         doc.add_namespace('dat', 'http://datamechanics.io/data/')  # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont',
@@ -123,11 +121,11 @@ class newCorrelation(dml.Algorithm):
 
 
         #---entities---
-        resource = doc.entity('dat: Jinghang_Yuan#Jinghang_Yuan.ZIPCounter', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        resource = doc.entity('dat: xcao19_yjhang_zy0105#xcao19_yjhang_zy0105.ZIPCounter', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
         res = doc.entity('dat:Jinghang_Yuan#Jinghang_Yuan.correlation',
                             {prov.model.PROV_LABEL: 'result', prov.model.PROV_TYPE: 'ont:DataSet'})
         #---agents---
-        this_script = doc.agent('alg:Xcao19_yjhang_zy0105#correlation',
+        this_script = doc.agent('alg:xcao19_yjhang_zy0105#correlation',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
         #---algs/activities---
         get_correlation = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
@@ -146,4 +144,10 @@ class newCorrelation(dml.Algorithm):
 
         return doc
 
-newCorrelation.execute()
+#newCorrelation.execute()
+#newCorrelation.provenance()
+# doc = newCorrelation.provenance()
+# print(doc.get_provn())
+# print(json.dumps(json.loads(doc.serialize()), indent=4))
+
+#eof
