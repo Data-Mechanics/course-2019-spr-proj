@@ -50,10 +50,10 @@ execute.py script so that Flask has the data within
 the MongoDB cluster needed to render the website. The
 visualization will also work if you run trial mode, but
 you will be limited only to the neighborhood of Allston.
-To run just simply run the app.py file found in the project3 
+To render rhe visualization simply run the app.py file found in the project3 
 subdirectory. This should render html locally on your machine.
 
 Note: we use sys.path.insert to reference the code
 found in optimize.py to compute kmeans. This should
-be fine working on your systems but if not
+work fine on your system but if not
 all app.py needs is a reference to the optimize module.
