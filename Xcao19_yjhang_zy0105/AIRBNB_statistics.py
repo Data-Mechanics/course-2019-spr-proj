@@ -100,6 +100,6 @@ class AIRBNB_statistics(dml.Algorithm):
 
         return doc
 
-doc = AIRBNB_statistics.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
+# doc = AIRBNB_statistics.provenance()
+# print(doc.get_provn())
+# print(json.dumps(json.loads(doc.serialize()), indent=4))
