@@ -2,6 +2,8 @@
 Author: Nicole Mis  
 Email:  misn15@bu.edu
 
+See end of readme file for instructions on running code for project 3
+
 ## Project #1
 
 In 2016, the worlds’ cities generated 2.01 billion tonnes of solid waste, amounting to a footprint of 0.74 kilograms per person per day. As the world continues to urbanize and grow in size, annual waste generation is expected to increase by 70% from 2016 to 2050, reaching 3.4 billion tonnes ([World Bank](http://www.worldbank.org/en/topic/urbandevelopment/brief/solid-waste-management)).
@@ -82,16 +84,19 @@ If waste turned out to be a significant factor affecting health, I wanted to cal
 
 Finally, I find the correlations between health and factors such as waste, open spaces and crimes to see if there is a relationship and how strong that relationship is. I also create a custom metric that gives you a sense of how healthy a certain area is. I hoped that by doing this conclusion I could determine what sort of external factors affect a person's health and thereby, pinpointing areas where the city could help improve the quality of life for its citizens.
 
+## Project 3
+In project 3, I created a web application that exposes all of my results from subsequent projects. You can find all the files needed to run the web application in the Website folder. This is a flask application so you can run the application using the command py app.py from the command line. First, remember to run all of the algorithms because the web application creates visualizations using data stored in MongoDB. Your visualizations may different depending on if you run the algorithms in trial mode because only a subset of the data is being used. In addition to the packages used in prior projects as well as python built in libraries, there are several other dependencies that need to be installed, which are listed below.
+
 #### Dependencies
-pyproj
-uszipcode
-geopy
-math
-census 
-us
-sklearn
-statsmodels
-scipy
-shapely
-copy
-requests
+pyproj   
+uszipcode   
+geopy   
+math   
+census    
+us   
+sklearn   
+statsmodels   
+scipy   
+shapely   
+copy   
+requests  
