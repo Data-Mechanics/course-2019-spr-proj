@@ -17,6 +17,11 @@ html, body{
     padding: 2%;
 }
 
+.about{
+    margin: auto;
+    padding: 2%;
+}
+
 .info {
     padding: 6px 8px;
     font: 14px/16px Arial, Helvetica, sans-serif;
