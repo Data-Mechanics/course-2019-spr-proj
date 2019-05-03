@@ -140,10 +140,10 @@ class light_crime_trans(dml.Algorithm):
 
         return doc
 
-
+'''
 light_crime_trans.execute()
 doc = light_crime_trans.provenance()
 print(doc.get_provn())
 print(json.dumps(json.loads(doc.serialize()), indent=4))
-
+'''
 
