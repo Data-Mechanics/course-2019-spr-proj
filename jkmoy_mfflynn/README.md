@@ -50,9 +50,10 @@ The web application for this project, is a simple page, that displays two tables
 
 **Findings and Conclusion:**
 **Accident Clusters:**
-![alt text](https://github.com/J-Moy/course-2019-spr-proj/blob/master/jkmoy_mfflynn/visualizations/accident.png = 100 x20)
+![alt text](https://github.com/J-Moy/course-2019-spr-proj/blob/master/jkmoy_mfflynn/visualizations/accident.png)
+
 **Crime Clusters:**
-![alt text](https://github.com/J-Moy/course-2019-spr-proj/blob/master/jkmoy_mfflynn/visualizations/crime.png = 100 x20)
+![alt text](https://github.com/J-Moy/course-2019-spr-proj/blob/master/jkmoy_mfflynn/visualizations/crime.png )
 For our accident reports, we found that there was not a big discrepancy in number of incidents from neighborhood to neighborhood, but there were a few interesting things to note. As expected, there were more accidents in the denser parts of the city and inversely less in the more spread out parts of Boston. But there were outliers to this, such as Mattapan, Dorchester, and Roxbury. These towns had similar numbers of accidents to the denser parts of Boston, even though they are relatively less dense to the other towns. For our Crime findings, most neighborhoods had the same percentage of serious crime, all being about 42%. Like accidents, there were outliers, with Mattapan having nearly 2x the amount of crime, whereas their population was only slightly higher. 
 
 With our findings, we concluded that crime and vehicular accidents are pretty uniform throughout Boston’s towns. There is no strong indication that any town/cluster is more prone to any type of crime or reckless driving.  However, it may be helpful in the future to extend our statistical analysis and data considered, to gain a more precise outcome. It also might help to look towards the neighboring towns of Boston, such as Cambridge and Brookline.
