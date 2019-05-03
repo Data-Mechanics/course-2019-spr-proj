@@ -11,14 +11,14 @@
 <h1>Rodent Incidents</h1>
     <div id="sliderContainer">
         <input id="timeslide" type="range" min="0" max="11" value="0" step="1"/><br>
-        <span id="range">January</span>
+        <span id="range">Jan</span>
     </div>
 <script>
     var width = 700;
     var height = 700;
 	
 	var inputValue = null;
-    var month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+    var month = ["Jan","Feb","Mar","Apr","May","June","July","Aug","Sep","Oct","Nov","Dec"];
 	
     var svg = d3.select( "body" )
         .append( "svg" )
@@ -46,7 +46,7 @@
         .data( rodents_json.features )
         .enter()
         .append( "path" )
-        .attr("fill", initialDate)
+        .attr("fill", Init)
         .attr("stroke", "#ccc")
         .attr("d", geoPath)
         .attr("class","incident")
@@ -67,9 +67,9 @@
         document.getElementById("range").innerHTML=month[value];
         inputValue = month[value];
         d3.selectAll(".incident")
-            .attr("fill", dateMatch);
+            .attr("fill", Check);
     }
-    function dateMatch(data, value) {
+    function Check(data, value) {
         var d = new Date(data.properties.OPEN_DT);
         var m = month[d.getMonth()];
         if (inputValue == m) {
@@ -79,10 +79,10 @@
             return "#999";
         };
     }
-    function initialDate(d,i){
+    function Init(d,i){
         var d = new Date(d.properties.OPEN_DT);
         var m = month[d.getMonth()];
-        if (m == "January") {
+        if (m == "Jan") {
             this.parentElement.appendChild(this);
             return "#900";
         } else {
