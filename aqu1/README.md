@@ -1,3 +1,5 @@
+## Overview of Spring 2019 Project for CS504 Data Mechanics. Please click on poster.pdf for a complete visual outline of the project
+
 ## Question: How does proximity of T-stops to public schools and colleges affect education attainment? How does education attainment affect poverty across different communities in Boston? How can the city of Boston optimize T-stops to provide residents with better access to education?
 
 ## Project Description: 
