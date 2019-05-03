@@ -79,7 +79,6 @@ def compute_kmeans(neighborhood, num_means, passed_weight):
     dict["Dist_To_Park"] = []
     dict["Avg_Health"] = []
     for mean in output:
-        print(mean)
         point = (mean[1], mean[0], mean[1], mean[0])
 
         bounds = [i for i in parcel_index.nearest(point, 5)]  # ties return two, only want 1
@@ -87,7 +86,6 @@ def compute_kmeans(neighborhood, num_means, passed_weight):
         dist_to_park = 0
         health_score = 0
         for ij in bounds[:5]:
-            print(neighborhood_parcels[ij])
             avg_val += round(
                 float(neighborhood_parcels[ij]["AV_TOTAL"]) / float(neighborhood_parcels[ij]["LAND_SF"]), 2)
             dist_to_park += float(neighborhood_parcels[ij]["min_distance_km"])
@@ -96,5 +94,4 @@ def compute_kmeans(neighborhood, num_means, passed_weight):
         dict["Dist_To_Park"].append(round(dist_to_park / 5, 2))
         dict["Avg_Health"].append(round(health_score / 5, 2))
 
-    print(dict)
     return dict
