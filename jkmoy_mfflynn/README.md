@@ -49,6 +49,7 @@ Using the clusters and statistical findings, we wanted to plot the points on a m
 The web application for this project, is a simple page, that displays two tables, one for accidents and one for crime, that give the mean and the standard deviation for the type of incident across all of the clusters. There is also the option to click to view either the accident or crime map produced by Folium, where the user can scroll over the clusters and see statistical data. For crime, it is the percent of serious crimes present in the cluster. For accidents, the number of each incident is given, along with the total number of incidents in that cluster. 
 
 **Findings and Conclusion:**
+
 **Accident Clusters:**
 ![alt text](https://github.com/J-Moy/course-2019-spr-proj/blob/master/jkmoy_mfflynn/visualizations/accident.png)
 
