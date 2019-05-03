@@ -97,5 +97,4 @@ sklearn
 statsmodels   
 scipy   
 shapely   
-copy   
-requests  
+
