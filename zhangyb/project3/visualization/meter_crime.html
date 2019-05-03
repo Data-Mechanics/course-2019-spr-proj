@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Crime and Parking Meter Locations</title>
+    <script src="d3/d3.js" charset="utf-8"></script>
+    <script src="http://datamechanics.io/data/zhangyb/Boston_Neighborhoods.json"></script>
+	<script src="http://datamechanics.io/data/zhangyb/meter_crime_geo.json"></script>
+	
+</head>
+<body>
+<body>
+<h1>Crime and Parking Meter Locations</h1>
+<script>
+    var width = 700;
+    var height = 700;
+    var svg = d3.select( "body" )
+        .append( "svg" )
+        .attr( "width", width )
+        .attr( "height", height );
+    var g = svg.append( "g" );
+    var albersProjection = d3.geoAlbers()
+        .scale( 190000 )
+        .rotate( [71.057,0] )
+        .center( [0, 42.313] )
+        .translate( [width/2,height/2] );
+    var geoPath = d3.geoPath()
+        .projection( albersProjection );
+    g.selectAll( "path" )
+        .data( boston_map.features )
+        .enter()
+        .append( "path" )
+        .attr( "fill", "#ccc" )
+        .attr( "stroke", "#333")
+        .attr( "d", geoPath );
+		
+	var rodents = svg.append( "g" );
+	
+	rodents.selectAll( "path" )
+	    .data( meter_crime.features )
+	    .enter()
+	    .append( "path" )
+	    .attr( "fill", "#900" )
+	    .attr( "stroke", "#999" )
+	    .attr( "d", geoPath );
+</script>
+</body>
+</html>
