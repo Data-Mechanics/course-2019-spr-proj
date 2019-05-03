@@ -1,6 +1,6 @@
 # Project 3
 
-### Introduction
+## Introduction
 ### Data sets:
 1.Property
 
