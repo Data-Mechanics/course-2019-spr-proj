@@ -141,4 +141,3 @@ class RateofChange2010To2016(dml.Algorithm):
         return doc
 
 
-
