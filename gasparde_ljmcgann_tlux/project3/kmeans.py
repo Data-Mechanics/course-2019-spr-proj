@@ -81,10 +81,11 @@ def compute_kmeans(neighborhood, num_means, passed_weight):
     for mean in output:
         point = (mean[1], mean[0], mean[1], mean[0])
 
-        bounds = [i for i in parcel_index.nearest(point, 5)]  # ties return two, only want 1
+        bounds = [i for i in parcel_index.nearest(point, 5)]
         avg_val = 0
         dist_to_park = 0
         health_score = 0
+        # take only five observations in case there are more due to ties
         for ij in bounds[:5]:
             avg_val += round(
                 float(neighborhood_parcels[ij]["AV_TOTAL"]) / float(neighborhood_parcels[ij]["LAND_SF"]), 2)

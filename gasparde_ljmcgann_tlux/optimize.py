@@ -14,29 +14,6 @@ class optimize(dml.Algorithm):
     writes = [contributor + ".KMeans"]
 
     @staticmethod
-    def health_score(row):
-        average = (float(row["obesity"]) + float(row["low_phys"]) + float(row["asthma"])) // 3
-        # we implement this scale to exagerate weights
-        # in the future should implement method to change how
-        # we weight
-        if average > 20:
-            return 100
-        elif average > 15:
-            return 10
-        else:
-            return 1
-
-    @staticmethod
-    def distance_score(distance_score, stdev, mean):
-        z_score = (distance_score - mean) / (stdev)
-        if z_score > 1.5:
-            return 100
-        elif z_score > .75:
-            return 10
-        else:
-            return 1
-
-    @staticmethod
     def compute_weight(dist_score, dist_mean, dist_stdev, health_score, health_mean, health_stdev, weight):
         dist_z_score = ((dist_score - dist_mean) / dist_stdev) * (1 - (weight / 100))
         # print("dist", dist_z_score)
@@ -111,15 +88,14 @@ class optimize(dml.Algorithm):
         dict["Dist_To_Park"] = []
         dict["Avg_Health"] = []
         for mean in output:
-            print(mean)
             point = (mean[1], mean[0], mean[1], mean[0])
 
-            bounds = [i for i in parcel_index.nearest(point, 5)]  # ties return two, only want 1
+            bounds = [i for i in parcel_index.nearest(point, 5)]
             avg_val = 0
             dist_to_park = 0
             health_score = 0
+            # take only five observations in case there are more due to ties
             for ij in bounds[:5]:
-                print(neighborhood_parcels[ij])
                 avg_val += round(
                     float(neighborhood_parcels[ij]["AV_TOTAL"]) / float(neighborhood_parcels[ij]["LAND_SF"]), 2)
                 dist_to_park += float(neighborhood_parcels[ij]["min_distance_km"])
@@ -128,25 +104,24 @@ class optimize(dml.Algorithm):
             dict["Dist_To_Park"].append(round(dist_to_park / 5, 2))
             dict["Avg_Health"].append(round(health_score / 5, 2))
 
-        print(dict)
         return dict
 
     @staticmethod
     def execute(trial=False):
         startTime = datetime.datetime.now()
 
-        # # Set up the database connection.
+        # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate(optimize.contributor, optimize.contributor)
-        # # read in neighborhoods to get the list of their names
+        # read in neighborhoods to get the list of their names
         neighborhoods = list(repo[optimize.contributor + ".Neighborhoods"].find())
         repo.dropCollection(optimize.contributor + ".KMeans")
         repo.createCollection(optimize.contributor + ".KMeans")
         for i in range(len(neighborhoods)):
             name = neighborhoods[i]["properties"]["Name"]
             distance_kmeans = optimize.compute_kmeans(name, 5, 0)
-            health_kmeans = optimize.compute_kmeans(name, 5, 0)
+            health_kmeans = optimize.compute_kmeans(name, 5, 100)
             distance_kmeans["metric"] = "distance_score"
             health_kmeans["metric"] = "health_score"
             if len(distance_kmeans) > 0:
