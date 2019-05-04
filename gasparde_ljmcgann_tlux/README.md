@@ -49,7 +49,12 @@ To run the visualization, one first needs to run the
 execute.py script so that Flask has the data within
 the MongoDB cluster needed to render the website. The
 visualization will also work if you run trial mode, but
-you will be limited only to the neighborhood of Allston.
+you will be limited only to the neighborhood of Allston. Also, since in
+trial mode we limit the number of data points, i.e the number of parcels,
+the statistics on each k-means should not be taken as the true values
+as there are many parcels in Allston that were not included. Trial mode
+with the visualization is mostly for the purpose of quickly showing how it works,
+not giving a completely 100% accurate answer,
 To render the visualization simply run the app.py file found in the project3 
 subdirectory. This should render html locally on your machine.
 

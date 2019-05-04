@@ -26,12 +26,10 @@ class getStatistics(dml.Algorithm):
         repo.createCollection(getStatistics.contributor + ".Statistics")
         for i in range(len(neighborhoods)):
             name = neighborhoods[i]["properties"]["Name"]
-            print(name)
             data = list(parcels.find({"Neighborhood": name}))
             if len(data) > 0:
                 # these are the three health statistics
                 for category in ["obesity", "asthma", "low_phys", "health_score"]:
-                    print(category, end=" ")
                     x = []
                     y = []
                     for i in range(len(data)):
@@ -40,7 +38,6 @@ class getStatistics(dml.Algorithm):
                     # find r values and their p-value for the correlation
                     # between distance scores and a health catagory
                     corr = pearsonr(x, y)
-                    print(corr)
                     repo[getStatistics.contributor + ".Statistics"].insert_one(
                         {"Neighborhood": name, "variable": category,
                          "statistic": "pearsonr", "value": corr})
@@ -111,4 +108,3 @@ class getStatistics(dml.Algorithm):
         doc.wasDerivedFrom(Stats, ParcelsCombined, getStatistics, getStatistics,
                            getStatistics)
         return doc
-getStatistics.execute()

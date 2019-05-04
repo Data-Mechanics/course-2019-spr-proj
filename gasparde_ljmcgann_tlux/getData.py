@@ -86,6 +86,7 @@ class getData(dml.Algorithm):
 
         # Parcels with their assessment value and type
         All_Assessments = []
+        r = 9 if not trial else 1
         for i in range(9):
             # need to iterate because we api request only brings max 32000 parcels
             # 20000 is a good number so we don't pull in more than maximum getting duplicates

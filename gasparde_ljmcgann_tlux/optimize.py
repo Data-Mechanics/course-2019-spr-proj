@@ -16,9 +16,7 @@ class optimize(dml.Algorithm):
     @staticmethod
     def compute_weight(dist_score, dist_mean, dist_stdev, health_score, health_mean, health_stdev, weight):
         dist_z_score = ((dist_score - dist_mean) / dist_stdev) * (1 - (weight / 100))
-        # print("dist", dist_z_score)
         health_z_score = ((health_score - health_mean) / health_stdev) * ((weight / 100))
-        # print("health", health_z_score)
         average_z_score = (dist_z_score + health_z_score)
 
         if average_z_score > 1.5:
@@ -94,15 +92,18 @@ class optimize(dml.Algorithm):
             avg_val = 0
             dist_to_park = 0
             health_score = 0
+            count = 0
             # take only five observations in case there are more due to ties
             for ij in bounds[:5]:
-                avg_val += round(
+                if neighborhood_parcels[ij]["AV_TOTAL"] is not None and neighborhood_parcels[ij]["LAND_SF"] is not None:
+                    avg_val += round(
                     float(neighborhood_parcels[ij]["AV_TOTAL"]) / float(neighborhood_parcels[ij]["LAND_SF"]), 2)
-                dist_to_park += float(neighborhood_parcels[ij]["min_distance_km"])
-                health_score += float(neighborhood_parcels[ij]["health_score"])
-            dict["Avg_Land_Val"].append(round(avg_val / 5, 2))
-            dict["Dist_To_Park"].append(round(dist_to_park / 5, 2))
-            dict["Avg_Health"].append(round(health_score / 5, 2))
+                    dist_to_park += float(neighborhood_parcels[ij]["min_distance_km"])
+                    health_score += float(neighborhood_parcels[ij]["health_score"])
+                    count += 1
+            dict["Avg_Land_Val"].append(round(avg_val / count, 2))
+            dict["Dist_To_Park"].append(round(dist_to_park / count, 2))
+            dict["Avg_Health"].append(round(health_score / count, 2))
 
         return dict
 
@@ -124,6 +125,8 @@ class optimize(dml.Algorithm):
             health_kmeans = optimize.compute_kmeans(name, 5, 100)
             distance_kmeans["metric"] = "distance_score"
             health_kmeans["metric"] = "health_score"
+            distance_kmeans["Neighborhood"] = name
+            health_kmeans["Neighborhood"] = name
             if len(distance_kmeans) > 0:
                 repo[optimize.contributor + ".KMeans"].insert_one(distance_kmeans)
                 repo[optimize.contributor + ".KMeans"].insert_one(health_kmeans)

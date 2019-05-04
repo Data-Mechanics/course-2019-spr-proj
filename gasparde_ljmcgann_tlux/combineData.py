@@ -172,8 +172,6 @@ class combineData(dml.Algorithm):
             if parcel_shape_assessment[i]["_id"] not in ids:
                 unique_parc_shape_assess.append(parcel_shape_assessment[i])
                 ids.add(parcel_shape_assessment[i]["_id"])
-            else:
-                print(parcel_shape_assessment[i]["_id"])
 
         # print(len(parcel_shape_assessment))
         # print(parcel_shape_assessment)
