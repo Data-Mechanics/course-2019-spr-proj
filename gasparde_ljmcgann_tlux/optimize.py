@@ -89,7 +89,7 @@ class optimize(dml.Algorithm):
         dict["Avg_Health"] = []
         for mean in output:
             point = (mean[1], mean[0], mean[1], mean[0])
-
+            # get 5 nearest parcels to k-means point to compute a location's statistics
             bounds = [i for i in parcel_index.nearest(point, 5)]
             avg_val = 0
             dist_to_park = 0
