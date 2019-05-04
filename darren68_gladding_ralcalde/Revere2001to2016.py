@@ -34,16 +34,25 @@ class Revere2001to2016(dml.Algorithm):
         # skip the headers
         next(file, None)
 
-        dictList = []
+        #dictList = []
         isNotFirst = False
 
+        repo.dropCollection("Revere2001to2016")
+        repo.createCollection("Revere2001to2016")
+
         # iterate through each row in the file and assign each element to the corresponding field in the dictionary
+        i = 1
         for row in file:
+            print(i)
             dic = {}
 
+
+
             dic['crashnumber'] = row[0]
-            dic['crashdate'] = row[1]
-            dic['crashtime'] = row[2]
+            dt = Revere2001to2016.get_datetime(row[1], row[2])
+            if isinstance(dt, str):
+                continue
+            dic['datetime'] = dt
             dic['crashhour'] = row[3]
             dic['citytown'] = row[4]
             dic['locality'] = row[5]
@@ -122,17 +131,70 @@ class Revere2001to2016(dml.Algorithm):
             dic['reportids'] = row[78]
             dic['federalfunctionalclassification'] = row[79]
             dic['roadwaycontributingcode'] = row[80]
-            dictList.append(dic)
 
-        repo.dropCollection("Revere2001to2016")
-        repo.createCollection("Revere2001to2016")
-        repo['darren68_gladding_ralcalde.Revere2001to2016'].insert_many(dictList)
+            repo['darren68_gladding_ralcalde.Revere2001to2016'].insert(dic)
+            i += 1
+
+
         repo['darren68_gladding_ralcalde.Revere2001to2016'].metadata({'complete': True})
 
         repo.logout()
         endTime = datetime.datetime.now()
 
         return {"start": startTime, "end": endTime}
+
+
+
+    @staticmethod
+    def get_datetime(dateStr, timeStr):
+
+        print(dateStr, timeStr)
+
+
+        try:
+            if timeStr[-2:] == "AM":
+                if timeStr[0] == '1':
+                    if timeStr[1] != ':':
+                        hour = timeStr[:2]
+                        minute = (timeStr[3:5])
+                        if hour == 12:
+                            hour = 0
+                    else:
+                        hour = "0" + (timeStr[0])
+                        minute = (timeStr[2:4])
+                else:
+                    hour = "0" + (timeStr[0])
+                    minute = (timeStr[2:4])
+            else:
+                if timeStr[0] == '1':
+                    if timeStr[1] != ':':
+                        hour = (timeStr[:2])
+                        if hour == '10':
+                            hour = '22'
+                        if hour == '11':
+                            hour = '23'
+                        minute = (timeStr[3:5])
+                    else:
+                        hour = '13'
+                        minute = (timeStr[2:4])
+                else:
+                    hour = str(int(timeStr[0]) + 12)
+                    minute = (timeStr[2:4])
+        except:
+            return "exception"
+
+
+        date_string = dateStr + " {}:{}".format(hour, minute)
+
+        print(date_string)
+        #datetime(year, month, day, hour, minute, second, microsecond)
+        try:
+            return datetime.datetime.strptime(date_string, "%m/%d/%Y %H:%M")
+        except:
+            return "exception"
+
+
+
 
     @staticmethod
     def provenance(doc=prov.model.ProvDocument(), startTime=None, endTime=None):
