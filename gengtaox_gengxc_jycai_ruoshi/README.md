@@ -1,6 +1,27 @@
 # Growing Voter Engagement in Communities of Color
 We are currently working on a BU Spark! Data Mechanics class project. Our partner is Amplify Latinx. We are looking for areas where there is an opportunity to increase the voter registration rate and voter turnout, particularly among communities of color.
 
+
+-----
+
+For project #3:
+
+### Running Instruction: 
+
+1. Please do the data preprocess (python execute.py gengtaox_gengxc_jycai_ruoshi) before running the web server;
+2. The web server file is in "Project#3-Web" folder, called "server.py";
+3. Just run it by "python server.py".
+
+1. We created a web-based visualization for voter and election data in boston city and its 22 wards.
+In this page, user can see the registered-eligible voters amount, voted-registered voters amount and the difference between the first two winning candidates on city scale, as well as ward scale.
+By clicking the ward on the map, user can see the bar chart and pie chart of different age groups, which helps visualize the proportion.
+
+2. We also created a couple of Restful API which can fetch the numerical data by ward level. 
+
+    - /api/v0.1/Ward/<id> : get all the data for ward <id>
+    - /api/v0.1/Election/<id> : get the election data of the first two candidates for ward <id>
+    - /api/v0.1/Voter/<id> : get the voters' distribution data for ward <id>
+
 -----
 
 For project #2:
