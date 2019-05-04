@@ -312,7 +312,6 @@ def display_clusters():
         repo = client.repo
         repo.authenticate('darren68_gladding_ralcalde', 'darren68_gladding_ralcalde')
 
-        print(dict(request.form))
 
         year = request.form['year']
 
@@ -382,12 +381,10 @@ def display_maps():
         collection = repo['darren68_gladding_ralcalde.Revere2001to2016LatLng']
 
         temp = dict(request.form)
-        print("TEST TEMP {}\n".format(temp))
 
 
         mannerF = 1
         if temp['manner'][0] == 'no filter':
-            print("true")
             mannerF = 0
 
 
