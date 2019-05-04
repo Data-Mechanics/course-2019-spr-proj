@@ -6,7 +6,6 @@ import datetime
 import uuid
 import csv
 import io
-from urllib.request import urlopen
 
 
 class Revere2016(dml.Algorithm):
@@ -124,4 +123,3 @@ class Revere2016(dml.Algorithm):
         repo.logout()
 
         return doc
-
