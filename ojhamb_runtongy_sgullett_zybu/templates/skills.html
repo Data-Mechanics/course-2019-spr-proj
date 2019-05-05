@@ -2,9 +2,67 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>LinkedIn Skills</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
 </head>
 <body>
+    <div class="wrapper">
+      <h1>Top 10 Skills IT Employees in Amman have</h1>
 
+        <canvas id="myChart" width="1800" height="400"></canvas>
+    </div>
+    <script>
+    var getData = $.get('/getskills');
+    var ctx = document.getElementById("myChart").getContext('2d');
+
+    getData.done(function(results) {
+        var keys = [];
+        var values = [];
+        for(i=0;i<results.length;i++){
+            keys.push(Object.keys(results[i]));
+            values.push(results[i][Object.keys(results[i])]);
+        }
+        var chart = new Chart(document.getElementById("myChart"), {
+            type: 'bar',
+            data: {
+              //labels: ["SQL", "JavaScript", "Software Development", "Java", "HTML", "Databases","Microsoft Office","MySQL", "Microsoft SQL Server", "C#"],
+              labels: keys,
+              datasets: [
+                {
+                  label: "Numbers",
+                  backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850","#c7cc3d","#bf8d31","#2da835","#223089","#ed12cc"],
+                  data: values
+                }
+              ]
+            },
+            options: {
+              legend: { display: false },
+              title: {
+                display: true,
+                text: 'Number of People That Are Capable of This Skill'
+              },
+                        scales: {
+                    xAxes: [{
+                        ticks: {
+                            min: 0 // Edit the value according to what you need
+                        }
+                    }],
+                    yAxes: [{
+                        stacked: true
+                    }]
+                }
+            }
+        });
+
+    })
+
+    </script>
+    <br/>
+    <div style="text-align: center;">
+        <a href="/">
+            <button>Back to Welcome Page</button>
+        </a>
+    </div>
 </body>
 </html>

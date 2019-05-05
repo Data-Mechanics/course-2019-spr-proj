@@ -2,23 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="447811c3-05c5-48ea-bab0-c0f483d76dba" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/JobAnalysis.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/job_edu_eng.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/linkedin.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/app.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/degrees.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/hello.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/skills.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/universities.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/DBOperations.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/JobAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/JobAnalysis.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/TwitterDataMain.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/age_cur_edu.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/cluster_status.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/edu_job.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/edu_work.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/got3/__init__.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/got3/manager/TweetCriteria.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/got3/manager/TweetManager.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/got3/manager/__init__.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/got3/models/Tweet.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/got3/models/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/job_edu_eng.py" beforeDir="false" afterPath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/job_edu_eng.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/student_status.py" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -27,24 +27,30 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/course_2019_spr_proj$app.coverage" NAME="app Coverage Results" MODIFIED="1557084158547" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu" />
+  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/execute.py">
+        <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/skills.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-41">
-              <caret line="21" column="12" selection-start-line="21" selection-start-column="12" selection-end-line="21" selection-end-column="12" />
+            <state relative-caret-position="27">
+              <caret line="39" column="38" selection-start-line="39" selection-start-column="38" selection-end-line="39" selection-end-column="38" />
+              <folding>
+                <element signature="n#style#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/linkedin.py">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/hello.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-393">
-              <caret line="26" column="40" selection-start-line="26" selection-start-column="40" selection-end-line="26" selection-end-column="40" />
+            <state relative-caret-position="402">
+              <caret line="27" column="31" selection-start-line="27" selection-start-column="31" selection-end-line="27" selection-end-column="31" />
               <folding>
-                <element signature="e#0#21#0" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -53,8 +59,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/JobAnalysis.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1398">
-              <caret line="3" column="11" selection-start-line="3" selection-start-column="11" selection-end-line="3" selection-end-column="11" />
+            <state relative-caret-position="1200">
+              <caret line="80" column="28" selection-start-line="80" selection-start-column="28" selection-end-line="80" selection-end-column="28" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -62,13 +68,49 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/job_edu_eng.py">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/app.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="915">
-              <caret line="61" column="37" lean-forward="true" selection-start-line="61" selection-start-column="37" selection-end-line="61" selection-end-column="37" />
+            <state relative-caret-position="-304">
+              <caret line="46" column="48" selection-start-line="46" selection-start-column="48" selection-end-line="46" selection-end-column="48" />
               <folding>
-                <element signature="e#1#11#0" expanded="true" />
+                <element signature="e#0#12#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/insert.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="278">
+              <caret line="20" column="82" selection-start-line="20" selection-start-column="82" selection-end-line="20" selection-end-column="82" />
+              <folding>
+                <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/degrees.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="312">
+              <caret line="58" selection-start-line="58" selection-end-line="63" selection-end-column="10" />
+              <folding>
+                <element signature="n#style#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/universities.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="477">
+              <caret line="58" column="9" selection-start-line="58" selection-start-column="9" selection-end-line="58" selection-end-column="9" />
+              <folding>
+                <element signature="n#style#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -80,6 +122,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Python Script" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -102,13 +145,21 @@
         <option value="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/age_cur_edu.py" />
         <option value="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/edu_work.py" />
         <option value="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/edu_job.py" />
-        <option value="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/job_edu_eng.py" />
         <option value="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/linkedin.py" />
+        <option value="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/hello.html.py" />
+        <option value="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/job_edu_eng.py" />
         <option value="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/JobAnalysis.py" />
+        <option value="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/test.html" />
+        <option value="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/universities.html" />
+        <option value="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/skills.html" />
+        <option value="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/degrees.html" />
+        <option value="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/hello.html" />
+        <option value="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/insert.html" />
+        <option value="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/app.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" fullScreen="true">
     <option name="y" value="23" />
     <option name="width" value="1440" />
     <option name="height" value="811" />
@@ -135,6 +186,12 @@
               <item name="course-2019-spr-proj" type="462c0819:PsiDirectoryNode" />
               <item name="ojhamb_runtongy_sgullett_zybu" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="course-2019-spr-proj" type="b2602c69:ProjectViewProjectNode" />
+              <item name="course-2019-spr-proj" type="462c0819:PsiDirectoryNode" />
+              <item name="ojhamb_runtongy_sgullett_zybu" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -143,10 +200,13 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -160,6 +220,35 @@
       </list>
     </option>
   </component>
+  <component name="RunManager">
+    <configuration name="app" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="course-2019-spr-proj" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/app.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.app" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -172,31 +261,41 @@
       <updated>1551990360337</updated>
       <workItem from="1551990361611" duration="1449000" />
       <workItem from="1555263885846" duration="14370000" />
+      <workItem from="1556639820977" duration="36458000" />
+      <workItem from="1557027574499" duration="4366000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="15819000" />
+    <option name="totallyTimeSpent" value="56643000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="811" extended-state="0" />
-    <editor active="true" />
+    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21244635" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21816881" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32962447" />
-      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32891566" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32891566" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32891566" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="bottom" id="Terminal" order="11" weight="0.9582754" />
+      <window_info anchor="bottom" id="Terminal" order="11" weight="0.41686746" />
       <window_info anchor="bottom" id="Python Console" order="12" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -222,13 +321,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/execute.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-41">
-          <caret line="21" column="12" selection-start-line="21" selection-start-column="12" selection-end-line="21" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/age_cur_edu.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1380">
@@ -239,25 +331,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/student_status.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" column="42" lean-forward="true" selection-start-line="18" selection-start-column="42" selection-end-line="18" selection-end-column="42" />
-          <folding>
-            <element signature="e#0#21#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/cluster_status.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/student_status.py" />
+    <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/cluster_status.py" />
     <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/edu_work.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-378">
@@ -276,9 +351,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/provenance.html">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/alice_bob/example.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -288,32 +360,104 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/hello.html.py" />
+    <entry file="file://$PROJECT_DIR$/execute.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="21" column="12" selection-start-line="21" selection-start-column="12" selection-end-line="21" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/pictures/hello.png" />
+    <entry file="file://$PROJECT_DIR$/provenance.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-833" />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/job_edu_eng.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="915">
-          <caret line="61" column="37" lean-forward="true" selection-start-line="61" selection-start-column="37" selection-end-line="61" selection-end-column="37" />
+        <state relative-caret-position="216">
+          <caret line="37" column="53" selection-start-line="37" selection-start-column="15" selection-end-line="37" selection-end-column="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/linkedin.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="46">
+          <caret line="11" column="25" lean-forward="true" selection-start-line="11" selection-start-column="25" selection-end-line="11" selection-end-column="25" />
           <folding>
-            <element signature="e#1#11#0" expanded="true" />
+            <element signature="e#0#21#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/test.html" />
     <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/JobAnalysis.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1398">
-          <caret line="3" column="11" selection-start-line="3" selection-start-column="11" selection-end-line="3" selection-end-column="11" />
+        <state relative-caret-position="1200">
+          <caret line="80" column="28" selection-start-line="80" selection-start-column="28" selection-end-line="80" selection-end-column="28" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/linkedin.py">
+    <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/universities.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-393">
-          <caret line="26" column="40" selection-start-line="26" selection-start-column="40" selection-end-line="26" selection-end-column="40" />
+        <state relative-caret-position="477">
+          <caret line="58" column="9" selection-start-line="58" selection-start-column="9" selection-end-line="58" selection-end-column="9" />
           <folding>
-            <element signature="e#0#21#0" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/degrees.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="312">
+          <caret line="58" selection-start-line="58" selection-end-line="63" selection-end-column="10" />
+          <folding>
+            <element signature="n#style#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/skills.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="27">
+          <caret line="39" column="38" selection-start-line="39" selection-start-column="38" selection-end-line="39" selection-end-column="38" />
+          <folding>
+            <element signature="n#style#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/hello.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="402">
+          <caret line="27" column="31" selection-start-line="27" selection-start-column="31" selection-end-line="27" selection-end-column="31" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/insert.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="278">
+          <caret line="20" column="82" selection-start-line="20" selection-start-column="82" selection-end-line="20" selection-end-column="82" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/app.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-304">
+          <caret line="46" column="48" selection-start-line="46" selection-start-column="48" selection-end-line="46" selection-end-column="48" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
           </folding>
         </state>
       </provider>
