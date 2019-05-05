@@ -111,7 +111,7 @@ def serve_data(path):
                             'Zip code': x['Zip Code'], 'Latitude': x['Coordinates'][1], 'Longitude': x['Coordinates'][0], 'Status': x['Status'],
                             'FIPS': x['FIPS']}
             waste_list.append(formatted_waste)
-        return jsonify(health_list)
+        return jsonify(waste_list)
     elif(path == "crime"):
         data = list(repo['misn15.crime'].find())
         crime_list = []
