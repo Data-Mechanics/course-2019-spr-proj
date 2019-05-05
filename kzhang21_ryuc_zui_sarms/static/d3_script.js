@@ -2,11 +2,11 @@
 var width = 700;
 var height = 580;
 
-var violation_data = {"Allston":0.0148305112,"Harbor Islands": null,"Longwood Medical Area": null,"Back Bay":0.014673516,"Bay Village":0.014673516,"Beacon Hill":0.0079316101,"Brighton":0.013214928,"Charlestown":0.0111358323,"Chinatown":0.0142877959,"Leather District":0.0142877959,"Dorchester":0.0200310624,"Downtown":0.0110069338,"East Boston":0.0124370158,"Fenway":0.0148607211,"Longwood":0.0148607211,"Hyde Park":0.0189047565,"Jamaica Plain":0.0157670894,"Mattapan":0.0200543367,"Mission Hill":0.0266863733,"North End":0.0133527343,"Roslindale":0.0209122753,"Roxbury":0.0202292164,"South Boston":0.0116010752,"South Boston Waterfront":0.0146368075,"South End":0.0187959066,"West End":0.0187833246,"West Roxbury":0.0201359561};
-var rating_data = {"Allston":3.6875,"Back Bay":3.7775229358,"Beacon Hill":3.6938202247,"Brighton":3.7681818182,"Charlestown":3.6351351351,"Chinatown":3.6461864407,"Dorchester":3.4085106383,"Downtown":3.5961538462,"East Boston":3.2379182156,"Fenway":3.5431937173,"Hyde Park":3.3333333333,"Jamaica Plain":3.7987012987,"Mattapan":3.2878787879,"Mission Hill":3.59375,"North End":3.8477508651,"Roslindale":3.2448979592,"Roxbury":3.5316455696,"South Boston":3.8106060606,"South Boston Waterfront":3.5472972973,"South End":3.8975903614,"West End":3.7417582418,"West Roxbury":3.6826923077}
+var violation_data = {"Allston":0.0148305112,"Back Bay":0.014673516,"Bay Village":0.014673516,"Beacon Hill":0.0079316101,"Brighton":0.013214928,"Charlestown":0.0111358323,"Chinatown":0.0142877959,"Leather District":0.0142877959,"Dorchester":0.0200310624,"Downtown":0.0110069338,"East Boston":0.0124370158,"Fenway":0.0148607211,"Longwood":0.0148607211,"Hyde Park":0.0189047565,"Jamaica Plain":0.0157670894,"Mattapan":0.0200543367,"Mission Hill":0.0266863733,"North End":0.0133527343,"Roslindale":0.0209122753,"Roxbury":0.0202292164,"South Boston":0.0116010752,"South Boston Waterfront":0.0146368075,"South End":0.0187959066,"West End":0.0187833246,"West Roxbury":0.0201359561};
+var rating_data = {"Allston":3.6875,"Back Bay":3.7775229358,"Bay Village":3.7775229358,"Beacon Hill":3.6938202247,"Brighton":3.7681818182,"Charlestown":3.6351351351,"Chinatown":3.6461864407,"Leather District":3.6461864407,"Dorchester":3.4085106383,"Downtown":3.5961538462,"East Boston":3.2379182156,"Fenway":3.5431937173,"Longwood":3.5431937173,"Hyde Park":3.3333333333,"Jamaica Plain":3.7987012987,"Mattapan":3.2878787879,"Mission Hill":3.59375,"North End":3.8477508651,"Roslindale":3.2448979592,"Roxbury":3.5316455696,"South Boston":3.8106060606,"South Boston Waterfront":3.5472972973,"South End":3.8975903614,"West End":3.7417582418,"West Roxbury":3.6826923077}
 
 var colorScale = d3.scaleSequential(d3["interpolateBlues"])
-        .domain([0, 0.03]);
+        .domain([0.0079316101, 0.0200543367]);
 // Create SVG
 var svg = d3.select("div.mapid")
     .append("svg")
@@ -38,8 +38,12 @@ var albersProjection = d3.geoAlbers()
 var geoPath = d3.geoPath()
     .projection(albersProjection);
 
+var neighborhoods_new =  neighborhoods_json.features.filter(function(neighborhoods) {
+	return (neighborhoods.properties.Name != "Longwood Medical Area" && neighborhoods.properties.Name != "Harbor Islands");
+});
+
 g.selectAll("path")
-    .data(neighborhoods_json.features)
+    .data(neighborhoods_new)
     .enter()
     .append("path")
     .attr("fill", function(d) {
@@ -55,7 +59,7 @@ g.selectAll("path")
     .on("mouseout", handleMouseOut_Violation)
     .attr("d", geoPath);
 
-var margin = ({top: 20, right: 40, bottom: 30, left: 40});
+var margin = ({top: 20, right: 40, bottom: 30, left: 200});
 
 var axisScale = d3.scaleLinear()
     .domain(colorScale.domain())
@@ -63,12 +67,12 @@ var axisScale = d3.scaleLinear()
 
 var axisBottom = g => g
     .attr("class", `x-axis`)
-  .attr("transform", `translate(0,${height - margin.bottom})`)
-  .call(d3.axisBottom(axisScale)
-    .ticks(width / 80)
-    .tickSize(-20))
+    .attr("transform", `translate(0,${height - margin.bottom})`)
+    .call(d3.axisBottom(axisScale)
+    .ticks(width / 120)
+    .tickSize(-20));
 
-const linearGradient = svg.append("linearGradient")
+const linearGradient = g.append("linearGradient")
   .attr("id", "linear-gradient");
 
 linearGradient.selectAll("stop")
@@ -77,7 +81,7 @@ linearGradient.selectAll("stop")
     .attr("offset", d => d.offset)
     .attr("stop-color", d => d.color);
 
-svg.append('g')
+g.append('g')
     .attr("transform", `translate(0,${height - margin.bottom - 20})`)
     .append("rect")
     .attr('transform', `translate(${margin.left}, 0)`)
@@ -85,7 +89,7 @@ svg.append('g')
     .attr("height", 20)
     .style("fill", "url(#linear-gradient)");
 
-svg.append('g').call(axisBottom);
+g.append('g').call(axisBottom);
 
 function handleMouseOver_Violation(d, i) {
     d3.select(this)

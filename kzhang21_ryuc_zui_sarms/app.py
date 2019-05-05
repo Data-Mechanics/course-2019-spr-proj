@@ -5,6 +5,8 @@ from flask import Flask, Response, request, render_template, redirect, url_for
 
 app = Flask(__name__)
 
+app.config["CACHE_TYPE"] = "null"
+
 #render index page
 @app.route("/", methods=['GET'])
 def hello():
