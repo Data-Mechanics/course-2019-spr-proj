@@ -43,7 +43,6 @@ class Revere2001to2016(dml.Algorithm):
         # iterate through each row in the file and assign each element to the corresponding field in the dictionary
         i = 1
         for row in file:
-            print(i)
             dic = {}
 
 
@@ -148,7 +147,6 @@ class Revere2001to2016(dml.Algorithm):
     @staticmethod
     def get_datetime(dateStr, timeStr):
 
-        print(dateStr, timeStr)
 
 
         try:
@@ -186,7 +184,6 @@ class Revere2001to2016(dml.Algorithm):
 
         date_string = dateStr + " {}:{}".format(hour, minute)
 
-        print(date_string)
         #datetime(year, month, day, hour, minute, second, microsecond)
         try:
             return datetime.datetime.strptime(date_string, "%m/%d/%Y %H:%M")
@@ -242,3 +239,4 @@ class Revere2001to2016(dml.Algorithm):
         repo.logout()
 
         return doc
+
