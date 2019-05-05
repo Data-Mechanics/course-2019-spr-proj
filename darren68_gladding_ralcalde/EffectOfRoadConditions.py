@@ -124,6 +124,3 @@ class EffectOfRoadConditions(dml.Algorithm):
         repo.logout()
 
         return doc
-
-
-
