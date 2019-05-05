@@ -60,11 +60,6 @@ class StatsOnSeverity(dml.Algorithm):
                 TotalQuant += 1
                 FatalNumb += 1
 
-        print()
-        print()
-        print()
-        print("This is the breakdown of how many are nonfatal, fatal, and property")
-        print(Non_fatal / TotalQuant * 100, FatalNumb / TotalQuant * 100, Property / TotalQuant * 100)
 
         dic = {"Non Fatal Percentage ": Non_fatal / TotalQuant * 100, "Fatal Percentage": FatalNumb / TotalQuant * 100,
                "Only Property Percentage": Property / TotalQuant * 100}
