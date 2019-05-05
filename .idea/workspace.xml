@@ -1,26 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="447811c3-05c5-48ea-bab0-c0f483d76dba" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/app.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/degrees.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/hello.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/skills.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/universities.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/DBOperations.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/JobAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/JobAnalysis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/TwitterDataMain.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/cluster_status.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/got3/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/got3/manager/TweetCriteria.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/got3/manager/TweetManager.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/got3/manager/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/got3/models/Tweet.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/got3/models/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/job_edu_eng.py" beforeDir="false" afterPath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/job_edu_eng.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/student_status.py" beforeDir="false" />
-    </list>
+    <list default="true" id="447811c3-05c5-48ea-bab0-c0f483d76dba" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,8 +16,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/skills.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="27">
-              <caret line="39" column="38" selection-start-line="39" selection-start-column="38" selection-end-line="39" selection-end-column="38" />
+            <state relative-caret-position="195">
+              <caret line="13" column="10" lean-forward="true" selection-start-line="13" selection-start-column="10" selection-end-line="13" selection-end-column="10" />
               <folding>
                 <element signature="n#style#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
               </folding>
@@ -47,8 +28,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/hello.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="402">
-              <caret line="27" column="31" selection-start-line="27" selection-start-column="31" selection-end-line="27" selection-end-column="31" />
+            <state relative-caret-position="105">
+              <caret line="7" column="17" lean-forward="true" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="17" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
               </folding>
@@ -68,7 +49,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/app.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-304">
@@ -92,11 +73,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/degrees.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="312">
-              <caret line="58" selection-start-line="58" selection-end-line="63" selection-end-column="10" />
+            <state relative-caret-position="237">
+              <caret line="53" column="17" lean-forward="true" selection-start-line="53" selection-start-column="17" selection-end-line="53" selection-end-column="17" />
               <folding>
                 <element signature="n#style#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
               </folding>
@@ -262,12 +243,12 @@
       <workItem from="1551990361611" duration="1449000" />
       <workItem from="1555263885846" duration="14370000" />
       <workItem from="1556639820977" duration="36458000" />
-      <workItem from="1557027574499" duration="4366000" />
+      <workItem from="1557027574499" duration="4514000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="56643000" />
+    <option name="totallyTimeSpent" value="56791000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -280,6 +261,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21816881" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -412,36 +394,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/degrees.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="312">
-          <caret line="58" selection-start-line="58" selection-end-line="63" selection-end-column="10" />
-          <folding>
-            <element signature="n#style#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/skills.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="27">
-          <caret line="39" column="38" selection-start-line="39" selection-start-column="38" selection-end-line="39" selection-end-column="38" />
-          <folding>
-            <element signature="n#style#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/hello.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="402">
-          <caret line="27" column="31" selection-start-line="27" selection-start-column="31" selection-end-line="27" selection-end-column="31" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/insert.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="278">
@@ -458,6 +410,36 @@
           <caret line="46" column="48" selection-start-line="46" selection-start-column="48" selection-end-line="46" selection-end-column="48" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/hello.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="17" lean-forward="true" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="17" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/skills.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="13" column="10" lean-forward="true" selection-start-line="13" selection-start-column="10" selection-end-line="13" selection-end-column="10" />
+          <folding>
+            <element signature="n#style#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ojhamb_runtongy_sgullett_zybu/templates/degrees.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="237">
+          <caret line="53" column="17" lean-forward="true" selection-start-line="53" selection-start-column="17" selection-end-line="53" selection-end-column="17" />
+          <folding>
+            <element signature="n#style#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
