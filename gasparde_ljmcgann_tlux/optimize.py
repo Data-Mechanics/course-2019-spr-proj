@@ -87,20 +87,25 @@ class optimize(dml.Algorithm):
         dict["Avg_Health"] = []
         for mean in output:
             point = (mean[1], mean[0], mean[1], mean[0])
-            # get 5 nearest parcels to k-means point to compute a location's statistics
-            bounds = [i for i in parcel_index.nearest(point, 5)]
+            # get 10 nearest parcels to k-means point to compute a location's statistics
+            bounds = [i for i in parcel_index.nearest(point, 10)]
             avg_val = 0
             dist_to_park = 0
             health_score = 0
             count = 0
-            # take only five observations in case there are more due to ties
-            for ij in bounds[:5]:
-                if neighborhood_parcels[ij]["AV_TOTAL"] is not None and neighborhood_parcels[ij]["LAND_SF"] is not None:
-                    avg_val += round(
-                    float(neighborhood_parcels[ij]["AV_TOTAL"]) / float(neighborhood_parcels[ij]["LAND_SF"]), 2)
-                    dist_to_park += float(neighborhood_parcels[ij]["min_distance_km"])
-                    health_score += float(neighborhood_parcels[ij]["health_score"])
-                    count += 1
+            # take only ten observations in case there are more due to ties
+            for ij in bounds[:10]:
+                if neighborhood_parcels[ij]["AV_TOTAL"] is not None and neighborhood_parcels[ij]["LAND_SF"] is not None\
+                        and neighborhood_parcels[ij]["AV_TOTAL"] != "0" and neighborhood_parcels[ij]["LAND_SF"] != "0":
+                    try:
+                        avg_val += round(
+                        float(neighborhood_parcels[ij]["AV_TOTAL"]) / float(neighborhood_parcels[ij]["LAND_SF"]), 2)
+                        dist_to_park += float(neighborhood_parcels[ij]["min_distance_km"])
+                        health_score += float(neighborhood_parcels[ij]["health_score"])
+                        count += 1
+                    except:
+                        print(neighborhood_parcels[ij]["AV_TOTAL"])
+                        print(neighborhood_parcels[ij]["LAND_SF"])
             dict["Avg_Land_Val"].append(round(avg_val / count, 2))
             dict["Dist_To_Park"].append(round(dist_to_park / count, 2))
             dict["Avg_Health"].append(round(health_score / count, 2))
