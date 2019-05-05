@@ -7,6 +7,7 @@ Roberto Alcalde Diego<br/>
 Darren Hoffmann-Marks<br/> 
 Alyssa Gladding<br/>
 
+### The Project Report and Project Poster are included within the Repo
 
 ## How to run the code within our project
 
@@ -17,7 +18,7 @@ All the files that are not within the visualizations folder are scripts that nee
 
 
 
-To run the scripts you will need the following libraries:
+## To run the scripts you will need the following libraries:
 branca==0.3.1 <br/>
 certifi==2019.3.9<br/>
 chardet==3.0.4<br/>
