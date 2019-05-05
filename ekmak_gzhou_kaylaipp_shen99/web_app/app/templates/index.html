@@ -153,51 +153,15 @@
         </div>
     </header>
     <!-- ##### Header Area End ##### -->
-
-    {% include 'map.html'%}
-
-    <!-- ##### Hero Area Start ##### -->
-    <!-- <section class="hero-area">
-        <div class="hero-slides owl-carousel">
-
-            <div class="single-hero-slide bg-img" style="background-image: url(img/bg-img/hero1.jpg);">
-                <div class="container h-100">
-                    <div class="row h-100 align-items-center">
-                        <div class="col-12">
-                            <div class="hero-slides-content">
-                                <h2 data-animation="fadeInUp" data-delay="100ms">Find your home</h2>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="single-hero-slide bg-img" style="background-image: url(img/bg-img/hero2.jpg);">
-                <div class="container h-100">
-                    <div class="row h-100 align-items-center">
-                        <div class="col-12">
-                            <div class="hero-slides-content">
-                                <h2 data-animation="fadeInUp" data-delay="100ms">Find your dream house</h2>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="single-hero-slide bg-img" style="background-image: url(img/bg-img/hero3.jpg);">
-                <div class="container h-100">
-                    <div class="row h-100 align-items-center">
-                        <div class="col-12">
-                            <div class="hero-slides-content">
-                                <h2 data-animation="fadeInUp" data-delay="100ms">Find your perfect house</h2>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+   
+    {% if filters %}
+        <div class = "test" style="top: 90px; position:relative;">
+        {% include 'filtered_map.html'%}
         </div>
-    </section> -->
-    <!-- ##### Hero Area End ##### -->
+    {% else %}
+        {% include 'map.html'%}
+    {% endif %}
+
 
     <!-- ##### Advance Search Area Start ##### -->
     <div class="south-search-area" style = "top: 160px;">
@@ -210,29 +174,73 @@
                             <p>Filter Properties</p>
                         </div>
                         <!-- Search Form -->
-                        <form action="{{url_for('recieve_data')}}" method="POST" id="advanceSearch">
+                        <!-- <form action="{{url_for('recieve_data')}}" method="POST" id="advanceSearch"> -->
+                        <form action="{{url_for('recieve_data',min_price=min_price, max_price=max_price)}}" method="POST" id="advanceSearch">
                             <!-- <div class = "row">
                                 <p align="center">Filter Properties</p>
                             </div> -->
                             <div class="row">
 
-                                <div class="col-12 col-md-8 col-lg-12 col-xl-5">
-                                    <!-- Space Range -->
-                                    <div class="slider-range">
+                                <!-- <div class="col-12 col-md-8 col-lg-12 col-xl-5"> -->
+                                <div class="col-12 col-md-4 col-xl-2">
+                                    <!-- <div class="slider-range">
                                         <div data-unit="$" data-min="0" data-max="10000000"  class="slider-range-price ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" data-value-min="0" data-value-max="10000000">
                                             <div class="ui-slider-range ui-widget-header ui-corner-all"></div>
                                             <span class="ui-slider-handle ui-state-default ui-corner-all" tabindex="0"></span>
                                             <span class="ui-slider-handle ui-state-default ui-corner-all" tabindex="0"></span>
                                         </div>
-                                        <div class="range"> Price: $0 - $10,000,000</div>
+                                        <div class="range"> Price: 0 - $10,000,000</div>
+                                    </div> -->
+
+
+                                    <div class="form-group">
+                                        <select class="form-control" name="min_price" id="min_price">
+                                            <!-- <p>{{filters}}</p> -->
+                                            {% if filters %}
+                                                <option>{{min_price}}</option>
+                                            {% else %}
+                                                <option>Min price</option>
+                                            {% endif %}
+                                            <option>None</option>
+                                            <option><$100,000</option>
+                                            <option>$200,000</option>
+                                            <option>$400,000</option>
+                                            <option>$600,000</option>
+                                            <option>$800,000</option>
+                                            <option>>$1,000,000</option>
+                                        </select>
                                     </div>
 
                                 </div>
 
                                 <div class="col-12 col-md-4 col-xl-2">
+                                <div class="form-group">
+                                        <select class="form-control" name="max_price" id="max_price">
+                                            {% if filters %}
+                                                <option>{{max_price}}</option>
+                                            {% else %}
+                                                <option>Max price</option>
+                                            {% endif %}
+                                            <option>None</option>
+                                            <option>$100,000</option>
+                                            <option>$200,000</option>
+                                            <option>$400,000</option>
+                                            <option>$800,000</option>
+                                            <option>$1,000,000</option>
+                                            <option>>$1,000,000</option>
+                                        </select>
+                                    </div>    
+                                </div>
+
+                                <div class="col-12 col-md-4 col-xl-2">
                                     <div class="form-group">
                                         <select class="form-control" name="bedrooms" id="bedrooms">
-                                            <option>Bedrooms</option>
+                                            {% if filters %}
+                                                <option>{{bedroom}}</option>
+                                            {% else %}
+                                                <option>Bedrooms</option>
+                                            {% endif %}
+                                            <option>All</option>
                                             <option>1</option>
                                             <option>2</option>
                                             <option>3</option>
@@ -245,7 +253,12 @@
                                 <div class="col-12 col-md-4 col-xl-2">
                                     <div class="form-group">
                                         <select class="form-control" name="bathrooms" id="bathrooms">
-                                            <option>Bathrooms</option>
+                                            {% if filters %}
+                                                <option>{{bathroom}}</option>
+                                            {% else %}
+                                                <option>Bathrooms</option>
+                                            {% endif %}
+                                            <option>All</option>
                                             <option>1</option>
                                             <option>2</option>
                                             <option>3</option>
@@ -258,7 +271,12 @@
                                 <div class="col-12 col-md-4 col-lg-3">
                                     <div class="form-group">
                                         <select class="form-control" name="categories" id="catagories">
-                                            <option>Property Type</option>
+                                            {% if filters %}
+                                                <option>{{property_type}}</option>
+                                            {% else %}
+                                                <option>Property Type</option>
+                                            {% endif %}
+                                            <option>All</option>
                                             <option>Residential 7 or more units</option>
                                             <option>Residential condimunium unit</option>
                                             <option>Commericial condimunium </option>
@@ -287,8 +305,7 @@
         </div>
     </div>
     <!-- ##### Advance Search Area End ##### -->
-	
-
+	<br><br><br><br><br><br><br><br><br><br><br><br>
 
     <!-- ##### Featured Properties Area Start ##### -->
     <section class="featured-properties-area section-padding-100-50">
@@ -296,14 +313,15 @@
             <div class="row">
                 <div class="col-12">
                     <div class="section-heading wow fadeInUp">
-                        <!-- <h2>Featured Properties</h2>
-                        <p>Suspendisse dictum enim sit amet libero malesuada feugiat.</p> -->
+                        <h2>Properties</h2>
+                        <!-- <p>Suspendisse dictum enim sit amet libero malesuada feugiat.</p> -->
                     </div>
                 </div>
             </div>
 
             <div class="row">
 
+            {% for entry in results %}
                 <!-- Single Featured Property -->
                 <div class="col-12 col-md-6 col-xl-4">
                     <div class="single-featured-property mb-50 wow fadeInUp" data-wow-delay="100ms">
@@ -311,43 +329,48 @@
                         <div class="property-thumb">
                             <img src="img/bg-img/feature1.jpg" alt="">
 
-                            <div class="tag">
+                            <!-- <div class="tag">
                                 <span>For Sale</span>
-                            </div>
-                            <div class="list-price">
+                            </div> -->
+                            <!-- <div class="list-price">
                                 <p>$945 679</p>
-                            </div>
+                            </div> -->
                         </div>
                         <!-- Property Content -->
                         <div class="property-content">
-                            <h5>Villa in Los Angeles</h5>
-                            <p class="location"><img src="img/icons/location.png" alt="">Upper Road 3411, no.34 CA</p>
-                            <p>Integer nec bibendum lacus. Suspendisse dictum enim sit amet libero malesuada.</p>
+
+                            <p class="location"><img src="static/img/icons/location.png" alt="">
+                                {{entry['ST_NUM']}} {{ entry['ST_NAME'] }} {{ entry['ST_NAME_SUF'] }}</p>
+                            <p>${{ entry['AV_BLDG']}}</p>
+                            <p>{{ entry['OWNER'] }}</p>
+                            <p>{{ entry['MAIL_ADDRESS']}} {{ entry['MAIL CS']}} {{ entry['MAIL_ZIPCODE'] }}</p>
                             <div class="property-meta-data d-flex align-items-end justify-content-between">
-                                <div class="new-tag">
-                                    <img src="img/icons/new.png" alt="">
-                                </div>
+
                                 <div class="bathroom">
-                                    <img src="img/icons/bathtub.png" alt="">
-                                    <span>2</span>
+                                    <span>{{ entry['R_BDRMS'] }}</span>
+                                    <img src="static/img/icons/bedroom.png" alt="">
+                                    
                                 </div>
                                 <div class="garage">
-                                    <img src="img/icons/garage.png" alt="">
-                                    <span>2</span>
+                                    <span>{{ entry['R_FULL_BTH'] }}</span>
+                                    <img src="static/img/icons/bathtub.png" alt="">
+                                    
                                 </div>
                                 <div class="space">
-                                    <img src="img/icons/space.png" alt="">
-                                    <span>120 sq ft</span>
+                                    <span>{{ entry['LIVING_AREA'] }} sq ft</span>
+                                    <img src="static/img/icons/space.png" alt="">
+                                    
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            {% endfor %}
 
                 <!-- Single Featured Property -->
-                <div class="col-12 col-md-6 col-xl-4">
+                <!-- <div class="col-12 col-md-6 col-xl-4">
                     <div class="single-featured-property mb-50 wow fadeInUp" data-wow-delay="200ms">
-                        <!-- Property Thumbnail -->
+           
                         <div class="property-thumb">
                             <img src="img/bg-img/feature2.jpg" alt="">
 
@@ -358,7 +381,7 @@
                                 <p>$945 679</p>
                             </div>
                         </div>
-                        <!-- Property Content -->
+                    
                         <div class="property-content">
                             <h5>Town House in Los Angeles</h5>
                             <p class="location"><img src="img/icons/location.png" alt="">Upper Road 3411, no.34 CA</p>
@@ -382,12 +405,12 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- Single Featured Property -->
-                <div class="col-12 col-md-6 col-xl-4">
+                <!-- <div class="col-12 col-md-6 col-xl-4">
                     <div class="single-featured-property mb-50 wow fadeInUp" data-wow-delay="300ms">
-                        <!-- Property Thumbnail -->
+
                         <div class="property-thumb">
                             <img src="img/bg-img/feature3.jpg" alt="">
 
@@ -398,7 +421,7 @@
                                 <p>$945 679</p>
                             </div>
                         </div>
-                        <!-- Property Content -->
+
                         <div class="property-content">
                             <h5>Town House in Los Angeles</h5>
                             <p class="location"><img src="img/icons/location.png" alt="">Upper Road 3411, no.34 CA</p>
@@ -422,12 +445,12 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- Single Featured Property -->
-                <div class="col-12 col-md-6 col-xl-4">
+                <!-- <div class="col-12 col-md-6 col-xl-4">
                     <div class="single-featured-property mb-50 wow fadeInUp" data-wow-delay="400ms">
-                        <!-- Property Thumbnail -->
+             
                         <div class="property-thumb">
                             <img src="img/bg-img/feature4.jpg" alt="">
 
@@ -438,7 +461,7 @@
                                 <p>$945 679</p>
                             </div>
                         </div>
-                        <!-- Property Content -->
+
                         <div class="property-content">
                             <h5>Villa in Los Angeles</h5>
                             <p class="location"><img src="img/icons/location.png" alt="">Upper Road 3411, no.34 CA</p>
@@ -462,12 +485,12 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- Single Featured Property -->
-                <div class="col-12 col-md-6 col-xl-4">
+                <!-- <div class="col-12 col-md-6 col-xl-4">
                     <div class="single-featured-property mb-50 wow fadeInUp" data-wow-delay="500ms">
-                        <!-- Property Thumbnail -->
+                    
                         <div class="property-thumb">
                             <img src="img/bg-img/feature5.jpg" alt="">
 
@@ -478,7 +501,7 @@
                                 <p>$945 679</p>
                             </div>
                         </div>
-                        <!-- Property Content -->
+                        
                         <div class="property-content">
                             <h5>Town House in Los Angeles</h5>
                             <p class="location"><img src="img/icons/location.png" alt="">Upper Road 3411, no.34 CA</p>
@@ -502,12 +525,12 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- Single Featured Property -->
-                <div class="col-12 col-md-6 col-xl-4">
+                <!-- <div class="col-12 col-md-6 col-xl-4">
                     <div class="single-featured-property mb-50 wow fadeInUp" data-wow-delay="600ms">
-                        <!-- Property Thumbnail -->
+                 
                         <div class="property-thumb">
                             <img src="img/bg-img/feature6.jpg" alt="">
 
@@ -518,7 +541,7 @@
                                 <p>$945 679</p>
                             </div>
                         </div>
-                        <!-- Property Content -->
+                       
                         <div class="property-content">
                             <h5>Town House in Los Angeles</h5>
                             <p class="location"><img src="img/icons/location.png" alt="">Upper Road 3411, no.34 CA</p>
@@ -544,12 +567,12 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </section>
     <!-- ##### Featured Properties Area End ##### -->
 
     <!-- ##### Call To Action Area Start ##### -->
-    <section class="call-to-action-area bg-fixed bg-overlay-black" style="background-image: url(img/bg-img/cta.jpg)">
+    <!-- <section class="call-to-action-area bg-fixed bg-overlay-black" style="background-image: url(img/bg-img/cta.jpg)">
         <div class="container h-100">
             <div class="row align-items-center h-100">
                 <div class="col-12">
@@ -561,11 +584,11 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
     <!-- ##### Call To Action Area End ##### -->
 
     <!-- ##### Testimonials Area Start ##### -->
-    <section class="south-testimonials-area section-padding-100">
+    <!-- <section class="south-testimonials-area section-padding-100">
         <div class="container">
             <div class="row">
                 <div class="col-12">
@@ -580,7 +603,7 @@
                 <div class="col-12">
                     <div class="testimonials-slides owl-carousel wow fadeInUp" data-wow-delay="500ms">
 
-                        <!-- Single Testimonial Slide -->
+               
                         <div class="single-testimonial-slide text-center">
                             <h5>Perfect Home for me</h5>
                             <p>Etiam nec odio vestibulum est mattis effic iturut magna. Pellentesque sit amet tellus blandit. Etiam nec odio vestibulum est mattis effic iturut magna. Pellentesque sit am et tellus blandit. Etiam nec odio vestibul. Etiam nec odio vestibulum est mat tis effic iturut magna.</p>
@@ -591,7 +614,7 @@
                             </div>
                         </div>
 
-                        <!-- Single Testimonial Slide -->
+              
                         <div class="single-testimonial-slide text-center">
                             <h5>Perfect Home for me</h5>
                             <p>Etiam nec odio vestibulum est mattis effic iturut magna. Pellentesque sit amet tellus blandit. Etiam nec odio vestibulum est mattis effic iturut magna. Pellentesque sit am et tellus blandit. Etiam nec odio vestibul. Etiam nec odio vestibulum est mat tis effic iturut magna.</p>
@@ -602,7 +625,7 @@
                             </div>
                         </div>
 
-                        <!-- Single Testimonial Slide -->
+                        
                         <div class="single-testimonial-slide text-center">
                             <h5>Perfect Home for me</h5>
                             <p>Etiam nec odio vestibulum est mattis effic iturut magna. Pellentesque sit amet tellus blandit. Etiam nec odio vestibulum est mattis effic iturut magna. Pellentesque sit am et tellus blandit. Etiam nec odio vestibul. Etiam nec odio vestibulum est mat tis effic iturut magna.</p>
@@ -616,14 +639,14 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
     <!-- ##### Testimonials Area End ##### -->
 
     <!-- ##### Editor Area Start ##### -->
-    <section class="south-editor-area d-flex align-items-center">
-        <!-- Editor Content -->
+    <!-- <section class="south-editor-area d-flex align-items-center">
+        
         <div class="editor-content-area">
-            <!-- Section Heading -->
+            
             <div class="section-heading wow fadeInUp" data-wow-delay="250ms">
                 <img src="img/icons/prize.png" alt="">
                 <h2>jeremy Scott</h2>
@@ -639,24 +662,24 @@
             </div>
         </div>
 
-        <!-- Editor Thumbnail -->
+        
         <div class="editor-thumbnail">
             <img src="img/bg-img/editor.jpg" alt="">
         </div>
-    </section>
+    </section> -->
     <!-- ##### Editor Area End ##### -->
 
     <!-- ##### Footer Area Start ##### -->
     <footer class="footer-area section-padding-100-0 bg-img gradient-background-overlay" style="background-image: url(img/bg-img/cta.jpg);">
-        <!-- Main Footer Area -->
+        
         <div class="main-footer-area">
             <div class="container">
                 <div class="row">
 
-                    <!-- Single Footer Widget -->
+                    
                     <div class="col-12 col-sm-6 col-xl-3">
                         <div class="footer-widget-area mb-100">
-                            <!-- Widget Title -->
+                            
                             <div class="widget-title">
                                 <h6>About Us</h6>
                             </div>
@@ -669,14 +692,14 @@
                         </div>
                     </div>
 
-                    <!-- Single Footer Widget -->
+                    
                     <div class="col-12 col-sm-6 col-xl-3">
                         <div class="footer-widget-area mb-100">
-                            <!-- Widget Title -->
+                           
                             <div class="widget-title">
                                 <h6>Hours</h6>
                             </div>
-                            <!-- Office Hours -->
+                            
                             <div class="weekly-office-hours">
                                 <ul>
                                     <li class="d-flex align-items-center justify-content-between"><span>Monday - Friday</span> <span>09 AM - 19 PM</span></li>
@@ -684,7 +707,7 @@
                                     <li class="d-flex align-items-center justify-content-between"><span>Sunday</span> <span>Closed</span></li>
                                 </ul>
                             </div>
-                            <!-- Address -->
+                            
                             <div class="address">
                                 <h6><img src="img/icons/phone-call.png" alt=""> +45 677 8993000 223</h6>
                                 <h6><img src="img/icons/envelope.png" alt=""> office@template.com</h6>
@@ -693,14 +716,14 @@
                         </div>
                     </div>
 
-                    <!-- Single Footer Widget -->
+                    
                     <div class="col-12 col-sm-6 col-xl-3">
                         <div class="footer-widget-area mb-100">
-                            <!-- Widget Title -->
+                            
                             <div class="widget-title">
                                 <h6>Useful Links</h6>
                             </div>
-                            <!-- Nav -->
+                            
                             <ul class="useful-links-nav d-flex align-items-center">
                                 <li><a href="#">Home</a></li>
                                 <li><a href="#">About us</a></li>
@@ -719,24 +742,24 @@
                         </div>
                     </div>
 
-                    <!-- Single Footer Widget -->
+                   
                     <div class="col-12 col-sm-6 col-xl-3">
                         <div class="footer-widget-area mb-100">
-                            <!-- Widget Title -->
+                            
                             <div class="widget-title">
                                 <h6>Featured Properties</h6>
                             </div>
-                            <!-- Featured Properties Slides -->
+                            
                             <div class="featured-properties-slides owl-carousel">
-                                <!-- Single Slide -->
+                                
                                 <div class="single-featured-properties-slide">
                                     <a href="#"><img src="img/bg-img/fea-product.jpg" alt=""></a>
                                 </div>
-                                <!-- Single Slide -->
+                                
                                 <div class="single-featured-properties-slide">
                                     <a href="#"><img src="img/bg-img/fea-product.jpg" alt=""></a>
                                 </div>
-                                <!-- Single Slide -->
+                                
                                 <div class="single-featured-properties-slide">
                                     <a href="#"><img src="img/bg-img/fea-product.jpg" alt=""></a>
                                 </div>
