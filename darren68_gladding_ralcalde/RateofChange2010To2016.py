@@ -139,5 +139,3 @@ class RateofChange2010To2016(dml.Algorithm):
         repo.logout()
 
         return doc
-
-
