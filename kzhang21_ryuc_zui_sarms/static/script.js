@@ -1,20 +1,23 @@
-
 $(document).ready(function(){
-    let zipCode;
     $("#zipCodes").change(function(){
-        zipCode = $(this).attr("value");
+        let zipCode = $(this).children("option:selected").val();
+        alert(zipCode);
         $.ajax({
             type : 'POST',
-            url : '/post',
-            contentType: 'application/json;charset=UTF-8',
-            data : {'data': zipCode},
+            url : "/plot",
+            data : JSON.stringify({'data': zipCode}),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
             success: function (data) {
-                if (data.success) {
-                    alert(data.message);
+                console.log(data);
+                if (data) {
+                    var graphs = data;
+                    Plotly.plot('chart',graphs,{});  
                 }
             },
             error: function (xhr) {
-                alert('error');
+                alert("error:");
+                console.log(xhr);
             }
         });
     });
