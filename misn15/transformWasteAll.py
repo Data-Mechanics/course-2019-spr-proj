@@ -246,9 +246,9 @@ class transformWasteAll(dml.Algorithm):
 
         return doc
 
-#transformWasteAll.execute()
-#doc = transformWasteAll.provenance()
-#print(doc.get_provn())
-#print(json.dumps(json.loads(doc.serialize()), indent=4))
+# transformWasteAll.execute()
+# doc = transformWasteAll.provenance()
+# print(doc.get_provn())
+# print(json.dumps(json.loads(doc.serialize()), indent=4))
 
 ## eof

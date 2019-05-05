@@ -13,7 +13,7 @@ class Correlation(dml.Algorithm):
 
     @staticmethod
     def execute(trial = False):
-        '''Get correlation coefficients and scores for every zip code'''
+        '''Get correlation coefficients and scores for every census tract'''
         startTime = datetime.datetime.now()
 
         # Set up the database connection.
@@ -87,7 +87,7 @@ class Correlation(dml.Algorithm):
         openSpace_corr = (corr_coefficients[4][1] + 1) / 2
         waste_corr = (corr_coefficients[6][1] + 1) / 2
 
-        # first normalize data
+        # normalize data
         def normalize(value, low, high):
             return float((value - low) / (high - low))
 
@@ -170,10 +170,10 @@ class Correlation(dml.Algorithm):
                   
         return doc
 
-Correlation.execute()
-##doc = Correlation.provenance()
-##print(doc.get_provn())
-##print(json.dumps(json.loads(doc.serialize()), indent=4))
+# Correlation.execute()
+# doc = Correlation.provenance()
+# print(doc.get_provn())
+# print(json.dumps(json.loads(doc.serialize()), indent=4))
 
 
 ## eof

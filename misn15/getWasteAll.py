@@ -5,7 +5,6 @@ import prov.model
 import datetime
 import uuid
 
-
 class getWasteAll(dml.Algorithm):
     contributor = 'misn15'
     reads = []
@@ -115,10 +114,10 @@ class getWasteAll(dml.Algorithm):
                   
         return doc
 
-#getWasteAll.execute()
-#doc = getWasteAll.provenance()
-#print(doc.get_provn())
-#print(json.dumps(json.loads(doc.serialize()), indent=4))
+# getWasteAll.execute()
+# doc = getWasteAll.provenance()
+# print(doc.get_provn())
+# print(json.dumps(json.loads(doc.serialize()), indent=4))
 
 
 ## eof

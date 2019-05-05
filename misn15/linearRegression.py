@@ -229,10 +229,10 @@ class linearRegression(dml.Algorithm):
 
         return doc
 
-#linearRegression.execute()
-#doc = linearRegression.provenance()
-#print(doc.get_provn())
-#print(json.dumps(json.loads(doc.serialize()), indent=4))
+# linearRegression.execute()
+# doc = linearRegression.provenance()
+# print(doc.get_provn())
+# print(json.dumps(json.loads(doc.serialize()), indent=4))
 
 
 ## eof

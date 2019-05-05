@@ -244,10 +244,10 @@ class WasteOptimization(dml.Algorithm):
 
         return doc
 
-#WasteOptimization.execute()
-#doc = WasteOptimization.provenance()
-#print(doc.get_provn())
-#print(json.dumps(json.loads(doc.serialize()), indent=4))
+# WasteOptimization.execute()
+# doc = WasteOptimization.provenance()
+# print(doc.get_provn())
+# print(json.dumps(json.loads(doc.serialize()), indent=4))
 
 
 ## eof

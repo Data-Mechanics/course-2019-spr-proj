@@ -57,9 +57,18 @@ class getIncome(dml.Algorithm):
 
         this_script = doc.agent('alg:misn15#getIncome', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
         resource = doc.entity('bdp:B06011_001E', {'prov:label':'Income for Each FIPS Code', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        resource2 = doc.entity('bdp:B01003_001E', {'prov:label': 'Population for Each FIPS Code', prov.model.PROV_TYPE: 'ont:DataResource', 'ont:Extension': 'json'})
+
         get_income = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        get_population = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+
         doc.wasAssociatedWith(get_income, this_script)
+        doc.wasAssociatedWith(get_population, this_script)
         doc.usage(get_income, resource, startTime, None,
+                  {prov.model.PROV_TYPE:'ont:Retrieval'
+                   }
+                  )
+        doc.usage(get_population, resource2, startTime, None,
                   {prov.model.PROV_TYPE:'ont:Retrieval'
                    }
                   )
@@ -67,13 +76,18 @@ class getIncome(dml.Algorithm):
         doc.wasAttributedTo(income, this_script)
         doc.wasGeneratedBy(income, get_income, endTime)
         doc.wasDerivedFrom(income, resource, get_income, get_income, get_income)
-                  
+
+        population = doc.entity('dat:misn15#population', {prov.model.PROV_LABEL: 'Population for Boston Census Tracts', prov.model.PROV_TYPE: 'ont:DataSet'})
+        doc.wasAttributedTo(population, this_script)
+        doc.wasGeneratedBy(population, get_income, endTime)
+        doc.wasDerivedFrom(population, resource2, get_population, get_population, get_population)
+
         return doc
 
-#getIncome.execute()
-#doc = getIncome.provenance()
-#print(doc.get_provn())
-#print(json.dumps(json.loads(doc.serialize()), indent=4))
+# getIncome.execute()
+# doc = getIncome.provenance()
+# print(doc.get_provn())
+# print(json.dumps(json.loads(doc.serialize()), indent=4))
 
 
 ## eof
