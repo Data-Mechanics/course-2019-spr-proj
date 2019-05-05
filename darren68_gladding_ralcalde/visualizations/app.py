@@ -4,12 +4,11 @@ import pymongo
 import datetime
 import time
 import re
-from pyproj import Proj, transform
 import numpy
 
 
 
-circle_colors = ['blue', 'red', 'green', 'purple', 'orange', 'darkred', 'lightred', 'beige', 'darkblue', 'darkgreen', 'cadetblue',
+circle_colors = ['blue', 'red', 'green', 'purple', 'orange', 'darkred', 'darkblue', 'darkgreen', 'cadetblue',
  'darkpurple', 'white', 'pink', 'lightblue', 'lightgreen', 'gray', 'black', 'lightgray']
 
 
@@ -44,7 +43,7 @@ def execute():
         PercChange = doc['Percentage Change']
 
         docList += [(date, numAcc, oneYearChange, PercChange)]
-    # print(docList)
+
 
     # Get Severity info
     colName2 = "darren68_gladding_ralcalde." + "SeverityStats"
@@ -60,7 +59,7 @@ def execute():
         change = doc['ChangeFromPrevious']
 
         docList2 += [(date, severity, numSevAcc, change)]
-    print(docList2)
+
 
     repo.logout()
     return [docList, docList2]
@@ -299,12 +298,14 @@ def noinjury():
 
 @app.route('/maps')
 def maps():
+    m = folium.Map(location=[42.4063407084367, -71.0034528430666], zoom_start=12)
+    m.save('static/folium_test.html')
     return render_template('mappings.html')
 
 
 @app.route('/display_clusters', methods=['GET', 'POST'])
 def display_clusters():
-    m = folium.Map(location=[42.442076440285724, -71.01438627691276], zoom_start=12)
+    m = folium.Map(location=[42.4063407084367, -71.0034528430666], zoom_start=12)
     m.save('static/folium_test.html')
     if request.method == 'POST':
 
@@ -315,49 +316,40 @@ def display_clusters():
 
         year = request.form['year']
 
-        tempStr = 'darren68_gladding_ralcalde.Clusters' + year
+        tempStr = 'darren68_gladding_ralcalde.Clusters' + year +'LatLng'
 
         collection = repo[tempStr]
 
-        state_plane = Proj(init='EPSG:26986', preserve_units=True)
-        wgs = Proj(proj='latlong', datum='WGS84', ellps='WGS84')
 
         meanPoints = collection.distinct('m')
 
         for k in meanPoints:
-            x1 = k['x']
-            y1 = k['y']
 
             try:
-                lng, lat = transform(state_plane, wgs, float(x1), float(y1))
+                lat = k['lat']
+                lng = k['lng']
+
+                folium.Marker(
+                    location=[float(lat), float(lng)],
+                    icon=folium.Icon(color=circle_colors[meanPoints.index(k)])
+                ).add_to(m)
             except:
                 continue
-
-            folium.Marker(
-                location=[float(lat), float(lng)],
-               # popup='Timberline Lodge',
-                icon=folium.Icon(color=circle_colors[meanPoints.index(k)])
-            ).add_to(m)
-
-
 
         for doc in collection.find():
 
-            x1 = doc['p']['x']
-            y1 = doc['p']['y']
-
             try:
-                lng, lat = transform(state_plane, wgs, float(x1), float(y1))
+                lat = doc['p']['lat']
+                lng = doc['p']['lng']
+
+                folium.Circle(
+                    radius=10,
+                    location=[float(lat), float(lng)],
+                    color=circle_colors[meanPoints.index(doc['m'])],
+                    fill=True,
+                ).add_to(m)
             except:
                 continue
-
-            folium.Circle(
-                radius=10,
-                location=[float(lat), float(lng)],
-                #popup=popUpString,
-                color=circle_colors[meanPoints.index(doc['m'])],
-                fill=True,
-            ).add_to(m)
         m.save('static/folium_test.html')
 
 
@@ -370,7 +362,7 @@ def display_clusters():
 
 @app.route('/display_maps', methods=['GET', 'POST'])
 def display_maps():
-    m = folium.Map(location=[42.442076440285724, -71.01438627691276], zoom_start=12)
+    m = folium.Map(location=[42.4063407084367, -71.0034528430666], zoom_start=12)
     m.save('static/folium_test.html')
     if request.method == 'POST':
 
