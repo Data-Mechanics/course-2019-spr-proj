@@ -69,8 +69,6 @@ class AnalyzeClusters(dml.Algorithm):
 
         dictList = []
         for i in range(len(appended)):
-            print(i)
-            print(appended[i])
             dic = {}
             dic['Location'] = appended[i][0]
             dic['2002-First Year'] = appended[0][1][0][1]
@@ -319,4 +317,3 @@ class AnalyzeClusters(dml.Algorithm):
         repo.logout()
 
         return doc
-
