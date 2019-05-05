@@ -130,4 +130,3 @@ class AllTowns1990to2016(dml.Algorithm):
         repo.logout()
 
         return doc
-
