@@ -8,21 +8,12 @@ Darren Hoffmann-Marks<br/>
 Alyssa Gladding<br/>
 
 
-
-## The report is still being written by Roberto
-
-I've made a pull request so that we can submit the code relating to our project. When Roberto finishes the report we will submit another pull request containing the report as the Readme.
-
 ## How to run the code within our project
 
-All the files that are not within the visualizations folder are scripts that need to be run using execute.py to set up the collections that our web application within the visualizations folder will use. So follow these steps:
+All the files that are not within the visualizations folder are scripts that need to be run using execute.py to set up the collections that our web application within the visualizations folder will use. Follow these steps:
 
 1) run 'python execute.py darren68_gladding_ralcalde' (with trial mode on or off)
 2) Go into the visualizations folder and run the command 'python app.py' to start our web app
-
-Those are all the commands needed to use our web visualization components properly.
-
-Some things to note: Since we're working with a lot of data, some of the scripts may take a very long time to finish execution. In the script ConvertToLatLng.py, the mongo cursor will most likely timeout while working with the collection and raise an exception. To get around this, use "mongod --setParameter cursorTimeoutMillis=3600000" to prevent the cursor from timing out before the script finishes execution.
 
 
 
