@@ -118,4 +118,3 @@ class Revere2000(dml.Algorithm):
         repo.logout()
 
         return doc
-
