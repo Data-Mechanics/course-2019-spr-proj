@@ -63,7 +63,7 @@ class optimization(dml.Algorithm):
 
         this_script = doc.agent('alg:xcao19_yjhang_zy0105#optimization',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
-        resource = doc.entity('dat:Jh_Y_Xy$JoinByZip',
+        resource = doc.entity('dat:Jinghang_Yuan#Jinghang_Yuan.ZIPCounter',
                               {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource',
                                'ont:Extension': 'json'})
         #select = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
@@ -79,7 +79,6 @@ class optimization(dml.Algorithm):
                    'ont:Query': 'FID,OBJECTID,SITE,PHONE,FAX,STREET,NEIGH,ZIP'
                    }
                   )
-
         resZip = doc.entity('dat:xcao19_yjhang_zy0105#result',
                           {prov.model.PROV_LABEL: 'result', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(resZip, this_script)
