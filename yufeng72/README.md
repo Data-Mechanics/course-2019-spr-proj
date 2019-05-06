@@ -80,3 +80,5 @@ In /web, run:
 ```
 python app.py
 ```
+
+Check report for more details and screenshots.
