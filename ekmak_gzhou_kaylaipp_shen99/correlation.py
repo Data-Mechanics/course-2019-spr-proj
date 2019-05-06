@@ -19,6 +19,7 @@ from numpy import array
 import numpy as np
 import pandas as pd
 import math
+from math import sqrt
 
 import folium
 from folium import plugins
@@ -78,7 +79,7 @@ class correlation(dml.Algorithm):
         all_coords = array(all_coords)
 
 
-        corr(price,all_coords)
+        # corr(price,all_coords)
 
         # Store information in db
         repo.logout()
@@ -137,7 +138,7 @@ def corr(x, y): # Correlation coefficient.
     if stddev(x)*stddev(y) != 0:
         return cov(x, y)/(stddev(x)*stddev(y))
 
-if __name__ == "__main__":
-    correlation.execute()
+# if __name__ == "__main__":
+    # correlation.execute()
     # doc = optimization.provenance()
 

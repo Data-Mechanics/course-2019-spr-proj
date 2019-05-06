@@ -14,7 +14,11 @@ def index():
     return render_template('index.html')
 
 
-# @app.route('/recievedata', methods=['GET','POST'])
+'''
+----------------------------------------
+Get data from forms 
+----------------------------------------
+'''
 @app.route('/', methods=['GET','POST'])
 def recieve_data():
     min_price = request.form.get('min_price')
@@ -22,42 +26,44 @@ def recieve_data():
     bedroom = request.form.get('bedrooms')
     bathroom = request.form.get('bathrooms')
     cat = request.form.get('categories')
+    filter_type = request.form.get('filter_type')
 
-    if max_price != 'None': 
+    if max_price != 'None' or min_price != 'None': 
         max_price = max_price.replace("$", "")
         max_price = int(max_price.replace(",", ""))
+        min_price = min_price.replace("$", "")
+        min_price = int(min_price.replace(",", ""))
 
     # filter properties 
-    results = filter(max_price, bedroom, bathroom, cat)
+    results = filter(min_price, max_price, bedroom, bathroom, cat)
+
+    if filter_type == 'Show best combination':
+        results = best_combo(results, max_price)
 
     # create the map 
     create_map(results)
 
-    print('map created! ')
-    print('min price in recieeve data: ', min_price)
-    print('max price in recieeve data: ', max_price)
-    return show_data(min_price, max_price, bedroom, bathroom, cat, results)
+    return show_data(min_price, max_price, bedroom, bathroom, cat, results, filter_type)
 
 
 '''
-show filtered results 
+----------------------
+Show filtered results 
+----------------------
 '''
-@app.route('/<min_price>/<max_price>', methods=['GET','POST'])
-def show_data(min_price, max_price, bedroom, bathroom, type_, results):
-    print("min price: ", min_price)
-    print('max price: ', max_price)
+@app.route('/<min_price>/<max_price>/<bedroom>/<bathroom>/<type>', methods=['GET','POST'])
+def show_data(min_price, max_price, bedroom, bathroom, type_, results, filter_type):
     if request.method == 'POST':
         print('POST METHOD')
     else: 
         print('GET METHOD')
     return render_template('index.html', filters = True, min_price = min_price, 
                                         max_price = max_price, bedroom = bedroom, bathroom = bathroom, property_type = type_,
-                                        results = results)
+                                        results = results, filter_type = filter_type)
 
 '''
 -----------------------------------------
-helper function that takes in filters 
-and returns matching properties 
+Helper function that takes in filters and returns matching properties 
 
 PARAMETERS: 
 - bedroom
@@ -68,7 +74,7 @@ RETURNS:
 - list of properties 
 -----------------------------------------
 '''
-def filter(budget, number_bedrooms, number_bathrooms, type_of_property):
+def filter(min_price, max_price, number_bedrooms, number_bathrooms, type_of_property):
 
         type_mapping = {'A': 'Residential 7 or more units', 'CD': 'Residential condimunium unit', 
                     'CC': 'Commercial condimunium', 'CM': 'Condomunium main', 'R1':'Residential 1 family', 
@@ -85,24 +91,38 @@ def filter(budget, number_bedrooms, number_bathrooms, type_of_property):
         accessing_data = repo.ekmak_gzhou_kaylaipp_shen99.accessing_data.find()
 
         res = []
-        # print('before: ', len(accessing_data))
-        if budget != 'None':
-            budget = int(budget)
+        if max_price != 'None':
+            max_price = int(max_price)
+        if min_price != 'None': 
+            min_price = int(min_price)
 
 
-        # if user specified a param, filter the results 
-        if budget != 'None': 
-            print('in budget')
+        # min price & max price specified 
+        if max_price != 'None' and min_price != 'None': 
             for idx,info in enumerate(accessing_data): 
                 valuation = int(info['AV_BLDG'])
-                if valuation <= int(budget): 
+                if valuation <= int(max_price) and valuation >= int(min_price): 
+                    res.append(info)
+        
+        # min price specifed, but not max price 
+        elif min_price != 'None' and max_price == 'None': 
+            for idx,info in enumerate(accessing_data): 
+                valuation = int(info['AV_BLDG'])
+                if valuation >= int(min_price): 
                     res.append(info)
 
-        # if budget isn't specified, add all to results 
-        else: 
+        # min price not specified, max price specifed
+        elif min_price == 'None' and max_price != 'None': 
+            for idx,info in enumerate(accessing_data): 
+                valuation = int(info['AV_BLDG'])
+                if valuation <= int(min_price): 
+                    res.append(info)
+
+        # if max_price isn't specified, add all to results 
+        elif min_price == 'None' and max_price == 'None':
             res = list(accessing_data)
 
-        print('num properties that fit budget: ', len(res))
+        print('num properties that fit max_price: ', len(res))
 
         # if type of property specified, filter through res list
         if type_of_property != 'All': 
@@ -137,7 +157,7 @@ def filter(budget, number_bedrooms, number_bathrooms, type_of_property):
             for idx,info in enumerate(res): 
                 rooms = info['R_FULL_BTH']
                 # print(rooms, number_bathrooms)
-                # if over budget, delete from total list 
+                # if over max_price, delete from total list 
                 if rooms == str(number_bathrooms): 
                     room_filter.append(info)    
             res = room_filter          
@@ -146,7 +166,56 @@ def filter(budget, number_bedrooms, number_bathrooms, type_of_property):
         return res
 
 '''
-create map based on filtered properties 
+------------------------------------------------------
+Helper function that returns best combination of houses 
+
+PARAMTERS: 
+- list of properties
+- budget
+
+RETURNS: 
+- list of best combination properties
+-----------------------------------------------------
+'''
+def best_combo(dataset, budget):
+    results = []
+
+    # sort by price high to low 
+    sorted_price = sorted(dataset, key=lambda k: k['AV_BLDG'], reverse = False) 
+
+    # go through sorted price 
+    for idx, info in enumerate(sorted_price): 
+
+        # if budget not negative, see if we can buy more houses 
+        if budget > 0: 
+
+            price = int(info['AV_BLDG'])
+
+            # if within budget, buy 
+            if price <= budget and price != 0: 
+                # buy house, update budget, add property to result 
+                budget -= price 
+                info['optimized_type'] = 'low_price'
+                results.append(info)
+
+            # other wise dont buy, continue searching
+            else: 
+                continue 
+
+    # print('budget: ', budget)
+    # print('results low price: ', len(results))
+    return results
+
+'''
+---------------------------------------
+Create map based on filtered properties 
+
+PARAMTERS: 
+- list of properties
+
+RETURNS: 
+- void, saves html map to templates folder
+---------------------------------------
 '''
 def create_map(properties): 
     # generate default map with all properties 
@@ -195,3 +264,4 @@ def create_map(properties):
 
     print('done! ')
     folium_map.save('app/templates/filtered_map.html')
+
