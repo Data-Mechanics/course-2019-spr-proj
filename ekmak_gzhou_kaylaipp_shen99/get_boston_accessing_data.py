@@ -35,13 +35,15 @@ class get_boston_accessing_data(dml.Algorithm):
         repo.authenticate('ekmak_gzhou_kaylaipp_shen99','ekmak_gzhou_kaylaipp_shen99')
 
         # #Retrieve boston tax acessing and add to mongo - source: Analyze Boston
-        url = 'https://data.boston.gov/api/3/action/datastore_search?resource_id=fd351943-c2c6-4630-992d-3f895360febd&limit=40000&q=02127'
+        # url = 'https://data.boston.gov/api/3/action/datastore_search?resource_id=fd351943-c2c6-4630-992d-3f895360febd&limit=40000&q=02127'
+        url = 'http://datamechanics.io/data/boston_accessing_data2.json'
         response = urllib.request.urlopen(url).read().decode("utf-8")
         r = json.loads(response)
-        r = r['result']['records']
+        # r = r['result']['records']
         repo.dropCollection("accessing_data")
         repo.createCollection("accessing_data")
         for info in tqdm(r): 
+            info['STATUS'] = 'Pending'
             repo['ekmak_gzhou_kaylaipp_shen99.accessing_data'].insert_one(info)
         repo['ekmak_gzhou_kaylaipp_shen99.accessing_data'].metadata({'complete':True})
         print(repo['ekmak_gzhou_kaylaipp_shen99.accessing_data'].metadata())
