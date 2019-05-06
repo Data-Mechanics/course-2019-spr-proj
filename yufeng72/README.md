@@ -81,4 +81,8 @@ In /web, run:
 python app.py
 ```
 
-Check report for more details and screenshots.
+
+
+<h2>Poster and Report</h2>
+
+Check my poster and report for more details.
