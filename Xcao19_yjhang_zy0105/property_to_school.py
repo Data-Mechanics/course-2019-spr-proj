@@ -92,7 +92,7 @@ class property_to_school(dml.Algorithm):
         return doc
 
 
-property_to_school.execute()
+#property_to_school.execute()
 # # doc = school_to_property.provenance()
 # # print(doc.get_provn())
 # # print(json.dumps(json.loads(doc.serialize()), indent=4))

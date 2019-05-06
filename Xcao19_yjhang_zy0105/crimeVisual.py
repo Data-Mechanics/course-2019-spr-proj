@@ -37,5 +37,5 @@ class crimeVisual():
     m.save(os.path.join('2.html'))
 
     # print(m)
-
+crimeVisual
 

@@ -74,7 +74,7 @@ class policeStation(dml.Algorithm):
         repo.logout()
 
         return doc
-policeStation.execute()
+#policeStation.execute()
 # doc = property.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))

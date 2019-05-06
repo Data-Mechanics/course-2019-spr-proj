@@ -74,7 +74,7 @@ class school(dml.Algorithm):
         repo.logout()
 
         return doc
-school.execute()
+#school.execute()
 # doc = school.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))

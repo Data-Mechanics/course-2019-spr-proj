@@ -75,7 +75,7 @@ class crime(dml.Algorithm):
 
         return doc
 
-crime.execute()
+#crime.execute()
 # doc = crime.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))

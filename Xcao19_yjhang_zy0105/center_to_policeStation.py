@@ -92,7 +92,7 @@ class center_to_policeStation(dml.Algorithm):
         return doc
 
 
-center_to_policeStation.execute()
+# center_to_policeStation.execute()
 # # doc = school_to_property.provenance()
 # # print(doc.get_provn())
 # # print(json.dumps(json.loads(doc.serialize()), indent=4))

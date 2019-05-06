@@ -29,9 +29,9 @@ class centerPool(dml.Algorithm):
         repo.createCollection("centerPool")
         repo['Jinghang_Yuan.centerPool'].insert_many(r)
         repo['Jinghang_Yuan.centerPool'].metadata({'complete': True})
-        # print('-----------------')
-        # print(list(repo['Jinghang_Yuan.centerPool'].find()))
-        # print('-----------------')
+        print('-----------------')
+        print(list(repo['Jinghang_Yuan.centerPool'].find()))
+        print('-----------------')
 
         repo.logout()
 
@@ -74,7 +74,7 @@ class centerPool(dml.Algorithm):
         repo.logout()
 
         return doc
-centerPool.execute()
+# centerPool.execute()
 # doc = centerPool.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))

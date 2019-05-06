@@ -8,10 +8,6 @@ import prov.model
 import datetime
 import uuid
 import math
-def dealWithZip(data,key):
-    for i in data:
-        if(len(str(int(i[key][:5]))) == 4):
-            i[key] = '0'+str(int(i[key][:5]))
 
 
 
@@ -20,6 +16,11 @@ class join_by_ZIP(dml.Algorithm):
     reads = ['Jinghang_Yuan.center', 'Jinghang_Yuan.centerPool', 'Jinghang_Yuan.policeStation','Jinghang_Yuan.school','Jinghang_Yuan.property']
     writes = ['Jinghang_Yuan.ZIPCounter']
 
+
+    def dealWithZip(data,key):
+        for i in data:
+            if(len(str(int(i[key][:5]))) == 4):
+                i[key] = '0'+str(int(i[key][:5]))
     @staticmethod
     def execute(trial=False):
         '''Retrieve some data sets (not using the API here for the sake of simplicity).'''
@@ -106,7 +107,7 @@ class join_by_ZIP(dml.Algorithm):
         doc.add_namespace('dat', 'http://datamechanics.io/data/')  # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/')  # The event log.
-        agent = doc.agent('alg:Jinghang_Yuan#count_all_by_zip',
+        agent = doc.agent('alg:Jinghang_Yuan#join_by_ZIP',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
      
         property = doc.entity('dat:Jinghang_Yuan#property',
@@ -123,7 +124,7 @@ class join_by_ZIP(dml.Algorithm):
         policeStation = doc.entity('dat:Jinghang_Yuan#policeStation',
                                {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource',
                                 'ont:Extension': 'json'})
-        count_all_by_zip = doc.entity('dat:Jinghang_Yuan#count_all_by_zip',
+        count_all_by_zip = doc.entity('dat:Jinghang_Yuan#join_by_zip',
                                {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource',
                                 'ont:Extension': 'json'})
         activity = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
@@ -155,4 +156,4 @@ class join_by_ZIP(dml.Algorithm):
 
         return doc
 
-join_by_ZIP.execute()
+#join_by_ZIP.execute()
