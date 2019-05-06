@@ -1,5 +1,5 @@
 import flask
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for
 import gmplot
 import json
 import uuid
@@ -50,7 +50,7 @@ def updateMapBefore():
 
 	gmapBefore.apikey = 'AIzaSyAePvzBOkxdh5YYcgTQjhY9bHWlNEn3Sog'
 
-	gmapBefore.draw( "static\dispmap.html" ) 
+	gmapBefore.draw('static/dispmap.html' ) 
 
 	return render_template('busstops.html', name="test")
 
