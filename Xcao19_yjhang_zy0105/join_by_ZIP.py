@@ -1,20 +1,16 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-import urllib.request
-import json
 import dml
 import prov.model
 import datetime
 import uuid
 import math
 
-
-
 class join_by_ZIP(dml.Algorithm):
-    contributor = 'Jinghang_Yuan'
-    reads = ['Jinghang_Yuan.center', 'Jinghang_Yuan.centerPool', 'Jinghang_Yuan.policeStation','Jinghang_Yuan.school','Jinghang_Yuan.property']
-    writes = ['Jinghang_Yuan.ZIPCounter']
+    contributor = 'xcao19_yjhang_zy0105'
+    reads = ['xcao19_yjhang_zy0105.center', 'xcao19_yjhang_zy0105.centerPool', 'xcao19_yjhang_zy0105.policeStation','xcao19_yjhang_zy0105.school','xcao19_yjhang_zy0105.property']
+    writes = ['xcao19_yjhang_zy0105.ZIPCounter']
 
 
     def dealWithZip(data,key):
@@ -27,7 +23,13 @@ class join_by_ZIP(dml.Algorithm):
         startTime = datetime.datetime.now()
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('Jinghang_Yuan', 'Jinghang_Yuan')
+        repo.authenticate('xcao19_yjhang_zy0105', 'xcao19_yjhang_zy0105')
+
+        def dealWithZip(data, key):
+            for i in data:
+                if (len(str(int(i[key][:5]))) == 4):
+                    i[key] = '0' + str(int(i[key][:5]))
+
         def count(R,key):
             c = 0
             for r in R:
@@ -36,11 +38,11 @@ class join_by_ZIP(dml.Algorithm):
             return c
 
 
-        r_center= repo['Jinghang_Yuan.center']
-        r_centerPool=repo['Jinghang_Yuan.centerPool']
-        r_policeStation = repo['Jinghang_Yuan.policeStation']
-        r_property = repo['Jinghang_Yuan.property']
-        r_school = repo['Jinghang_Yuan.school']
+        r_center= repo['xcao19_yjhang_zy0105.center']
+        r_centerPool=repo['xcao19_yjhang_zy0105.centerPool']
+        r_policeStation = repo['xcao19_yjhang_zy0105.policeStation']
+        r_property = repo['xcao19_yjhang_zy0105.property']
+        r_school = repo['xcao19_yjhang_zy0105.school']
 
         center=list(r_center.find({},{'_id':0,'ZIP':1,}))
         centerPool=list(r_centerPool.find({},{'_id':0,'ZIP':1}))
@@ -90,7 +92,7 @@ class join_by_ZIP(dml.Algorithm):
 
         repo.dropCollection("ZIPCounter")
         repo.createCollection("ZIPCounter")
-        repo["Jinghang_Yuan.ZIPCounter"].insert_many(res)
+        repo["xcao19_yjhang_zy0105.ZIPCounter"].insert_many(res)
         repo.logout()
         endTime = datetime.datetime.now()
         return {"start": startTime, "end": endTime}             
@@ -107,24 +109,25 @@ class join_by_ZIP(dml.Algorithm):
         doc.add_namespace('dat', 'http://datamechanics.io/data/')  # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/')  # The event log.
-        agent = doc.agent('alg:Jinghang_Yuan#join_by_ZIP',
+
+        agent = doc.agent('alg:xcao19_yjhang_zy0105#join_by_ZIP',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
      
-        property = doc.entity('dat:Jinghang_Yuan#property',
+        property = doc.entity('dat:xcao19_yjhang_zy0105#property',
                            {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource', 'ont:Extension': 'json'})
-        school = doc.entity('dat:Jinghang_Yuan#school',
+        school = doc.entity('dat:xcao19_yjhang_zy0105#school',
                                {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource',
                                 'ont:Extension': 'json'})
-        center = doc.entity('dat:Jinghang_Yuan#center',
+        center = doc.entity('dat:xcao19_yjhang_zy0105#center',
                                {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource',
                                 'ont:Extension': 'json'})
-        centerPool = doc.entity('dat:Jinghang_Yuan#centerPool',
+        centerPool = doc.entity('dat:xcao19_yjhang_zy0105#centerPool',
                                {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource',
                                 'ont:Extension': 'json'})
-        policeStation = doc.entity('dat:Jinghang_Yuan#policeStation',
+        policeStation = doc.entity('dat:xcao19_yjhang_zy0105#policeStation',
                                {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource',
                                 'ont:Extension': 'json'})
-        count_all_by_zip = doc.entity('dat:Jinghang_Yuan#join_by_zip',
+        count_all_by_zip = doc.entity('dat:xcao19_yjhang_zy0105#count_all_by_zip',
                                {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource',
                                 'ont:Extension': 'json'})
         activity = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
@@ -155,5 +158,3 @@ class join_by_ZIP(dml.Algorithm):
         doc.wasGeneratedBy(count_all_by_zip, activity, endTime)
 
         return doc
-
-#join_by_ZIP.execute()

@@ -16,7 +16,7 @@ import folium
 
 # In[74]:
 
-class final():
+class KmeansVisual():
     data = pd.read_csv('http://datamechanics.io/data/Jinghang_Yuan/listings.csv')
 
 
@@ -228,7 +228,7 @@ class final():
     folium.LayerControl().add_to(m)
 
     m.save(os.path.join('final.html'))
-final
+KmeansVisual
 
 
 

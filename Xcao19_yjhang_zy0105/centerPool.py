@@ -5,12 +5,10 @@ import prov.model
 import datetime
 import uuid
 
-
-
 class centerPool(dml.Algorithm):
-    contributor = 'Jinghang_Yuan'
+    contributor = 'xcao19_yjhang_zy0105'
     reads = []
-    writes = ['Jinghang_Yuan.centerPool']
+    writes = ['xcao19_yjhang_zy0105.centerPool']
 
     @staticmethod
     def execute(trial=False):
@@ -19,7 +17,7 @@ class centerPool(dml.Algorithm):
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('Jinghang_Yuan', 'Jinghang_Yuan')
+        repo.authenticate('xcao19_yjhang_zy0105', 'xcao19_yjhang_zy0105')
 
         url = 'http://datamechanics.io/data/Jinghang_Yuan/centerPool.json'
         response = urllib.request.urlopen(url).read().decode("utf-8")
@@ -27,11 +25,9 @@ class centerPool(dml.Algorithm):
         s = json.dumps(r, sort_keys=True, indent=2)
         repo.dropCollection("centerPool")
         repo.createCollection("centerPool")
-        repo['Jinghang_Yuan.centerPool'].insert_many(r)
-        repo['Jinghang_Yuan.centerPool'].metadata({'complete': True})
-        print('-----------------')
-        print(list(repo['Jinghang_Yuan.centerPool'].find()))
-        print('-----------------')
+
+        repo['xcao19_yjhang_zy0105.centerPool'].insert_many(r)
+        repo['xcao19_yjhang_zy0105.centerPool'].metadata({'complete': True})
 
         repo.logout()
 
@@ -45,7 +41,7 @@ class centerPool(dml.Algorithm):
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('Jinghang_Yuan', 'Jinghang_Yuan')
+        repo.authenticate('xcao19_yjhang_zy0105', 'xcao19_yjhang_zy0105')
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')
         doc.add_namespace('dat', 'http://datamechanics.io/data/')
         doc.add_namespace('ont',
@@ -53,7 +49,7 @@ class centerPool(dml.Algorithm):
         doc.add_namespace('log', 'http://datamechanics.io/log/')
         doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
 
-        this_script = doc.agent('alg:Jinghang_Yuan#centerPool',
+        this_script = doc.agent('alg:xcao19_yjhang_zy0105#centerPool',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
         resource = doc.entity('bdp:wc8w-nujj',
                               {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource',
@@ -74,9 +70,4 @@ class centerPool(dml.Algorithm):
         repo.logout()
 
         return doc
-# centerPool.execute()
-# doc = centerPool.provenance()
-# print(doc.get_provn())
-# print(json.dumps(json.loads(doc.serialize()), indent=4))
 
-##eof
