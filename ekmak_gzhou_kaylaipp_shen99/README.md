@@ -55,13 +55,22 @@ Our team was also interested in determining if there was a correlation between p
 |3|1,908,919.74|493,819.63|243857832656.78|1,309,041 - 10,808,461|
 
 # Project 3: Web Interface
-Both features are used in the interactive web service we created to generate an individualized search result list for our client (SBNDC). The client can efficiently utilize budget to purchase target properties and maintain the affordable housing in South Boston neighborhood based on the optimized choices of property result list. 
+We built the web interface with Flask and Python. There are several main features in the site - firstly the interactive map built with folium, filtering and listing properties based on what the user specifies and also the option to list properties that maximize their budget. Both features are used in the interactive web service we created to generate an individualized search result list for our client (SBNDC). The client can efficiently utilize budget to purchase target properties and maintain the affordable housing in South Boston neighborhood based on the optimized choices of property result list. 
+
+ <p align="center"> 
+    <img src="https://github.com/kaylaipp/course-2019-spr-proj/blob/master/ekmak_gzhou_kaylaipp_shen99/demo.gif" 
+     style="width: 10em; height: 20em;">
+ </p>
+ 
+ To run the web service, go into the `web_app` directory and run `python webapp.py`
 
 # Limitations and Future Work
-In the future, we would like to implement more filters to narrow target housing (e.g., transportation proximity). A limitation we encountered was we did not have access to owner data freely. We hope to one day generate a data set of property owners’ contact information (e.g. census, WhitePages API) to automate the contact process.
+In the future, we would like to implement more filters to narrow target housing (e.g., transportation proximity). A limitation we encountered was we did not have access to owner data freely - while we did have property owner's name and mailing address (via Boston Tax Accessing dataset), we were unable to access their phone numbers or email, which was necessary in order to fulfill the original goal of building an automated contacting service. We were provided a Boston voter listing from Spark which had ~2,000 voter information, including age and phone number, however none of the owners from the accessing dataset were actually in the file, thus we didn't end up using that dataset. We hope to one day obtain a data set of property owners’ contact information (e.g. census, WhitePages API) to automate the contact process and expand our project. 
+
+
 
 # Conclusions
-Our analysis indicates that there is a correlation between property location and price. While we were unable to build an automated contacting service due to our restricted API usage, the interactive web service acts as an aggregated data portal that lists property owners in a user friendly manner. With the data and analysis we collected, we hope that this can be of use to the  South Boston Neighborhood Development Corporation in their commitment towards making South Boston a safe and affordable community. 
+Our analysis indicates that there is a correlation between property location and price - properties inland tend to be below the average south boston property price, while properties closer to the coast tend to be more expensive. While we were unable to build an automated contacting service due to our restricted API usage, the interactive web service acts as an aggregated data portal that lists property owners in a user friendly manner. Here, SBNDC can target filtered properties and at least send out snail mail to properties of interest. With the data and analysis we collected, we hope that this can be of use to the  South Boston Neighborhood Development Corporation in their commitment towards making South Boston a safe and affordable community. 
 
 # Auth.json
 The auth.json file should contain a key to acess the Zillow api. You can retrieve a key [here](https://www.zillow.com/howto/api/APIOverview.htm) 
