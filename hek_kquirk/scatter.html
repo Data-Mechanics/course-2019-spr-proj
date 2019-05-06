@@ -1,0 +1,353 @@
+<html>
+    <head>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+            google.charts.load('current', {'packages':['corechart']});
+            google.charts.setOnLoadCallback(drawChart);
+            google.charts.setOnLoadCallback(drawChart2);
+            google.charts.setOnLoadCallback(drawChart3);
+            google.charts.setOnLoadCallback(drawChart4);
+            google.charts.setOnLoadCallback(drawChart5);
+            google.charts.setOnLoadCallback(drawChart6);
+
+            function drawChart() {
+                var data = new google.visualization.DataTable();
+                data.addColumn('number', 'Age');
+                data.addColumn('number', 'Crime Incidents');
+                data.addColumn({type: 'string', role: 'tooltip'});
+
+                data.addRows([
+                    [ 74.25,    42324,  "A1"    ],
+                    [ 63.5,     7756,   "A15"   ],
+                    [ 22.8,     15383,  "A7"    ],
+                    [ 28.21,    59889,  "B2"    ],
+                    [ 16.8,     42737,  "B3"    ],
+                    [ 25.7,     50692,  "C11"   ],
+                    [ 61.4,     27197,  "C6"    ],
+                    [ 66.61,    23826,  "D14"   ],
+                    [ 73.04,    49233,  "D4"    ],
+                    [ 64.6,     20735,  "E13"   ],
+                    [ 28.4,     20743,  "E18"   ],
+                    [ 48.74,    16013,  "E5"    ]
+                ]);
+
+                var options = {
+                    title: 'Education Level vs. Crime Incidents (By District)',
+                    hAxis: {title: 'Education Level (Percent with Bachelor\'s or Higher)', minValue: 0, maxValue: 100},
+                    vAxis: {title: 'Number of Crime Incidents', minValue: 0, maxValue: 70000},
+                    legend: 'none',
+                    trendlines: { 0: {visibleInLegend: true,} }
+                };
+
+                var chart = new google.visualization.ScatterChart(document.getElementById('edu_chart_div'));
+
+                chart.draw(data, options);
+            }
+
+            function drawChart2() {
+                var data = new google.visualization.DataTable();
+                data.addColumn('number', 'Age');
+                data.addColumn('number', 'Crime Incidents');
+                data.addColumn({type: 'string', role: 'tooltip'});
+                data.addColumn({type: 'string', role: 'style'});
+
+                data.addRows([
+                    [ 61.2,    42324,  "Downtown - A1"  , 'point { fill-color: #f47142; }'],
+                    [ 89.8,    42324,  "Beacon Hill - A1"    , 'point { fill-color: #f47142; }'],
+                    [ 79.5,    42324,  "North End - A1"    , 'point { fill-color: #f47142; }'],
+                    [ 73.6,    42324,  "West End - A1"   , 'point { fill-color: #f47142; }' ],
+                    [ 82.5,    42324,  "South Boston Waterfront - A1"    , 'point { fill-color: #f47142; }'],
+                    [ 63.5,     7756,   "Charlestown - A15"   , 'point { fill-color: #f4e541; }'],
+                    [ 22.8,     15383,  "East Boston - A7"    , 'point { fill-color: #91f441; }'],
+                    [ 22.2,    59889,  "Roxbury - B2"    , 'point { fill-color: #41f4d9; }'],
+                    [ 48.5,    59889,  "Mission Hill - B2"    , 'point { fill-color: #41f4d9; }'],
+                    [ 16.8,     42737,  "Mattapan - B3"    , 'point { fill-color: #418bf4; }'],
+                    [ 25.7,     50692,  "Dorchester - C11"   , 'point { fill-color: #7941f4; }'],
+                    [ 61.4,     27197,  "South Boston - C6"    , 'point { fill-color: #e241f4; }'],
+                    [ 71.9,    23826,  "Allston - D14"   , 'point { fill-color: #f4415e; }'],
+                    [ 65.0,    23826,  "Brighton - D14"   , 'point { fill-color: #f4415e; }'],
+                    [ 85.0,    49233,  "Back Bay - D4"    , 'point { fill-color: #660514; }'],
+                    [ 65.8,    49233,  "South End - D4"    , 'point { fill-color: #660514; }'],
+                    [ 74.5,    49233,  "Fenway - D4"    , 'point { fill-color: #660514; }'],
+                    [ 64.6,     20735,  "Jamaica Plain - E13"   , 'point { fill-color: #440336; }'],
+                    [ 28.4,     20743,  "Hyde Park - E18"  , 'point { fill-color: #040244; }' ],
+                    [ 52.1,    16013,  "West Roxbury - E5"   , 'point { fill-color: #024418; }' ],
+                    [ 44.8,    16013,  "Roslindale - E5"   , 'point { fill-color: #024418; }' ]
+                ]);
+
+                var options = {
+                    title: 'Education Level vs. Crime Incidents (By Neighborhood)',
+                    hAxis: {title: 'Education Level (Percent with Bachelor\'s or Higher)', minValue: 0, maxValue: 100},
+                    vAxis: {title: 'Number of Crime Incidents', minValue: 0, maxValue: 70000},
+                    legend: 'none'
+                };
+
+                var chart = new google.visualization.ScatterChart(document.getElementById('edu_neigh_chart_div'));
+
+                chart.draw(data, options);
+            }
+
+            function drawChart3() {
+                var data = new google.visualization.DataTable();
+                data.addColumn('number', 'Age');
+                data.addColumn('number', 'Crime Incidents');
+                data.addColumn({type: 'string', role: 'tooltip'});
+
+                data.addRows([
+                    [ 76259.06583130728,    42324,  "A1"    ],
+                    [ 69219,     7756,   "A15"   ],
+                    [ 26569,     15383,  "A7"    ],
+                    [ 19538.9907604833,    59889,  "B2"    ],
+                    [ 23729,     42737,  "B3"    ],
+                    [ 26292,     50692,  "C11"   ],
+                    [ 55709,     27197,  "C6"    ],
+                    [ 34000.64653960758,    23826,  "D14"   ],
+                    [ 60624.05148887869,    49233,  "D4"    ],
+                    [ 46721,     20735,  "E13"   ],
+                    [ 31570,     20743,  "E18"   ],
+                    [ 41261.88070197668,    16013,  "E5"    ]
+                ]);
+
+                var options = {
+                    title: 'Per Capita Income vs. Crime Incidents (By District)',
+                    hAxis: {title: 'Per Capita Income', minValue: 0, maxValue: 100000},
+                    vAxis: {title: 'Number of Crime Incidents', minValue: 0, maxValue: 70000},
+                    legend: 'none',
+                    trendlines: { 0: {visibleInLegend: true,} }
+                };
+
+                var chart = new google.visualization.ScatterChart(document.getElementById('income_chart_div'));
+
+                chart.draw(data, options);
+            }
+
+            function drawChart4() {
+                var data = new google.visualization.DataTable();
+                data.addColumn('number', 'Age');
+                data.addColumn('number', 'Crime Incidents');
+                data.addColumn({type: 'string', role: 'tooltip'});
+                data.addColumn({type: 'string', role: 'style'});
+
+                data.addRows([
+                    [ 67994,    42324,  "Downtown - A1"  , 'point { fill-color: #f47142; }'],
+                    [ 90227,    42324,  "Beacon Hill - A1"    , 'point { fill-color: #f47142; }'],
+                    [ 81149,    42324,  "North End - A1"    , 'point { fill-color: #f47142; }'],
+                    [ 70389,    42324,  "West End - A1"   , 'point { fill-color: #f47142; }' ],
+                    [ 99073,    42324,  "South Boston Waterfront - A1"    , 'point { fill-color: #f47142; }'],
+                    [ 69219,     7756,   "Charlestown - A15"   , 'point { fill-color: #f4e541; }'],
+                    [ 26569,     15383,  "East Boston - A7"    , 'point { fill-color: #91f441; }'],
+                    [ 18932,    59889,  "Roxbury - B2"    , 'point { fill-color: #41f4d9; }'],
+                    [ 21386,    59889,  "Mission Hill - B2"    , 'point { fill-color: #41f4d9; }'],
+                    [ 23729,     42737,  "Mattapan - B3"    , 'point { fill-color: #418bf4; }'],
+                    [ 26292,     50692,  "Dorchester - C11"   , 'point { fill-color: #7941f4; }'],
+                    [ 55709,     27197,  "South Boston - C6"    , 'point { fill-color: #e241f4; }'],
+                    [ 28986,    23826,  "Allston - D14"   , 'point { fill-color: #f4415e; }'],
+                    [ 35876,    23826,  "Brighton - D14"   , 'point { fill-color: #f4415e; }'],
+                    [ 98495,    49233,  "Back Bay - D4"    , 'point { fill-color: #660514; }'],
+                    [ 75387,    49233,  "South End - D4"    , 'point { fill-color: #660514; }'],
+                    [ 24997,    49233,  "Fenway - D4"    , 'point { fill-color: #660514; }'],
+                    [ 46721,     20735,  "Jamaica Plain - E13"   , 'point { fill-color: #440336; }'],
+                    [ 31570,     20743,  "Hyde Park - E18"  , 'point { fill-color: #040244; }' ],
+                    [ 43415,    16013,  "West Roxbury - E5"   , 'point { fill-color: #024418; }' ],
+                    [ 38760,    16013,  "Roslindale - E5"   , 'point { fill-color: #024418; }' ]
+                ]);
+
+                var options = {
+                    title: 'Per Capita Income vs. Crime Incidents (By Neighborhood)',
+                    hAxis: {title: 'Per Capita Income', minValue: 0, maxValue: 100000},
+                    vAxis: {title: 'Number of Crime Incidents', minValue: 0, maxValue: 70000},
+                    legend: 'none'
+                };
+
+                var chart = new google.visualization.ScatterChart(document.getElementById('income_neigh_chart_div'));
+
+                chart.draw(data, options);
+            }
+
+            function drawChart5() {
+                var data = new google.visualization.DataTable();
+                data.addColumn('number', 'Age');
+                data.addColumn('number', 'Crime Incidents');
+                data.addColumn({type: 'string', role: 'tooltip'});
+
+                data.addRows([
+                    [ 70.4,    42324,  "A1"    ],
+                    [ 73.2,     7756,   "A15"   ],
+                    [ 32.57,     15383,  "A7"    ],
+                    [ 18.78,    59889,  "B2"    ],
+                    [ 6.8,     42737,  "B3"    ],
+                    [ 21.52,     50692,  "C11"   ],
+                    [ 78.0,     27197,  "C6"    ],
+                    [ 62.07,    23826,  "D14"   ],
+                    [ 61.88,    49233,  "D4"    ],
+                    [ 55.05,     20735,  "E13"   ],
+                    [ 24.45,     20743,  "E18"   ],
+                    [ 61.02,    16013,  "E5"    ]
+                ]);
+
+                var options = {
+                    title: 'Percentage White Non-Hispanics vs. Crime Incidents (By District)',
+                    hAxis: {title: 'Percentage White Non-Hispanics', minValue: 0, maxValue: 100},
+                    vAxis: {title: 'Number of Crime Incidents', minValue: 0, maxValue: 70000},
+                    legend: 'none',
+                    trendlines: { 0: {visibleInLegend: true,} }
+                };
+
+                var chart = new google.visualization.ScatterChart(document.getElementById('eth_chart_div'));
+
+                chart.draw(data, options);
+            }
+
+            function drawChart6() {
+                var data = new google.visualization.DataTable();
+                data.addColumn('number', 'Age');
+                data.addColumn('number', 'Crime Incidents');
+                data.addColumn({type: 'string', role: 'tooltip'});
+                data.addColumn({type: 'string', role: 'style'});
+
+                data.addRows([
+                    [ 56.40,    42324,  "Downtown - A1"  , 'point { fill-color: #f47142; }'],
+                    [ 83.40,    42324,  "Beacon Hill - A1"    , 'point { fill-color: #f47142; }'],
+                    [ 88.40,    42324,  "North End - A1"    , 'point { fill-color: #f47142; }'],
+                    [ 62.60,    42324,  "West End - A1"   , 'point { fill-color: #f47142; }' ],
+                    [ 81.40,    42324,  "South Boston Waterfront - A1"    , 'point { fill-color: #f47142; }'],
+                    [ 73.20,     7756,   "Charlestown - A15"   , 'point { fill-color: #f4e541; }'],
+                    [ 32.60,     15383,  "East Boston - A7"    , 'point { fill-color: #91f441; }'],
+                    [ 10.50,    59889,  "Roxbury - B2"    , 'point { fill-color: #41f4d9; }'],
+                    [ 43.90,    59889,  "Mission Hill - B2"    , 'point { fill-color: #41f4d9; }'],
+                    [ 6.80,     42737,  "Mattapan - B3"    , 'point { fill-color: #418bf4; }'],
+                    [ 21.50,     50692,  "Dorchester - C11"   , 'point { fill-color: #7941f4; }'],
+                    [ 77.00,     27197,  "South Boston - C6"    , 'point { fill-color: #e241f4; }'],
+                    [ 54.20,    23826,  "Allston - D14"   , 'point { fill-color: #f4415e; }'],
+                    [ 65.00,    23826,  "Brighton - D14"   , 'point { fill-color: #f4415e; }'],
+                    [ 75.50,    49233,  "Back Bay - D4"    , 'point { fill-color: #660514; }'],
+                    [ 55.90,    49233,  "South End - D4"    , 'point { fill-color: #660514; }'],
+                    [ 60.10,    49233,  "Fenway - D4"    , 'point { fill-color: #660514; }'],
+                    [ 55.10,     20735,  "Jamaica Plain - E13"   , 'point { fill-color: #440336; }'],
+                    [ 24.50,     20743,  "Hyde Park - E18"  , 'point { fill-color: #040244; }' ],
+                    [ 69.40,    16013,  "West Roxbury - E5"   , 'point { fill-color: #024418; }' ],
+                    [ 51.30,    16013,  "Roslindale - E5"   , 'point { fill-color: #024418; }' ]
+                ]);
+
+                var options = {
+                    title: 'Percentage White Non-Hispanics vs. Crime Incidents (By Neighborhood)',
+                    hAxis: {title: 'Percentage White Non-Hispanics', minValue: 0, maxValue: 100},
+                    vAxis: {title: 'Number of Crime Incidents', minValue: 0, maxValue: 70000},
+                    legend: 'none'
+                };
+
+                var chart = new google.visualization.ScatterChart(document.getElementById('eth_neigh_chart_div'));
+
+                chart.draw(data, options);
+            }
+        </script>
+        <style>
+            /* Style the tab */
+            .tab {
+                overflow: hidden;
+                border: 1px solid #ccc;
+                background-color: #f1f1f1;
+                width: 850px;
+                display: inline-block;
+            }
+
+            /* Style the buttons that are used to open the tab content */
+            .tab button {
+                background-color: inherit;
+                float: left;
+                border: none;
+                outline: none;
+                cursor: pointer;
+                padding: 14px 16px;
+                transition: 0.3s;
+            }
+
+            /* Change background color of buttons on hover */
+            .tab button:hover {
+                background-color: #ddd;
+            }
+
+            /* Create an active/current tablink class */
+            .tab button.active {
+                background-color: grey;
+            }
+
+            /* Style the tab content */
+            .tabcontent {
+                display: none;
+                padding: 6px 12px;
+                border: 1px solid #ccc;
+                border-top: none;
+            }
+            #chart_wrapper {
+                display: flex;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="tab" style="vertical-align: middle;">
+            <!--<button class="tablinks" onclick="openCity(event, 'London')"></button> -->
+            <button class="tablinks"
+                    onclick="showAll()">
+                Show All
+            </button>
+            <button class="tablinks"
+                    onclick="showEducation()">
+                Education Level vs. Crime Incidents
+            </button>
+            <button class="tablinks"
+                    onclick="showIncome()">
+                Per Capita Income vs. Crime Incidents
+            </button>
+            <button class="tablinks"
+                    onclick="showEthnicity()">
+                Percentage White Non-Hispanic vs. Crime Incidents
+            </button>
+        </div>
+        <div>
+            <br>
+            Hover over the points in the charts below to see the police district and/or Boston neighborhood.
+        </div>
+        <div id="edu_chart_div" style="width: 900px; height: 500px;"></div>
+        <div id="edu_neigh_chart_div" style="width: 900px; height: 500px;"></div>
+        <div id="income_chart_div" style="width: 900px; height: 500px;"></div>
+        <div id="income_neigh_chart_div" style="width: 900px; height: 500px;"></div>
+        <div id="eth_chart_div" style="width: 900px; height: 500px;"></div>
+        <div id="eth_neigh_chart_div" style="width: 900px; height: 500px;"></div>
+        <script>
+
+            function showEducation() {
+                document.getElementById('edu_chart_div').style.display='block';
+                document.getElementById('edu_neigh_chart_div').style.display='block';
+                document.getElementById('income_chart_div').style.display='none';
+                document.getElementById('income_neigh_chart_div').style.display='none';
+                document.getElementById('eth_chart_div').style.display='none';
+                document.getElementById('eth_neigh_chart_div').style.display='none';
+            }
+            function showIncome() {
+                document.getElementById('edu_chart_div').style.display='none';
+                document.getElementById('edu_neigh_chart_div').style.display='none';
+                document.getElementById('income_chart_div').style.display='block';
+                document.getElementById('income_neigh_chart_div').style.display='block';
+                document.getElementById('eth_chart_div').style.display='none';
+                document.getElementById('eth_neigh_chart_div').style.display='none';
+            }
+            function showEthnicity() {
+                document.getElementById('edu_chart_div').style.display='none';
+                document.getElementById('edu_neigh_chart_div').style.display='none';
+                document.getElementById('income_chart_div').style.display='none';
+                document.getElementById('income_neigh_chart_div').style.display='none';
+                document.getElementById('eth_chart_div').style.display='block';
+                document.getElementById('eth_neigh_chart_div').style.display='block';
+            }
+            function showAll() {
+                document.getElementById('edu_chart_div').style.display='block';
+                document.getElementById('edu_neigh_chart_div').style.display='block';
+                document.getElementById('income_chart_div').style.display='block';
+                document.getElementById('income_neigh_chart_div').style.display='block';
+                document.getElementById('eth_chart_div').style.display='block';
+                document.getElementById('eth_neigh_chart_div').style.display='block';
+            }
+        </script>
+    </body>
+</html>
