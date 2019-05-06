@@ -75,6 +75,7 @@ on my machine, running in normal mode takes about 1 minute, while running in tri
 <h2>Visualization</h2>
 
 To run visualization, first run execute.py as described above, and copy auth.json and config.json to /web.
+
 In /web, run:
 ```
 python app.py
