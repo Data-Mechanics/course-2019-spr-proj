@@ -1,13 +1,26 @@
 <!doctype html>
-<title>Mapped out stops : {{ name }}</title>
-<form method="post" action="updateMapBefore">
-	<input type="submit" value="Show Stops Before"/>
-</form>
+<html>
+    <head>
+        <title>Mapped out stops : {{ name }}</title>
+    </head>
 
-<form method="post" action="updateMapAfter">
-	<input type="submit" value="Show Stops After"/>
-</form>
+    <body>
+        <form method="post" action="updateMapBefore">
+            <input type="submit" value="Show Stops Before"/>
+        </form>
 
-<iframe id="serviceFrameSend" src="//dispmap.html" height="400" width="600"></iframe>
+        <form method="post" action="updateMapAfter">
+            <input type="submit" value="Show Stops After"/>
+        </form>
+        
+        <iframe id="serviceFrameSend" src="{{ url_for('static', filename= 'dispmap.html')}}" height="400" width="600"></iframe>
+        
+    </body>
+</html>
+
+
+
+
+
 <!-- <object type="text/html" data="dispmap.html"></object> -->
 
