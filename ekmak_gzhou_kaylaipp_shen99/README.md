@@ -3,7 +3,7 @@
 ## Authors
 ##### Ellen Mak, Xiaoyi Gabby Zhou, Kayla Ippongi, Ziyu Shen (ekmak_gzhou_kaylaipp_shen99)
 
-## Introduction
+# Introduction
 Gentrification has long been a problem of the Greater Boston area. South Boston Neighborhood Development Corporation (NDC) aims on preserving and creating affordable housing in order to improve the quality of life in the neighborhood. NDC looks into finding target properties and retrieve contact information of owners before target housing is posted on to market for selling. In this project, our goal is to identify target buildings for South Boston NDC to consider purchasing and contact the property owners.
  
 
@@ -20,7 +20,7 @@ Following are the datasets we retrieved from public resources available online:
 * Boston Permit Database
 	* List of approved building permits for construction in Boston
 
-## <b>Project 1: Derived Datasets</b>
+# <b>Project 1: Derived Datasets</b>
 
 <b>Dataset 1(num_per_street1):</b> We performed <b>union</b> on the Boston address and accessing datasets, took counts for every address, and removed any duplicates. Then, we called <b>map reduce</b> to <b>aggregate sum</b> on every address in order to get the number of properties/buildings per street. Our new datasets show 355 unique streets in South Boston. 
 
