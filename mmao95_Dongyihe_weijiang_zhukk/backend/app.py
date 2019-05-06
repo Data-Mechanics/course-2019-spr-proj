@@ -1,9 +1,9 @@
 from flask import Flask, url_for, send_file
-# from flask_cors import *
+from flask_cors import *
 import json
 
 app = Flask(__name__)
-# CORS(app, resources=r'/*')
+CORS(app, resources=r'/*')
 
 
 def reduce(f, R):

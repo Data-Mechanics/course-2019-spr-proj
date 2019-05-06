@@ -22,7 +22,7 @@ export default {
         ziplist: ["02108", "02109", "02110", "02111", "02113", "02114", "02115", "02116", "02118", "02119", "02120", "02121", "02122", "02124", "02125", "02126", "02127", "02128", "02129", "02130", "02131", "02132", "02134", "02135", "02136", "02151", "02152", "02163", "02199", "02203", "02210", "02215", "02467"],
         layers: {
             'candidate': true,
-            'clusters': true
+            'clusters': false
         },
         map: null
     }},
@@ -149,28 +149,7 @@ export default {
     }
 }
 </script>
-<style lang="stylus">
-    // #menu button
-    //     font-size: 13px;
-    //     color: #404040;
-    //     display: block;
-    //     margin: 0;
-    //     padding: 0;
-    //     padding: 10px;
-    //     text-decoration: none;
-    //     border-bottom: 1px solid rgba(0,0,0,0.25);
-    //     text-align: center;
-    //     &:last-child
-    //         border none
-    //     &:hover
-    //         background #f8f8f8
-    //         color #404040
-    //     .active 
-    //         background #3887be
-    //         color #fff
-    //         &:hover
-    //             background #3074a4
- 
+<style lang="stylus"> 
     #menu
         position absolute
         right 0
