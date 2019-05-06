@@ -44,7 +44,7 @@ Transformation 3: for each college and university, find out how many Bluebike tr
 
 I set 2 constraints for the datasets I got above, and solve one constraint satisfaction problem and two optimization
 
-Constraint 1: Add some new bike stations nearby colleges and universities and achieve this situation: for all colleges and universities, the ratio of around trip number and around station number are less than 600? First I solved the satisfaction problem with new bike station number 30, and after get the answer 'No', calculate what is the smallest number of new bike stations to satisfy the constraint (the answer for this optimization problem is 55). Implemented in OptimizationIdealStations.py.
+Constraint 1: Add some new bike stations nearby colleges and universities and achieve this situation: for all colleges and universities, the ratio of around trip number and around station number are less than 600? First I solved the satisfaction problem with new bike station number 20, and after get the answer 'No', calculate what is the smallest number of new bike stations to satisfy the constraint (the answer for this optimization problem is 55). Implemented in OptimizationIdealStations.py.
 
 Constraint 2: Add that much bike stations at one time is not practical, so how about add a small number (let's say X) of new bike stations, and let the average ratio of around trip number and around station number (of all colleges and universities) as small as possible? I solved this optimization problem using X = 1 in OptimizationLimitStations.py.
 
