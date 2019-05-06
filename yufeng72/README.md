@@ -59,3 +59,8 @@ Run in trial mode (where retrive function read less data and the algorithm work 
 python execute.py yufeng72 --trial
 ```
 on my machine, running in normal mode takes about 1 minute, while running in trial mode takes less than 10 seconds.
+
+
+
+<h2>Visualization</h2>
+To
