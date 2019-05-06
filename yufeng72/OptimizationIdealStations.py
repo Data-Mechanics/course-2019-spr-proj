@@ -34,6 +34,7 @@ class OptimizationIdealStations(dml.Algorithm):
         idealResult = []
 
         for i in range(len(collegeStations)):
+            # print(i)
             stationNum = collegeStations[i]['HubwayStationNearby']
             tripNum = collegeTrips[i]['TripToSchool']
             if stationNum != 0:

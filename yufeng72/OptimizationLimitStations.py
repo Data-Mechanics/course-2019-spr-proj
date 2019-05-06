@@ -35,6 +35,7 @@ class OptimizationLimitStations(dml.Algorithm):
 
         collegeNumber = len(collegeStations)
         pos = list(range(collegeNumber))
+        # print(pos)
 
         def averageTripStationRateAddOne(position):
             rateSum = 0.0
