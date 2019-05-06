@@ -85,4 +85,4 @@ python app.py
 
 <h2>Poster and Report</h2>
 
-Check my [poster](https://github.com/AllenChenGH/course-2019-spr-proj/blob/master/yufeng72/CS504_poster_Yufeng_Chen.pdf) and [report](https://github.com/AllenChenGH/course-2019-spr-proj/blob/master/yufeng72/CS504_report_Yufeng_Chen.pdf) for more details.
+Check my [poster](https://github.com/AllenChenGH/course-2019-spr-proj/blob/master/yufeng72/CS504_poster_Yufeng_Chen.pdf) and [report](https://github.com/AllenChenGH/course-2019-spr-proj/blob/master/yufeng72/CS504_report_Yufeng_Chen.pdf) for more details about my project.
