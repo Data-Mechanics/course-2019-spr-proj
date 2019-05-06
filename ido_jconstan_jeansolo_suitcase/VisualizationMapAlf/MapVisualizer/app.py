@@ -7,6 +7,7 @@ import urllib.request
 import os
 
 app = Flask(__name__)
+key = 'AIzaSyAePvzBOkxdh5YYcgTQjhY9bHWlNEn3Sog'
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 contributor = 'ido_jconstan_jeansolo_suitcase'
 
@@ -16,7 +17,7 @@ def hello():
 	gmapEmpty = gmplot.GoogleMapPlotter(42.283772, 
 	                                -71.347290, 13) 
 
-	gmapEmpty.apikey = 'AIzaSyAePvzBOkxdh5YYcgTQjhY9bHWlNEn3Sog'
+	gmapEmpty.apikey = key
 
 	gmapEmpty.draw( "templates\\dispmap.html" ) 
 	gmapEmpty.draw( "static\\dispmap.html" ) 
@@ -51,7 +52,7 @@ def updateMapBefore():
 	gmapBefore.scatter( latitude_list, longitude_list, '#0000FF', 
 	                              size = 40, marker = False ) 
 
-	gmapBefore.apikey = 'AIzaSyAePvzBOkxdh5YYcgTQjhY9bHWlNEn3Sog'
+	gmapBefore.apikey = key
 
 	gmapBefore.draw('static\\dispmap.html' ) 
 	gmapBefore.draw('templates\\dispmap.html' )
@@ -350,6 +351,19 @@ def updateMapAfter():
 
 	gmapAfter.draw( "static\\dispmap.html" ) 
 	gmapAfter.draw( "templates\\dispmap.html" ) 
+
+	return render_template('busstops.html', name="test")
+
+@app.route("/resetMap", methods=['GET', 'POST'])
+def resetMap():
+	gmapReset = gmplot.GoogleMapPlotter(42.283772, 
+	                                -71.347290, 13) 
+
+	gmapReset.apikey = key
+
+	gmapReset.draw('static\\dispmap.html')
+	gmapReset.draw('templates\\dispmap.html')
+
 
 	return render_template('busstops.html', name="test")
 

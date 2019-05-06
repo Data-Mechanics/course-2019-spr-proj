@@ -13,6 +13,11 @@
             <input type="submit" value="Show Stops After"/>
         </form>
 
+        <form method="post" action="resetMap">
+            <input type="submit" value="Reset Map"/>
+        </form>
+
+
         <iframe id="serviceFrameSend" src="{{ url_for('static', filename= 'dispmap.html')}}" height="400" width="600"></iframe>
         
     </body>
