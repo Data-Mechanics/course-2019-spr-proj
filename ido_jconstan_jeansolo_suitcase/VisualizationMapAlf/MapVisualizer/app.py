@@ -50,7 +50,7 @@ def updateMapBefore():
 
 	gmapBefore.apikey = 'AIzaSyAePvzBOkxdh5YYcgTQjhY9bHWlNEn3Sog'
 
-	gmapBefore.draw( "templates\\dispmap.html" ) 
+	gmapBefore.draw( "static\dispmap.html" ) 
 
 	return render_template('busstops.html', name="test")
 
@@ -344,7 +344,7 @@ def updateMapAfter():
 
 	gmapAfter.apikey = 'AIzaSyAePvzBOkxdh5YYcgTQjhY9bHWlNEn3Sog'
 
-	gmapAfter.draw( "templates\\dispmap.html" ) 
+	gmapAfter.draw( "static\dispmap.html" ) 
 
 	return render_template('busstops.html', name="test")
 
