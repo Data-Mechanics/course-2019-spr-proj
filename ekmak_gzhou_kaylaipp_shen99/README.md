@@ -22,9 +22,9 @@ Following are the datasets we retrieved from public resources available online:
 
 ## <b>Project 1: Derived Datasets</b>
 
-<b>Dataset 1(num_per_street1):</b> We performed <b>union</b> on the Boston address and accessing datasets, took counts for every address, and removed any duplicates. Then, we called <b>map reduce<b/> to <b>aggregate sum<b/> on every address in order to get the number of properties/buildings per street. Our new datasets show 355 unique streets in South Boston. 
+<b>Dataset 1(num_per_street1):</b> We performed <b>union</b> on the Boston address and accessing datasets, took counts for every address, and removed any duplicates. Then, we called <b>map reduce</b> to <b>aggregate sum</b> on every address in order to get the number of properties/buildings per street. Our new datasets show 355 unique streets in South Boston. 
 
-<b>Dataset 2 (type_amount):</b> We took two Zillow API calls (getPropertyData and getSearchResults) and combined them to get the different types of units and their average cost. We did this by first <b>filtering<b/> out only the South Boston addresses then took the <b>product</b> and took out the duplicates. Finally we combined the two datasets by taking the <b>average</b> of the amounts and <b>mapping</b> it to the respective unit type. 
+<b>Dataset 2 (type_amount):</b> We took two Zillow API calls (getPropertyData and getSearchResults) and combined them to get the different types of units and their average cost. We did this by first <b>filtering</b> out only the South Boston addresses then took the <b>product</b> and took out the duplicates. Finally we combined the two datasets by taking the <b>average</b> of the amounts and <b>mapping</b> it to the respective unit type. 
 
 <b> Dataset 3 (newly_renovated_5_years): </b> The Zillow API and Permit records were <b>unioned</b> to get the most recent constructions in South Boston. We used <b>map reduce</b> to filter out the most recent renovations that happened in the last 5 years.  
 
