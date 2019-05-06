@@ -21,24 +21,33 @@ For data storage, we use mongoDB to store and interact with data through a simpl
 In the beginning of our working pipeline, we import food inspection data from Analyze Boston. We calculate the average food violation rate for each restaurant, and then we incorporate rating data from the Yelp Fusion API. Finally, we use z3 to approach restaurant selection as a constraint satisfaction problem, where the user provides the following constraints as input: location, minimum and maximum travel distance, average rating requirement, average acceptable violations. Location is used as a starting location of where the user would like to start their day in Boston, and using GeoPy we are able to determine acceptable eateries based on the given minimum and maximum distances. Using these constraints and GeoPy we return a list of places the user can go to, which in trial mode is 5 places, and otherwise 500.
 
 ## Visualizations
-To help users get a better idea of the available eateries in Boston, we also provide visualizations of the data gathered using R. In figure 1 are a graphs showing the relationship between price range and restaurant rating. There is a positive relationship here, indicating that the more expensive a restaurant is, the better ratings it gets. And in figure 2 is a graph showing the restaurant densities, mean rating, and mean price for eateries in a neighborhood. As can be seen, Chinatown has the highest density of eateries, while North End has the highest mean rating per restaurant, and Back Bay is the most expensive neighborhood. In addition, figure 3 is a visual mapping of violation rate and Fusion rating in neighborhoods, and figure 4 shows the what type of cuisine each neighborhood has the most of; Most of North End’s eateries are Italian, and Fenway has a high density of pizza and sandwiches.
-**Figure 1:** 
+To help users get a better idea of the available eateries in Boston, we also provide visualizations of the data gathered using R. In figure 1 and 2 are a graphs showing the relationship between price range and restaurant rating. There is a positive relationship here, indicating that the more expensive a restaurant is, the better ratings it gets.
+
 ![figure1](images/figure1.png)
+**Figure 1:** Graphs showing a positive relationship between the price range and rating of a restaurant.
 
-**Figure 2:**
 ![figure2](images/figure2.png)
+**Figure 2:** Graphs showing a positive relationship between the price range and rating of a restaurant.
 
-**Figure 3:**
+In figure 3 is a graph showing the restaurant densities, mean rating, and mean price for eateries in a neighborhood. As can be seen, Chinatown has the highest density of eateries, while North End has the highest mean rating per restaurant, and Back Bay is the most expensive neighborhood.
+
 ![figure3](images/figure3.png)
+**Figure 3:** Graph showing the density, mean rating, and mean price of neighborhoods in Boston; Chinatown is the densest, North End has the highest mean ratings, and Back Bay is the most expensive.
 
-**Figure 4:**
+
+In addition, figure 4 is a visual mapping of violation rate and figure 5 is Fusion rating in neighborhoods.
+
 ![figure4](images/figure4.png)
+**Figure 4:** Visual mapping of violation rate by neighborhood.
 
-**Figure 5:**
-![figure4](images/figure5.png)
+![figure5](images/figure5.png)
+**Figure 5:** Visual mapping of average Fusion rating by neighborhood.
 
-**Figure 6:**
-![figure4](images/figure6.png)
+
+And figure 6 shows the what type of cuisine each neighborhood has the most of; Most of North End’s eateries are Italian, and Fenway has a high density of pizza and sandwiches. 
+
+![figure6](images/figure6.png)
+**Figure 6:** Showing of neighborhood restaurant county by cuisine.
 
 ## How to Run
 
