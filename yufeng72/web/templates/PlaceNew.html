@@ -13,7 +13,7 @@
 <body bgcolor="#EEEEEE">
 <div id="content" align="center">
 
-    <h1><font face="Baskerville Old Face" color="#236BBD">10 Optimal Places for New Stations</font></h1>
+    <h1><font face="Baskerville Old Face" color="#236BBD">10 Optimal Locations for New Stations</font></h1>
 
     <div id="mapid" style="width: 800px; height: 800px;"></div>
 
@@ -68,16 +68,12 @@
         .addTo(myMap);
     '{% endfor %}'
 
-    L.marker([42.3518, -71.0872], {icon: newBikeIcon}).bindPopup('Average Congestion Score: 1039.68').setZIndexOffset(100).addTo(myMap);
-    L.marker([42.3463, -71.0891], {icon: newBikeIcon}).bindPopup('Average Congestion Score: 1054.27').setZIndexOffset(100).addTo(myMap);
-    L.marker([42.3624, -71.0701], {icon: newBikeIcon}).bindPopup('Average Congestion Score: 1055.53').setZIndexOffset(100).addTo(myMap);
-    L.marker([42.3551, -71.0738], {icon: newBikeIcon}).bindPopup('Average Congestion Score: 1058.77').setZIndexOffset(100).addTo(myMap);
-    L.marker([42.3408, -71.0875], {icon: newBikeIcon}).bindPopup('Average Congestion Score: 1059.57').setZIndexOffset(100).addTo(myMap);
-    L.marker([42.3534, -71.0567], {icon: newBikeIcon}).bindPopup('Average Congestion Score: 1064.53').setZIndexOffset(100).addTo(myMap);
-    L.marker([42.3420, -71.1050], {icon: newBikeIcon}).bindPopup('Average Congestion Score: 1065.24').setZIndexOffset(100).addTo(myMap);
-    L.marker([42.3485, -71.0855], {icon: newBikeIcon}).bindPopup('Average Congestion Score: 1070.88').setZIndexOffset(100).addTo(myMap);
-    L.marker([42.3461, -71.0706], {icon: newBikeIcon}).bindPopup('Average Congestion Score: 1071.08').setZIndexOffset(100).addTo(myMap);
-    L.marker([42.3292, -71.0948], {icon: newBikeIcon}).bindPopup('Average Congestion Score: 1072.40').setZIndexOffset(100).addTo(myMap);
+    '{% for newStation in newStations %}'
+        marker = new L.marker([parseFloat('{{newStation[0]}}'), parseFloat('{{newStation[1]}}'),], {icon: newBikeIcon})
+        .bindPopup('Average Congestion Score: ' + '{{newStation[2]}}')
+        .setZIndexOffset(100)
+        .addTo(myMap);
+    '{% endfor %}'
     </script>
 
 </div>

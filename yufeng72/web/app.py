@@ -90,8 +90,15 @@ def addNew():
         long = row['Longitude']
         numb = row['HubwayStationNearby']
         schoolResult.append([name, lati, long, numb])
+    newStationList = repo['yufeng72.limitStations'].find()
+    newStationResult = []
+    for row in newStationList:
+        lati = row['Latitude']
+        long = row['Longitude']
+        avsc = row['AvgScore']
+        newStationResult.append([lati, long, avsc])
     repo.logout()
-    return render_template("PlaceNew.html", stations=stationResult, schools=schoolResult)
+    return render_template("PlaceNew.html", stations=stationResult, schools=schoolResult, newStations=newStationResult)
 
 
 if __name__ == '__main__':
