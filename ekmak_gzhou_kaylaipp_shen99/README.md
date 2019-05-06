@@ -5,19 +5,19 @@
 
 # Introduction
 Gentrification has long been a problem of the Greater Boston area. South Boston Neighborhood Development Corporation (NDC) aims on preserving and creating affordable housing in order to improve the quality of life in the neighborhood. NDC looks into finding target properties and retrieve contact information of owners before target housing is posted on to market for selling. In this project, our goal is to identify target buildings for South Boston NDC to consider purchasing and contact the property owners.
- 
+
 
 ## Data Portals and Datasets
 Following are the datasets we retrieved from public resources available online:
-*  Boston Street Address Management 
+*  [Boston Street Address Management](https://data.boston.gov/dataset/live-street-address-management-sam-addresses/resource/26933f1b-bcaa-4241-b0f2-7933570fd52d)
 	* All addresses in Boston
-* Boston property assessment
+* [Boston property assessment](https://data.boston.gov/dataset/property-assessment/resource/fd351943-c2c6-4630-992d-3f895360febd)
 	* Tax assesment for properties in Boston
-* Zillow Search Results Data
+* [Zillow Search Results Data](http://datamechanics.io/data/zillow_getsearchresults_data2.json)
 	* Zillow valution/zestimate, full address, zillow links 
-* Zillow Property Results DAta
+* [Zillow Property Results Data](http://datamechanics.io/data/zillow_property_data.json)
 	* Number of bed,baths, valuation, home description for given property 
-* Boston Permit Database
+* [Boston Permit Database](https://data.boston.gov/dataset/approved-building-permits)
 	* List of approved building permits for construction in Boston
 
 # <b>Project 1: Derived Datasets</b>
