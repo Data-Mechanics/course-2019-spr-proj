@@ -94,6 +94,5 @@ def addNew():
     return render_template("PlaceNew.html", stations=stationResult, schools=schoolResult)
 
 
-
 if __name__ == '__main__':
     app.run()

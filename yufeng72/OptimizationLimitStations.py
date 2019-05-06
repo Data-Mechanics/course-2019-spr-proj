@@ -47,6 +47,10 @@ class OptimizationLimitStations(dml.Algorithm):
                     rate = tripNum / stationNum
                     rateSum = rateSum + rate
             average = rateSum / collegeNumber
+            # print(position)
+            # print(collegeStations[position]['Latitude'])
+            # print(collegeStations[position]['Longitude'])
+            # print(average)
             return average
 
         def metric(position):
