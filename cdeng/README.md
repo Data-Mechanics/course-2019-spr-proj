@@ -13,7 +13,7 @@ The second feature visualizes the results of the algorithm and statistical analy
 Please **Notice** that the way to see those visualizations will be summarized in "How to run the project code" section. 
 
 ## Completion of final report
-I finished the final report which describes everything of this project. The report is in HTML format and it is called `Final_Report.md.html`. 
+I finished the final report which describes everything of this project. The report is in pdf format and it is called `CS504_Final_Report.pdf`. 
 
 ## Completion of poster
 I attended the poster session and talked with Professor Lapets about my project. The poster name is `CS504_Project_Poster.pdf`. 
