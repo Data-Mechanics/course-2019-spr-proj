@@ -89,11 +89,11 @@ class uber_movement_data(dml.Algorithm):
         doc.add_namespace('dat', 'http://datamechanics.io/data/')  # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/')  # The event log.
-        doc.add_namespace('bdp', 'https://movement.uber.com/explore/boston/travel-times/query?lang=en-US')
+        doc.add_namespace('umd', 'https://movement.uber.com/explore/boston/travel-times/query?lang=en-US')
 
         this_script = doc.agent('alg:' + contributor + '#uber_data',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
-        resource = doc.entity('bdp:wc8w-nujj',
+        resource = doc.entity('umd:season4mouthly',
                               {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource',
                                'ont:Extension': 'json'})
         get_names = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
