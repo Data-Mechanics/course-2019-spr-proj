@@ -63,6 +63,7 @@ We built the web interface with Flask and Python. There are several main feature
  </p>
  
  To run the web service, go into the `web_app` directory and run `python webapp.py`
+ More specific details to run the service can be found in the readme of the `web_app` directory
 
 # Limitations and Future Work
 In the future, we would like to implement more filters to narrow target housing (e.g., transportation proximity). A limitation we encountered was we did not have access to owner data freely - while we did have property owner's name and mailing address (via Boston Tax Accessing dataset), we were unable to access their phone numbers or email, which was necessary in order to fulfill the original goal of building an automated contacting service. We were provided a Boston voter listing from Spark which had ~2,000 voter information, including age and phone number, however none of the owners from the accessing dataset were actually in the file, thus we didn't end up using that dataset. We hope to one day obtain a data set of property owners’ contact information (e.g. census, WhitePages API) to automate the contact process and expand our project. 
