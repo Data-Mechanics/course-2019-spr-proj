@@ -28,7 +28,7 @@ To help users get a better idea of the available eateries in Boston, we also pro
 
 **Figure 1:** Graphs showing a positive relationship between the price range and rating of a restaurant.
 
-Now, we try to understand the relationship between neighbourhood and price/rating. Figure 2 is a graph showing the restaurant densities, mean rating, and mean price for eateries in a neighborhood. As can be seen, Chinatown has the highest density of eateries, while North End has the highest mean rating per restaurant, and Charlestown/South Boston are the most expensive neighborhoods.
+Now, we try to understand the relationship between neighborhood and price/rating. Figure 2 is a graph showing the restaurant densities, mean rating, and mean price for eateries in a neighborhood. As can be seen, Chinatown has the highest density of eateries, while North End has the highest mean rating per restaurant, and Charlestown/South Boston are the most expensive neighborhoods.
 
 ![figure2](images/figure_4.png)
 
@@ -56,7 +56,7 @@ To further understand the relationship between variables in our dataset, we cond
 
 ### Rating and Price
 
-From our EDA above, we noticed that there is a relationship between price and rating. So, we transformed the price range into a continuous variable (from 1 to 4, repective with the number of dollar signs a restaurnt holds). We assume this transformation is legitimate since we want to understand the increasing relationship of price in comparison with rating. We saved this variable as `price_new`. Then, we calculated their p-value (using t-test distribution) and their correlation coefficient. And then model the results using a linear regression model.
+From our EDA above, we noticed that there is a relationship between price and rating. So, we transformed the price range into a continuous variable (from 1 to 4, respective with the number of dollar signs a restaurant holds). We assume this transformation is legitimate since we want to understand the increasing relationship of price in comparison with rating. We saved this variable as `price_new`. Then, we calculated their p-value (using t-test distribution) and their correlation coefficient. And then model the results using a linear regression model.
 
 ![figure6](images/figure_3.png)
 
@@ -66,11 +66,11 @@ From figure 6, we can see that the fitted line has barely a positive slope (0.02
 
 ### Neighborhood Density and Rating
 
-Now, we try to find a correlation between density of a neighbourhood (restaurant per acre) and the mean_rating. First, to get this dataset, we projected the zip code each of the restaurants into its respective neighbourhood (an approximate). Then, we merged it with the Analyze Boston Neighborhood Dataset to get the volume in acres. We found that the correlation coefficient between density and mean_rating is 0.2 which is a high number. Furthermore, we fitted these variables by using a linear regression model and found that the coefficient is 0.05372 (with a p-value of 0.009, highly significant). Therefore, we conclude that density matters in terms of average rating of the restaurant. So highly busy/dense neighbourhoods have higher quality restaurants. Back Bay and North End are the prime example for the City of Boston.
+Now, we try to find a correlation between density of a neighborhood (restaurant per acre) and the mean_rating. First, to get this dataset, we projected the zip code each of the restaurants into its respective neighborhood (an approximate). Then, we merged it with the Analyze Boston Neighborhood Dataset to get the volume in acres. We found that the correlation coefficient between density and mean_rating is 0.2 which is a high number. Furthermore, we fitted these variables by using a linear regression model and found that the coefficient is 0.05372 (with a p-value of 0.009, highly significant). Therefore, we conclude that density matters in terms of average rating of the restaurant. So highly busy/dense neighborhoods have higher quality restaurants. Back Bay and North End are the prime example for the City of Boston.
 
 ![figure7](images/figure_5.png)
 
-**Figure 7:** Graphs showing a positive relationship between the density and average rating of a neighbourhood.
+**Figure 7:** Graphs showing a positive relationship between the density and average rating of a neighborhood.
 
 ### Violation Rate and Rating
 
@@ -79,7 +79,21 @@ We found that their correlation coefficient is equal to -0.08, which denotes a n
 
 ![figure8](images/figure_7.png)
 
-**Figure 8:** Graphs showing a positive relationship between the density and average rating of a neighbourhood.
+**Figure 8:** Graphs showing a positive relationship between the density and average rating of a neighborhood.
+
+## Conclusion
+
+In conclusion, we found that price does not matter when choosing to eat a quality meal. Furthermore, we also found that areas with densely located restaurants have a higher rating (positive correlation between density and mean_rating). Nevertheless, we found that there is a negative correlation between violation rate and rating. This means that the more violations the restaurant received, the less rated it is; however, it was not significant since the correlation coefficient was around -0.08. These are interesting findings since expectations should be met when enjoying a pricey meal or when a restaurant is highly rated. This comes into questioning the accuracy of our Yelp data as in whether we should essentially trust reviewers' opinions. 
+
+## Future Works
+
+For future works, here are some things we can improve on:
+- Since for the time being we are only looking at trends in Boston, we can potentially expand the database to observe trends of eateries in other cities and compare the results with those of Boston.
+- The data provided by Yelp API contains many missing values so our findings may be inconclusive in nature (around 400 eateries have no price range). 
+- Analyze Boston updates some of its datasets daily. Our current project has yet to tackle the ability of regenerating daily analysis. This would be a helpful feature as it provides valuable insight over time. Also, this could pose an opportunity to understand the trends of certain restaurants and their downfalls/success.
+- It would be a great feature if we were able to obtain written reviews data (Yelp API only returns 3) and use NLP to get the best dishes a restaurant has to offer. This can be provided as a feature by the webservice.
+- We also notice a possible correlation between violation rate and mean household income of the neighborhood. However, this need further studies to uncover deeper potential causes.
+
 
 ## How to Run
 
