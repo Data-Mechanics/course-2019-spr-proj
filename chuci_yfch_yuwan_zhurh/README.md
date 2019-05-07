@@ -20,6 +20,9 @@ For the Health and Uber dataset, first of all,at the health_uber_input.py, we re
 Project3:
 </p>
 <p>
-For the first visualization graph, visit the `project3_webservice.html`. For the second one, please first put `index.html` and `final_json.json` in the same folder, then run `http-server .` on your terminal. After that, you should get a url from your terminal. By visiting this url, you should be able to view a graph like this:
-<img src="https://github.com/yizheshexin/course-2019-spr-proj/blob/master/chuci_yfch_yuwan_zhurh/project3_visualization2.png" style="max-width:100%;">
+For the project 3, we choose to create two interactive web-based visualization that can be displayed in a standard web browser. </p>
+<p>For the first visualization, we create a interactive web-based map using Leaflet to show our project 2's k-mean result. You can run it by visiting the `project3_webservice.html`. And when you click each point in the map, the map will tell you the point's corresponding k, which is the interactive part that we implement.</p> 
+<p><img src="https://github.com/yizheshexin/course-2019-spr-proj/blob/master/chuci_yfch_yuwan_zhurh/project3_visualization1.png" style="max-width:100%;"></p>
+<p>For the second visualization, we create a interactive web-based map using Echart.To run the program. please first put `index.html` and `final_json.json` in the same folder, then run `http-server .` on your terminal. After that, you should get a url from your terminal. By visiting this url, you should be able to view a graph like this:</p>
+<p><img src="https://github.com/yizheshexin/course-2019-spr-proj/blob/master/chuci_yfch_yuwan_zhurh/project3_visualization2.png" style="max-width:100%;"></p>
 </p>
