@@ -20,7 +20,7 @@ from io import StringIO
 import json
 import pymongo
 
-class street_clustered_location(dml.Algorithm):
+class select_candidate(dml.Algorithm):
     contributor = 'mmao95_Dongyihe_weijiang_zhukk'
     reads = []
     writes = []
