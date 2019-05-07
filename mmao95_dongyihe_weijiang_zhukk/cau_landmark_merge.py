@@ -13,7 +13,7 @@ import numpy as np
 
 
 class cau_landmark_merge(dml.Algorithm):
-    contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+    contributor = 'mmao95_dongyihe_weijiang_zhukk'
     reads = [contributor + '.colleges_and_universities',
              contributor + '.landmarks']
     writes = [contributor + '.cau_landmark_merge']
@@ -21,7 +21,7 @@ class cau_landmark_merge(dml.Algorithm):
     @staticmethod
     def execute(trial=False):
         startTime = datetime.datetime.now()
-        contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+        contributor = 'mmao95_dongyihe_weijiang_zhukk'
         reads = [contributor + '.colleges_and_universities',
                  contributor + '.landmarks']
         writes = [contributor + '.cau_landmark_merge']
@@ -112,22 +112,29 @@ class cau_landmark_merge(dml.Algorithm):
 
         this_script = doc.agent('alg:' + contributor + '#cau_landmark_merge', {
                                 prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
-        resource = doc.entity('bdp:wc8w-nujj', {'prov:label': '311, Service Requests',
-                                                prov.model.PROV_TYPE: 'ont:DataResource', 'ont:Extension': 'json'})
-        get_names = doc.activity(
+        res_cau = doc.entity('dat:'+contributor+'#colleges_and_universities', {prov.model.PROV_LABEL:'Colleges and Universities', prov.model.PROV_TYPE:'ont:DataSet'})
+        res_landmark = doc.entity('dat:'+contributor+'#landmarks', {prov.model.PROV_LABEL:'Landmark', prov.model.PROV_TYPE:'ont:DataSet'})
+
+        filter_names = doc.activity(
             'log:uuid' + str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(get_names, this_script)
-        doc.usage(get_names, resource, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:Retrieval',
-                   'ont:Computation': 'Data cleaning'
+        doc.wasAssociatedWith(filter_names, this_script)
+        doc.usage(filter_names, res_cau, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:Computation',
+                   'ont:Computation': 'Selection'
+                   }
+                  )
+        doc.usage(filter_names, res_landmark, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:Computation',
+                   'ont:Computation': 'Selection'
                    }
                   )
 
-        fp = doc.entity('dat:' + contributor + '#cau_landmark_merge', {
+        result = doc.entity('dat:' + contributor + '#cau_landmark_merge', {
                         prov.model.PROV_LABEL: 'CAU and Landmark Merge', prov.model.PROV_TYPE: 'ont:DataSet'})
-        doc.wasAttributedTo(fp, this_script)
-        doc.wasGeneratedBy(fp, get_names, endTime)
-        doc.wasDerivedFrom(fp, resource, get_names, get_names, get_names)
+        doc.wasAttributedTo(result, this_script)
+        doc.wasGeneratedBy(result, filter_names, endTime)
+        doc.wasDerivedFrom(result, res_cau, filter_names, filter_names, filter_names)
+        doc.wasDerivedFrom(result, res_landmark, filter_names, filter_names, filter_names)
 
         repo.logout()
 

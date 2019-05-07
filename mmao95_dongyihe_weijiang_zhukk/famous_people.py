@@ -9,14 +9,14 @@ import pandas as pd
 import numpy as np
 
 class famous_people(dml.Algorithm):
-    contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+    contributor = 'mmao95_dongyihe_weijiang_zhukk'
     reads = []
     writes = [contributor + '.famous_people']
 
     @staticmethod
     def execute(trial = False):
         startTime = datetime.datetime.now()
-        contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+        contributor = 'mmao95_dongyihe_weijiang_zhukk'
         writes = [contributor + '.famous_people']
         
         # Set up the database connection.

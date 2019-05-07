@@ -12,14 +12,14 @@ import pymongo
 
 
 class colleges_and_universities(dml.Algorithm):
-    contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+    contributor = 'mmao95_dongyihe_weijiang_zhukk'
     reads = []
     writes = [contributor + '.colleges_and_universities']
 
     @staticmethod
     def execute(trial=False):
         startTime = datetime.datetime.now()
-        contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+        contributor = 'mmao95_dongyihe_weijiang_zhukk'
         writes = [contributor + '.colleges_and_universities']
 
         # Set up the database connection.

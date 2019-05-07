@@ -10,7 +10,7 @@ from random import shuffle
 from math import sqrt
 
 class candidate_res(dml.Algorithm):
-    contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+    contributor = 'mmao95_dongyihe_weijiang_zhukk'
     reads = [contributor + '.streetbook_alternate',contributor + '.streetbook_filtered',contributor + '.cau_landmark_merge']
     writes = [contributor + '.candidate_res']
     @staticmethod
@@ -52,7 +52,7 @@ class candidate_res(dml.Algorithm):
                 return cov(x, y)/(stddev(x)*stddev(y))
             
         start_time = datetime.datetime.now()
-        contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+        contributor = 'mmao95_dongyihe_weijiang_zhukk'
         reads = [contributor + '.streetbook_alternate',contributor + '.streetbook_filtered',contributor + '.cau_landmark_merge']
         writes = [contributor + '.candidate_res']
         client = dml.pymongo.MongoClient()
