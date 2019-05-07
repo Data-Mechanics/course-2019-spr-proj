@@ -20,53 +20,56 @@ For data storage, we use mongoDB to store and interact with data through a simpl
 ## Algorithms and Analysis Techniques
 In the beginning of our working pipeline, we import food inspection data from Analyze Boston. We calculate the average food violation rate for each restaurant, and then we incorporate rating data from the Yelp Fusion API. Finally, we use z3 to approach restaurant selection as a constraint satisfaction problem, where the user provides the following constraints as input: location, minimum and maximum travel distance, average rating requirement, average acceptable violations. Location is used as a starting location of where the user would like to start their day in Boston, and using GeoPy we are able to determine acceptable eateries based on the given minimum and maximum distances. Using these constraints and GeoPy we return a list of places the user can go to, which in trial mode is 5 places, and otherwise 500.
 
-## Visualizations and Statistical Analysis
+## Exploratory Data Analysis 
+
 To help users get a better idea of the available eateries in Boston, we also provide visualizations of the data gathered using R. In figure 1 is a graph that shows the relationship between price range and restaurant rating. There is a positive relationship here, indicating that the more expensive a restaurant is, the better ratings it gets. There are no one-star reviewed restaurant within the price range of '$$$$' which is somewhat expected. 
 
 ![figure1](images/figure1.png)
-
 **Figure 1:** Graphs showing a positive relationship between the price range and rating of a restaurant.
 
-To further understand their relationship, we transformed the price range into a continuous variable (from 1 to 4, repective with the number of dollar signs a restaurnt holds). We assume this transformation is legitimate since we want to understand the increasing relationship of price in comparison with rating. We saved this variable as `price_new`. Then, we calculated their p-value (using t-test distribution) and their correlation coefficient. And then model the results using a linear regression model.
+Now, we try to understand the relationship between neighbourhood and price/rating. Figure 2 is a graph showing the restaurant densities, mean rating, and mean price for eateries in a neighborhood. As can be seen, Chinatown has the highest density of eateries, while North End has the highest mean rating per restaurant, and Charlestown/South Boston are the most expensive neighborhoods.
 
-![figure2](images/figure_3.png)
+![figure2](images/figure_4.png)
+**Figure 2:** Graph showing the density, mean rating, and mean price of neighborhoods in Boston; Chinatown is the densest, North End has the highest mean ratings, and Charlestown/South Boston is the most expensive.
 
-**Figure 2:** Graphs showing a positive relationship between the price range and rating of a restaurant.
+In addition, figure 3 is a visual mapping of violation rate and figure 4 is a visual of mean rating in neighborhoods.
 
-From figure 2, we can see that the fitted line has barely a positive slope (0.02016 coefficient). And the price and rating correlation coefficient is equal to 0.02 with a significant p-value (2.2e-16). This means that there is no real correlation which is interesting to note that good quality restaurants can be cheap and bad quality restaurants can also be expensive. However, these findings are all based on yelp reviewers which can be biased. 
+![figure3](images/viol.png)
+**Figure 3:** Visual mapping of violation rate by neighborhood.
 
-Now, we try to understand the relationship between neighbourhood and price/rating. Figure 3 is a graph showing the restaurant densities, mean rating, and mean price for eateries in a neighborhood. As can be seen, Chinatown has the highest density of eateries, while North End has the highest mean rating per restaurant, and Charlestown/South Boston are the most expensive neighborhoods.
+![figure4](images/rating.png)
+**Figure 4:** Visual mapping of average rating by neighborhood.
 
-![figure3](images/figure_4.png)
+And figure 5 shows the what type of cuisine each neighborhood has the most of; Most of North End’s eateries are Italian, and Chinatown has a high density of chinese food and Back Bay has a high amount of hotels/sandwiches/cocktailbars. 
 
-**Figure 3:** Graph showing the density, mean rating, and mean price of neighborhoods in Boston; Chinatown is the densest, North End has the highest mean ratings, and Charlestown/South Boston is the most expensive.
+![figure5](images/table.png)
+**Figure 5:** Showing of neighborhood restaurant count by cuisine.
 
-Now, we try to find a correlation between density of a neighbourhood (restaurant per acre) and the mean_rating. The correlation coefficient between density and mean_rating is 0.2 which is a high number. Furthermore, we fitted these variables by using a linear regression model and found that the coefficient is 0.05372 (with a p-value of 0.009, highly significant). Therefore, we conclude that density matters in terms of average rating of the restaurant. So highly busy/dense neighbourhoods have higher quality restaurants. Back Bay and North End are the prime example for Boston.
+## Statistical Analysis and Modelling
 
-![figure5](images/figure_5.png)
+To further understand the relationship between variables in our dataset, we conduct many statistical analysis techniques.
 
-**Figure 4:** Graphs showing a positive relationship between the density and average rating of a neighbourhood.
+### Rating and Price
 
-In addition, figure 5 is a visual mapping of violation rate and figure 6 is a visual of mean rating in neighborhoods.
+From our EDA above, we noticed that there is a relationship between price and rating. So, we transformed the price range into a continuous variable (from 1 to 4, repective with the number of dollar signs a restaurnt holds). We assume this transformation is legitimate since we want to understand the increasing relationship of price in comparison with rating. We saved this variable as `price_new`. Then, we calculated their p-value (using t-test distribution) and their correlation coefficient. And then model the results using a linear regression model.
 
-![figure4](images/viol.png)
+![figure6](images/figure_3.png)
+**Figure 6:** Graphs showing a positive relationship between the price range and rating of a restaurant.
 
-**Figure 5:** Visual mapping of violation rate by neighborhood.
+From figure 6, we can see that the fitted line has barely a positive slope (0.02016 coefficient). And the price and rating correlation coefficient is equal to 0.02 with a significant p-value (2.2e-16). This means that there is no real correlation which is interesting to note: good quality restaurants can be cheap and bad quality restaurants can also be expensive. However, these findings are all based on yelp reviewers which can be biased. 
 
-![figure5](images/rating.png)
+### Neighborhood Density and Rating
 
-**Figure 5:** Visual mapping of average rating by neighborhood.
+Now, we try to find a correlation between density of a neighbourhood (restaurant per acre) and the mean_rating. First, to get this dataset, we projected the zip code each of the restaurants into its respective neighbourhood (an approximate). Then, we merged it with the Analyze Boston Neighborhood Dataset to get the volume in acres. We found that the correlation coefficient between density and mean_rating is 0.2 which is a high number. Furthermore, we fitted these variables by using a linear regression model and found that the coefficient is 0.05372 (with a p-value of 0.009, highly significant). Therefore, we conclude that density matters in terms of average rating of the restaurant. So highly busy/dense neighbourhoods have higher quality restaurants. Back Bay and North End are the prime example for the City of Boston.
+
+![figure7](images/figure_5.png)
+**Figure 7:** Graphs showing a positive relationship between the density and average rating of a neighbourhood.
 
 Also, we tried to understand whether the violation rate of a given restaurant affects the quality of a food establishment or vice-verse. Therefore, we conducted some statistical analysis on these variables to further understand their relationship.
 We found that their correlation coefficient is equal to -0.08, which denotes a negative relationship. The higher the violation, the lower the rating. Here's a plot of the linear regression model. The slope of the fitted line is negative (-0.0023). 
 
-![figure7](images/figure_7.png)
-
-And figure 6 shows the what type of cuisine each neighborhood has the most of; Most of North End’s eateries are Italian, and Chinatown has a high density of chinese food and Back Bay has a high amount of hotels/sandwiches/cocktailbars. 
-
-![figure6](images/table.png)
-
-**Figure 7:** Showing of neighborhood restaurant count by cuisine.
+![figure8](images/figure_7.png)
+**Figure 8:** Graphs showing a positive relationship between the density and average rating of a neighbourhood.
 
 ## How to Run
 
