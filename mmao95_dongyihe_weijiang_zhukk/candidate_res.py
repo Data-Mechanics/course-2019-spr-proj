@@ -111,20 +111,12 @@ class candidate_res(dml.Algorithm):
         doc.add_namespace('dat', 'http://datamechanics.io/data/')  # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/')  # The event log.
-        doc.add_namespace('bdp', 'https://movement.uber.com/explore/boston/travel-times/query?lang=en-US')
-
+        
         this_script = doc.agent('alg:' + contributor + '#uber_data',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
-        resource = doc.entity('bdp:wc8w-nujj',
-                              {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource',
-                               'ont:Extension': 'json'})
+        
         get_names = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(get_names, this_script)
-        doc.usage(get_names, resource, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:Retrieval',
-                   'ont:Computation': 'Data cleaning'
-                   }
-                  )
 
         fp = doc.entity('dat:' + contributor + '#streetbook_alternate',
                         {prov.model.PROV_LABEL: 'Streetbook Alternate', prov.model.PROV_TYPE: 'ont:DataSet'})
@@ -134,6 +126,11 @@ class candidate_res(dml.Algorithm):
                         {prov.model.PROV_LABEL: 'Cau Landmark Merge', prov.model.PROV_TYPE: 'ont:DataSet'})
         r1 = doc.entity('dat:' + contributor + '#candidate_res',
                         {prov.model.PROV_LABEL: 'Candidate Res', prov.model.PROV_TYPE: 'ont:DataSet'})
+        doc.usage(get_names, fp, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:Retrieval',
+                   'ont:Computation': 'Data cleaning'
+                   }
+                  )
         doc.wasAttributedTo(fp, this_script)
         doc.wasAttributedTo(fp1, this_script)
         doc.wasAttributedTo(fp2, this_script)
