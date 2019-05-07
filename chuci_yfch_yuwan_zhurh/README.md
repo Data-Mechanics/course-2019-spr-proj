@@ -1,3 +1,5 @@
+<p>Final report:https://github.com/yizheshexin/course-2019-spr-proj/blob/master/chuci_yfch_yuwan_zhurh/CS504%20Final%20Report.pdf</p>
+<p>Poster:https://github.com/yizheshexin/course-2019-spr-proj/blob/master/chuci_yfch_yuwan_zhurh/melancholymedallion_poster.pdf</p>
 <p>Project 1:</p>
 <p>For our Unemployment (from lmi2.detma.org and retrieved from datamechanics.io) and 2018 Governor Election dataset (from wbur.org), we did a projection on the Unemployment dataset and only kept the City and the unployment rate£¨as of Dec 2018£©fields. 
 We did the same thing on the Governor dataset and kept the Town and the voting percentage for Charlie Baker (2018 MA governor election) fields.
