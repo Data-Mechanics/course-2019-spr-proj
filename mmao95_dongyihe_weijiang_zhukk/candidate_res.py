@@ -117,11 +117,6 @@ class candidate_res(dml.Algorithm):
         
         get_names = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(get_names, this_script)
-        doc.usage(get_names, resource, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:Retrieval',
-                   'ont:Computation': 'Data cleaning'
-                   }
-                  )
 
         fp = doc.entity('dat:' + contributor + '#streetbook_alternate',
                         {prov.model.PROV_LABEL: 'Streetbook Alternate', prov.model.PROV_TYPE: 'ont:DataSet'})
@@ -131,6 +126,11 @@ class candidate_res(dml.Algorithm):
                         {prov.model.PROV_LABEL: 'Cau Landmark Merge', prov.model.PROV_TYPE: 'ont:DataSet'})
         r1 = doc.entity('dat:' + contributor + '#candidate_res',
                         {prov.model.PROV_LABEL: 'Candidate Res', prov.model.PROV_TYPE: 'ont:DataSet'})
+        doc.usage(get_names, fp, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:Retrieval',
+                   'ont:Computation': 'Data cleaning'
+                   }
+                  )
         doc.wasAttributedTo(fp, this_script)
         doc.wasAttributedTo(fp1, this_script)
         doc.wasAttributedTo(fp2, this_script)
