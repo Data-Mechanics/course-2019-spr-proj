@@ -20,8 +20,10 @@ export default {
     name: 'MapViewer',
     data() {return {
         ziplist: ["02108", "02109", "02110", "02111", "02113", "02114", "02115", "02116", "02118", "02119", "02120", "02121", "02122", "02124", "02125", "02126", "02127", "02128", "02129", "02130", "02131", "02132", "02134", "02135", "02136", "02151", "02152", "02163", "02199", "02203", "02210", "02215", "02467"],
+        zipdis: [["02108", "02114"], ["02109", "02110", "02113"], ["02111"], ["02115", "02215"], ["02116"], ["02118"], ["02119"], ["02120"], ["02121", "02122", "02124", "02125"], ["02126"], ["02127"], ["02128"], ["02129"], ["02130"], ["02131"], ["02132"], ["02134"], ["02135"], ["02136"], ["02151", "02152"], ["02163"], ["02199"], ["02203"], ["02210"], ["02467"]],
         layers: {
-            'candidate': true,
+            'candidates(cluster)': true,
+            'candidates(district)': false,
             'clusters': false
         },
         map: null
@@ -30,19 +32,34 @@ export default {
         getColorMap(){
             let list = []
             list.push("match")
-            list.push(["get","ZIP5"])
-            for (let zip in this.ziplist){
-                list.push(this.ziplist[zip])
-                list.push(this.getRandomColor())
+            list.push(["get", "ZIP5"])
+            for (let zip in this.zipdis) {
+                for (let j in this.zipdis[zip]) {
+                    var col = this.getRandomColor(140, 40, 37)
+                    list.push(this.zipdis[zip][j])
+                    list.push(col)
+                }
             }
             list.push('#66ccff')
             return list
         },
-        getRandomColor(){
+        getClusterMap(){
+            let list = []
+            list.push("match")
+            list.push(["get","Cluster"])
+            var i
+            for (i=0;i<34;i++){
+                list.push(i)
+                list.push(this.getRandomColor(30, 40, 37))
+            }
+            list.push('#66ccff')
+            return list
+        },
+        getRandomColor(h, s, l){
             return '#'+convert.hsl.hex([
-                140 + Math.random() * 30, 
-                40 + Math.random() * 20, 
-                37 + Math.random() * 40])
+                h + Math.random() * 30, 
+                s + Math.random() * 20, 
+                l + Math.random() * 40])
         },
         click(layer, e){
             e.preventDefault();
@@ -66,6 +83,7 @@ export default {
         center: [-71.066, 42.325]
         });
         const colorMap = this.getColorMap();
+        const clusterMap = this.getClusterMap();
         map.on('load', function() {
             map.addSource('SS', { 
                 "type": "geojson", 
@@ -79,6 +97,10 @@ export default {
                 "type": "geojson", 
                 "data": "/data/candidates.geojson"
             });
+            map.addSource('CAND', { 
+                "type": "geojson", 
+                "data": "/data/can_district.geojson"
+            });
 
 
             map.addLayer({ 
@@ -91,13 +113,31 @@ export default {
                 }
             }); 
             map.addLayer({ 
-                "id": "candidate", 
+                "id": "candidates(cluster)", 
                 "source": "CAN", 
                 "type": "symbol", 
                 "layout": {
                     "icon-image": "marker-15",
                     "icon-size": 2.5,
+                    "text-field": "{name}",
+                    "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+                    "text-offset": [0, 0.6],
+                    "text-anchor": "top",
                     "visibility": "visible"
+                }
+            });  
+            map.addLayer({ 
+                "id": "candidates(district)", 
+                "source": "CAND", 
+                "type": "symbol", 
+                "layout": {
+                    "icon-image": "marker-15",
+                    "icon-size": 2.5,
+                    "text-field": "{name}",
+                    "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+                    "text-offset": [0, 0.6],
+                    "text-anchor": "top",
+                    "visibility": "none"
                 }
             }); 
             map.addLayer({ 
@@ -109,42 +149,10 @@ export default {
                 }, 
                 "paint": { 
                     "circle-radius": 3,
-                    "circle-color": [
-                        "match",
-                        ["get", "Cluster"],
-                        0,"#F1C40F",
-                        1,"#800080",
-                        2,"#EC7063",
-                        3,"#85C1E9",
-                        4,"#F1C40F",
-                        6,"#EC7063",
-                        7,"#85C1E9",
-                        8,"#F1C40F",
-                        9,"#EC7063",
-                        10,"#85C1E9",
-                        12,"#A3E4D7",
-                        13,"#EC7063",
-                        15,"#85C1E9",
-                        16,"#F1C40F",
-                        17,"#EC7063",
-                        19,"#85C1E9",
-                        20,"#A3E4D7",
-                        21,"#EC7063",
-                        23,"#85C1E9",
-                        24,"#F1C40F",
-                        25,"#EC7063",
-                        26,"#85C1E9",
-                        27,"#F1C40F",
-                        28,"#EC7063",
-                        30,"#A3E4D7",
-                        31,"#EC7063",
-                        33,"#F1C40F",
-                        34,"#85C1E9",
-                        /*other*/ "#800080"
-                    ]
+                    "circle-color": clusterMap
             },
             "filter": ["==", "$type", "Point"],
-        }); }); 
+            }); }); 
         this.map = map;
     }
 }

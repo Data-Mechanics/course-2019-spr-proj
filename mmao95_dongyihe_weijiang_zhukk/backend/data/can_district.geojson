@@ -1,0 +1,356 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.107238,
+          42.319626
+        ]
+      },
+      "properties": {
+        "name": "Paul Gore Ter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.15531399999999,
+          42.283204
+        ]
+      },
+      "properties": {
+        "name": "March Ter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.056369,
+          42.361177999999995
+        ]
+      },
+      "properties": {
+        "name": "Salt Ln"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.086805,
+          42.343436
+        ]
+      },
+      "properties": {
+        "name": "Westland Ave"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.062221,
+          42.375192999999996
+        ]
+      },
+      "properties": {
+        "name": "Cordis Street Ave"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.074781,
+          42.304967999999995
+        ]
+      },
+      "properties": {
+        "name": "Beechwood St"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.091132,
+          42.293911
+        ]
+      },
+      "properties": {
+        "name": "Wilbert Cir"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.05782999999998,
+          42.365282
+        ]
+      },
+      "properties": {
+        "name": "Thacher Ct"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.06593999999998,
+          42.349789
+        ]
+      },
+      "properties": {
+        "name": "Warrenton Pl"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.104367,
+          42.269534
+        ]
+      },
+      "properties": {
+        "name": "Greenfield Rd"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.056877,
+          42.331851
+        ]
+      },
+      "properties": {
+        "name": "Woodward Pl"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.06253699999999,
+          42.353099
+        ]
+      },
+      "properties": {
+        "name": "Hayward Pl"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.05845899999998,
+          42.302787999999985
+        ]
+      },
+      "properties": {
+        "name": "Duncan Pl"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.084046,
+          42.337689999999995
+        ]
+      },
+      "properties": {
+        "name": "Davenport St"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.05846199999999,
+          42.35609199999999
+        ]
+      },
+      "properties": {
+        "name": "Hawley Pl"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.119401,
+          42.259192999999996
+        ]
+      },
+      "properties": {
+        "name": "Dell Ter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.127352,
+          42.275938
+        ]
+      },
+      "properties": {
+        "name": "Chisholm Ter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.069422,
+          42.361070999999995
+        ]
+      },
+      "properties": {
+        "name": "Lindall Pl"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.10095199999999,
+          42.34676199999999
+        ]
+      },
+      "properties": {
+        "name": "Overland St"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.066901,
+          42.318856
+        ]
+      },
+      "properties": {
+        "name": "Quincefield Pl"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.05316399999998,
+          42.36236999999999
+        ]
+      },
+      "properties": {
+        "name": "Fulton St"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -70.996347,
+          42.389458999999995
+        ]
+      },
+      "properties": {
+        "name": "Leverett Ave"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.12608999999999,
+          42.354482999999995
+        ]
+      },
+      "properties": {
+        "name": "Ashford Ct"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.084115,
+          42.325593999999995
+        ]
+      },
+      "properties": {
+        "name": "Regent Pl"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.15162899999999,
+          42.34740399999999
+        ]
+      },
+      "properties": {
+        "name": "Winship Pl"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.0708,
+          42.341595
+        ]
+      },
+      "properties": {
+        "name": "Pelham Ter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.02973799999998,
+          42.345672
+        ]
+      },
+      "properties": {
+        "name": "Anchor Way"
+      }
+    }
+  ]
+}
