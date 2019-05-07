@@ -59,7 +59,7 @@ As for techinical architecture, our **Frontend** is built with [Vue.js](https://
 
 ### Map
 
-![Map](doc/map.png)
+![Map](docs/map.png)
 
 Map display library is provided by [Mapbox](https://www.mapbox.com/about/maps/) using data from [OpenStreetMap](https://www.openstreetmap.org/about/). We display 4 layers in the map:
 
@@ -70,6 +70,6 @@ Map display library is provided by [Mapbox](https://www.mapbox.com/about/maps/) 
 
 ### Word Cloud
 
-![Word Cloud](doc/wordcloud.png)
+![Word Cloud](docs/wordcloud.png)
 
 We used the [VueWordCloud](https://github.com/SeregPie/VueWordCloud) component to show street names with their sizes by weight. There are multiple word clouds, including word cloud for each district and each cluster. Some buttons is placed on the top-right corner of the card panel for user interaction or control.
