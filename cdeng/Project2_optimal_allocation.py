@@ -38,8 +38,8 @@ class Project2_optimal_allocation(dml.Algorithm):
 		station_start = list(repo['cdeng.stations_popular_start'].find().limit(2))
 		station_end = list(repo['cdeng.stations_popular_end'].find().limit(2))
 
-		print(station_start)
-		print(station_end)
+		# print(station_start)
+		# print(station_end)
 
 		reward = 2
 		cost = 1
@@ -61,7 +61,7 @@ class Project2_optimal_allocation(dml.Algorithm):
 		station_2_incoming_rate = station_end[1].get('avg_incomming_trip')
 		station_2_outgoing_rate = station_start[1].get('avg_outgoing_trip')
 
-		print('Here is the parameters for the polict iteration optimization algorithm:')
+		print('Here is the parameters for the policy iteration optimization algorithm:')
 		print('reward: %s'%reward)
 		print('cost: %s'%cost)
 		print('discount_factor: %s'%discount_factor)

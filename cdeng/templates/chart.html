@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Popular Stations</title>
+    <!-- import plugin script -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+
+<body>
+    <h1> Popular Stations Chart </h1>
+    <h2> 1. Popular Start Stations </h2>
+
+    <div id="chart_start"></div>
+    <script>
+        trace1 = {
+            x: {{labels.get('start_name') | tojson}},
+            y: {{values.get('start_data')}},
+            type: 'bar',
+            text: {{values.get('start_data') | tojson}},
+            textposition: 'auto',
+            marker: {
+                color: 'rgb(204, 204, 204)',
+                opacity: 0.5
+            }
+        }
+
+        var data = [trace1];
+
+        var layout = {
+            title: 'Popular Start Stations',
+            font: {
+                size: 12
+            }
+        };
+
+        Plotly.newPlot('chart_start', data, layout);
+    </script>
+
+
+
+    <h2> 2. Popular End Stations</h2>
+
+    <div id="chart_end"></div>
+    <script>
+        trace2 = {
+            x: {{labels.get('end_name') | tojson}},
+            y: {{values.get('end_data')}},
+            type: 'bar',
+            text: {{values.get('end_data') | tojson}},
+            textposition: 'auto',
+            marker: {
+                color: 'rgb(49, 130, 189)',
+                opacity: 0.8
+            }
+        }
+
+        var data = [trace2];
+
+        var layout = {
+            title: 'Popular End Stations',
+            font: {
+                size: 12
+            }
+        };
+
+        Plotly.newPlot('chart_end', data, layout);
+    </script>
+</body>
+
+</html>

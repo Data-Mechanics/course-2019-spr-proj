@@ -49,8 +49,8 @@ class Project2_most_popular_stations(dml.Algorithm):
 					'_id': '$Station',
 					'outgoing_trip': {'$size': '$start_trip'},
 					'dock': '$# of Docks',
-					'avg_outgoing_trip': {'$toInt': {'$divide': [{'$size': '$start_trip'}, time_num]}}
-					# 'Coordinate': {'Lat': '$Latitude', 'Long': '$Longitude'}
+					'avg_outgoing_trip': {'$toInt': {'$divide': [{'$size': '$start_trip'}, time_num]}},
+					'Coordinate': {'Lat': '$Latitude', 'Long': '$Longitude'}
 				}
 			},
 
@@ -78,8 +78,8 @@ class Project2_most_popular_stations(dml.Algorithm):
 					'_id': '$Station',
 					'incoming_trip': {'$size': '$end_trip'},
 					'dock': '$# of Docks',
-					'avg_incomming_trip': {'$toInt': {'$divide': [{'$size': '$end_trip'}, time_num]}}
-					# 'Coordinate': {'Lat': '$Latitude', 'Long': '$Longitude'}
+					'avg_incomming_trip': {'$toInt': {'$divide': [{'$size': '$end_trip'}, time_num]}},
+					'Coordinate': {'Lat': '$Latitude', 'Long': '$Longitude'}
 				}
 			},
 
