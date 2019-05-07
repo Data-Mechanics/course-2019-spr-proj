@@ -72,6 +72,8 @@ Now, we try to find a correlation between density of a neighbourhood (restaurant
 
 **Figure 7:** Graphs showing a positive relationship between the density and average rating of a neighbourhood.
 
+### Violation Rate and Rating
+
 Also, we tried to understand whether the violation rate of a given restaurant affects the quality of a food establishment or vice-verse. Therefore, we conducted some statistical analysis on these variables to further understand their relationship.
 We found that their correlation coefficient is equal to -0.08, which denotes a negative relationship. The higher the violation, the lower the rating. Here's a plot of the linear regression model. The slope of the fitted line is negative (-0.0023). 
 
