@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8' />
+<title>Change a map's style</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css' rel='stylesheet' />
+<style>
+body { margin:0; padding:0; }
+#map { position:absolute; top:0; bottom:0; width:100%; }
+</style>
+</head>
+<body>
+ 
+<style>
+    #menu {
+        background: #fff;
+        position: absolute;
+        z-index: 1;
+        top: 10px;
+        right: 10px;
+        border-radius: 3px;
+        width: 120px;
+        border: 1px solid rgba(0,0,0,0.4);
+        font-family: 'Open Sans', sans-serif;
+    }
+ 
+    #menu a {
+        font-size: 13px;
+        color: #404040;
+        display: block;
+        margin: 0;
+        padding: 0;
+        padding: 10px;
+        text-decoration: none;
+        border-bottom: 1px solid rgba(0,0,0,0.25);
+        text-align: center;
+    }
+ 
+    #menu a:last-child {
+        border: none;
+    }
+ 
+    #menu a:hover {
+        background-color: #f8f8f8;
+        color: #404040;
+    }
+ 
+    #menu a.active {
+        background-color: #3887be;
+        color: #ffffff;
+    }
+ 
+    #menu a.active:hover {
+        background: #3074a4;
+    }
+</style>
+
+
+<nav id="menu"></nav> 
+<div id='map'></div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoibW1hbzk1IiwiYSI6ImNqdXB0eHoxZjNlM200M25xZHgzMG82cDgifQ.Q2_T7ErCmRmP7Lpf26T1fg';
+var map = new mapboxgl.Map({
+container: 'map',
+style: 'mapbox://styles/mapbox/light-v10',
+zoom: 13,
+center: [-71.06, 42.35]
+});
+
+var ziplist = ["02108", "02109", "02110", "02111", "02113", "02114", "02115", "02116", "02118", "02119", "02120", "02121", "02122", "02124", "02125", "02126", "02127", "02128", "02129", "02130", "02131", "02132", "02134", "02135", "02136", "02151", "02152", "02163", "02199", "02203", "02210", "02215", "02467"]
+
+var zipdis = new Map([["02108","#F5EEF8"],["02114","#F5EEF8"],["02109","#EBDEF0"],["02110","#EBDEF0"],["02113","#EBDEF0"],["02111","#D7BDE2"],["02115","#C39BD3"],["02215","#C39BD3"],["02116","#AF7AC5"],["02118","#9B59B6"],["02119","#884EA0"],["02120","#76448A"],["02121","#633974"],["02122","#633974"],["02124","#633974"],["02125","#633974"],["02126","#512E5F"],["02127","#F4ECF7"],["02128","#E8DAEF"],["02129","#D2B4DE"],["02130","#BB8FCE"],["02131","#A569BD"],["02132","#8E44AD"],["02134","#7D3C98"],["02135","#6C3483"],["02136","#5B2C6F"],["02151","#4A235A"],["02152","#4A235A"],["02163","#7D3C98"],["02199","#AF7AC5"],["02203","#7FB3D5"],["02210","#2980B9"],["02467","#154360"]])
+
+var getColorMap = function(){
+    list = []
+    list.push("match")
+    list.push(["get","ZIP5"])
+    for (zip in ziplist){
+        list.push(ziplist[zip])
+        list.push(zipdis.get(ziplist[zip]))
+    }
+    list.push('#66ccff')
+    return list
+}
+
+var getClusterMap = function(){
+    list = []
+    list.push("match")
+    list.push(["get","Cluster"])
+    var i
+    for (i=0;i<34;i++){
+        list.push(i)
+        list.push(getRandomColor())
+    }
+    list.push('#66ccff')
+    return list
+}
+
+var getRandomColor = function(){
+  return '#'+('00000'+ (Math.random()*0x1000000<<0).toString(16)).substr(-6); 
+}
+
+map.on('load', function() { 
+    map.addSource('SS', { 
+        "type": "geojson", 
+        "data": "http://datamechanics.io/data/street.geojson"
+    });
+    map.addSource('ZIP', { 
+        "type": "geojson", 
+        "data": "http://datamechanics.io/data/ZIP_Codes.geojson"
+    });
+    map.addSource('CAN', { 
+        "type": "geojson", 
+        "data": "http://datamechanics.io/data/candidates.geojson"
+    });
+
+
+    map.addLayer({ 
+        "id": "zipcode", 
+        "source": "ZIP", 
+        "type": "fill", 
+        "paint": {
+            "fill-color": getColorMap(),
+            "fill-opacity": 0.8
+        }
+    }); 
+    map.addLayer({ 
+        "id": "candidate", 
+        "source": "CAN", 
+        "type": "symbol", 
+        "layout": {
+            "icon-image": "marker-15",
+            "icon-size": 2.5,
+            "text-field": "{name}",
+            "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+			"text-offset": [0, 0.6],
+			"text-anchor": "top",
+			"visibility": "visible"
+        }
+    }); 
+    map.addLayer({ 
+        "id": "clusters", 
+        "source": "SS", 
+        "type": "circle",
+        "layout": {
+            "visibility": "none"
+        }, 
+        "paint": { 
+            "circle-radius": 3,
+            "circle-color": getClusterMap()
+     },
+     "filter": ["==", "$type", "Point"],
+    }); 
+}); 
+
+var toggleableLayerIds = [ 'candidate', 'clusters' ];
+ 
+for (var i = 0; i < toggleableLayerIds.length; i++) {
+    var id = toggleableLayerIds[i];
+ 
+    var link = document.createElement('a');
+    link.href = '#';
+    link.className = 'active';
+    link.textContent = id;
+ 
+    link.onclick = function (e) {
+        var clickedLayer = this.textContent;
+        e.preventDefault();
+        e.stopPropagation();
+ 
+        var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
+ 
+        if (visibility === 'visible') {
+            map.setLayoutProperty(clickedLayer, 'visibility', 'none'); 
+            this.className = '';
+        } else {
+            this.className = 'active';
+            map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
+        }
+    };
+ 
+    var layers = document.getElementById('menu');
+    layers.appendChild(link);
+}
+</script>
+ 
+</body>
+</html>
