@@ -1,6 +1,7 @@
 NOTE: Chart.js and flask need to be installed
 project #3 is completely web visualization, a web app and an attempted web service with RESTful API. 
 also included are a report and poster. All files are in the project_3 directory
+
 Visualization 1: 
 Name of file: webapp_scripts/templates/donut_trial.html
 Tool used: Chart.js
