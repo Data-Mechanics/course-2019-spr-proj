@@ -55,7 +55,7 @@ Our team was also interested in determining if there was a correlation between p
 |3|1,908,919.74|493,819.63|243857832656.78|1,309,041 - 10,808,461|
 
 # Project 3: Web Interface
-We built the web interface with Flask and Python. There are several main features in the site - firstly the interactive map built with folium, filtering and listing properties based on what the user specifies and also the option to list properties that maximize their budget. Both features are used in the interactive web service we created to generate an individualized search result list for our client (SBNDC). The client can efficiently utilize budget to purchase target properties and maintain the affordable housing in South Boston neighborhood based on the optimized choices of property result list. 
+We built the web interface with Flask and Python. There are several main features in the site - firstly we have the interactive map on our site to fulfill the visualization requirement of project 3. Addionally we utilized constraint satisfaction to list targeted properties that also updates the map. Both features are used in the interactive web service we created to generate an individualized search result list for our client (SBNDC). The client can efficiently utilize budget to purchase target properties and maintain the affordable housing in South Boston neighborhood based on the optimized choices of property result list. 
 
  <p align="center"> 
     <img src="https://github.com/kaylaipp/course-2019-spr-proj/blob/master/ekmak_gzhou_kaylaipp_shen99/demo.gif" 
