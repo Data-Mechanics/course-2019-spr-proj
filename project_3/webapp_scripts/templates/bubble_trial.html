@@ -1,0 +1,121 @@
+{% extends "layout.html" %}
+{% block content %}
+	<head>
+		<title>Bubble Chart</title>
+		<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+		<script
+		  src="https://code.jquery.com/jquery-3.4.1.js"
+		  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+		  crossorigin="anonymous"></script>
+		<script src="utils.js"></script>
+		<style type="text/css">
+			canvas{
+				-moz-user-select: none;
+				-webkit-user-select: none;
+				-ms-user-select: none;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="container" style="width: 75%;">
+			<canvas id="canvas"></canvas>
+		</div>
+		<button id="addDataset">Add Dataset</button>
+		<button id="removeDataset">Remove Dataset</button>
+		<button id="addData">Add Data</button>
+		<button id="removeData">Remove Data</button>
+		<script>
+			src= "https://code.jquery.com/jquery-3.4.1.js"
+			var DEFAULT_DATASET_SIZE = 7;
+			var addedCount = 0;
+			var color = Chart.helpers.color;
+			var colorNames = Object.keys(window.chartColors);
+			$.ajax({url:"http://127.0.0.1:5000/data/newpip_oldgrp_iter1_4eigs_res_and_energy",dataType:"json"})
+			.fail(function(){alert("Im a failure")})
+			.done(function(data){
+				var myData = (data);
+				console.log(myData[0].clusrank);
+				Array.prototype.mapProperty = function(property) {
+					return this.map(function (obj) {
+						return obj[property];
+					});
+				}
+			})
+			window.onload = function() {
+				console.log("cheerio")
+				var ctx = document.getElementById('canvas').getContext('2d');
+				window.myChart = new Chart(ctx, {
+					type: 'bubble',
+					data: {
+						x: data.clusrank,
+						y: data.dockq,
+						r: data.modrank
+					},
+					options: {
+						responsive: true,
+						title: {
+							display: true,
+							text: 'DockQ results of BM5 cases',
+							fontSize: 40,
+							fontColor: 'black'
+						},
+						tooltips: {
+							mode: 'point'
+						},
+						legend: {
+							position: 'top',
+							labels: {
+								fontColor: 'black',
+								fontSize: 20
+							}
+						}
+					}
+				});
+			};
+			document.getElementById('addDataset').addEventListener('click', function() {
+				++addedCount;
+				var colorName = colorNames[bubbleChartData.datasets.length % colorNames.length];
+				var dsColor = window.chartColors[colorName];
+				var newDataset = {
+					label: 'My added dataset ' + addedCount,
+					backgroundColor: color(dsColor).alpha(0.5).rgbString(),
+					borderColor: dsColor,
+					borderWidth: 1,
+					data: []
+				};
+				for (var index = 0; index < DEFAULT_DATASET_SIZE; ++index) {
+					newDataset.data.push({
+						x: randomScalingFactor(),
+						y: randomScalingFactor(),
+						r: Math.abs(randomScalingFactor()) / 5,
+					});
+				}
+				bubbleChartData.datasets.push(newDataset);
+				window.myChart.update();
+			});
+			document.getElementById('addData').addEventListener('click', function() {
+				if (bubbleChartData.datasets.length > 0) {
+					for (var index = 0; index < bubbleChartData.datasets.length; ++index) {
+						bubbleChartData.datasets[index].data.push({
+							x: randomScalingFactor(),
+							y: randomScalingFactor(),
+							r: Math.abs(randomScalingFactor()) / 5,
+						});
+					}
+					window.myChart.update();
+				}
+			});
+			document.getElementById('removeDataset').addEventListener('click', function() {
+				bubbleChartData.datasets.splice(0, 1);
+				window.myChart.update();
+			});
+			document.getElementById('removeData').addEventListener('click', function() {
+				bubbleChartData.datasets.forEach(function(dataset) {
+					dataset.data.pop();
+				});
+				window.myChart.update();
+			});
+		</script>
+	</body>
+{% endblock content %}
