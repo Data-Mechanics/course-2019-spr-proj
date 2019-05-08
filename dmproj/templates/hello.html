@@ -1,0 +1,162 @@
+<!-- authors Jesse Fimbres and Aaron Heckman (jfimbres@bu.edu and aheckman@bu.edu) -->
+<!doctype html>
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/mainpage.css') }}">
+
+<style type="text/css">
+    body {
+  background-image: url("/static/circuit.png")
+}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #444;
+}
+
+</style>
+
+
+<title>US Climate Change Opinions</title>
+<!-- <h1>Hello {{ name }}!</h1> -->
+<center><h1>Republicans, Democrats, and Climate Change Opinions in the United States</h1></center>
+<center><p> A Data Mechanics Project by Jesse W. Fimbres and Aaron J. Heckman for <font color="red">Boston University</font></p></center>
+
+<!-- <ul>
+<li><a href='/upload'>Upload a photo</a> </li> 
+<li><a href='/logout'>Logout</a></li>
+<li><a href='/'>Home</a></li>
+</ul> -->
+
+<h2> Introduction </h2>
+
+<p> This decade there has been an increasing divide in the United States between its two dominant political parties: republicans and democrats. According to <i>The New York Times</i>, <b>“Partisan identification is now a bigger wedge between Americans than race, gender, religion or level of education” </b>. This comes at a time many climate scientists view enacting government policies as a necessary solution to prevent irreversible harm to Earth’s ecosystems. However, climate change is a very divisive issue between republicans and democrats in a political system only increasing in polarity. This begs the question- is there common ground regarding climate change that can be reached between the two parties? </p>
+
+<h2> Project Goals </h2>
+<p> Use data mechanics tools to: </p>
+<ol>
+  <li> Determine the degree of difference between republicans and democrats in each state on select opinions relating to climate change to determine which ones <b>maximize</b> common ground between the two parties (e.g. Is congress doing enough about climate change?). </li>
+  <li>  Find the <b>correlation</b> between carbon efficacy and CO2 emissions per capita to determine if an increase in how efficiently carbon is used by a state decreases its emissions per capita and if so by how much. </li>
+
+</ol>
+
+<h2> Republicans and Democrats on Various Opinions </h2>
+<!---
+ <div class="dropdown">
+  <button class="dropbtn">Opinions</button>
+  <div class="dropdown-content">
+    <a href="#">Congress should do more to address global warming</a>
+    <a href="#">Corperations should do more to address global warming</a>
+    <a href="#">Citizens should do more to address global warming</a>
+    <a href="#">CO2 should be regulated as a pollutant</a>
+    <a href="#">I have personally experienced effects of global warming </a>
+    <a href="#">It's worth protecting the environment at the cost of economic growth</a>
+    <a href="#">Global warming is happening</a>
+    <a href="#">Global warming is caused mostly by human activities</a>
+    <a href="#">Most scientists think global warming is happening</a>
+    <a href="#">I am worried about global warming</a>
+    <a href="#">Global warming will harm the United States</a>
+  </div>
+</div>
+-->
+<center><img src="/static/images/bar.png" alt="Workplace" usemap="#workmap"></center>
+
+<map name="workmap">
+  <area shape="rect" coords="204,398,273,855" alt="q1" href="/q1">
+  <area shape="rect" coords="290,626,354,856" alt="q2" href="/q2">
+  <area shape="rect" coords="373,617,438,854" alt="q3" href="/q3">
+  <area shape="rect" coords="455,563,522,854" alt="q4" href="/q4">
+  <area shape="rect" coords="538,422,606,854" alt="q5" href="/q5">
+  <area shape="rect" coords="622,652,690,855" alt="q6" href="/q6">
+  <area shape="rect" coords="706,533,774,854" alt="q7" href="/q7">
+  <area shape="rect" coords="791,300,854,855" alt="q8" href="/q8">
+  <area shape="rect" coords="873,270,942,855" alt="q9" href="/q9">
+  <area shape="rect" coords="957,148,1022,855" alt="q_10" href="/q10">
+  <area shape="rect" coords="1040,511,1106,854" alt="q_11" href="/q11">
+</map>
+
+{% if message %}
+<center><img src="/static/images/img.jpg" alt="Workplace"></center>
+{% endif %}
+
+<center><p> Tap on a bar on the bar graph above to see the scatterplot distribution for the respective opinion. <font color="red">Republicans</font> are representeed by red dots and <font color="blue">democrats</font> are represented by blue dots.</p></center>
+
+<p> <b>Opinions:</b> </p>
+<ol>
+  <li> Congress should do more to address global warming </li>
+  <li> Corperations should do more to address global warming </li>
+  <li> Citizens should do more to address global warming </li>
+  <li> CO2 should be regulated as a pollutant </li>
+  <li> I have personally experienced effects of global warming </li>
+  <li> It's worth protecting the environment at the cost of economic growth </li>
+  <li> Global warming is happening </li>
+  <li> Global warming is caused mostly by human activities </li>
+  <li> Most scientists think global warming is happening </li>
+  <li> I am worried about global warming </li>
+  <li> Global warming will harm the United States </li>
+</ol>
+
+<h2> How'd we do it? </h2>
+
+<h3> Optimization Using the K-Means Algorithm </h3>
+<p> With regards to each opinion: for each state’s democrats and republicans, we mapped the party's respective opinion on a scatterplot with the x-axis representing the percentage of people for regulation and the y-axis representing the percentage of people against regulation. Since these values will usually sum to around 100, you'll notice that all the scatterplots follow a linear pattern. You can view each scatterplot above.
+
+  <br>
+
+Next we use the k-means algorithm to determine the amount of disagreement between the two parties. K-means works by spltting data into a fixed number of clusters (k) and creating data points at the center of each cluster, essentially finding the cluster's average. Since we know republicans and democrats are polarized, with some certainty we are guaranteed at k=2 that one k will represent republicans and the other democrats. From here we find the distance between these two points for each opinion and graph them on the bar graph above in order to visualize the level of agreement between different questions asked. From here we can easily find the questions with the least and most disagreement. </p>
+
+
+<h2> Emissions per Capita vs. Carbon Efficacy </h2>
+
+<center><img src="/static/images/scatter.png" alt="Workplace"></center>
+
+<center><p> Type in the name of a state here to view where it lands on the scatterplot. </p></center>
+
+<center><form method="post" action="/relScatter">
+  State: <input type="text" name="state">
+    <input type="submit" value="Submit">
+</form></center>
+
+{% if message2 %}
+<center><img src="/static/images/img2.jpg" alt="Workplace" ></center>
+{% endif %}
+
+
+<p> <b>correlation coefficient</b> = -0.06883 </p>
+<p> <b>p-value</b> = 0.63478 </p>
+
+<p> In layman's terms, there is no statistically significant correlation between emissions per capita and carbon intensity. </p>
+
+<h2> How'd we do it? </h2>
+
+<h3> Determining Relationship Through the Correlation Coefficient </h3>
+
+<p> Using our census and carbon emissions data we calculate the emission per capita per state. Next we decided on this formula to represent carbon efficacy: (average of Adjusted and Unadjusted CO2 Emissions) / Carbon Intensity. We then graph the results found for each state on the scatterplot above. Next we use functions from the Python SciPy library to calculate the correlation coefficient and p-value of the data which are displayed above.
+<br>
+The <b>p-value</b> shows the level of marginal significance within a statistical hypothesis test that represents the probability of the occurrence of a given event. The <b>correlation coefficient</b> measures the statistical significance between two variables. Values less than 0.8 and greater than -0.8 are not considered significant.  </p>
+
+<h2> Conclusion & Future Work </h2>
+
+<p> From the bar graph for disagreement per question we can see that the question with the least amount of disagreement is q6: <b>It’s worth protecting the environment at the cost of economic growth.</b> If we were to analyze this data even more, and perhaps given more climate change opinions to work with, we could attempt to find patterns between various opinions and their level of agreement between the two parties.
+  <br>
+Interestingly we found no relationship between carbon efficacy and carbon emissions per capita. This rejects our initial hypothesis and seems counterintuitive and given more time we would explore the reason for this lack of relationship. If we were to guess- and this is not based in statistical analysis- we think this is because states that use carbon more efficently also expend more carbon overall, therefore dilluting any statistical significance for the relationship. Additionally our unique method for calculating carbon efficacy could be a factor. 
+</p>
+
+<h2> Datasets Used </h2>
+<ol> 
+  <li> United States Partisan Map Data </li>
+  <li> United States Population/State Data </li>
+  <li> State Energy-Related CO2 Emissions Adjusted </li>
+  <li> State Energy-Related CO2 Emissions Unadjusted </li>
+  <li> Carbon Intensity Per State </li>
+</ol>
+
+<h2> Sources </h2>
+<ol> 
+<li> <a href="https://www.nytimes.com/2018/08/17/us/politics/political-fights.html"> In a Divided Era, One Thing Seems to Unite: Political Anger from <i>The New York Times</i> </a> </li>
+<br>
+<li> <a href="https://www.investopedia.com/terms/p/p-value.asp"> <i>Investopedia</i> on P-values</a> </li>
+<br>
+<li> <a href="https://www.investopedia.com/terms/c/correlationcoefficient.asp"> <i>Investopedia</i> on Correlation Coefficents</a> </li>
+</ol> 
+
+<p> The code for this project (including the datasets used) can be found on our GitHub repo linked <a href="https://github.com/AHeckman118/course-2019-spr-proj/tree/master/aheckman_jfimbres">here</a>. Check it out! </p>
