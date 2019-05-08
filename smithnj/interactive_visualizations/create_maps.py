@@ -1,15 +1,13 @@
 import pandas as pd
-import math
-import dml
+# import dml
+import pymongo #todo update dependencies to say pymongo
 import folium
-from IPython.display import HTML
-import geopandas
 
 # ---[ Assistant Functions ]---------------------------------
 def project(R, p):
      return [p(t) for t in R]
 # ---[ Connect to Database ]---------------------------------
-client = dml.pymongo.MongoClient()
+client = pymongo.MongoClient()
 repo = client.repo
 repo.authenticate('smithnj', 'smithnj')
 repo_name = 'smithnj.zones'
@@ -34,8 +32,8 @@ merged = pd.merge(df, df_stationlocation, left_index=True, right_index=True) # C
 merged = merged.reset_index().rename(index=str, columns={"index":"StationID"})
 # ---[ Folium ]-----------------------------------------------
 def save(map, map_alt):
-    map.save("8Zones.html")
-    map_alt.save("4Zones.html")
+    map.save("8Zones-Map.html")
+    map_alt.save("4Zones-Map.html")
 def plotPoints(df, map, map_alt):
     for i in range(len(merged)):
         x = df['Latitude'][i]
@@ -51,7 +49,7 @@ def plotPoints(df, map, map_alt):
         marker_alt.add_to(map_alt)
 folmap = folium.Map(location=[41.8827, -87.6233], zoom_start=11, tiles="CartoDB positron")
 folmap_alt = folium.Map(location=[41.8827, -87.6233], zoom_start=11, tiles="CartoDB positron")
-folium.GeoJson('/Users/nathaniel/Desktop/CTA_RailLines.geojson', name='geojson').add_to(folmap)
-folium.GeoJson('/Users/nathaniel/Desktop/CTA_RailLines.geojson', name='geojson').add_to(folmap_alt)
+folium.GeoJson('http://datamechanics.io/data/smithnj/CTA_RailLines.geojson', name='geojson').add_to(folmap)
+folium.GeoJson('http://datamechanics.io/data/smithnj/CTA_RailLines.geojson', name='geojson').add_to(folmap_alt)
 plotPoints(merged, folmap, folmap_alt)
 save(folmap, folmap_alt)
