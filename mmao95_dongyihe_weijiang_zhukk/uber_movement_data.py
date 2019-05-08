@@ -10,14 +10,14 @@ import pandas as pd
 
 class uber_movement_data(dml.Algorithm):
 	# define relational models
-    contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+    contributor = 'mmao95_dongyihe_weijiang_zhukk'
     reads = []
     writes = [contributor + '.uber_data',contributor + '.boston_censustracts',contributor + '.boston_traffic']
 
     @staticmethod
     def execute(trial=False):
         start_time = datetime.datetime.now()
-        contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+        contributor = 'mmao95_dongyihe_weijiang_zhukk'
         writes = [contributor + '.uber_data', contributor + '.boston_censustracts',contributor + '.boston_traffic']
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
@@ -80,7 +80,7 @@ class uber_movement_data(dml.Algorithm):
 
     @staticmethod
     def provenance(doc=prov.model.ProvDocument(), startTime=None, endTime=None):
-        contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+        contributor = 'mmao95_dongyihe_weijiang_zhukk'
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate(contributor, contributor)

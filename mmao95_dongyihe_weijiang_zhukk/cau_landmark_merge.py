@@ -95,7 +95,7 @@ class cau_landmark_merge(dml.Algorithm):
             document describing that invocation event.
             '''
 
-        contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+        contributor = 'mmao95_dongyihe_weijiang_zhukk'
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate(contributor, contributor)

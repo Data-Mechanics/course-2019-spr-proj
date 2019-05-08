@@ -13,7 +13,7 @@ import numpy as np
 
 
 class streetbook_filtered(dml.Algorithm):
-    contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+    contributor = 'mmao95_dongyihe_weijiang_zhukk'
     reads = [contributor + '.cau_landmark_merge', contributor + '.public_libraries',
              contributor + '.filtered_famous_people_streets', contributor + '.boston_traffic']
     writes = [contributor + '.streetbook_filtered',
@@ -22,7 +22,7 @@ class streetbook_filtered(dml.Algorithm):
     @staticmethod
     def execute(trial=False):
         startTime = datetime.datetime.now()
-        contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+        contributor = 'mmao95_dongyihe_weijiang_zhukk'
         reads = [contributor + '.cau_landmark_merge', contributor + '.public_libraries',
                  contributor + '.filtered_famous_people_streets', contributor + '.boston_traffic']
         writes = [contributor + '.streetbook_filtered',
@@ -167,7 +167,7 @@ class streetbook_filtered(dml.Algorithm):
             document describing that invocation event.
             '''
 
-        contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+        contributor = 'mmao95_dongyihe_weijiang_zhukk'
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate(contributor, contributor)
@@ -179,25 +179,41 @@ class streetbook_filtered(dml.Algorithm):
         doc.add_namespace('bdp', 'https://www.50states.com/bio/mass.htm')
 
         this_script = doc.agent('alg:'+contributor+'#streetbook_filtered', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        res_fp = doc.entity('bdp:fp', {'prov:label':'Public Libraries', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
-        res_sb = doc.entity('bdp:sb', {'prov:label':'Boston Traffic', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        res_cl = doc.entity('dat:'+contributor+'#cau_landmark_merge', {prov.model.PROV_LABEL:'CAU and Landmark Merge', prov.model.PROV_TYPE:'ont:DataSet'})
+        res_pl = doc.entity('dat:'+contributor+'#public_libraries', {prov.model.PROV_LABEL:'Public Libraries', prov.model.PROV_TYPE:'ont:DataSet'})
+        res_fp = doc.entity('dat:'+contributor+'#filtered_famous_people_streets', {prov.model.PROV_LABEL:'Filter Famous People Streets', prov.model.PROV_TYPE:'ont:DataSet'})
+        res_bt = doc.entity('dat:'+contributor+'#boston_traffic', {prov.model.PROV_LABEL:'Boston Traffic', prov.model.PROV_TYPE:'ont:DataSet'})
+        
+
         filter_names = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(filter_names, this_script)
+        doc.usage(filter_names, res_cl, startTime, None,
+            {prov.model.PROV_TYPE: 'ont:Computation',
+            'ont:Computation':'Selection, Differentiate'
+            }
+        )
+        doc.usage(filter_names, res_pl, startTime, None,
+            {prov.model.PROV_TYPE: 'ont:Computation',
+            'ont:Computation':'Selection, Differentiate'
+            }
+        )
         doc.usage(filter_names, res_fp, startTime, None,
             {prov.model.PROV_TYPE: 'ont:Computation',
             'ont:Computation':'Selection, Differentiate'
             }
         )
-        doc.usage(filter_names, res_sb, startTime, None,
+        doc.usage(filter_names, res_bt, startTime, None,
             {prov.model.PROV_TYPE: 'ont:Computation',
             'ont:Computation':'Selection, Differentiate'
             }
         )
-        result = doc.entity('dat:'+contributor+'#streetbook_filtered', {prov.model.PROV_LABEL:'Streetbook filtered', prov.model.PROV_TYPE:'ont:DataSet'})
+        result = doc.entity('dat:'+contributor+'#streetbook_filtered', {prov.model.PROV_LABEL:'Street Filtered Version', prov.model.PROV_TYPE:'ont:DataSet'})
         doc.wasAttributedTo(result, this_script)
         doc.wasGeneratedBy(result, filter_names, endTime)
+        doc.wasDerivedFrom(result, res_cl, filter_names, filter_names, filter_names)
+        doc.wasDerivedFrom(result, res_pl, filter_names, filter_names, filter_names)
         doc.wasDerivedFrom(result, res_fp, filter_names, filter_names, filter_names)
-        doc.wasDerivedFrom(result, res_sb, filter_names, filter_names, filter_names)
+        doc.wasDerivedFrom(result, res_bt, filter_names, filter_names, filter_names)
         repo.logout()
                   
         return doc

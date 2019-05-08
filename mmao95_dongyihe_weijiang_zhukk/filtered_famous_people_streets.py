@@ -6,14 +6,14 @@ import uuid
 import itertools
 
 class filtered_famous_people_streets(dml.Algorithm):
-    contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+    contributor = 'mmao95_dongyihe_weijiang_zhukk'
     reads = [contributor + '.famous_people', contributor + '.street_book']
     writes = [contributor + '.filtered_famous_people_streets']
 
     @staticmethod
     def execute(trial = False):
         startTime = datetime.datetime.now()
-        contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+        contributor = 'mmao95_dongyihe_weijiang_zhukk'
         reads = [contributor + '.famous_people', contributor + '.street_book']
         writes = [contributor + '.filtered_famous_people_streets']
         
@@ -44,7 +44,7 @@ class filtered_famous_people_streets(dml.Algorithm):
             document describing that invocation event.
             '''
 
-        contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+        contributor = 'mmao95_dongyihe_weijiang_zhukk'
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate(contributor, contributor)

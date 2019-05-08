@@ -21,7 +21,7 @@ import numpy as np
 from sklearn.cluster import KMeans
 
 class streetbook_kmeans(dml.Algorithm):
-    contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+    contributor = 'mmao95_dongyihe_weijiang_zhukk'
     reads = [contributor + '.streetbook_filtered',
               contributor + '.streetbook_alternate']
     writes = [contributor + '.streetbook_kmeans']
@@ -29,7 +29,7 @@ class streetbook_kmeans(dml.Algorithm):
     @staticmethod
     def execute(trial=False):
         startTime = datetime.datetime.now()
-        contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+        contributor = 'mmao95_dongyihe_weijiang_zhukk'
         reads = [contributor + '.streetbook_filtered',
               contributor + '.streetbook_alternate']
         writes = [contributor + '.streetbook_kmeans']
@@ -96,7 +96,7 @@ class streetbook_kmeans(dml.Algorithm):
     
     @staticmethod    
     def provenance(doc = prov.model.ProvDocument(), startTime = None, endTime = None):
-        contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+        contributor = 'mmao95_dongyihe_weijiang_zhukk'
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate(contributor, contributor)
@@ -111,25 +111,26 @@ class streetbook_kmeans(dml.Algorithm):
         doc.add_namespace('log', 'http://datamechanics.io/log/')
         doc.add_namespace('bdp', 'https://www.50states.com/bio/mass.htm')
 
-        this_script = doc.agent('alg:' + contributor + '#cau_kmeans', {
-                                prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
-        resource = doc.entity('bdp:wc8w-nujj', {'prov:label': '311, Service Requests',
-                                                prov.model.PROV_TYPE: 'ont:DataResource', 'ont:Extension': 'json'})
-        get_names = doc.activity(
-            'log:uuid' + str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(get_names, this_script)
-        doc.usage(get_names, resource, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:Retrieval',
-                   'ont:Computation': 'Data cleaning'
-                   }
-                  )
-
-        fp = doc.entity('dat:' + contributor + '#streetbook_kmeans', {
-                        prov.model.PROV_LABEL: 'StreetBook Kmeans', prov.model.PROV_TYPE: 'ont:DataSet'})
-        doc.wasAttributedTo(fp, this_script)
-        doc.wasGeneratedBy(fp, get_names, endTime)
-        doc.wasDerivedFrom(fp, resource, get_names, get_names, get_names)
-
+        this_script = doc.agent('alg:'+contributor+'#streetbook_kmeans', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        res_sf = doc.entity('dat:'+contributor+'#streetbook_filtered', {prov.model.PROV_LABEL:'Streetbook Filtered', prov.model.PROV_TYPE:'ont:DataSet'})
+        res_sa = doc.entity('dat:'+contributor+'#streetbook_alternate', {prov.model.PROV_LABEL:'Streetbook Alternate', prov.model.PROV_TYPE:'ont:DataSet'})
+        filter_names = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(filter_names, this_script)
+        doc.usage(filter_names, res_sf, startTime, None,
+            {prov.model.PROV_TYPE: 'ont:Computation',
+            'ont:Computation':'Selection, Differentiate'
+            }
+        )
+        doc.usage(filter_names, res_sa, startTime, None,
+            {prov.model.PROV_TYPE: 'ont:Computation',
+            'ont:Computation':'Selection, Differentiate'
+            }
+        )
+        result = doc.entity('dat:'+contributor+'#streetbook_kmeans', {prov.model.PROV_LABEL:'Streetbook with K Means', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(result, this_script)
+        doc.wasGeneratedBy(result, filter_names, endTime)
+        doc.wasDerivedFrom(result, res_sf, filter_names, filter_names, filter_names)
+        doc.wasDerivedFrom(result, res_sa, filter_names, filter_names, filter_names)
         repo.logout()
 
         return doc

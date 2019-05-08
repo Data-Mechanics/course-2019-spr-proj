@@ -9,13 +9,13 @@ import pandas as pd
 import numpy as np
 
 class male_streets(dml.Algorithm):
-    contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+    contributor = 'mmao95_dongyihe_weijiang_zhukk'
     reads = [contributor + '.filtered_famous_people_streets']
     writes = [contributor + '.male_streets']
 
     @staticmethod
     def execute(trial = False):
-        contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+        contributor = 'mmao95_dongyihe_weijiang_zhukk'
         reads = [contributor + '.filtered_famous_people_streets']
         writes = [contributor + '.male_streets']
         startTime = datetime.datetime.now()
@@ -46,7 +46,7 @@ class male_streets(dml.Algorithm):
             document describing that invocation event.
             '''
 
-        contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+        contributor = 'mmao95_dongyihe_weijiang_zhukk'
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate(contributor, contributor)

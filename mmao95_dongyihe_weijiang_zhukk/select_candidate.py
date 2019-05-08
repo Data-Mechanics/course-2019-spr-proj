@@ -21,13 +21,13 @@ import json
 import pymongo
 
 class select_candidate(dml.Algorithm):
-    contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+    contributor = 'mmao95_dongyihe_weijiang_zhukk'
     reads = []
     writes = []
 
     @staticmethod
     def execute(trial=False):
-        contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+        contributor = 'mmao95_dongyihe_weijiang_zhukk'
         reads = []
         writes = []
 
@@ -156,7 +156,7 @@ class select_candidate(dml.Algorithm):
     
     @staticmethod
     def provenance(doc=prov.model.ProvDocument(), startTime=None, endTime=None):
-        contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+        contributor = 'mmao95_dongyihe_weijiang_zhukk'
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate(contributor, contributor)
@@ -170,20 +170,6 @@ class select_candidate(dml.Algorithm):
         # The event log.
         doc.add_namespace('log', 'http://datamechanics.io/log/')
         
-
-        this_script = doc.agent('alg:' + contributor + '#select_candidate', {
-                                prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
-        resource = doc.entity('bdp:wc8w-nujj', {'prov:label': '311, Service Requests',
-                                                prov.model.PROV_TYPE: 'ont:DataResource', 'ont:Extension': 'json'})
-        get_names = doc.activity(
-            'log:uuid' + str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(get_names, this_script)
-        doc.usage(get_names, resource, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:Retrieval',
-                   'ont:Computation': 'Data cleaning'
-                   }
-                  )
-
         
 
         repo.logout()

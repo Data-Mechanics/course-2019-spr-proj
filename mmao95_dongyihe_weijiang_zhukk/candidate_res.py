@@ -102,7 +102,7 @@ class candidate_res(dml.Algorithm):
 
     @staticmethod
     def provenance(doc=prov.model.ProvDocument(), startTime=None, endTime=None):
-        contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+        contributor = 'mmao95_dongyihe_weijiang_zhukk'
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate(contributor, contributor)
@@ -112,33 +112,36 @@ class candidate_res(dml.Algorithm):
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/')  # The event log.
         
-        this_script = doc.agent('alg:' + contributor + '#uber_data',
+        this_script = doc.agent('alg:' + contributor + '#candidate_res',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
+        res_sa = doc.entity('dat:'+contributor+'#streetbook_alternate', {prov.model.PROV_LABEL:'Streetbook Alternate', prov.model.PROV_TYPE:'ont:DataSet'})
+        res_sf = doc.entity('dat:'+contributor+'#streetbook_filtered', {prov.model.PROV_LABEL:'Streetbook Filtered', prov.model.PROV_TYPE:'ont:DataSet'})
+        res_cm = doc.entity('dat:'+contributor+'#cau_landmark_merge', {prov.model.PROV_LABEL:'CAU Landmard Merge', prov.model.PROV_TYPE:'ont:DataSet'})
         
         get_names = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(get_names, this_script)
-
-        fp = doc.entity('dat:' + contributor + '#streetbook_alternate',
-                        {prov.model.PROV_LABEL: 'Streetbook Alternate', prov.model.PROV_TYPE: 'ont:DataSet'})
-        fp1 = doc.entity('dat:' + contributor + '#streetbook_filtered',
-                        {prov.model.PROV_LABEL: 'Streetbook Filtered', prov.model.PROV_TYPE: 'ont:DataSet'})
-        fp2 = doc.entity('dat:' + contributor + '#cau_landmark_merge',
-                        {prov.model.PROV_LABEL: 'Cau Landmark Merge', prov.model.PROV_TYPE: 'ont:DataSet'})
-        r1 = doc.entity('dat:' + contributor + '#candidate_res',
-                        {prov.model.PROV_LABEL: 'Candidate Res', prov.model.PROV_TYPE: 'ont:DataSet'})
-        doc.usage(get_names, fp, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:Retrieval',
-                   'ont:Computation': 'Data cleaning'
+        
+        doc.usage(get_names, res_sa, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:Computation',
+                   'ont:Computation': 'Usage'
                    }
                   )
-        doc.wasAttributedTo(fp, this_script)
-        doc.wasAttributedTo(fp1, this_script)
-        doc.wasAttributedTo(fp2, this_script)
-        doc.wasGeneratedBy(r1, get_names, endTime)
-        doc.wasDerivedFrom(r1, fp, get_names, get_names, get_names)
-        doc.wasDerivedFrom(r1, fp1, get_names, get_names, get_names)
-        doc.wasDerivedFrom(r1, fp2, get_names, get_names, get_names)
-
+        doc.usage(get_names, res_sf, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:Computation',
+                   'ont:Computation': 'Filter'
+                   }
+                  )
+        doc.usage(get_names, res_cm, startTime, None,
+                  {prov.model.PROV_TYPE: 'ont:Computation',
+                   'ont:Computation': 'Filter'
+                   }
+                  )
+        result = doc.entity('dat:'+contributor+'#candidate_res', {prov.model.PROV_LABEL:'Candidate Results', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(result, this_script)
+        doc.wasGeneratedBy(result, get_names, endTime)
+        doc.wasDerivedFrom(result, res_sa, get_names, get_names, get_names)
+        doc.wasDerivedFrom(result, res_sf, get_names, get_names, get_names)
+        doc.wasDerivedFrom(result, res_cm, get_names, get_names, get_names)
         repo.logout()
 
         return doc

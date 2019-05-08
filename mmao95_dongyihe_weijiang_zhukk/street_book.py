@@ -15,14 +15,14 @@ import math
 class street_book(dml.Algorithm):
     # define relational models
 
-    contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+    contributor = 'mmao95_dongyihe_weijiang_zhukk'
     reads = []
     writes = [contributor + '.street_book']
 
     @staticmethod
     def execute(trial=False):
         startTime = datetime.datetime.now()
-        contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+        contributor = 'mmao95_dongyihe_weijiang_zhukk'
         writes = [contributor + '.street_book']
 
         # Set up the database connection.
@@ -89,7 +89,7 @@ class street_book(dml.Algorithm):
             document describing that invocation event.
             '''
 
-        contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+        contributor = 'mmao95_dongyihe_weijiang_zhukk'
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate(contributor, contributor)

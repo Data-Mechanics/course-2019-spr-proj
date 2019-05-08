@@ -16,13 +16,13 @@ from sklearn.cluster import KMeans
 
 
 class street_clustered_location(dml.Algorithm):
-    contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+    contributor = 'mmao95_dongyihe_weijiang_zhukk'
     reads = [contributor + '.streetbook_filtered']
     writes = [contributor + '.street_clustered_location']
 
     @staticmethod
     def execute(trial=False):
-        contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+        contributor = 'mmao95_dongyihe_weijiang_zhukk'
         reads = [contributor + '.streetbook_filtered']
         writes = [contributor + '.street_clustered_location']
 
@@ -171,7 +171,7 @@ class street_clustered_location(dml.Algorithm):
             document describing that invocation event.
             '''
 
-        contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+        contributor = 'mmao95_dongyihe_weijiang_zhukk'
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate(contributor, contributor)

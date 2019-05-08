@@ -102,7 +102,7 @@ class colleges_and_universities(dml.Algorithm):
             document describing that invocation event.
             '''
 
-        contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+        contributor = 'mmao95_dongyihe_weijiang_zhukk'
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate(contributor, contributor)
@@ -117,24 +117,21 @@ class colleges_and_universities(dml.Algorithm):
         doc.add_namespace('log', 'http://datamechanics.io/log/')
         doc.add_namespace('bdp', 'https://www.50states.com/bio/mass.htm')
 
-        this_script = doc.agent('alg:' + contributor + '#colleges_and_universities', {
-                                prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
-        resource = doc.entity('bdp:wc8w-nujj', {'prov:label': '311, Service Requests',
-                                                prov.model.PROV_TYPE: 'ont:DataResource', 'ont:Extension': 'json'})
-        get_names = doc.activity(
-            'log:uuid' + str(uuid.uuid4()), startTime, endTime)
+        this_script = doc.agent('alg:'+contributor+'#colleges_and_universities', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})        
+        cau_csv = doc.entity('bdp:onlinedata', {'prov:label':'Online Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'csv'})
+        get_names = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(get_names, this_script)
-        doc.usage(get_names, resource, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:Retrieval',
-                   'ont:Computation': 'Data cleaning'
-                   }
-                  )
+        doc.usage(get_names, cau_csv, startTime, None,
+            {prov.model.PROV_TYPE:'ont:Retrieval',
+            'ont:Computation':'Data cleaning'
+            }
+        )
 
-        fp = doc.entity('dat:' + contributor + '#colleges_and_universities', {
-                        prov.model.PROV_LABEL: 'Colleges and Universities', prov.model.PROV_TYPE: 'ont:DataSet'})
-        doc.wasAttributedTo(fp, this_script)
-        doc.wasGeneratedBy(fp, get_names, endTime)
-        doc.wasDerivedFrom(fp, resource, get_names, get_names, get_names)
+        cau = doc.entity('dat:'+contributor+'#colleges_and_universities', {prov.model.PROV_LABEL:'Colleges and Universities', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(cau, this_script)
+        doc.wasGeneratedBy(cau, get_names, endTime)
+        doc.wasDerivedFrom(cau, cau_csv, get_names, get_names, get_names)
+   
 
         repo.logout()
 

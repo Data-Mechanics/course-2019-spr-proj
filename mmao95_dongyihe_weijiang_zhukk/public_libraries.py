@@ -15,14 +15,14 @@ import math
 class public_libraries(dml.Algorithm):
     # define relational models
 
-    contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+    contributor = 'mmao95_dongyihe_weijiang_zhukk'
     reads = []
     writes = [contributor + '.public_libraries']
 
     @staticmethod
     def execute(trial=False):
         startTime = datetime.datetime.now()
-        contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+        contributor = 'mmao95_dongyihe_weijiang_zhukk'
         writes = [contributor + '.public_libraries']
 
         # Set up the database connection.
@@ -88,7 +88,7 @@ class public_libraries(dml.Algorithm):
             document describing that invocation event.
             '''
 
-        contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+        contributor = 'mmao95_dongyihe_weijiang_zhukk'
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate(contributor, contributor)
@@ -103,24 +103,23 @@ class public_libraries(dml.Algorithm):
         doc.add_namespace('log', 'http://datamechanics.io/log/')
         doc.add_namespace('bdp', 'https://www.50states.com/bio/mass.htm')
 
-        this_script = doc.agent('alg:' + contributor + '#public_libraries', {
-                                prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
-        resource = doc.entity('bdp:wc8w-nujj', {'prov:label': '311, Service Requests',
-                                                prov.model.PROV_TYPE: 'ont:DataResource', 'ont:Extension': 'json'})
-        get_names = doc.activity(
-            'log:uuid' + str(uuid.uuid4()), startTime, endTime)
+        this_script = doc.agent('alg:'+contributor+'#public_libraries', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        pl_res = doc.entity('bdp:pl', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'html'})
+        
+        
+        get_names = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         doc.wasAssociatedWith(get_names, this_script)
-        doc.usage(get_names, resource, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:Retrieval',
-                   'ont:Computation': 'Data cleaning'
-                   }
-                  )
+        doc.usage(get_names, pl_res, startTime, None,
+            {prov.model.PROV_TYPE:'ont:Retrieval',
+            'ont:Computation':'Data cleaning'
+            }
+        )
+       
 
-        fp = doc.entity('dat:' + contributor + '#public_libraries',
-                        {prov.model.PROV_LABEL: 'Public Libraries', prov.model.PROV_TYPE: 'ont:DataSet'})
-        doc.wasAttributedTo(fp, this_script)
-        doc.wasGeneratedBy(fp, get_names, endTime)
-        doc.wasDerivedFrom(fp, resource, get_names, get_names, get_names)
+        pl = doc.entity('dat:'+contributor+'#public_libraries', {prov.model.PROV_LABEL:'Public Libraries', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(pl, this_script)
+        doc.wasGeneratedBy(pl, get_names, endTime)
+        doc.wasDerivedFrom(pl, pl_res, get_names, get_names, get_names)
 
         repo.logout()
 

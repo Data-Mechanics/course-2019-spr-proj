@@ -22,14 +22,14 @@ import math
 
 class landmarks(dml.Algorithm):
 
-    contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+    contributor = 'mmao95_dongyihe_weijiang_zhukk'
     reads = []
     writes = [contributor + '.landmarks']
 
     @staticmethod
     def execute(trial=False):
         startTime = datetime.datetime.now()
-        contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+        contributor = 'mmao95_dongyihe_weijiang_zhukk'
         writes = [contributor + '.landmarks']
         #url = 'http://bostonopendata-boston.opendata.arcgis.com/datasets/7a7aca614ad740e99b060e0ee787a228_3.csv'
 
@@ -110,7 +110,7 @@ class landmarks(dml.Algorithm):
             in this script. Each run of the script will generate a new
             document describing that invocation event.
             '''
-        contributor = 'mmao95_Dongyihe_weijiang_zhukk'
+        contributor = 'mmao95_dongyihe_weijiang_zhukk'
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate(contributor, contributor)
@@ -139,11 +139,11 @@ class landmarks(dml.Algorithm):
                    }
                   )
 
-        fp = doc.entity('dat:' + contributor + '#landmarks',
+        lm = doc.entity('dat:' + contributor + '#landmarks',
                         {prov.model.PROV_LABEL: 'landmarks', prov.model.PROV_TYPE: 'ont:DataSet'})
-        doc.wasAttributedTo(fp, this_script)
-        doc.wasGeneratedBy(fp, get_names, endTime)
-        doc.wasDerivedFrom(fp, resource, get_names, get_names, get_names)
+        doc.wasAttributedTo(lm, this_script)
+        doc.wasGeneratedBy(lm, get_names, endTime)
+        doc.wasDerivedFrom(lm, resource, get_names, get_names, get_names)
 
         repo.logout()
 
