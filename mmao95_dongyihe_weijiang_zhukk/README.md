@@ -51,6 +51,8 @@ The `streetbook` of this project is a legacy dataset inherited from the previous
 
 To determine the gender of each street, they trimmed the name of the street to obtain only the probably "human name" part, then use two webservice independtly to predict the gender by the actual name. The results are stored in `Gender` and `Gender2`.
 
+To visualize our result, you just need to run 'python app.py' under backend. After the flask server starts, you can vist http://127.0.0.1:5000/ to operate.
+
 ## Visualization
 
 We used a webpage to visualize our results. In the webpage, you can see all layers in the map including street clustering, candidates per-district and per-cluster; also we show the word cloud of each distict/cluster's street names so that you can have a general idea of the entire program.
