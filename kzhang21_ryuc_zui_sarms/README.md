@@ -1,15 +1,17 @@
 # Project #3
 **Duy Nguyen** and **Sarah M'Saad** and **Colleen Kim** and **Kelly Zhang**
 
-## How to run this code?
+### Web services
+The web-service is built on `flask` are in the `web` directory. Navigate to the project root (`kzhang21_ryuc_zui_sarms`) and run `FLASK_APP=web FLASK_DEBUG=1 flask run`. The web-service and the visulations would be viewable at `localhost:5000`.
 
-### About mongoDB
-- If the mongoDB is not running on the localhost, like how this code initially set-up, there must be an ssh tunnel to the server.
-`ssh -L 27017:localhost:27017 user@example.org`
+The visulisations:
+- The map of Boston shown the violation rate of food establishment calculated according to our formula and the data obtained from Analyze Boston. 
+- The plot of popular cuisines type from the Yelp businesses in a specific neighborhood. This is linked to the map. 
 
 ### Additional Libraries
 - z3
 - GeoPy
+- flask
 
 ## Introduction
 As of 2018, over 11,000 eateries were operating in the Greater Boston region, and faced with the challenges to survive, each restaurant does its best to stand out. From the uniqueness of the dishes to the ambience and location, everything is utilized by eateries to ensure that customers are satisfied and come back for more. But customers also face challenges when trying to pick 1 out of 11,000 eateries to dine at. Preferences such as cuisine, price, distance, and even time of day become important deciding factors for locals. And for tourists unfamiliar with Boston, navigating through Boston’s cityscape let alone picking a restaurant to dine at can be overwhelming. To help both tourists and locals, we utilize datasets relating to the city of Boston, and based on where the user wants to start their day in Boston, we find and recommend eateries. To see which eateries are safer to eat at we use a dataset from Analyze Boston containing food inspection violations that go back as far as 2007. And to see how popular each restaurant is, we use data from the Yelp Fusion API and collect data on restaurant and bars around Boston. And finally, we use GeoPy to evaluate distances between recommended eateries, and the user’s starting point. Using these datasets, we use z3 to choose eateries to recommend.
