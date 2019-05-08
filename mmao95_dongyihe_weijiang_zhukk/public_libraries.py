@@ -101,10 +101,10 @@ class public_libraries(dml.Algorithm):
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#')
         # The event log.
         doc.add_namespace('log', 'http://datamechanics.io/log/')
-        doc.add_namespace('bdp', 'https://www.50states.com/bio/mass.htm')
+        doc.add_namespace('bdp', 'http://bostonopendata-boston.opendata.arcgis.com/datasets/cb00f9248aa6404ab741071ca3806c0e_6.csv')
 
         this_script = doc.agent('alg:'+contributor+'#public_libraries', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
-        pl_res = doc.entity('bdp:pl', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'html'})
+        pl_res = doc.entity('bdp:pl', {'prov:label':'Online Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'csv'})
         
         
         get_names = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)

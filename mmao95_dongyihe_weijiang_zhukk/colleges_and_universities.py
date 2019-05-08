@@ -115,7 +115,7 @@ class colleges_and_universities(dml.Algorithm):
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#')
         # The event log.
         doc.add_namespace('log', 'http://datamechanics.io/log/')
-        doc.add_namespace('bdp', 'https://www.50states.com/bio/mass.htm')
+        doc.add_namespace('bdp', 'http://bostonopendata-boston.opendata.arcgis.com/datasets/cbf14bb032ef4bd38e20429f71acb61a_2.csv')
 
         this_script = doc.agent('alg:'+contributor+'#colleges_and_universities', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})        
         cau_csv = doc.entity('bdp:onlinedata', {'prov:label':'Online Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'csv'})
