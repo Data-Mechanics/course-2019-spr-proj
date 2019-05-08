@@ -14,7 +14,6 @@ collection = repo["stathisk_simonwu_nathanmo_nikm.avgAnswers"]
 data = collection.find().sort([("Total Votes Cast", pymongo.DESCENDING)])
 yesList = []
 noList = []
-#blankList = []
 localityList = []
 for i in range(10):
     entry = data[i]
@@ -32,7 +31,7 @@ rects2 = ax.bar(ind + width/2, noList, width,
                 color='IndianRed', label='No')
 
 ax.set_ylabel('Votes')
-ax.set_title('Vote Distribution on MA Towns with Top Ten Vote Counts')
+ax.set_title('Average Vote Distribution on MA Towns with Top Ten Vote Counts')
 ax.set_xticks(ind)
 ax.set_xticklabels(localityList)
 ax.legend()
