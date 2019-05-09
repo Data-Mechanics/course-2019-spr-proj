@@ -48,4 +48,5 @@ See generated images for k-means grouping and print statements for correlation c
 * sklearn
 * mpl_toolkits.mplot3d
 * from scipy.stats.stats import pearsonr
-
+* plotly
+* pymongo
