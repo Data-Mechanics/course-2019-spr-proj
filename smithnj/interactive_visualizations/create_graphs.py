@@ -1,4 +1,3 @@
-# TODO: update README to reflect new required libraries like plotly.
 import plotly
 import pandas as pd
 # import dml
@@ -44,7 +43,6 @@ for i in range(len(zones)):
     df_colors = pd.DataFrame(colors)
     df_colors.columns = ["Color"]
     df_zones = df_zones.join(df_colors)
-    print(df_zones)
 
     scatter = dict(
         mode="markers",
