@@ -1,5 +1,7 @@
 # Commuting in Boston
 
+**NOTE: This is the README for the semester's repository, it is NOT the report for project 3. That's at `/project-3/README.md`.**
+
 # Project 1
 
 ## Why
@@ -108,3 +110,9 @@ The new bluebike station optimization answered that the new station should go in
 I modified `alerts_and_weather.py` to output an intermediary dataset with a datapoint for each day that has the alert count and temperature. 
 
 `new_station.py` has the z3-optimizer logic. It writes the latitude and longitude of the new station to a collection in Mongo named "new_station".
+
+# Project 3
+
+Project 3 includes a data visualization of bluebike data. To run it, make sure you run projects 1 and 2 to generate the necessary collections in MongoDB. Then navigate to the project-3 folder and run the command `flask run` to start the flask server, then visit your localhost to see the D3-generated graphics.
+
+**NOTE: The report for project 3 is at `/project-3/README.md`**
