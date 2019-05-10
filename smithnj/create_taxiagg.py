@@ -46,7 +46,7 @@ class create_taxiagg(dml.Algorithm):
             pickup_counts_temp.append((i['pickup_community_area'], 1))
         dropoff_counts = aggregate(dropoff_counts_temp, sum)
         pickup_counts = aggregate(pickup_counts_temp, sum)
-        totals = [(d, (b + (a*0.5))) for ((d, a), (p, b)) in product(dropoff_counts, pickup_counts) if d == p] #Dropoffs count for 1/2 since fares would only be based on entry location.
+        totals = [(d, (b + a)) for ((d, a), (p, b)) in product(dropoff_counts, pickup_counts) if d == p]
         # ---[ Send to Dict ]----------------------------------------
         labels = lambda t: {'Community Area': t[0], 'Demand Metric': t[1]}
         result = project(totals, labels)

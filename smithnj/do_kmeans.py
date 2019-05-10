@@ -19,14 +19,13 @@ class do_kmeans(dml.Algorithm):
 
     contributor = 'smithnj'
     reads = ['smithnj.metrics']
-    writes = ['smithnj.zones']
+    writes = ['smithnj.zones','smithnj.kmeans.centers', 'smithnj.kmeans.data']
 
     @staticmethod
-    def execute(trial = False):
+    def execute(trial=False):
         # ---[ Assistant Functions ]---------------------------------
         def project(R, p):
             return [p(t) for t in R]
-
         startTime = datetime.datetime.now()
         # ---[ Connect to Database ]---------------------------------
         client = dml.pymongo.MongoClient()
@@ -48,10 +47,12 @@ class do_kmeans(dml.Algorithm):
         metrics_data = [[a, b, c] for [a, b, c] in metrics_data if (b is not None) and (
                 c is not None)]  # Sadly ~20 stations must be ignored since they do not reside in chicago proper.
         df = pd.DataFrame.from_dict(result)
-        df.dropna()  # Sadly ~20 stations must be ignored since they do not reside in chicago proper.
+        df = df.dropna()  # Sadly ~20 stations must be ignored since they do not reside in chicago proper.
         X = scale(metrics_data)  # Scale the data.
-        Y = df
-        variable_names = ['Popularity', 'Hardship Index', 'Taxi Demand']
+        scaled_data = X
+        scaled_labels = lambda t: {'Popularity': t[0], 'Hardship Index': t[1], 'Taxi Demand': t[2]}
+        scaled_data = project(scaled_data, scaled_labels)
+        kmeans_centers = []
         # ---[ KMeans Operation ]-----------------------------------
         fignum = 1
         if (trial):
@@ -65,35 +66,64 @@ class do_kmeans(dml.Algorithm):
         for name, est in estimators:
             est.fit(X)
             y_kmeans = est.predict(X)
-            three = plt.figure().gca(projection='3d')
-            three.scatter(X[:, 0], X[:, 1], X[:, 2], c=y_kmeans, cmap='viridis')
-            three.set_xlabel('Hardship Index')
-            three.set_ylabel('Popularity')
-            three.set_zlabel('Taxi Demand')
+            # three = plt.figure().gca(projection='3d')
+            # three.scatter(X[:, 0], X[:, 1], X[:, 2], c=y_kmeans, cmap='viridis')
+            # three.set_xlabel('Hardship Index')
+            # three.set_ylabel('Popularity')
+            # three.set_zlabel('Taxi Demand')
             centers = est.cluster_centers_
-            three.scatter(centers[:, 0], centers[:, 1], centers[:, 2], c='black', s=200, alpha=0.5)
-            title = "Figure #" + str(fignum) + ": " + titles[fignum - 1]
-            plt.title(title)
-            plt.show()  # - uncomment to show graphs
+            kmeans_centers.append([titles[fignum - 1], centers])
+            # three.scatter(centers[:, 0], centers[:, 1], centers[:, 2], c='black', s=200, alpha=0.5)
+            # title = "Figure #" + str(fignum + 3) + ": " + titles[fignum - 1]
+            # plt.title(title)
+            # plt.show()  # - uncomment to show graphs
             fignum = fignum + 1
             clusters.append(y_kmeans)
-        # ---[ MongoDB Insertion ]-----------------------------------
+        # ---[ Cluster Center DataFrame Staging ]--------------------
+        adj_kmeans_centers = []
+        for i in kmeans_centers:
+            numCenters = i[0]
+            for x in i[1]:
+                adj_kmeans_centers.append([numCenters, x[0], x[1], x[2]])
+        # ---[ DataFrame Staging ]-----------------------------------
         df_clusters = pd.DataFrame.from_records(clusters)
         df_clusters = df_clusters.transpose()
         df_final = df.join(df_clusters)
+        df_scaled = pd.DataFrame.from_records(scaled_data)
+        df_scaled_final = df_scaled.join(df_clusters)
+        df_centers = pd.DataFrame.from_records(adj_kmeans_centers)
+        center_cols = ["NumCenters", "HardshipIndex", "Popularity", "TaxiDemand"]
         if (trial):
             columns = ["HardshipIndex", "Popularity", "StationID", "TaxiDemand", "3Zones"]
+            scaled_cols = ["S_HardshipIndex", "S_Popularity", "S_TaxiDemand", "3Zones"]
         else:
             columns = ["HardshipIndex", "Popularity", "StationID", "TaxiDemand", "8Zones", "6Zones", "4Zones", "3Zones"]
+            scaled_cols = ["S_HardshipIndex", "S_Popularity", "S_TaxiDemand", "8Zones", "6Zones", "4Zones", "3Zones"]
         df_final.columns = columns
+        df_stationID = df_final["StationID"]
+        df_scaled_final.columns = scaled_cols
+        df_scaled_final = df_scaled_final.join(df_stationID)
+        df_centers.columns = center_cols
         # ---[ MongoDB Insertion ]-----------------------------------
         df = df_final.to_json(orient="records")
+        df_scaled = df_scaled_final.to_json(orient="records")
+        df_centers = df_centers.to_json(orient="records")
         loaded = json.loads(df)
+        scaled_loaded = json.loads(df_scaled)
+        centers_loaded = json.loads(df_centers)
         repo.dropCollection(repo_name)
         repo.createCollection(repo_name)
+        repo.dropCollection('smithnj.kmeans.data')
+        repo.createCollection('smithnj.kmeans.data')
+        repo.dropCollection('smithnj.kmeans.centers')
+        repo.createCollection('smithnj.kmeans.centers')
         print('done')
         repo[repo_name].insert_many(loaded)
+        repo['smithnj.kmeans.data'].insert_many(scaled_loaded)
+        repo['smithnj.kmeans.centers'].insert_many(centers_loaded)
         repo[repo_name].metadata({'complete': True})
+        repo['smithnj.kmeans.data'].metadata({'complete': True})
+        repo['smithnj.kmeans.centers'].metadata({'complete': True})
         # ---[ Finishing Up ]-------------------------------------------
         print(repo[repo_name].metadata())
         repo.logout()
