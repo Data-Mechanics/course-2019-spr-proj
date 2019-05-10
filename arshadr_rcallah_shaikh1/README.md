@@ -1,3 +1,6 @@
+# Project 3
+For project 3 we created 4 different visualizations. They are each described in the project3_writeup.pdf file. The visualizations themselves can be found in the project3_writeup.pdf. The code used to generate these visualizations is in chelsea_viz.py. Originally we created a jupyter notebook to create these vidualizations but we moved the code from the notebook into this file and commented where each graph is made. We also added the powerpoint into this repo for referencing our poster.  
+
 # Project 2
 
 ## income_data.py
