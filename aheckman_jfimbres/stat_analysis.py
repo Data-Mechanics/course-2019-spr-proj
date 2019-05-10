@@ -5,6 +5,7 @@ import uuid
 import aheckman_jfimbres.Helpers.transformations as t
 import aheckman_jfimbres.Helpers.stats as s
 import scipy.stats
+import matplotlib.pyplot as plt
 
 class stat_analysis(dml.Algorithm):
     contributor = 'aheckman_jfimbres'

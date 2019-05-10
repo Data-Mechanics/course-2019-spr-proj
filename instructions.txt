@@ -1,0 +1,15 @@
+Instructions:
+First, start a mongo daemon and run the execute command on aheckman_jfimbres
+This is essential because it fills the databases that the web service uses.
+Next, cd into the dmproj directory.  If you do not do this you will get an error.
+
+run 'python dmweb.py' from the dmproj directory.  It should start running.
+While it is running, go to http://127.0.0.1:2000, this is the web server that 
+hosts our visualizations.
+To interact with our opinion visualization, click on one of the bars.
+The web page will reload and display a scatter plot of opinion by state, 
+color coded for Republicans and Democrats, underneath the bar graph.
+To interact with our state emissions per capita vs. carbon efficacy 
+visualization, enter the name of a state(must be capitalized).  The page 
+will reload, with the graph having a purple dot indicating the stats of the 
+state you entered.

@@ -64,23 +64,32 @@ class optimization(dml.Algorithm):
         k10 = KMeans(n_clusters=2, random_state=0).fit(q10)
         k11 = KMeans(n_clusters=2, random_state=0).fit(q11)
 
+
         inertias = [k1.inertia_, k2.inertia_, k3.inertia_, k4.inertia_, k5.inertia_, k6.inertia_, k7.inertia_,
                     k8.inertia_, k9.inertia_, k10.inertia_, k11.inertia_]
+
+        '''questions = ['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8', 'q9', 'q_10', 'q_11']
+        plt.figure()
+        plt.bar(questions, inertias)
+        plt.xlabel('Questions')
+        plt.ylabel('Total distance between agreement')
+        plt.title('Disagreement per question')
+        plt.show()'''
 
 
         inertias = {"disagreement on each question": inertias}
 
-        questions = {'q1': q1,
-                     'q2': q2,
-                     'q3': q3,
-                     'q4': q4,
-                     'q5': q5,
-                     'q6': q6,
-                     'q7': q7,
-                     'q8': q8,
-                     'q9': q9,
-                     'q10': q10,
-                     'q11': q11}
+        questions = {'Question 1': q1,
+                     'Question 2': q2,
+                     'Question 3': q3,
+                     'Question 4': q4,
+                     'Question 5': q5,
+                     'Question 6': q6,
+                     'Question 7': q7,
+                     'Question 8': q8,
+                     'Question 9': q9,
+                     'Question 10': q10,
+                     'Question 11': q11}
 
         repo.dropCollection("k_means")
         repo.createCollection("k_means")
@@ -89,6 +98,7 @@ class optimization(dml.Algorithm):
         repo.dropCollection("questions")
         repo.createCollection("questions")
         repo['aheckman_jfimbres.questions'].insert(questions)
+
 
         repo.logout()
 
