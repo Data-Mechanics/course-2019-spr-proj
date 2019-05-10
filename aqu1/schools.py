@@ -103,12 +103,4 @@ class schools(dml.Algorithm):
         doc.wasDerivedFrom(schools, resource_colleges, get_schools, get_schools, get_schools)
         
         repo.logout()
-
         return doc
-
-'''   
-schools.execute()
-doc = schools.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
-'''

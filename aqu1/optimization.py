@@ -111,10 +111,3 @@ class optimization(dml.Algorithm):
         repo.logout()
 
         return doc
-'''
-optimization.execute()
-doc = optimization.provenance()
-#print(type(optimization.provenance()))
-print(optimization.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
-'''

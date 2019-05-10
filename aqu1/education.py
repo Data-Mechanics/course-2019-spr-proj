@@ -66,12 +66,4 @@ class education(dml.Algorithm):
         doc.wasDerivedFrom(education, resource_education, get_education, get_education, get_education)
         
         repo.logout()
-
         return doc
-
-'''
-education.execute()
-doc = education.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
-'''

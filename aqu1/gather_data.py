@@ -106,20 +106,20 @@ class gather_data(dml.Algorithm):
         doc.add_namespace('dat', 'http://datamechanics.io/data/') # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
         doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
-        doc.add_namespace('stats', 'http://google.com/')
+        doc.add_namespace('dm','http://datamechanics.io/data/aqu1')
         
-        this_script = doc.agent('alg:aqu1#combine_data', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+        this_script = doc.agent('alg:aqu1#gather_data', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
         
-        # Statistical Analysis Report
-        resource_stats_analysis = doc.entity('stats:correlation', {'prov:label':'Statistical Analysis', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
-        get_stats = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
-        doc.wasAssociatedWith(get_stats, this_script)
-        doc.usage(get_stats, resource_stats_analysis, startTime, None, {prov.model.PROV_TYPE:'ont:Retrieval'})
+        resource_data = doc.entity('dm:gather_data', {'prov:label':'Gather Data for Map', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        get_data = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        doc.wasAssociatedWith(get_data, this_script)
+        doc.usage(get_data, resource_data, startTime, None, {prov.model.PROV_TYPE:'ont:Retrieval'})
 
-        stats_analysis = doc.entity('dat:aqu1#correlation', {prov.model.PROV_LABEL:'Statistical Analysis', prov.model.PROV_TYPE: 'ont:DataSet'})
-        doc.wasAttributedTo(stats_analysis, this_script)
-        doc.wasGeneratedBy(stats_analysis, get_stats, endTime)
-        doc.wasDerivedFrom(stats_analysis, resource_stats_analysis, get_stats, get_stats, get_stats)
-        doc.wasDerivedFrom(stats_analysis, resource_stats_analysis, get_stats, get_stats, get_stats)
+        gather_data = doc.entity('dat:aqu1#gatherdata', {prov.model.PROV_LABEL:'Gather Data for Map', prov.model.PROV_TYPE: 'ont:DataSet'})
+        doc.wasAttributedTo(gather_data, this_script)
+        doc.wasGeneratedBy(gather_data, get_data, endTime)
+        doc.wasDerivedFrom(gather_data, resource_data, get_data, get_data, get_data)
+        doc.wasDerivedFrom(gather_data, resource_data, get_data, get_data, get_data)
         
         repo.logout()
+        return doc
