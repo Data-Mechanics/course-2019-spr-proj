@@ -99,10 +99,10 @@ class transformOpenSpace(dml.Algorithm):
 
         return doc
 
-#transformOpenSpace.execute(trial=True)
-#doc = transformOpenSpace.provenance()
-#print(doc.get_provn())
-#print(json.dumps(json.loads(doc.serialize()), indent=4))
+# transformOpenSpace.execute()
+# doc = transformOpenSpace.provenance()
+# print(doc.get_provn())
+# print(json.dumps(json.loads(doc.serialize()), indent=4))
 
 
 ## eof

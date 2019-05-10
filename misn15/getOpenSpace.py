@@ -69,6 +69,6 @@ class getOpenSpace(dml.Algorithm):
 # doc = getOpenSpace.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))
-#
+
 
 ## eof

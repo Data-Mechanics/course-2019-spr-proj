@@ -23,7 +23,8 @@ class getZipcodes(dml.Algorithm):
         url = 'http://datamechanics.io/data/zip_tracts.json'
         response = urllib.request.urlopen(url).read().decode("utf-8")
         r = json.loads(response)
-        s = json.dumps(r, sort_keys=True, indent=2)      
+        s = json.dumps(r, sort_keys=True, indent=2)
+
         repo.dropCollection("zipcodes")
         repo.createCollection("zipcodes")
         repo['misn15.zipcodes'].insert_many(r)
@@ -65,10 +66,10 @@ class getZipcodes(dml.Algorithm):
         return doc
 
 
-##getZipcodes.execute()
-##doc = getZipcodes.provenance()
-##print(doc.get_provn())
-##print(json.dumps(json.loads(doc.serialize()), indent=4))
+# getZipcodes.execute()
+# doc = getZipcodes.provenance()
+# print(doc.get_provn())
+# print(json.dumps(json.loads(doc.serialize()), indent=4))
 
 
 ## eof

@@ -105,10 +105,10 @@ class cleanHealth(dml.Algorithm):
         return doc
 
 
-##cleanHealth.execute()
-##doc = cleanHealth.provenance()
-##print(doc.get_provn())
-##print(json.dumps(json.loads(doc.serialize()), indent=4))
+# cleanHealth.execute()
+# doc = cleanHealth.provenance()
+# print(doc.get_provn())
+# print(json.dumps(json.loads(doc.serialize()), indent=4))
 
 
 # eof
