@@ -32,19 +32,19 @@ class crimeRateValueRegression(dml.Algorithm):
         mean_values = [doc['value'] for doc in crime_rate_mean_value]
         
         #regr = regression.regression()
-
-        result = regr.getRegressionResults(crime_rates, mean_values, "crime-rate-value-regr", 20)       
-        result['_id'] = 'crime_rate_mean_value_regression'
+        if len(crime_rate) > 0:
+            result = regr.getRegressionResults(crime_rates, mean_values, "crime-rate-value-regr", 20)       
+            result['_id'] = 'crime_rate_mean_value_regression'
 
         
-        repo.dropCollection('asadeg02_gxy9598.regressions')
-        repo.createCollection('asadeg02_gxy9598.regressions') 
+           repo.dropCollection('asadeg02_gxy9598.regressions')
+           repo.createCollection('asadeg02_gxy9598.regressions') 
         
-        #result is already a dictionary we store the coefficients and scores in the collection
-        repo['asadeg02_gxy9598.regressions'].insert_one(result)
+           #result is already a dictionary we store the coefficients and scores in the collection
+           repo['asadeg02_gxy9598.regressions'].insert_one(result)
         
            
-        repo['asadeg02_gxy9598.regressions'].metadata({'complete':True})
+           repo['asadeg02_gxy9598.regressions'].metadata({'complete':True})
         print(repo['asadeg02_gxy9598.regressions'].metadata())
         print('Load Regression Results For Modeling The Relationship Between Crime Rate And Mean Property Value') 
         repo.logout()       
