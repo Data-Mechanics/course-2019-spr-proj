@@ -1,3 +1,5 @@
+import urllib.request
+import json
 import dml
 import prov.model
 import datetime
@@ -6,12 +8,11 @@ import uuid
 from random import shuffle
 from math import sqrt
 
-class correlation(dml.Algorithm):
+class crime_priceCorrelation(dml.Algorithm):# contributor = 'Jinghang_Yuan'
 
-    #project 2 contributors:
     contributor = 'xcao19_yjhang_zy0105'
-    reads = ['xcao19_yjhang_zy0105.ZIPCounter']
-    writes = ['xcao19_yjhang_zy0105.correlation']
+    reads = []
+    writes = []
 
     @staticmethod
     def execute(trial=False):
@@ -24,23 +25,16 @@ class correlation(dml.Algorithm):
         repo = client.repo
         repo.authenticate('xcao19_yjhang_zy0105', 'xcao19_yjhang_zy0105')
 
-        data=repo['Jinghang_Yuan.ZIPCounter'].find()
+        url = 'http://datamechanics.io/data/airbnb_neighborhood_crime_rate.csv.json'
+        response = urllib.request.urlopen(url).read().decode("utf-8")
+        r = json.loads(response)
 
-        if trial:
-            data = data[0:20:1]
+        ave_price = []
+        crime = []
 
-        ave_val = []
-        centerNum = []
-        centerPoolNum = []
-        policeStationNum = []
-        schoolNum = []
-
-        for i in data:
-            ave_val += [i["val_avg"]]
-            centerNum += [i["centerNum"]]
-            centerPoolNum += [i["centerPoolNum"]]
-            policeStationNum += [i["policeStationNum"]]
-            schoolNum += [i["schoolNum"]]
+        for i in r:
+            ave_price += [i["price"]]
+            crime += [i["crime_rate"]]
 
         def permute(x):
             shuffled = [xi for xi in x]
@@ -63,41 +57,12 @@ class correlation(dml.Algorithm):
 
         res = []
 
-        # print("avg_value vs centerNum")
-        corr_avg_value_centerNum = corr(ave_val,centerNum)
-        # print(corr_avg_value_centerNum)
-        # print("----------")
+        print("ave_price vs crime")
+        corr_ave_price_crime = corr(ave_price,crime)
+        print(corr_ave_price_crime)
+        print("----------")
 
-        res.append({'avg_value vs centerNum': corr_avg_value_centerNum})
-
-        # print("avg_value vs centerPoolNum")
-        corr_avg_value_centerPoolNum = corr(ave_val, centerPoolNum)
-        # print(corr_avg_value_centerPoolNum)
-        # print("----------")
-
-        res.append({'avg_value vs centerPoolNum': corr_avg_value_centerPoolNum})
-
-        # print("avg_value vs policeStationNum")
-        corr_avg_value_policeStationNum = corr(ave_val, policeStationNum)
-        # print(corr_avg_value_policeStationNum)
-        # print("----------")
-
-        res.append({'avg_value vs policeStationNum': corr_avg_value_policeStationNum})
-
-        # print("avg_value vs schoolNum")
-        corr_avg_value_schoolNum = corr(ave_val, schoolNum)
-        # print(corr_avg_value_schoolNum)
-        # print("----------")
-
-        res.append({'avg_value vs schoolNum': corr_avg_value_schoolNum})
-
-        # print(res)
-
-        repo.dropCollection("correlation")
-        repo.createCollection("correlation")
-        repo["xcao19_yjhang_zy0105.correlation"].insert_many(res)
-
-        # print(list(repo['Jinghang_Yuan.correlation'].find()))
+        # res.append({'avg_value vs centerPoolNum': corr_avg_value_centerPoolNum})
 
         repo.logout()
         endTime = datetime.datetime.now()
@@ -109,7 +74,7 @@ class correlation(dml.Algorithm):
         # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('xcao19_yjhang_zy0105', 'xcao19_yjhang_zy0105')
+        repo.authenticate('Jinghang_Yuan', 'Jinghang_Yuan')
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')  # The scripts are in <folder>#<filename> format.
         doc.add_namespace('dat', 'http://datamechanics.io/data/')  # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont',
@@ -119,8 +84,8 @@ class correlation(dml.Algorithm):
 
 
         #---entities---
-        resource = doc.entity('dat: xcao19_yjhang_zy0105#xcao19_yjhang_zy0105.ZIPCounter', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
-        res = doc.entity('dat:xcao19_yjhang_zy0105#xcao19_yjhang_zy0105.correlation',
+        resource = doc.entity('dat: Jinghang_Yuan#Jinghang_Yuan.ZIPCounter', {'prov:label':'311, Service Requests', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        res = doc.entity('dat:Jinghang_Yuan#Jinghang_Yuan.correlation',
                             {prov.model.PROV_LABEL: 'result', prov.model.PROV_TYPE: 'ont:DataSet'})
         #---agents---
         this_script = doc.agent('alg:Xcao19_yjhang_zy0105#correlation',
@@ -141,3 +106,11 @@ class correlation(dml.Algorithm):
         repo.logout()
 
         return doc
+
+#crime_priceCorrelation.execute()
+#crime_priceCorrelation.provenance()
+# doc = crime_priceCorrelation.provenance()
+# print(doc.get_provn())
+# print(json.dumps(json.loads(doc.serialize()), indent=4))
+
+#eof

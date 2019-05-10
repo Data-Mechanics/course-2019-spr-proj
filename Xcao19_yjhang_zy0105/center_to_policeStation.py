@@ -1,21 +1,19 @@
-import urllib.request
-import json
 import dml
 import prov.model
 import datetime
 import uuid
 
 class center_to_policeStation(dml.Algorithm):
-    contributor = 'Jinghang_Yuan'
-    reads = ['Jinghang_Yuan.center','Jinghang_Yuan.policeStation']
-    writes = ['Jinghang_Yuan.center_to_policeStation']
+    contributor = 'xcao19_yjhang_zy0105'
+    reads = ['xcao19_yjhang_zy0105.center','xcao19_yjhang_zy0105.policeStation']
+    writes = ['xcao19_yjhang_zy0105.center_to_policeStation']
 
     @staticmethod
     def execute(trial=False):
         startTime = datetime.datetime.now()
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('Jinghang_Yuan', 'Jinghang_Yuan')
+        repo.authenticate('xcao19_yjhang_zy0105', 'xcao19_yjhang_zy0105')
 
         def select(R, s):
             return [t for t in R if s(t)]
@@ -27,12 +25,10 @@ class center_to_policeStation(dml.Algorithm):
             return [p(t) for t in R]
 
         # projection of policeStation
-        X = list(repo['Jinghang_Yuan.policeStation'].find({}, {'_id':0,'BID':1,'ZIP': 1}))
-        # print(list(repo['Jinghang_Yuan.policeStation'].find({}, {'_id':0,'BID':1,'ZIP': 1})))
+        X = list(repo['xcao19_yjhang_zy0105.policeStation'].find({}, {'_id':0,'BID':1,'ZIP': 1}))
 
         # projection of center
-        Y = list(repo['Jinghang_Yuan.center'].find({}, {'_id':0,'FID':1,'ZIP':1}))
-        # print(list(repo['Jinghang_Yuan.center'].find({}, {'_id':0,'FID':1,'ZIP':1})))
+        Y = list(repo['xcao19_yjhang_zy0105.center'].find({}, {'_id':0,'FID':1,'ZIP':1}))
 
         #join of policeStation and center
         M = select(product(X, Y), lambda t: t[0]['ZIP'] == t[1]['ZIP'])
@@ -41,9 +37,7 @@ class center_to_policeStation(dml.Algorithm):
 
         repo.dropCollection("center_to_policeStation")
         repo.createCollection("center_to_policeStation")
-        repo["Jinghang_Yuan.center_to_policeStation"].insert_many(RESULT)
-
-        # print(list(repo["Jinghang_Yuan.center_to_policeStation"].find()))
+        repo["xcao19_yjhang_zy0105.center_to_policeStation"].insert_many(RESULT)
 
         repo.logout()
         endTime = datetime.datetime.now()
@@ -53,7 +47,7 @@ class center_to_policeStation(dml.Algorithm):
     def provenance(doc=prov.model.ProvDocument(), startTime=None, endTime=None):
         client = dml.pymongo.MongoClient()
         repo = client.repo
-        repo.authenticate('Jinghang_Yuan', 'Jinghang_Yuan')
+        repo.authenticate('xcao19_yjhang_zy0105', 'xcao19_yjhang_zy0105')
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/')  # The scripts are in <folder>#<filename> format.
         doc.add_namespace('dat', 'http://datamechanics.io/data/')  # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#')  # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
@@ -61,14 +55,14 @@ class center_to_policeStation(dml.Algorithm):
         #doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
 
 
-        this_script = doc.agent('alg:Jinghang_Yuan#center_to_policeStation', {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
+        this_script = doc.agent('alg:xcao19_yjhang_zy0105#center_to_policeStation', {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
 
-        center = doc.entity('dat:Jinghang_Yuan#center',
+        center = doc.entity('dat:xcao19_yjhang_zy0105#center',
                            {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource', 'ont:Extension': 'json'})
-        policeStation = doc.entity('dat:Jinghang_Yuan#policeStation',
+        policeStation = doc.entity('dat:xcao19_yjhang_zy0105#policeStation',
                                {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource',
                                 'ont:Extension': 'json'})
-        center_policeStation_by_zip = doc.entity('dat:Jinghang_Yuan#center_policeStation_by_zip',
+        center_policeStation_by_zip = doc.entity('dat:xcao19_yjhang_zy0105#center_policeStation_by_zip',
                                {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource',
                                 'ont:Extension': 'json'})
 
@@ -90,11 +84,3 @@ class center_to_policeStation(dml.Algorithm):
         repo.logout()
 
         return doc
-
-
-center_to_policeStation.execute()
-# # doc = school_to_property.provenance()
-# # print(doc.get_provn())
-# # print(json.dumps(json.loads(doc.serialize()), indent=4))
-
-##eof
