@@ -12,9 +12,6 @@ from io import StringIO
 class fetch_data(dml.Algorithm):
     contributor = 'mriver_osagga'
     reads = []
-    # writes = [  'mriver_osagga.bos_neighborhoods', 'mriver_osagga.bos_neighborhoods_income',
-    #             'mriver_osagga.bos_neighborhoods_ages', 'mriver_osagga.bos_neighborhoods_education',
-    #             'mriver_osagga.bos_311_reqs', 'mriver_osagga.ny_uber_data' ]
     writes = [ 'mriver_osagga.ny_uber_data' ]
 
     @staticmethod
@@ -28,69 +25,6 @@ class fetch_data(dml.Algorithm):
         repo = client.repo
         repo.authenticate('mriver_osagga', 'mriver_osagga')
         
-        '''
-        # for the data set `bos_neighborhoods`
-        url = 'http://opendata.arcgis.com/datasets/3525b0ee6e6b427f9aab5d0a1d0a1a28_0.csv'
-        response = urllib.request.urlopen(
-            url, context=context).read().decode("utf-8")
-        r = [json.loads(json.dumps(d))
-            for d in csv.DictReader(StringIO(response))]
-        repo.dropCollection("bos_neighborhoods")
-        repo.createCollection("bos_neighborhoods")
-        repo['mriver_osagga.bos_neighborhoods'].insert_many(r)
-        repo['mriver_osagga.bos_neighborhoods'].metadata({'complete': True})
-        print(repo['mriver_osagga.bos_neighborhoods'].metadata())
-
-        # for the data set `bos_neighborhoods_income`
-        url = 'http://bostonopendata-boston.opendata.arcgis.com/datasets/34f2c48b670d4b43a617b1540f20efe3_0.csv'
-        response = urllib.request.urlopen(
-            url, context=context).read().decode("utf-8")
-        r = [json.loads(json.dumps(d))
-            for d in csv.DictReader(StringIO(response))]
-        repo.dropCollection("bos_neighborhoods_income")
-        repo.createCollection("bos_neighborhoods_income")
-        repo['mriver_osagga.bos_neighborhoods_income'].insert_many(r)
-        repo['mriver_osagga.bos_neighborhoods_income'].metadata(
-            {'complete': True})
-        print(repo['mriver_osagga.bos_neighborhoods_income'].metadata())
-
-        # for the data set `bos_neighborhoods_ages`
-        url = 'http://data.boston.gov/dataset/8202abf2-8434-4934-959b-94643c7dac18/resource/c53f0204-3b39-4a33-8068-64168dbe9847/download/age.csv'
-        response = urllib.request.urlopen(
-            url, context=context).read().decode("utf-8")
-        r = [json.loads(json.dumps(d))
-            for d in csv.DictReader(StringIO(response))]
-        repo.dropCollection("bos_neighborhoods_ages")
-        repo.createCollection("bos_neighborhoods_ages")
-        repo['mriver_osagga.bos_neighborhoods_ages'].insert_many(r)
-        repo['mriver_osagga.bos_neighborhoods_ages'].metadata(
-            {'complete': True})
-        print(repo['mriver_osagga.bos_neighborhoods_ages'].metadata())
-
-        # for the data set `bos_neighborhoods_education`
-        url = 'http://data.boston.gov/dataset/8202abf2-8434-4934-959b-94643c7dac18/resource/bb0f26f8-e472-483c-8f0c-e83048827673/download/educational-attainment-age-25.csv'
-        response = urllib.request.urlopen(
-            url, context=context).read().decode("utf-8")
-        r = [json.loads(json.dumps(d))
-            for d in csv.DictReader(StringIO(response))]
-        repo.dropCollection("bos_neighborhoods_education")
-        repo.createCollection("bos_neighborhoods_education")
-        repo['mriver_osagga.bos_neighborhoods_education'].insert_many(r)
-        repo['mriver_osagga.bos_neighborhoods_education'].metadata(
-            {'complete': True})
-        print(repo['mriver_osagga.bos_neighborhoods_education'].metadata())
-
-        # for the data set `bos_311_reqs`
-        url = 'http://data.boston.gov/dataset/8048697b-ad64-4bfc-b090-ee00169f2323/resource/2968e2c0-d479-49ba-a884-4ef523ada3c0/download/tmpnjyvx2w3.csv'
-        response = urllib.request.urlopen(url, context=context).read().decode("utf-8")
-        r = [json.loads(json.dumps(d))
-            for d in csv.DictReader(StringIO(response))]
-        repo.dropCollection("bos_311_reqs")
-        repo.createCollection("bos_311_reqs")
-        repo['mriver_osagga.bos_311_reqs'].insert_many(r[-len(r)//4:])
-        repo['mriver_osagga.bos_311_reqs'].metadata({'complete': True})
-        print(repo['mriver_osagga.bos_311_reqs'].metadata())
-        '''
         # for the data set `ny_uber_data`
         url = 'http://datamechanics.io/data/uber-raw-data-jun14.csv'
         response = urllib.request.urlopen(url, context=context).read().decode("utf-8")
@@ -133,16 +67,6 @@ class fetch_data(dml.Algorithm):
         this_script = doc.agent('alg:mriver_osagga#fetch_data', {
                                 prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
 
-        #resource_1 = doc.entity('bdp:3525b0ee6e6b427f9aab5d0a1d0a1a28_0', {
-                                # 'prov:label': 'Boston Neighborhoods', prov.model.PROV_TYPE: 'ont:DataResource', 'ont:Extension': 'csv'})
-        #resource_2 = doc.entity('bdp:34f2c48b670d4b43a617b1540f20efe3_0.csv', {
-                                # 'prov:label': 'Climate Ready Boston Social Vulnerability', prov.model.PROV_TYPE: 'ont:DataResource', 'ont:Extension': 'csv'})
-        #resource_3 = doc.entity('bdp:age', {'prov:label': 'Age demographics by neighborhood',
-                                            # prov.model.PROV_TYPE: 'ont:DataResource', 'ont:Extension': 'csv'})
-        #resource_4 = doc.entity('bdp:educational-attainment-age-25', {
-                                # 'prov:label': 'Educational attainment demographics by neighborhood', prov.model.PROV_TYPE: 'ont:DataResource', 'ont:Extension': 'csv'})
-        #resource_5 = doc.entity('bdp:tmpnjyvx2w3', {
-        #                        'prov:label': '311 Service Requests', prov.model.PROV_TYPE: 'ont:DataResource', 'ont:Extension': 'csv'})
         resource_6 = doc.entity('dat:uber-raw-data-jun14', {
                                 'prov:label': 'Uber trip data', prov.model.PROV_TYPE: 'ont:DataResource', 'ont:Extension': 'csv'})
 
@@ -151,74 +75,19 @@ class fetch_data(dml.Algorithm):
 
         doc.wasAssociatedWith(fetch_data, this_script)
 
-        # doc.usage(fetch_data, resource_1, startTime, None,
-        #           {prov.model.PROV_TYPE: 'ont:Retrieval',
-        #            'ont:Query': '?type=Boston+Neighborhoods&$select=name'
-        #            }
-        #           )
-        # doc.usage(fetch_data, resource_2, startTime, None,
-        #           {prov.model.PROV_TYPE: 'ont:Retrieval',
-        #            'ont:Query': '?type=Climate+Ready+Boston+Social+Vulnerability&$select=name'
-        #            }
-        #           )
-        # doc.usage(fetch_data, resource_3, startTime, None,
-        #           {prov.model.PROV_TYPE: 'ont:Retrieval',
-        #            'ont:Query': '?type=Age+demographics+by+neighborhood&$select=name'
-        #            }
-        #           )
-        # doc.usage(fetch_data, resource_4, startTime, None,
-        #           {prov.model.PROV_TYPE: 'ont:Retrieval',
-        #            'ont:Query': '?type=Educational+attainment+demographics+by+neighborhood&$select=name'
-        #            }
-        #           )
-        '''doc.usage(fetch_data, resource_5, startTime, None,
-                  {prov.model.PROV_TYPE: 'ont:Retrieval',
-                   'ont:Query': '?type=311+Service+Requests&$select=name'
-                   }
-                  ) '''
         doc.usage(fetch_data, resource_6, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:Retrieval',
                    'ont:Query': '?type=uber+trip+data&$select=name'
                    }
                   )
 
-        # output_1 = doc.entity('dat:mriver_osagga#bos_neighborhoods', {
-        #                       prov.model.PROV_LABEL: 'Boston Neighborhoods', prov.model.PROV_TYPE: 'ont:DataSet'})
-        # output_2 = doc.entity('dat:mriver_osagga#bos_neighborhoods_income', {
-        #                       prov.model.PROV_LABEL: 'Income by Neighborhood', prov.model.PROV_TYPE: 'ont:DataSet'})
-        # output_3 = doc.entity('dat:mriver_osagga#bos_neighborhoods_ages', {
-        #                       prov.model.PROV_LABEL: 'Age by Neighborhood', prov.model.PROV_TYPE: 'ont:DataSet'})
-        # output_4 = doc.entity('dat:mriver_osagga#bos_neighborhoods_education', {
-        #                       prov.model.PROV_LABEL: 'Education by Neighborhood', prov.model.PROV_TYPE: 'ont:DataSet'})
-        # output_5 = doc.entity('dat:mriver_osagga#bos_311_reqs', {
-        #                       prov.model.PROV_LABEL: '311 Service Requests', prov.model.PROV_TYPE: 'ont:DataSet'})
         output_6 = doc.entity('dat:mriver_osagga#ny_uber_data', {
                               prov.model.PROV_LABEL: 'Uber trip data', prov.model.PROV_TYPE: 'ont:DataSet'})
 
-        #doc.wasAttributedTo(output_1, this_script)
-        #doc.wasAttributedTo(output_2, this_script)
-        #doc.wasAttributedTo(output_3, this_script)
-        #doc.wasAttributedTo(output_4, this_script)
-        #doc.wasAttributedTo(output_5, this_script)
         doc.wasAttributedTo(output_6, this_script)
 
-        # doc.wasGeneratedBy(output_1, fetch_data, endTime)
-        # doc.wasGeneratedBy(output_2, fetch_data, endTime)
-        # doc.wasGeneratedBy(output_3, fetch_data, endTime)
-        # doc.wasGeneratedBy(output_4, fetch_data, endTime)
-        # doc.wasGeneratedBy(output_5, fetch_data, endTime)
         doc.wasGeneratedBy(output_6, fetch_data, endTime)
 
-        # doc.wasDerivedFrom(output_1, resource_1, fetch_data,
-        #                    fetch_data, fetch_data)
-        # doc.wasDerivedFrom(output_2, resource_2, fetch_data,
-        #                    fetch_data, fetch_data)
-        # doc.wasDerivedFrom(output_3, resource_3, fetch_data,
-        #                    fetch_data, fetch_data)
-        # doc.wasDerivedFrom(output_4, resource_4, fetch_data,
-        #                    fetch_data, fetch_data)
-        #doc.wasDerivedFrom(output_5, resource_5, fetch_data,
-        #                   fetch_data, fetch_data)
         doc.wasDerivedFrom(output_6, resource_6, fetch_data,
                            fetch_data, fetch_data)
 

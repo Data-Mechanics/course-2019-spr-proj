@@ -1,0 +1,35 @@
+<!--index.html-->
+
+<head>
+  <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+</head>
+
+<div class="container">
+  <br>
+  <br>
+  <center>
+    <h1> <strong>
+        <font color="black">Uber Pick Up in NYC</font><strong></h1>
+    <center>
+      <br>
+      <center>
+        <h2>
+          <font color="black">Enter number of pickup points below: </font>
+        </h2>
+        <center>
+          <br>
+
+          <body style="background-color:powderblue;">
+            <input id="k_val_box" type="text" name="k_val"> &nbsp;
+            <input type="image" src="http://datamechanics.io/data/uberLogo.jpeg" height="35" width="35" name="saveForm"
+              class="btTxt submit" id="saveForm" onclick="getGraph()" />
+            <br><br>
+            <img id="graph_box" height="500" width="700" src="">
+</div>
+
+<script>
+  function getGraph() {
+    var k_val = $('#k_val_box').val();
+    $('#graph_box').attr('src', `/app/api/v0.1/compute/${k_val}`);
+  }
+</script>
