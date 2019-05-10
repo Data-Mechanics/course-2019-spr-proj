@@ -84,7 +84,7 @@ Another analysis that we wanted to do for project 2, as to find the correlation 
 ## Results
 
 
- **Correlation reuslts between age of owners and number of peroperties owned by them**
+ **Correlation results between age of owners and number of peroperties owned by them**
  
 | **Age Range** | **Correlation coefficient**  | **P-Value** |
 | :---         |     :---:      |          ---: |
@@ -100,7 +100,7 @@ Another analysis that we wanted to do for project 2, as to find the correlation 
 | 19-95 | 0.1296640596971729    | 0.0415  |
 
 --------------------------------------------------------------------------------------------------------------
- **Regression reuslts between age of owners and number of peroperties owned by them**
+ **Regression results between age of owners and number of peroperties owned by them**
  
 | **Age Range** | **Coefficient**  | **mean_square_error** | **score** |
 | :---:          |     :---:      |        :---:           |  :---:              |
@@ -134,3 +134,15 @@ Running The Code
 In Order to be able to run the code you need to install `selenium` and `xmltodict`. We are using selenium for scraping Accsesssors and using xmltodic for parsing the Zillow Search API responses since they are in xml foramt.
 
 For scraping Accsesssors in scrapeBostonGov method in "mergeValueWithCrimeRate.py" module, you need to specify the path to your chrome web driver. The path already used, is the default path when you install chrome web driver. 
+
+-----------------------------------------------------------------------------------------------------------------
+## Project 3
+For project 3 we have implemented a web app which runs the statistical analysis for correlation between age and number of properties owned. this web app is impelemnted using flask.(app.zip)
+We have also implemented an interactive map for all the properties not on the market in south Bsoton.
+this map has been created using folium and we have embedded the html file witihn our java script app which is to be delivered to spark.(nteractivemapapp.zip) 
+
+Below is the picture of our interactive map
+
+![map3](https://user-images.githubusercontent.com/32320836/57174243-e9ee9980-6e09-11e9-8959-7fd979acb32e.png)
+
+Red makerker are the porperties that we have their owners's contact information and greens onew are the ones that we don't have thier owners' contact info.

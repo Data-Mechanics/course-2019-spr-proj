@@ -25,7 +25,7 @@ class Clustering(dml.Algorithm):
 
         #inserts the data we'll be working with into Mongo
         Clustering.insertDataPointsToMongo(trial)
-        print("Inserted data points into mongo with trail set to {}".format(trial))
+
 
         #set up the database connection
         client = dml.pymongo.MongoClient()
@@ -73,7 +73,7 @@ class Clustering(dml.Algorithm):
             repo['darren68_gladding_ralcalde.' + 'Clusters' + year].insert_many(dicList)
             repo['darren68_gladding_ralcalde.' + 'Clusters' + year].metadata({'complete': True})
 
-            print("Wrote Clusters" + year + " collection to Mongo")
+
 
         repo.logout()
         endTime = datetime.datetime.now()
@@ -104,24 +104,24 @@ class Clustering(dml.Algorithm):
         i = 0
         OLD = []
         while OLD != M:
-            print("iteration {}\nM: {}\n".format(i, sorted(M)))
+
             OLD = M
             #computes the distance between the point in M and the point in P
             MPD = [(m, p, Clustering.dist(m, p)) for (m, p) in Clustering.product(M, P)]
-            #print("MPD[0]: {}".format(MPD[0]))
+
 
             #gets the list of of points and their distance to an M point
             PDs = [(p, d) for (m, p, d) in MPD]
-            #print("PDs[0]: {}".format(PDs[0]))
+
 
             #assocaites p point with smallest distance
             PD = Clustering.aggregate(PDs, min)
-            #print("PD[0]: {}".format(PD[0]))
+
 
             MP = [(m, p) for ((m, p, d), (p2, d2)) in Clustering.product(MPD, PD) if p == p2 and d == d2]
-            #print("MP[0]: {}".format(MP[0]))
+
             MT = Clustering.aggregate(MP, Clustering.plus)
-            #print("MT: {}".format(MT))
+
             M1 = [(m, 1) for (m, _) in MP]
             MC = Clustering.aggregate(M1, sum)
             M = [Clustering.scale(t, c) for ((m, t), (m2, c)) in Clustering.product(MT, MC) if m == m2]
@@ -189,17 +189,17 @@ class Clustering(dml.Algorithm):
             count = 0
             for doc in docs:
                 count += 1
-                if len(doc['x']) != 0 and len(doc['y']) != 0 and ((count % 20) == 0) and doc['x'] != "0" and doc['y'] != "0":
+                if len(doc['x']) != 0 and len(doc['y']) != 0 and ((count % 10) == 0):
                     liOfXs.append(float(doc['x']))
                     liOfYs.append(float(doc['y']))
-                    liOfDates.append(doc['crashdate'][-4:])
+                    liOfDates.append(str(doc['datetime'].year))
                     liOfCIDs.append(doc['crashnumber'])
         else:
             for doc in docs:
-                if len(doc['x']) != 0 and (len(doc['y']) != 0) and doc['x'] != "0" and doc['y'] != "0":
+                if len(doc['x']) != 0 and len(doc['y']) != 0:
                     liOfXs.append(float(doc['x']))
                     liOfYs.append(float(doc['y']))
-                    liOfDates.append(doc['crashdate'][-4:])
+                    liOfDates.append(str(doc['datetime'].year))
                     liOfCIDs.append(doc['crashnumber'])
 
         # All the data points are here, I should save them into mongo
@@ -472,3 +472,5 @@ class Clustering(dml.Algorithm):
 
 
         return doc
+
+

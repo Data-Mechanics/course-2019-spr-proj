@@ -1,3 +1,5 @@
+# CS504 Project: 
+More details could be find in poster and final report.
 # Project 1 Description
 In this project, we are collecting data from multiple sources which is need for 
 THE ANALYZE BOSTON OPEN DATA CHALLENGE:  
@@ -30,6 +32,19 @@ fire incidents to find which weather features influence the fire incidents the m
 every single feature has less influence on fire incidents, when they are combined together in our SVM machine 
 learning model, they as a union show a great influence on fire incidents.
 
+# Project 3 Description
+In this project, we used Flask framework to implement a web visualization service. Firstly, we use leaflet.js
+to visualize all Boston fire facilities, including fire department, fire hydrants and fire alarm boxes, on map. 
+We are supposed to implement all fire incidents but the original fire incident report dataset do not contain exactly
+latitude and longitude information. Instead, we count the number of incidents in each area and draw the incident hotmap.  
+We also draw the histogram of the boston daily weather and number of fire incident, which allow user to see the condition of
+each month.  
+To run the web service, first ensure the data of this repository has been added to your mongodb. (run execute.py of root folder)
+Go to Project 3 folder and type:
+  ```
+    python server.py
+  ```
+Then go to localhost:5000 to see the result.
 
 # Dataset
 * Boston Fire Incident

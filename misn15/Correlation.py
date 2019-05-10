@@ -13,7 +13,7 @@ class Correlation(dml.Algorithm):
 
     @staticmethod
     def execute(trial = False):
-        '''Get correlation coefficients and scores for every zip code'''
+        '''Get correlation coefficients and scores for every census tract'''
         startTime = datetime.datetime.now()
 
         # Set up the database connection.
@@ -22,7 +22,6 @@ class Correlation(dml.Algorithm):
         repo.authenticate('misn15', 'misn15')
 
         crime_health = list(repo['misn15.crime_health_waste_space'].find())
-        zips = list(repo['misn15.zipcodes'].find())
 
         if trial:
             crime_health = crime_health[0:20]
@@ -42,69 +41,70 @@ class Correlation(dml.Algorithm):
             if stddev(x) * stddev(y) != 0:
                 return float(cov(x, y) / (stddev(x) * stddev(y)))
 
-        # define relational building blocks
-        def product(R, S):
-            return [(t, u) for t in R for u in S]
-
-        def select(R, s):
-            return [t for t in R if s(t)]
-
-        def project(R, p):
-            return [p(t) for t in R]
-
-        def aggregate(R, f):
-            keys = {r[0] for r in R}
-            return [(key, f([u for (k, u) in R if k == key])) for key in keys]
-
         # correlation between crime and health
         corr_coefficients = []
         crime_health = pd.DataFrame(crime_health)
-        crime_health_pd = crime_health[['fips', 'crime', 'income', 'open space', 'waste', 'total occurrences']]
+        crime_health_pd = crime_health[['fips', 'crime', 'income', 'open space', 'waste', 'total occurrences', 'cancer occurrences']]
         crime_health_pd = crime_health_pd.drop_duplicates()
         crime_health = np.matrix(crime_health_pd)
         crime_count = crime_health[:,1]
-        health_count = crime_health[:, -1]
+        health_count = crime_health[:, -2]
         coefficient = round(corr(crime_count, health_count), 3)
         corr_coefficients.append(['crime vs health', coefficient])
+
+        cancer_count = crime_health[:, -1]
+        coefficient = round(corr(crime_count, cancer_count), 3)
+        corr_coefficients.append(['crime vs cancer', coefficient])
 
         # correlation between income and health
         income_count = crime_health[:, 2]
         coefficient = round(corr(income_count, health_count), 3)
         corr_coefficients.append(['income vs health', coefficient])
+        coefficient = round(corr(income_count, cancer_count), 3)
+        corr_coefficients.append(['income vs cancer', coefficient])
 
         # correlation between open spaces and health
         open_space_count = crime_health[:, 3]
         coefficient = round(corr(open_space_count, health_count), 3)
         corr_coefficients.append(['open space vs health', coefficient])
+        coefficient = round(corr(open_space_count, cancer_count), 3)
+        corr_coefficients.append(['open_space vs cancer', coefficient])
 
         # correlation between waste and health
         waste_count = crime_health[:, 4]
         coefficient = round(corr(waste_count, health_count), 3)
         corr_coefficients.append(['waste vs health', coefficient])
+        coefficient = round(corr(waste_count, cancer_count), 3)
+        corr_coefficients.append(['waste vs cancer', coefficient])
 
         # correlation between open space and income
         coefficient = round(corr(income_count, open_space_count), 3)
         corr_coefficients.append(['open space vs income', coefficient])
 
-        # custom scoring metric
-        crime_health_pd['score'] = crime_health_pd['total occurrences'] + corr_coefficients[0][1] * crime_health_pd['crime'] + corr_coefficients[2][1] * crime_health_pd['open space'] + corr_coefficients[3][1] * crime_health_pd['waste']
+        # normalize correlation coefficients
+        crime_corr = (corr_coefficients[0][1] + 1) / 2
+        income_corr = (corr_coefficients[2][1] + 1) / 2
+        openSpace_corr = (corr_coefficients[4][1] + 1) / 2
+        waste_corr = (corr_coefficients[6][1] + 1) / 2
 
-        score_df = crime_health_pd[['fips', 'score']]
+        # normalize data
+        def normalize(value, low, high):
+            return float((value - low) / (high - low))
 
-        score_list = []
-        for x in range(len(score_df)):
-            score_list += [[score_df.iloc[x,0], score_df.iloc[x,1]]]
-
-        zips_list = []
-        for x in zips:
-            zips_list += [['0'+ str(x['zip']), x['tract']]]
-
-        # get zip code for every fips tract and compute score
-        zips_score = product(score_list, zips_list)
-        zips_select = select(zips_score, lambda t: t[0][0] == str(t[1][1]))
-        zips_project = project(zips_select, lambda t: (t[1][0], t[0][1]))
-        zips_agg = aggregate(zips_project, sum)
-        zips_agg.sort(key=lambda t: t[1])
+        # normalize correlation coefficients
+        scores_list = []
+        for x in range(len(crime_health_pd)):
+            health_norm = normalize(crime_health_pd.iloc[x]['total occurrences'], crime_health_pd['total occurrences'].min(),
+                                    crime_health_pd['total occurrences'].max())
+            crime_norm = normalize(crime_health_pd.iloc[x]['crime'], crime_health_pd['crime'].min(), crime_health_pd['crime'].max())
+            income_norm = normalize(crime_health_pd.iloc[x]['income'], crime_health_pd['income'].min(),
+                                   crime_health_pd['income'].max())
+            openSpace_norm = normalize(crime_health_pd.iloc[x]['open space'], crime_health_pd['open space'].min(),
+                                   crime_health_pd['open space'].max())
+            waste_norm = normalize(crime_health_pd.iloc[x]['waste'], crime_health_pd['waste'].min(),
+                                       crime_health_pd['waste'].max())
+            score = health_norm + crime_norm * crime_corr + income_norm * income_corr + openSpace_norm * openSpace_corr + waste_norm * waste_corr
+            scores_list += [[crime_health_pd.iloc[x]['fips'], score]]
 
         repo.dropCollection("correlation")
         repo.createCollection("correlation")
@@ -116,8 +116,8 @@ class Correlation(dml.Algorithm):
             entry = {x[0]: x[1]}
             repo['misn15.correlation'].insert_one(entry)
 
-        for x in zips_agg:
-            entry = {x[0]: x[1]}
+        for x in scores_list:
+            entry = {'fips': x[0], 'score': x[1]}
             repo['misn15.score'].insert_one(entry)
 
         repo['misn15.score'].metadata({'complete': True})
@@ -163,17 +163,17 @@ class Correlation(dml.Algorithm):
         doc.wasGeneratedBy(correlation, get_correlation, endTime)
         doc.wasDerivedFrom(correlation, resource, get_correlation, get_correlation, get_correlation)
 
-        scores = doc.entity('dat:misn15#score', {prov.model.PROV_LABEL: 'Health Scores for Zip Codes', prov.model.PROV_TYPE: 'ont:DataSet'})
+        scores = doc.entity('dat:misn15#score', {prov.model.PROV_LABEL: 'Health Scores for Census tracts', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(scores, this_script)
         doc.wasGeneratedBy(scores, get_scores, endTime)
         doc.wasDerivedFrom(scores, resource, get_scores, get_scores, get_scores)
                   
         return doc
 
-##Correlation.execute()
-##doc = Correlation.provenance()
-##print(doc.get_provn())
-##print(json.dumps(json.loads(doc.serialize()), indent=4))
+# Correlation.execute()
+# doc = Correlation.provenance()
+# print(doc.get_provn())
+# print(json.dumps(json.loads(doc.serialize()), indent=4))
 
 
 ## eof

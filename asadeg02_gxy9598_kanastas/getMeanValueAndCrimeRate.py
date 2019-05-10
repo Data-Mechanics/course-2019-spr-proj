@@ -53,7 +53,7 @@ class getMeanValueAndCrimeRate(dml.Algorithm):
         crime_rate_mean_value = []
         
         if trial == True:
-            dangerous_streets = dangerous_streets[:2]   
+            dangerous_streets = dangerous_streets[:5]   
         
         for street in dangerous_streets:
             street_value_crime_rate = {'street': street, 'crime_rate': street_crime_rate_dict[street]}            

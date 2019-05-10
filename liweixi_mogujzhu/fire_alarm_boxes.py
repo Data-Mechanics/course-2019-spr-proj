@@ -24,7 +24,6 @@ class fire_alarm_boxes(dml.Algorithm):
 
         url = 'https://opendata.arcgis.com/datasets/3a0f4db1e63a4a98a456fdb71dc37a81_1.geojson'
         response = urllib.request.urlopen(url).read().decode("utf-8")
-
         r = json.loads(response)
         s = json.dumps(r, sort_keys=True, indent=2)
         repo.dropCollection("fire_alarm_boxes")

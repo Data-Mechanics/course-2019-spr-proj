@@ -44,6 +44,9 @@ class boston_fire_facility_transformation(dml.Algorithm):
         repo.createCollection("boston_fire_facility")
         data_list = ["liweixi_mogujzhu.fire_hydrants","liweixi_mogujzhu.fire_department","liweixi_mogujzhu.fire_alarm_boxes"]
         data = boston_fire_facility_transformation.merge_data(data_list, repo)
+        print(data[0])
+        print(data[100])
+        print(data[-1])
         repo['liweixi_mogujzhu.boston_fire_facility'].insert_many(data)
         repo['liweixi_mogujzhu.boston_fire_facility'].metadata({'complete': True})
         print(repo['liweixi_mogujzhu.boston_fire_facility'].metadata())
@@ -101,13 +104,15 @@ class boston_fire_facility_transformation(dml.Algorithm):
         return doc
 
 
-# '''
-# # This is example code you might use for debugging this module.
-# # Please remove all top-level function calls before submitting.
-# '''
-# boston_fire_facility_transormation.execute()
-# doc = boston_fire_facility_transormation.provenance()
-# print(doc.get_provn())
-# print(json.dumps(json.loads(doc.serialize()), indent=4))
-#
-# ## eof
+'''
+# This is example code you might use for debugging this module.
+# Please remove all top-level function calls before submitting.
+'''
+if __name__ == "__main__":
+    boston_fire_facility_transformation.execute()
+    doc = boston_fire_facility_transformation.provenance()
+    print(doc.get_provn())
+    print(json.dumps(json.loads(doc.serialize()), indent=4))
+
+
+## eof

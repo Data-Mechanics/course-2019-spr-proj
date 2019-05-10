@@ -178,5 +178,3 @@ class HotspotsRevere(dml.Algorithm):
 
         repo.logout()
         return doc
-
-

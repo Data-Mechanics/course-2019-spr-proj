@@ -16,7 +16,7 @@ class WasteOptimization(dml.Algorithm):
 
     @staticmethod
     def execute(trial = False):
-        '''K-means algorithm for finding clusters of waste sites'''
+        '''Use K-means and constraint satisfaction to find optimal waste sites'''
         startTime = datetime.datetime.now()
 
         # Set up the database connection.
@@ -31,9 +31,9 @@ class WasteOptimization(dml.Algorithm):
         population = list(repo['misn15.population'].find())
 
         if trial:
-            waste_all = waste_all[0:100]
-            schools = schools[0:100]
-            open_space = open_space[0:100]
+            waste_all = waste_all[0:400]
+            schools = schools[0:400]
+            open_space = open_space[0:400]
 
         # Define relational building blocks
         def product(R, S):
@@ -146,7 +146,7 @@ class WasteOptimization(dml.Algorithm):
         pts_dist.sort()
         pts_dist2.sort()
 
-        # rank each distance and the population from 1 to 5
+        # rank each distance and the population
         pts_index = []
         pts_dist_index = []
         pts_dist2_index = []
@@ -176,7 +176,7 @@ class WasteOptimization(dml.Algorithm):
         pts_dist2_project.sort(key=lambda j: j[8])
 
         # Rank the centroids and make into a dictionary
-        # 1 is the worst and 5 is the best waste site
+        # 1 is the worst
         for i in range(1, len(pts_dist2_project)+1):
             pts_index += [(pts[i-1], i)]
 
@@ -244,10 +244,10 @@ class WasteOptimization(dml.Algorithm):
 
         return doc
 
-##WasteOptimization.execute(trial=True)
-##doc = WasteOptimization.provenance()
-##print(doc.get_provn())
-##print(json.dumps(json.loads(doc.serialize()), indent=4))
+# WasteOptimization.execute()
+# doc = WasteOptimization.provenance()
+# print(doc.get_provn())
+# print(json.dumps(json.loads(doc.serialize()), indent=4))
 
 
 ## eof

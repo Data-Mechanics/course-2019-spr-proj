@@ -23,7 +23,8 @@ class getHealth(dml.Algorithm):
         url = 'https://chronicdata.cdc.gov/resource/csmm-fdhi.json?cityname=Boston'
         response = urllib.request.urlopen(url).read().decode("utf-8")
         r = json.loads(response)
-        s = json.dumps(r, sort_keys=True, indent=2)      
+        s = json.dumps(r, sort_keys=True, indent=2)
+
         repo.dropCollection("health")
         repo.createCollection("health")
         repo['misn15.health'].insert_many(r)
@@ -66,10 +67,10 @@ class getHealth(dml.Algorithm):
                   
         return doc
 
-##getHealth.execute()
-##doc = getHealth.provenance()
-##print(doc.get_provn())
-##print(json.dumps(json.loads(doc.serialize()), indent=4))
+# getHealth.execute()
+# doc = getHealth.provenance()
+# print(doc.get_provn())
+# print(json.dumps(json.loads(doc.serialize()), indent=4))
 
 
 ## eof

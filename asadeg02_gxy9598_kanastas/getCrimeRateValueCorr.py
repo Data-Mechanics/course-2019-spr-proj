@@ -32,14 +32,15 @@ class getCrimeRateValueCorr(dml.Algorithm):
                 y += [doc["value"]]
 
         #stats = statistics.statistics()
-        results = {}
-        results['_id'] = 'crime_rate_mean_value_corelation'
-        results['correlation_value'] = statistics.corr(x,y)
-        results['p_value'] = statistics.p(x,y)        
+        if len(x) > 0:
+            results = {}
+            results['_id'] = 'crime_rate_mean_value_corelation'
+            results['correlation_value'] = statistics.corr(x,y)
+            results['p_value'] = statistics.p(x,y)        
         
-        print('correlation coefficient between crime rate and mean peroperty value is: ' + str(results['correlation_value']))
-        print('p-value for correlation coefficient between crime rate and mean peroperty value is: ' + str(results['p_value']))
-        repo['asadeg02_gxy9598.correlations'].insert_one(results)
+            print('correlation coefficient between crime rate and mean peroperty value is: ' + str(results['correlation_value']))
+            print('p-value for correlation coefficient between crime rate and mean peroperty value is: ' + str(results['p_value']))
+            repo['asadeg02_gxy9598.correlations'].insert_one(results)
         repo.logout()
         
         repo['asadeg02_gxy9598.correlations'].metadata({'complete':True})
