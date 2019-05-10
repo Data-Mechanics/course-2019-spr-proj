@@ -1,0 +1,139 @@
+{% extends "layout.html" %}
+{% block content %}
+	<head>
+		<title>BM5 doughnut Chart</title>
+		<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+		<script src="utils.js"></script>
+		<style>
+		canvas {
+			-moz-user-select: none;
+			-webkit-user-select: none;
+			-ms-user-select: none;
+		}
+		</style>
+	</head>
+
+	<body>
+		<div id="canvas-holder" style="width:80%">
+			<canvas id="chart-area"></canvas>
+		</div>
+		<button id="addData">Add Data</button>
+		<button id="removeData">Remove Data</button>
+		<button id="changeCircleSize">Semi/Full Circle</button>
+		<script>
+			window.chartColors = {
+				darkred: 'rgb(204, 0, 0)',
+				red: 'rgb(255, 51, 51)',
+				lightred: 'rgb(255, 153, 153)',
+				darkblue: 'rgb(0, 102, 204)',
+				blue: 'rgb(51, 153, 255)',
+				lightblue: 'rgb(153, 204, 255)',
+				darkgreen: 'rgb(102, 204, 0)',
+				green: 'rgb(153, 255, 51)',
+				lightgreen: 'rgb(204, 255, 153)'
+			};
+			var randomScalingFactor = function() {
+				return Math.round(Math.random() * 100);
+			};
+			var config = {
+				type: 'doughnut',
+				data: {
+					datasets: [{
+						data: [
+							33,
+							5,
+							2,
+							61,
+							13,
+							14,
+							57,
+							27,
+							18
+						],
+						backgroundColor: [
+							window.chartColors.darkred,
+							window.chartColors.red,
+							window.chartColors.lightred,
+							window.chartColors.darkblue,
+							window.chartColors.blue,
+							window.chartColors.lightblue,
+							window.chartColors.darkgreen,
+							window.chartColors.green,
+							window.chartColors.lightgreen,
+						],
+						label: 'Dataset 1'
+					}],
+					labels: [
+						'Antibody: Easy',
+						'Antibody: Intermediate',
+						'Antibody: Difficult',
+						'Enzymes: Easy',
+						'Enzymes: Intermediate',
+						'Enzymes: Difficult',
+						'Others: Easy',
+						'Others: Intermediate',
+						'Others: Difficult',
+					]
+				},
+				options: {
+					responsive: true,
+					legend: {
+						position: 'top',
+						labels: {
+							fontColor: 'black',
+							fontSize: 15
+						}
+					},
+					title: {
+						display: true,
+						text: 'Zhiping\'s Benchmark 5',
+						fontColor: 'black',
+						fontSize: 40
+					},
+					animation: {
+						animateScale: true,
+						animateRotate: true
+					}
+				}
+			};
+			window.onload = function() {
+				var ctx = document.getElementById('chart-area').getContext('2d');
+				window.myDoughnut = new Chart(ctx, config);
+			};
+
+			//fix this for submiting script so that when you add data, you add the last removed data
+			var colorNames = Object.keys(window.chartColors);
+			document.getElementById('addData').addEventListener('click', function() {
+				if (config.data.datasets.length < 9) {
+					config.data.labels.push('data #' + config.data.labels.length);
+					var colorName = colorNames[config.data.datasets[-1].data.length % colorNames.length];
+					var newColor = window.chartColors[colorName];
+					config.data.datasets.forEach(function(dataset) {
+						dataset.data.push(config.data.datasets[-1]);
+						dataset.backgroundColor.push(newColor);
+					});
+					window.myDoughnut.update();
+				}
+			});
+			document.getElementById('removeData').addEventListener('click', function() {
+				config.data.labels.splice(-1, 1); // remove the label first
+				config.data.datasets.forEach(function(dataset) {
+					dataset.data.pop();
+					dataset.backgroundColor.pop();
+				});
+				window.myDoughnut.update();
+			});
+			document.getElementById('changeCircleSize').addEventListener('click', function() {
+				if (window.myDoughnut.options.circumference === Math.PI) {
+					window.myDoughnut.options.circumference = 2 * Math.PI;
+					window.myDoughnut.options.rotation = -Math.PI / 2;
+				} else {
+					window.myDoughnut.options.circumference = Math.PI;
+					window.myDoughnut.options.rotation = -Math.PI;
+				}
+				window.myDoughnut.update();
+			});
+		</script>
+	</body>
+
+{% endblock content %}

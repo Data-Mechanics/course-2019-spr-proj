@@ -1,0 +1,7 @@
+{% extends "layout.html" %}
+{% block content %}
+	<h1>About CS504 project on ClusPro</h1>
+	<body>
+		Protein-Protien Docking is a computational tool that is used to predict how two proteins interact and uses a great deal of data. While the process of docking itself is beyond the scope of the class, the pre and post processing steps involves a great deal of data manipulation. As such, in this project, tools from the relational paradigm were used to make the said steps more efficient and general. Tools such as selection, projection, aggregation and more were used. After docking, the results were analyzed with 4 widely accepted evaluative scores. The second part of the project implemented Z3 solver to find scaling factors for 2 of the evaluative scores as implemented on a recent research paper. Furthermore, correlation coefficients and the corresponding p values for between each of the 4 scores were calculated to identify the most important aspect for predicting the right structure of protein. Lastly, to better understand the features that are important for increasing prediction accuracy, the data was visualized using Chart.js and web server building tool flask.
+	</body>
+{% endblock content %}

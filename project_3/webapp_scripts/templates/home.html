@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block content %}
+	{% for prot in data %}
+		<h1>{{ prot.pdbid}}</h1>
+		<protdet class="protein details section">
+		  <div class="protdet-body">
+		    <div class="protdet-metadata">
+		      <a class="mr-2" href="#">{{ prot.coefnum }}</a>
+		      <small class="text-muted">{{ prot.casetype }}</small>
+		    </div>
+		    <h2><a class="protdet-title" href="#">{{ prot.pdbid }}</a></h2>
+		    <p class="protdet-content">
+		    <p>For model rank, {{ prot.modrank}} and cluster rank {{ prot.clusrank}}</p>
+		    <p>The accuracy values are: {{prot.fnat}}, {{prot.irms}}, {{ prot.lrms}}, {{ prot.dockq }}</p>
+		    <p>The energy values are: {{prot.tot_energy}}, {{prot.es1}}, {{prot.es2}}, {{prot.vdw1}}, {{prot.vdw2}}, {{prot.dars}}</p>
+		    </p>	
+		  </div>
+		</protdet>
+	{% endfor %}
+{% endblock content %}
