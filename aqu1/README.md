@@ -21,7 +21,7 @@ http://bostonopendata-boston.opendata.arcgis.com/datasets/34f2c48b670d4b43a617b1
 MBTA T-Stops 
 http://maps-massgis.opendata.arcgis.com/datasets/a9e4d01cbfae407fbf5afe67c5382fde_2.csv
 
-## Transformations: 
+## Transformations
 
 1. First a new income dataset was created containing the percent of people who were below the poverty line and fell into the low income group across each neighborhood in Boston. All of the data across the tract codes for each of the 23 neighborhoods (each neighborhood has multiple tract codes) were then aggregated. A projection was then applied to create a new column for the proportion of people who are low income (people who were 100% below the poverty level and those who were 100–149% of the poverty level).
 
