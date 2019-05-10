@@ -110,7 +110,7 @@ class correlation(dml.Algorithm):
         ylabel = 'Percent Low Income'
         description = 'Percent Low Income vs. Percent Bachelor\'s Degree or Higher'
         result = correlation.corr_pval(x, y, description)
-        correlation.lin_reg(x, y, xlabel, ylabel, title, result)
+        #correlation.lin_reg(x, y, xlabel, ylabel, title, result)
 
         title = 'Percent With College Degree vs. Distance from T-stop to School'
         x = dist_education['Distance']
@@ -119,7 +119,7 @@ class correlation(dml.Algorithm):
         ylabel = 'Percent in Neighborhood with \n Bachelor\'s Degree or Higher'
         description = 'Percent Bachelor\'s Degree or Higher vs. Avg Dist from T-stop to School'
         data = correlation.corr_pval(x, y, description)
-        correlation.lin_reg(x, y, xlabel, ylabel, title, data)
+        #correlation.lin_reg(x, y, xlabel, ylabel, title, data)
     
     @staticmethod
     def execute(trial = False):
