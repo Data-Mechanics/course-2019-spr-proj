@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rodent Incidents</title>
+    <script src="d3/d3.js" charset="utf-8"></script>
+    <script src="http://datamechanics.io/data/zhangyb/Boston_Neighborhoods.json"></script>
+	<script src="http://datamechanics.io/data/zhangyb/boston_rodents.json"></script>
+	
+</head>
+<body>
+<h1>Rodent Incidents</h1>
+    <div id="sliderContainer">
+        <input id="timeslide" type="range" min="0" max="11" value="0" step="1"/><br>
+        <span id="range">Jan</span>
+    </div>
+<script>
+    var width = 700;
+    var height = 700;
+	
+	var inputValue = null;
+    var month = ["Jan","Feb","Mar","Apr","May","June","July","Aug","Sep","Oct","Nov","Dec"];
+	
+    var svg = d3.select( "body" )
+        .append( "svg" )
+        .attr( "width", width )
+        .attr( "height", height );
+    var g = svg.append( "g" );
+    var albersProjection = d3.geoAlbers()
+        .scale( 190000 )
+        .rotate( [71.057,0] )
+        .center( [0, 42.313] )
+        .translate( [width/2,height/2] );
+    var geoPath = d3.geoPath()
+        .projection( albersProjection );
+    g.selectAll( "path" )
+        .data( boston_map.features )
+        .enter()
+        .append( "path" )
+        .attr( "fill", "#ccc" )
+        .attr( "stroke", "#333")
+        .attr( "d", geoPath );
+		
+	var rodents = svg.append( "g" );
+	
+	var path = rodents.selectAll( "path" )
+        .data( rodents_json.features )
+        .enter()
+        .append( "path" )
+        .attr("fill", Init)
+        .attr("stroke", "#ccc")
+        .attr("d", geoPath)
+        .attr("class","incident")
+        .on("mouseover", function(d){
+            d3.select("h2").text(d.properties.LOCATION_STREET_NAME);
+            d3.select(this).attr("class","incident hover");
+        })
+        .on("mouseout", function(d){
+            d3.select("h2").text("");
+            d3.select(this).attr("class","incident");
+        });
+		
+    d3.select("#timeslide").on("input", function() {
+        update(+this.value);
+    });
+    
+    function update(value) {
+        document.getElementById("range").innerHTML=month[value];
+        inputValue = month[value];
+        d3.selectAll(".incident")
+            .attr("fill", Check);
+    }
+    function Check(data, value) {
+        var d = new Date(data.properties.OPEN_DT);
+        var m = month[d.getMonth()];
+        if (inputValue == m) {
+            this.parentElement.appendChild(this);
+            return "#900";
+        } else {
+            return "#999";
+        };
+    }
+    function Init(d,i){
+        var d = new Date(d.properties.OPEN_DT);
+        var m = month[d.getMonth()];
+        if (m == "Jan") {
+            this.parentElement.appendChild(this);
+            return "#900";
+        } else {
+            return "#999";
+        };
+    }
+</script>
+</body>
+</html>
