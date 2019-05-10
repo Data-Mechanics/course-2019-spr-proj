@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>CS504</title>
+  <link rel="stylesheet" href="main.css" type="text/css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+    integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+    crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+    integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+    crossorigin=""></script>
+</head>
+
+<body>
+  <h1> CS504 Homepage </h1>
+  <div id="mapid" style="height:400px"></div>
+
+
+  <script>
+    var res = {{bar|safe}} ;
+    console.log(res);
+
+    var mymap = L.map('mapid').setView([42.361145, -71.057083], 12);
+
+    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+      maxZoom: 18,
+      id: 'mapbox.streets',
+      accessToken: 'pk.eyJ1IjoiZHd1MjMyIiwiYSI6ImNqdXloenFtdjB5M3QzeWw2a3dycmxia2IifQ.hOgyK3MFvOuobfJOR-fB5Q'
+    }).addTo(mymap);
+
+    // var marker = L.marker([51.5, -0.09]).addTo(mymap);
+
+    // marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+    // 
+    // 
+    Object.keys(res).forEach(function(key) {
+      if (key != "total") {
+        console.log("not total");
+        console.log(res[key][1], res[key][2]);
+        console.log(res[key][0]);
+        var marker = L.marker([res[key][1], res[key][2]]).addTo(mymap);
+        marker.bindPopup("<b>" + res[key][0] + "</b>");
+      }
+
+      if (res[key][3] == "1") {
+        console.log("it was 1");
+        var circle = L.circle([res[key][1], res[key][2]], {color: 'red', fillColor: '#f03', fillOpacity: 0.5, radius: 500}).addTo(mymap);
+      }
+    });
+
+    function updateTextInput(val) {
+      document.getElementById('value').value = val;
+    }
+
+  </script>
+
+  <div>
+    <form method="POST" action="/map">
+      <input type="text" id="value" value="30">
+    10 <input type="range" style="width:500px;" name="number" id="number" min="10" max="31" class="slider" oninput="updateTextInput(this.value)" value="30" required> 31
+      <input type="submit" value="Submit" class="button">
+    </form>
+    {% if apple %}
+    <h1>{{apple}} biking paths, represented by blue markers on the map.</h1>
+    {% else %}
+        <h1> Biking paths, represented by blue markers on the map </h1>
+
+    {% endif %}
+    <p>Red circles under the markers represent streets that should have a hubway station on them in order to minimize amount of stations for an distance that was deemed walkable by our team.</p>
+    {% for k,v in bar.items() %}
+    <p>{{v[0]}}</p>
+    {% endfor %}
+
+  </div>
+
+  <div>
+    <h1>{{apple}}</h1>
+  </div>
+
+</body>
+
+</html>
