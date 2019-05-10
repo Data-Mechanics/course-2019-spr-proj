@@ -1,0 +1,19 @@
+README
+
+Given a certain type of cuisine, we hope to help future restaurant owneres find out which area in Boston is most suitable for opening their new restaurant. We've gathered data of income, age, ethnicity, restaurants, population regarding of the boston area. 
+Yelp Fusion API was used, to learn more about it: https://www.yelp.com/fusion
+use requirement.txt to download all modules needed for using TransformFusion.py 
+
+
+Retrieved Datasets
+TransformFusion.py
+getData.py
+getIncome.py
+getAge.py
+getNativity.py 
+
+Transformations:
+newBostonEthnicities.py
+formatIncome.py, appends Income to newBostonEthinicities
+aggregate.py, sums everything together 
+
