@@ -7,6 +7,7 @@ import uuid
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.cluster import KMeans
+import folium
 
 def union(R, S):
     return R + S
@@ -38,16 +39,17 @@ class accidentLongLat(dml.Algorithm):
 
         data = [(doc['lat'], doc['long'], doc['mode_type']) for doc in collection]
         data2 = [(doc['lat'], doc['long'], doc['mode_type']) for doc in collection2]
-
+        
         data = union(data,data2)
         data = select(data, not_null)
-
+        
         if (trial):
             data = data[0:100]
 
         types = [i[2] for i in data]
-        data = [(i[0],i[1]) for i in data]
-
+        #data = [(i[0],i[1]) for i in data]
+        data = [(i[0],i[1]) for i in data if i[0] != '' and i[1] != '']
+        
         cluster_number = 23 #number of offical neighborhoods in boston
         kmeans = KMeans(n_clusters=cluster_number)
         kmeans.fit(data)
@@ -72,7 +74,51 @@ class accidentLongLat(dml.Algorithm):
             means.append(mean)
 
         final_dataset = [{'mean':tup[0], 'mean_points':tup[1], 'types':tup[3], 'num_points':tup[2]} for tup in means]
-
+        '''
+        colors = [
+                    'red',
+                    'blue',
+                    'gray',
+                    'darkred',
+                    '#ECF023',
+                    'orange',
+                    'beige',
+                    'green',
+                    'darkgreen',
+                    'lightgreen',
+                    'darkblue',
+                    'lightblue',
+                    'purple',
+                    '#FFAA50',
+                    'pink',
+                    'cadetblue',
+                    'lightgray',
+                    'black',
+                    '#3186cc',
+                    '#77FF33',
+                    '#33FCFF',
+                    '#FFFF33',
+                    '#FF33D7'
+                 ] # DARK PURPLE AND LIGHT RED DO NOT SHOW UP! FIX ASAP
+        colorCounter = 0
+        clusterCounter = 0
+        myMap = folium.Map(location = [42.328764, -71.096742], tiles = 'Stamen Toner', zoom_start = 12)
+        for c in final_dataset:
+            clr = colors[colorCounter]
+            pu = ('Cluster #' + str(clusterCounter)) + '\n' + clr
+            folium.Marker(location = c['mean'], popup = pu).add_to(myMap)
+            for x in (c['mean_points']):
+                a = str(type(x[0])).split('\'')
+                b = str(type(x[1])).split('\'')
+                if(a[1] != 'float' or b[1] != 'float'):
+                    x[0] = float(x[0])
+                    x[1] = float(x[1])
+                folium.CircleMarker(location = x, radius = .05, color=clr).add_to(myMap)
+            colorCounter += 1
+            clusterCounter += 1
+        # This might have to go into a separate file.
+        myMap.save('index.html')
+        '''
         repo.dropCollection('jkmoy_mfflynn.accidentLongLat')
         repo.createCollection('jkmoy_mfflynn.accidentLongLat')
         
@@ -129,6 +175,6 @@ doc = example.provenance()
 print(doc.get_provn())
 print(json.dumps(json.loads(doc.serialize()), indent=4))
 '''
-#modeLocationCount.execute()
+#accidentLongLat.execute()
 
 ## eof
