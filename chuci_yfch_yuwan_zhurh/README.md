@@ -1,3 +1,5 @@
+<p>Final report:https://github.com/yizheshexin/course-2019-spr-proj/blob/master/chuci_yfch_yuwan_zhurh/CS504%20Final%20Report.pdf</p>
+<p>Poster:https://github.com/yizheshexin/course-2019-spr-proj/blob/master/chuci_yfch_yuwan_zhurh/melancholymedallion_poster.pdf</p>
 <p>Project 1:</p>
 <p>For our Unemployment (from lmi2.detma.org and retrieved from datamechanics.io) and 2018 Governor Election dataset (from wbur.org), we did a projection on the Unemployment dataset and only kept the City and the unployment rate£¨as of Dec 2018£©fields. 
 We did the same thing on the Governor dataset and kept the Town and the voting percentage for Charlie Baker (2018 MA governor election) fields.
@@ -15,3 +17,14 @@ For the Health and Uber dataset, first of all,at the health_uber_input.py, we re
 <p>For the request of implementing a statistical analysis, we choose to compute correlation coefficient and p-value over several groups of data to see if there are correlation between them or not. We use both the functions that are defined in slide and the scipy library to calculate the data. First of all, we analyze the relation between uber's distance and uber's travel time. In fact, even we don't calculate the correlation coefficient, with our intuition, the two variables should be positive related. The correlation coefficient is in line with our expectation, 0.8402 means that two variables are highly positive related. And the p-value is almost 0. When we do hypothesis test, our H0 should be: uber's distance and uber's travel time are not related, our H1 should be: uber's distance and uber's travel time are related, we could set the significance level alpha = 0.05, since 0 < 0.05, we should reject H0, accept H1, so uber's distance and uber's travel time are related. </p>
 <p>Now let's see some more interesting data sets. Let's try to find out if there is realtion between GOP's vote percent and unemplotment rate. This time I don't think we can judge it by our intuition so we will rely on the correlation coefficient. We choose 3 days to calculate the correlation coefficient and the value is between -0.145 ~ -0.081. It seems that these two variables are very weakly negative related.</p>  
 <p><img src="https://github.com/yizheshexin/course-2019-spr-proj/blob/master/chuci_yfch_yuwan_zhurh/stat.png" style="max-width:100%;"></p>
+
+<p>
+Project3:
+</p>
+<p>
+For the project 3, we choose to create two interactive web-based visualization that can be displayed in a standard web browser. </p>
+<p>For the first visualization, we create a interactive web-based map using Leaflet to show our project 2's k-mean result. You can run it by visiting the `project3_webservice.html`. And when you click each point in the map, the map will tell you the point's corresponding k, which is the interactive part that we implement.</p> 
+<p><img src="https://github.com/yizheshexin/course-2019-spr-proj/blob/master/chuci_yfch_yuwan_zhurh/project3_visualization1.png" style="max-width:100%;"></p>
+<p>For the second visualization, we create a interactive web-based map chart uing Echart.To run the program. please first put `index.html` and `final_json.json` in the same folder, then run `http-server .` on your terminal. After that, you should get a url from your terminal. By visiting this url, you should be able to view a graph like below. When you put the mouse on the node in the graph, you shoule be able to see some interactive information. If you haven't installed http-server on your mac, you can install it by doing the follow: 1.go to https://nodejs.org/en/download/, download the installer and run it to install node and npm. 2. run 'npm install http-server -g' to install http-server 3. if http-server cannot be installed correctly due to some errors, try to firstly run 'npm config set registry http://registry.npm.taobao.org/' then run 'npm install http-server -g'</p>
+<p><img src="https://github.com/yizheshexin/course-2019-spr-proj/blob/master/chuci_yfch_yuwan_zhurh/project3_visualization2.png" style="max-width:100%;"></p>
+</p>
