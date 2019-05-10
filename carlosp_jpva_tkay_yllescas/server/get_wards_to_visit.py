@@ -12,7 +12,7 @@ class registered_voters_didnt_turn_out(dml.Algorithm):
     writes = ['carlosp_jpva_tkay_yllescas.registered_voters_didnt_turn_out', 'carlosp_jpva_tkay_yllescas.wards_to_visit']
 
     @staticmethod
-    def execute(trial=False):
+    def execute(flip_percentage_constraint, hispanic_proportion_constraint):
         print("registered_voters_didnt_turn_out")
         '''Retrieve some data sets (without API).'''
         startTime = datetime.datetime.now()
@@ -81,7 +81,6 @@ class registered_voters_didnt_turn_out(dml.Algorithm):
         for x in diff_to_flip:
             diff_to_flip = x['total_diff']
         print('diff_to_flip',diff_to_flip)
-
         hispanic_total = {}
         
         i = 1
@@ -101,8 +100,8 @@ class registered_voters_didnt_turn_out(dml.Algorithm):
         
 
         total_flipped = 0
-        flip_percentage_constraint = 0.5
-        hispanic_proportion_constraint = 0.04
+       # flip_percentage_constraint = 0.5
+       # hispanic_proportion_constraint = 0.04
         possible = False
         wards_to_visit = {}
         
@@ -125,23 +124,10 @@ class registered_voters_didnt_turn_out(dml.Algorithm):
        
 
             #do something if not possible?
-        print( "wards_to_visit", wards_to_visit)
-        repo['carlosp_jpva_tkay_yllescas.registered_voters_didnt_turn_out'].insert(total_who_didnt_turn_out_by_ward)
-        repo['carlosp_jpva_tkay_yllescas.wards_to_visit'].insert(wards_to_visit)
-
-        repo['carlosp_jpva_tkay_yllescas.registered_voters_didnt_turn_out'].metadata({'complete': True})
-        print(repo['carlosp_jpva_tkay_yllescas.registered_voters_didnt_turn_out'].metadata())
-
-        repo['carlosp_jpva_tkay_yllescas.wards_to_visit'].metadata({'complete': True})
-        print(repo['carlosp_jpva_tkay_yllescas.wards_to_visit'].metadata())
+        #return json.dumps(wards_to_visit)
+        return wards_to_visit
 
 
-        
-
-
-
-
-        return {"start": startTime, "end": endTime}
 
 
     @staticmethod
