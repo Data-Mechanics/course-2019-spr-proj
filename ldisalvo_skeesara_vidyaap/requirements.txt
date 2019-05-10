@@ -1,0 +1,7 @@
+bs4
+csv
+io
+pandas
+requests
+scipy
+z3-solver

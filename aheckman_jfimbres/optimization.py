@@ -64,7 +64,6 @@ class optimization(dml.Algorithm):
         k10 = KMeans(n_clusters=2, random_state=0).fit(q10)
         k11 = KMeans(n_clusters=2, random_state=0).fit(q11)
 
-
         inertias = [k1.inertia_, k2.inertia_, k3.inertia_, k4.inertia_, k5.inertia_, k6.inertia_, k7.inertia_,
                     k8.inertia_, k9.inertia_, k10.inertia_, k11.inertia_]
 
@@ -90,7 +89,6 @@ class optimization(dml.Algorithm):
         repo.dropCollection("questions")
         repo.createCollection("questions")
         repo['aheckman_jfimbres.questions'].insert(questions)
-
 
         repo.logout()
 

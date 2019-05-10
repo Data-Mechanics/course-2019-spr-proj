@@ -1,0 +1,7 @@
+Narrative and Justification:
+
+In terms of statistical analysis, we decided to find the correlation coefficient between carbon efficacy and emissions per capita to see if there is an inverse correlation between the two. On average, when looking at data for all 50 states, we expect that a higher carbon efficacy, whether it be due to government regulations or some technological advancements, will lead to a lower emissions per capita. After finding the correlation coefficient, we confirmed that our hypothesis was correct.
+
+In terms of constraint satisfaction or optimization, we chose to use the k-means algorithm in order to, for each issue, find the distance between the k for those who agree and for those who disagree, aggregated from both democrats and republicans in all 50 states. We chose k = 2 for our implementation under the assumption that democrats and republicans will on average have strongly opposing views on climate change. We use these resulting distances as the optimization factor to determine which set of opinions have the least disagreement between republicans and democrats. The lower the k-means distance, the less contentious the issue is between the two parties.
+
+Due to the small overall size of our working data set (never larger than 100 entries) we decided that a trial mode was redundant due to the relative speed of our algorithms on our base machine- an early 2015 MacBook Pro with 8GB of RAM and an Intel Core i5 processor clocked at 2.7 GHz)- which completed a full run in roughly 7.5 seconds.
