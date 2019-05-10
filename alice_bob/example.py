@@ -52,7 +52,10 @@ class example(dml.Algorithm):
             document describing that invocation event.
             '''
 
-
+        # Set up the database connection.
+        client = dml.pymongo.MongoClient()
+        repo = client.repo
+        repo.authenticate('alice_bob', 'alice_bob')
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/') # The scripts are in <folder>#<filename> format.
         doc.add_namespace('dat', 'http://datamechanics.io/data/') # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
@@ -86,6 +89,8 @@ class example(dml.Algorithm):
         doc.wasGeneratedBy(found, get_found, endTime)
         doc.wasDerivedFrom(found, resource, get_found, get_found, get_found)
 
+        repo.logout()
+                  
         return doc
 
 '''
