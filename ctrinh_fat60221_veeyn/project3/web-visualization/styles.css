@@ -1,0 +1,73 @@
+/* #canvas {
+    height: 1000px !important;
+    width: auto !important;
+} */
+
+* {
+    padding: 0;
+    margin: 0;
+    font-family: 'Nunito', sans-serif;
+}
+
+#mapid {
+    height: 500px; 
+    width: 75vw; 
+    border-radius: 10px; 
+    margin: 5em; 
+    margin-top: 0; 
+    margin-left: 12%;
+}
+
+h3 {
+    font-size: 3em;
+    text-align: center;
+    padding: 1em;
+}
+
+#header p {
+    font-size: 1.1em;
+    margin: 2em;
+    margin-bottom: 0;
+    margin-left: 2.8em;
+}
+
+span {
+    display: inline;
+    background-color: #E8E8E8;
+    padding: 0.1em 0.25em;
+    color: black;
+    font-family: 'Inconsolata', monospace;
+}
+
+#content {
+    padding: 6em;
+    font-family: 'Nunito', sans-serif;
+}
+
+#header {
+    background: #efefef;
+    padding: 6em;
+    font-family: 'Nunito', sans-serif;
+}
+
+#hero {
+    font-size: 3em;
+    padding-left: 1em;
+}
+
+#byline {
+    font-size: 1.25em;
+    padding: 0.5em;
+    padding-left: 2.5em;
+    font-style: italic;
+}
+
+#tag {
+    padding: 1em;
+    font-size: 1.5em;
+    border: 2px solid black;
+    margin: 2em;
+    margin-top: 0.5em;
+    border-radius: 5px;
+    /* right: 200; */
+}

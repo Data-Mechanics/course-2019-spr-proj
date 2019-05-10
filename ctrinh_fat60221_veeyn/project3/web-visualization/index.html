@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="stylesheet" href="leaflet.css"/>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"
+      integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
+      crossorigin="">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <script src="./utils.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
+    <title>CS 504 | Optimizing Coffee Shop Commutes</title>
+  </head>
+  <body>
+    <div id="header">
+      <h1 id="hero">Optimizing Coffee Shop Commutes</h1>
+      <h2 id="byline">Vee Nguyen, Tung-Ho Kang, Christopher Trinh</h2>
+      <h2 id="tag">
+        Our goal is to optimize the placement of existing coffee shops along the MBTA Green Line to provide shorter commute times between coffee shops and train stations.
+      </h2>
+      <p>
+          Our idea revolved around coffee shops and transportation. Boston is a city full of busy commuters, resulting in an often hectic morning commute. We wanted to explore those commutes that revolves around stopping at a coffee shop to get one's morning caffeine before heading to the train station continue their commute to their workplace -- a narrative that we all know much too well. Many commuters struggle to optimize their morning routine in order to both energize and prepare themselves while still managing to get to work on time, and we challenged ourselves to try to optimize this situation.
+      </p>
+      <p>
+          Our goal is to find the optimal placement of coffee shops, whether that involves moving existing ones or adding new ones, along the MBTA train lines. More specifically, we will retrieve data focused on just the Green Line to limit the scope of our calculations. In order to assign priority to parts of the Green Line, we will put more focus on stations that are more busy than others during peak morning commute times. By determining optimal locations of coffee shops based on MBTA train station locations, we hope to theoretically minimize travelling time in Boston during the morning commute for those who need to get from a coffee shop to the nearest train station, which would hopefully decrease both traffic and additional environmental pollution from motor vehicles.            
+      </p>
+    </div>
+    <div class="content">
+      <h3 style="padding-bottom: 0">Visualization of New Proposed Coffee Shop Locations</h3>
+      <p style="text-align: center; font-style: normal; padding: 2em; padding-bottom: 0.25em; font-size: 1.1em;">(Note: Original coffee shop locations are marked orange, while the new ones we propose are marked green.)</p>
+      <p style="text-align: center; font-style: normal; padding-bottom: 2em; font-size: 1.1em;">(Tip: You can click the orange markers on the map to see their shop name.)</p>
+      <div id="mapid"></div>
+      <p style="font-size: 1.1em;
+      margin: 8em;
+      margin-top: 2em;
+      margin-bottom: 2em;">
+          Our first course of action was to identify which MBTA stations along the Green Line were most busy, 
+          in order to determine which stations should be closer to a coffee shop; we did this by assigning 
+          each station a weight based on number of daily departures from that station. We first get the list 
+          of arrival schedules for each station and aggregate all the arrivals for the station, an example data 
+          point would be <span>['South Station', lat, lon, 300]</span>, where <span>300</span> is the number of arrivals for 
+          the station, <span>lat</span> as latitude and <span>lon</span> as longitude. In order to feed in the correct weight for the 
+          <span>k-means</span> algorithm, one data point is generated if a station has 100 arrivals. Using the 
+          example above, <span>['South Station', lat, lon, 300]</span> would generate 3 data points. 
+          Since <span>k-means</span> would move the clusters closer to a location where more data points are present, 
+          the existing coffee shop location would move towards the stations with more data points. 
+      </p>    
+      <p style="font-size: 1.1em;
+        margin: 8em;
+        margin-top: 0.5em;
+        margin-bottom: 0;">
+        After running <span>k-means</span> on the data set we generated, we calculated the average distance from the coffee shops to train stations. We then compared the result to the original average distance and found a significant 91.65% decrease in the average distance. To put this result in context, we gathered the aggregated Uber hourly mean travel time of a weekday in Boston. Again assuming that people travel from a coffee shop to the nearest train station using Uber, we can conclude that Uber cars would be driving 91.65% less during the morning weekday commute in Boston. During 2018, Uber cars spent a total of ~199,109 hours driving at 6-7am; with these proposed coffee shop locations, they would instead spend ~16,625 hours driving during 6-7am. 
+      </p>
+      <h3 style="padding-bottom: 0">Graph Visualizations of Supplemental Data</h3>
+      <p style="font-size: 1.1em;
+        margin: 8em;
+        margin-top: 2em;
+        margin-bottom: 0;">
+        We have provided the graphs below to visually supplement our data.
+      </p>
+      <p style="font-size: 1.1em;
+        margin: 8em;
+        margin-top: 2em;
+        margin-bottom: 0;">
+        The first graph is a bar graph that depicts a 
+        side-by-side comparison of what the original aggregated Uber total mean hours and the new theoretical Uber total mean 
+        hours look like next to each other. The new theoretical Uber total mean hours were calculated by taking the 91.65% 
+        decrease in the average distance and applying that to the original aggregated Uber total mean hours. One can conclude
+        after looking at the graph that the difference in Uber total mean driving hours would be significant, which would
+        cut down on the amount of time cars are out on Boston streets during morning commute hours, benefitting the environment.
+      </p>
+      <p style="font-size: 1.1em;
+        margin: 8em;
+        margin-top: 2em;
+        margin-bottom: 0;">
+        The second graph is our version of a histogram, and using the bins provided on the X-axis, this graph 
+        depicts the number of original coffee shops locations' distances from the closest train station 
+        that fall into each bin. We can at the very least conclude that a great majority of Boston coffee shops
+        lie between 24-400 meters from the closest train station.  
+      </p>
+      <script>
+        var map = L.map('mapid').setView([42.35, -71.08], 13);
+        L.tileLayer('http://tiles.mapc.org/basemap/{z}/{x}/{y}.png',
+          {
+            attribution: 'Tiles by <a href="http://mapc.org">MAPC</a>, Data by <a href="https://worldmap.harvard.edu/data/geonode:subwaylines_p_odps">WorldMap</a>, <a href ="https://data.boston.gov/dataset/hubway-stations">Analyze Boston</a>',
+            maxZoom: 17,
+            minZoom: 9
+          }).addTo(map);
+          $.getJSON("http://datamechanics.io/data/ctrinh_fat60221_veeyn/green.json",function(lineData){
+            L.geoJson(lineData ).addTo(map);
+          }); 
+          $.getJSON("http://datamechanics.io/data/ctrinh_fat60221_veeyn/coffee.json",function(data){
+              var ratIcon = L.icon({
+              iconUrl: 'http://datamechanics.io/data/ctrinh_fat60221_veeyn/original-marker.png',
+              iconSize: [18,27]
+            }); 
+            L.geoJson(data  ,{
+              pointToLayer: function(feature,latlng){
+                var marker = L.marker(latlng,{icon: ratIcon});
+                marker.bindPopup(feature.properties.name);
+                // marker.bindPopup(feature.properties.name + " (" + feature.geometry.coordinates +")");
+                return marker; 
+              }
+            }).addTo(map);
+          });
+          $.getJSON("http://datamechanics.io/data/ctrinh_fat60221_veeyn/adjusted.json",function(data){
+              var ratIcon = L.icon({
+              iconUrl: 'http://datamechanics.io/data/ctrinh_fat60221_veeyn/new-marker.png',
+              iconSize: [18,27]
+            }); 
+            L.geoJson(data  ,{
+              pointToLayer: function(feature,latlng){
+                var marker = L.marker(latlng,{icon: ratIcon});
+                return marker; 
+              }
+            }).addTo(map);
+          });
+      </script>
+      <canvas height="100"></canvas>
+      <canvas id="myChart" width="800" height="450"></canvas>
+      <canvas height="100"></canvas>            
+      <canvas id = "myChart2" width="800" height="450"></canvas>
+    </div>
+    <script>
+      var ctx = document.getElementById("myChart");
+      var color = Chart.helpers.color;
+      var chartOptions = {
+            scales: {
+              yAxes: [{
+                barPercentage: 0.5,
+                gridLines: {
+                  display: false
+                }
+              }],
+              xAxes: [{
+                gridLines: {
+                  zeroLineColor: "black",
+                  zeroLineWidth: 2
+                },
+                ticks: {
+                  min: 0,
+                  max: 200000,
+                  stepSize: 10000
+                }
+              }]
+            },
+            elements: {
+              rectangle: {
+                borderSkipped: 'left',
+              }
+            }
+      };
+
+      var myChart = new Chart(ctx, {
+        type: 'bar',
+          data: {
+            labels: ['6am', '7am', '8am', '9am', '10am', '11am'],
+            datasets: [{
+              label: 'Original Total Mean Hours',
+              backgroundColor: window.chartColors.red,
+              data: [
+                199109.06555274423,
+                275671.1047749727,
+                275524.45993608574,
+                243454.67777221123,
+                223954.74376664837,
+                220794.26743331287
+              ]
+            }, {
+              label: 'Theoretical Total Mean Hours',
+              backgroundColor: window.chartColors.blue,
+              data: [
+                16625.6069736541,
+                23018.5372487102,
+                23006.2924046632,
+                20328.4655939796,
+                18700.2211045151,
+                18436.3213306816
+              ]
+            }]
+          },
+          options: {
+            title: {
+              display: true,
+              text: 'Uber 2018 Aggregated Mean Travel Hours Difference Projection'
+            },
+            tooltips: {
+              mode: 'index',
+              intersect: false
+            },
+            responsive: true
+          }
+      });
+    </script>
+    <script>
+      var ctx = document.getElementById("myChart2");
+      var color = Chart.helpers.color;
+
+      var myChart2 = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ["(24, 399)", '(399, 774)', '(774, 1149)', '(1149, 1524)', '(1524, 1899)'],
+          datasets: [{
+            label: 'Number of Coffee Shops within Meter Range from Closest Station',
+            backgroundColor: window.chartColors.red,
+            data: [
+              38,
+              17,
+              7,
+              2,
+              2
+            ]
+          }]
+        },
+        options: {
+          title: {
+            display: true,
+            text: 'Coffee Shop Distances from Train Stations (in meters)'
+          },
+          tooltips: {
+            mode: 'index',
+            intersect: false
+          },
+          responsive: true,
+          scales: {
+            xAxes: [{
+              display: true,
+              labelString: "test"
+            }]
+          }
+        }
+      })
+    </script>
+  </body>
+</html>
