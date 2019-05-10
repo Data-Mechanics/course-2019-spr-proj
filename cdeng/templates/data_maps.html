@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Data Results</title>
+    <!-- import plugin script -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+
+<body>
+    <h1>Data Maps Visualizations</h1>
+
+    <h2>A Map based on the Dock Number</h2>
+
+    <p>
+       The circle markers indicate the locations of bike stations. The size of the circle marker depends on the number of docks. The number shown in the circle marker denotes the number of docks. Feel free to play around with the interactive visualization.  
+    </p>
+
+    <div id="map_dock"></div>
+    <script>
+        var trace = {
+            type: 'scattermapbox',
+            lat: {{ values[0]['lat'] }},
+            lon: {{ values[0]['lon'] }},
+            mode: 'markers+text',
+            marker: {
+                size: {{ values[0].get('docks_size') }}
+            },
+            text: {{ labels[0].get('dock_text') | tojson}},
+            hovertext: {{labels[0].get('name') | tojson}}
+            
+        };
+
+        var layout = {
+            autosize: true,
+            hovermode:'closest',
+            font: {
+                color: '#EAECEE'
+            },
+            margin: {
+                r: 100,
+                t: 0,
+                b: 0,
+                l: 100,
+                pad: 0
+            },
+            mapbox: {
+                bearing:0,
+                center: {
+                    lat: 42.34054262,
+                    lon: -71.08138848
+                },
+                pitch:0,
+                zoom:11,
+                style: 'dark'
+            }
+        };
+
+        Plotly.setPlotConfig({
+            mapboxAccessToken: 'pk.eyJ1IjoiY3JkZGRkZGRkIiwiYSI6ImNqdjJxOXJhdjAwbG40ZG9jemphbDV6emUifQ.J2Lj8t4oHkneiyU2YUXe_Q'
+        });
+
+        Plotly.plot('map_dock', [trace], layout, {showSendToCloud: true})
+    </script>
+
+    <h2>A Map based on the Incoming Rate</h2>
+
+    <p>
+       The circle markers indicate the locations of bike stations. The size of the circle marker depends on the number of docks. The number shown in the circle marker denotes total number of incoming bikes in January and Feburary, 2018 for that station. Feel free to play around with the interactive visualization.  
+    </p>
+
+    <div id="station_incoming" style="width:100%;height:100%;"></div>
+    <script>
+        var trace = {
+            type: 'scattermapbox',
+            lat: {{ values[1]['lat'] }},
+            lon: {{ values[1]['lon'] }},
+            mode: 'markers+text',
+            marker: {
+                size: {{ values[1].get('docks_size') }},
+                color: '#3CC178'
+            },
+            text: {{ labels[1].get('incoming_text') | tojson}},
+            hovertext: {{labels[1].get('name') | tojson}}
+            
+        };
+
+        var layout = {
+            autosize: true,
+            hovermode:'closest',
+            font: {
+                color: '#EAECEE'
+            },
+            margin: {
+                r: 100,
+                t: 0,
+                b: 0,
+                l: 100,
+                pad: 0
+            },
+            mapbox: {
+                bearing:0,
+                center: {
+                    lat: 42.34054262,
+                    lon: -71.08138848
+                },
+                pitch:0,
+                zoom:11,
+                style: 'dark'
+            }
+        };
+
+        Plotly.setPlotConfig({
+            mapboxAccessToken: 'pk.eyJ1IjoiY3JkZGRkZGRkIiwiYSI6ImNqdjJxOXJhdjAwbG40ZG9jemphbDV6emUifQ.J2Lj8t4oHkneiyU2YUXe_Q'
+        });
+
+        Plotly.plot('station_incoming', [trace], layout, {showSendToCloud: true})
+    </script>
+
+    <h2>A Map based on the Outgoing Rate</h2>
+
+    <p>
+       The circle markers indicate the locations of bike stations. The size of the circle marker depends on the number of docks. The number shown in the circle marker denotes total number of outgoing bikes in January and Feburary, 2018 for that station. Feel free to play around with the interactive visualization.  
+    </p>
+
+    <div id="station_outgoing" style="width:100%;height:100%;"></div>
+    <script>
+        var trace = {
+            type: 'scattermapbox',
+            lat: {{ values[2]['lat'] }},
+            lon: {{ values[2]['lon'] }},
+            mode: 'markers+text',
+            marker: {
+                size: {{ values[2].get('docks_size') }},
+                color: '#C94676'
+            },
+            text: {{ labels[2].get('outgoing_trip') | tojson}},
+            hovertext: {{labels[2].get('name') | tojson}}
+            
+        };
+
+        var layout = {
+            autosize: true,
+            hovermode:'closest',
+            font: {
+                color: '#EAECEE'
+            },
+            margin: {
+                r: 100,
+                t: 0,
+                b: 0,
+                l: 100,
+                pad: 0
+            },
+            mapbox: {
+                bearing:0,
+                center: {
+                    lat: 42.34054262,
+                    lon: -71.08138848
+                },
+                pitch:0,
+                zoom:11,
+                style: 'dark'
+            }
+        };
+
+        Plotly.setPlotConfig({
+            mapboxAccessToken: 'pk.eyJ1IjoiY3JkZGRkZGRkIiwiYSI6ImNqdjJxOXJhdjAwbG40ZG9jemphbDV6emUifQ.J2Lj8t4oHkneiyU2YUXe_Q'
+        });
+
+        Plotly.plot('station_outgoing', [trace], layout, {showSendToCloud: true})
+    </script>
+
+</body>
+
+</html>
