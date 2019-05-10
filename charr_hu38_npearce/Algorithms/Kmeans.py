@@ -19,7 +19,7 @@ class Kmeans(dml.Algorithm):
 	writes = ['charr_hu38_npearce.Kmeans']
 	
 	@staticmethod
-	def execute(trial = False):
+	def execute(trial = False, max_num=10):
 		'''Union dataset containing bike data into the dataset containing city census information'''
 		startTime = datetime.datetime.now()
 

@@ -17,7 +17,7 @@ class StationDataCollection(dml.Algorithm):
 	writes = ['charr_hu38_npearce.boston_s', 'charr_hu38_npearce.washington_s', 'charr_hu38_npearce.newyork_s', 'charr_hu38_npearce.chicago_s', 'charr_hu38_npearce.sanfran_s']
 
 	@staticmethod
-	def execute(trial = False):
+	def execute(trial = False, max_num=10):
 		'''Retrieve some data sets (not using the API here for the sake of simplicity).'''
 		startTime = datetime.datetime.now()
 
@@ -25,6 +25,13 @@ class StationDataCollection(dml.Algorithm):
 		client = dml.pymongo.MongoClient()
 		repo = client.repo
 		repo.authenticate('charr_hu38_npearce', 'charr_hu38_npearce')
+		
+		if(not repo['charr_hu38_npearce.sanfran_s'].count() == 0):
+			repo.logout()
+
+			endTime = datetime.datetime.now()
+	
+			return {"start":startTime, "end":endTime}
 			
 		url = 'https://gbfs.bluebikes.com/gbfs/en/station_information.json'													
 		response = urllib.request.urlopen(url).read().decode("utf-8")

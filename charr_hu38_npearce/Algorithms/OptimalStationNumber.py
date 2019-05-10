@@ -4,7 +4,6 @@ import datetime
 import uuid
 import numpy as np
 from sklearn.linear_model import LinearRegression
-import matplotlib
 
 class OptimalStationNumber(dml.Algorithm):
 	contributor = 'charr_hu38_npearce'
@@ -12,7 +11,7 @@ class OptimalStationNumber(dml.Algorithm):
 	writes = ['charr_hu38_npearce.optstationnum']
 
 	@staticmethod
-	def execute(trial = False):
+	def execute(trial = False, max_num=10):
 		'''Union dataset containing bike data into the dataset containing city census information'''
 		startTime = datetime.datetime.now()
 
@@ -31,17 +30,19 @@ class OptimalStationNumber(dml.Algorithm):
 		y = []
 		for city in data:
 			cities.append(city['city'])
-			X.append(10000*int(city['stations'])/int(city['population'])) #Amount of bike stations per person
+			X.append(int(city['stations'])/int(city['population'])) #Amount of bike stations per person
 			y.append(city['tot_bike_time']/int(city['population'])) #Time spent on bike per person
 		
-		z = np.polyfit(X, y, 1)		#Linear regression
-		#Washington has the highest amount of bike time/person, so we use washington station number plus our constraint max
+		z = np.polyfit(X,y,1)		#Linear regression
+		c = z[0]
+		
 		#It is clear from our data that adding stations only increases productivity, so we add the max we can build
-		#k-means k=10
-		k=10
+		#k-means k=max_num
+		k=max_num
 		data_arry=[]
-		data_arry.append({"opt_num":k})
-		repo['charr_hu38_npearce.optstationnum'].insert_many(data_arry)														#Data set 0: Optimal Station Number
+		for i in range(len(X)):
+			data_arry.append({"opt_num":k,"coef":c,"x":X[i],"y":y[i]})
+		repo['charr_hu38_npearce.optstationnum'].insert_many(data_arry)						#Data set 0: Optimal Station Number
 		repo['charr_hu38_npearce.optstationnum'].metadata({'complete':True})
 
 		repo.logout()
