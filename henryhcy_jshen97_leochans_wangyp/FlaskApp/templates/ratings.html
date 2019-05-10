@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <main>
+        <p>
+            Here are the records:
+            <hr>
+            {% if messages %}
+                <ul>
+                    {% for m in messages %}
+                        <p style="color: red"><b>{{ m[0] }}</b></p> {{ m[1] }}
+                        <hr>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            <hr>
+
+            The average rating is: {{ average }}/5
+        </p>
+    </main>
+{% endblock %}

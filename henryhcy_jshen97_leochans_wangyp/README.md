@@ -1,4 +1,40 @@
-###cs504 Project 2 Modeling, Optimization, and Statistical Analysis
+###--Project 3 update--
+
+* **This README contains detailed report up to Project 2. The complete report is in the web 
+application we built. The pdf file is in the folder "PosterReport"** if you want to read it
+while using our web services, please follow the following instructions. 
+  * **Make sure you have Python 3.7.x installed in your environment.**
+  * **Make sure you have all the latest dependencies downloaded.** 
+    * dml, json, flask, flask-migrate, flask-sqlalchemy, flask-wtf, folium
+      geopy, numpy, pandas, prov, pprint, scipy, uuid, wtforms, z3-solver.
+    * ```pip install requirements.txt```
+  * **To run the data retrievals and operations, make sure you are in the directory 
+  where the files "execute.py" and "auth.json" resides.**
+    * Enter your API credentials in "auth.json" and save.
+    * Open a terminal and enter: 
+        * ```python execute.py henryhcy_jshen97_leochans_wangyp```
+    * This might take 5-10 minutes. (We did not implement trial mode because the data we
+    retrieve are relatively small)
+  * **To run the we application, make sure you are in the directory where the file 
+  "_DataApp.py" resides.**
+    * ```cd ../henryhcy_jshen97_leochans_wangyp```
+  * **Then we need to let flask know where is the application.**
+    * if you are in UNIX/LINUX environment, enter the command:
+        * ```export FLASK_APP=_DataApp.py```
+    * if you are on Windows, enter the command:
+        * ```set FLASK_APP=_DataApp.py```
+  * **After the successful executions of the previous steps, enter:**
+    * ```flask run```
+  * **The web application will run in backend.**
+  * **Click on the link generated, or open a browser and go to http://127.0.0.1:5000/ or 
+    http://localhost:5000/ to see the web pages.**
+* **You can see all the comments and ratings in our web app.
+We also made a flask shell for you to easily access the embedded SQL database to see 
+ratings and comments of our project.** Simply cd to the folder where "_DataApp.py" resides
+, ```set/export FLASK_APP=_DataApp.py``` if you are on a new terminal, then enter ```flask shell```
+you can interact with the database "db" and table "User" using standard sql commands (i.e. 
+```users = User.query.all()```, ```db.session.commit()```).
+###Boston Pharmacy
 
 ####Team Formation
 - **JiaJia shen (jshen97@bu.edu)**
@@ -20,7 +56,6 @@
 - MBTA stops in boston area
     - (http://datamechanics.io/data/MBTA_Stops.json)
 - **File rlated**: DataRetrieval.py
-  
 ####General Description, Procedure, and Narrative
 The project is divided into two tasks:
 - **Task One: Quantify Competition Between two major pharmacy brands CVS and Walgreen in Boston area **
@@ -33,7 +68,7 @@ The project is divided into two tasks:
 
         3. Using **statistical analysis** to test our hypothesis.
 
-            
+             
 
            1. Related script: **find_Distance**
 
@@ -53,13 +88,13 @@ The project is divided into two tasks:
 
            3. For further analsis, we plot the following histograms. It is interesting that there are around 16 pairs of CVS and Walgreen right next to each other which is consistent with our intuition.   It is reasonable to believe that density of CVS and Walgreen stores is proportional with the density of population. Hopefully, we can have further investigation about the location selction in next part of the project. 
 
-               ![](cvs_cvs.png)
+               ![](/cvs_cvs.png)
 
-               ![](cvs_walgreen.png)
+               ![](/cvs_walgreen.png)
 
-               ![](walgreen_walgreen.png)
+               ![](/walgreen_walgreen.png)
 
-               ![](walgreen_cvs.png)
+               ![](/walgreen_cvs.png)
 
                
 
@@ -107,7 +142,7 @@ The project is divided into two tasks:
                 - **1249 Boylston St, Boston**
             - with a total stability **S =  0.4886**
             - with a total accessibility **A = 11.2147 km**
-            - ![Google Maps result](Project2%20result.JPG)
+            - ![Google Maps result](Project2Images/Project2%20result.JPG)
     5. Constraints Satisfaction:
         - **Related Files**: Salesmen.py
         - **Question**: If we have the chance to send **3** salesmen (**1** per store), obtained the model that has the total stability >= **S**, total accessibility >= **A**?
@@ -120,4 +155,4 @@ The project is divided into two tasks:
                 - **631 Washington St, Boston**
             - with a total **S = 0.63646**
             - with a total **A = 7.91282**
-            - ![Google Maps result](Project2%20resultz3.JPG)
+            - ![Google Maps result](Project2Images/Project2%20resultz3.JPG)

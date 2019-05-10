@@ -1,0 +1,34 @@
+<html>
+    <head>
+        <title> {{ title }} - CS504 SPR 2019</title>
+        <title>Welcome to Project Pharmacy</title>
+        <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/png">
+        <link rel="stylesheet" href="{{ url_for('static', filename='_main.css') }}">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+       
+    </head>
+
+    <body>
+        <div class="p-3 mb-2 bg-transparent">
+            <h1 class="display-5 text-center text-dark">Boston Pharmacy</h1>
+            <ul class ="intro">
+                <li class ="intro" ><a class ="intro" href="/index">Home</a></li>    
+                <li class ="intro" ><a class ="intro" href="/task1">Task I</a></li>
+                <li class ="intro" ><a class ="intro" href="/task2">Task II</a></li>
+                <li class ="intro"><a class ="intro" href="/report">Report</a></li>
+                <li class ="intro"><a class ="intro" href="/feedback">Feedback</a></li>
+                <li class ="intro"><a class ="intro" href="/feedback/ratings">Ratings&Comments</a></li>
+            </ul>
+        </div>          
+        <hr>
+
+        {% block content %}{% endblock %}
+
+        <p style="margin-left: 140px">
+            <br><br>
+            <font size="1" color="red">
+                <b>**Updated on 2019-05-01. All rights reserved for Boston University CS504 Data Mechanics SPR2019.</b>
+            </font>
+        </p>
+    </body>
+</html>
