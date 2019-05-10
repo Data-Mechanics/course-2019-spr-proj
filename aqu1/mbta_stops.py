@@ -11,6 +11,23 @@ class mbta_stops(dml.Algorithm):
     reads = []
     writes = ['aqu1.mbta_stops_data']
     
+    def drop_stations(train_stops):
+        stations = ['Alewife', 'Assembly', 'Beachmont', 'Beaconsfield', 'Bellingham Square',
+                    'Box District', 'Braintree', 'Brandon Hall', 'Brookline Hills', 'Brookline Village',
+                    'Capen Street', 'Central', 'Central Avenue', 'Chelsea', 'Chestnut Hill',
+                    'Coolidge Corner', 'Davis', 'Dean Road', 'Eastern Avenue', 'Eliot', 'Englewood Avenue',
+                    'Fairbanks', 'Harvard', 'Hawes Street', 'Kendall/MIT', 'Kent Street', 'Lechmere',
+                    'Longwood', 'Malden Center', 'Milton', 'Newton Centre', 'Newton Highlands',
+                    'North Quincy', 'Oak Grove', 'Porter', 'Quincy Adams', 'Quincy Center', 'Revere Beach',
+                    'Riverside', 'St. Marys Street', 'St. Paul Street', 'Summit Avenue', 'Tappan Street',
+                    'Valley Road', 'Waban', 'Washington Square', 'Wellington', 'Wollaston', 'Wonderland',
+                    'Woodland']
+                    
+        for s in stations:
+            train_stops = train_stops[train_stops['STATION'] != s]
+            
+        return train_stops
+    
     @staticmethod
     def execute(trial = False):
         '''Retrieve some data sets (not using the API here for the sake of simplicity).'''
@@ -19,9 +36,11 @@ class mbta_stops(dml.Algorithm):
         # Dataset 5: MBTA T stops 
         url = 'http://maps-massgis.opendata.arcgis.com/datasets/a9e4d01cbfae407fbf5afe67c5382fde_2.csv'
         train_stops = pd.read_csv(url)
-
-        t_stops = pd.concat([train_stops.Y, train_stops.X], axis = 1) # select columns
-        t_stops.columns = ['Latitude', 'Longitude']
+        
+        train_stops = mbta_stops.drop_stations(train_stops)
+        
+        t_stops = pd.concat([train_stops.X, train_stops.Y], axis = 1) # select columns
+        t_stops.columns = ['Longitude', 'Latitude']
         t_stops = json.loads(t_stops.to_json(orient = 'records'))
         
         # Set up the database connection.
@@ -70,10 +89,3 @@ class mbta_stops(dml.Algorithm):
         repo.logout()
 
         return doc
-        
-'''
-mbta_stops.execute()
-doc = mbta_stops.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
-'''

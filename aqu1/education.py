@@ -22,6 +22,7 @@ class education(dml.Algorithm):
         education = education[education.Decade == 2000] 
         # projection: remove % from percent of population column
         education['Percent of Population'] = education['Percent of Population'].apply(lambda p: str(p)[:-1]) 
+        education = education[education['Education'] == 'Bachelor\'s Degree or Higher']
         education = pd.DataFrame(education)
         education = json.loads(education.to_json(orient = 'records'))
         
@@ -48,8 +49,9 @@ class education(dml.Algorithm):
         doc.add_namespace('alg', 'http://datamechanics.io/algorithm/') # The scripts are in <folder>#<filename> format.
         doc.add_namespace('dat', 'http://datamechanics.io/data/') # The data sets are in <user>#<collection> format.
         doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retrieval', 'Query', or 'Computation'.
+        doc.add_namespace('log', 'http://datamechanics.io/log/') # The event log.
         doc.add_namespace('bdp', 'https://data.boston.gov/dataset/') # Boston Data Portal
-
+        
         this_script = doc.agent('alg:aqu1#education', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
         
         # Education Attainment Report
@@ -64,12 +66,4 @@ class education(dml.Algorithm):
         doc.wasDerivedFrom(education, resource_education, get_education, get_education, get_education)
         
         repo.logout()
-
         return doc
-
-'''
-education.execute()
-doc = education.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
-'''

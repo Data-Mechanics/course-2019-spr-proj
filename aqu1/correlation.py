@@ -9,6 +9,7 @@ import math
 import numpy as np
 import scipy.stats
 import matplotlib.pyplot as plt
+
 from sklearn.linear_model import LinearRegression
 
 class correlation(dml.Algorithm):
@@ -58,22 +59,25 @@ class correlation(dml.Algorithm):
         school_stop_dist = pd.DataFrame(school_stop_dist)
         school_stop_dist.columns = ['Neighborhood', 'Distance']
         school_stop_dist = school_stop_dist.groupby('Neighborhood').mean()
+        
         #convert distances from km to miles 
         school_stop_dist['Distance'] = school_stop_dist['Distance'].apply(lambda d: d/1.609) 
-        college_education = education[education['Education'] == 'Bachelor\'s Degree or Higher']
+        school_stop_dist = school_stop_dist.rename_axis('Neighborhood').reset_index()
         
-        dist_education = pd.merge(school_stop_dist, college_education, on = 'Neighborhood')
+        education = education[education['Education'] == 'Bachelor\'s Degree or Higher']
+        
+        dist_education = pd.merge(school_stop_dist, education, on = 'Neighborhood')
         dist_education = dist_education.drop(['Decade', 'Education', 'Number of People'], axis = 1)
 
         dist_education['Percent of Population'] = dist_education['Percent of Population'].astype(dtype = np.float64)
         
-        income_education = pd.merge(income, college_education, on = 'Neighborhood')
+        income_education = pd.merge(income, education, on = 'Neighborhood')
         income_education['prop_low_income'] = income_education['prop_low_income'].apply(lambda p: p*100)
         income_education['Percent of Population'] = income_education['Percent of Population'].astype(dtype = np.float64)  
-        result = [dist_education, income_education]
+        result = [dist_education, income_education, school_stop_dist]
         return result
         
-    def lin_reg(x, y, xlabel, ylabel, title):
+    def lin_reg(x, y, xlabel, ylabel, title, data):
         x = np.array(x).reshape(-1,1)
         y = np.array(y).reshape(-1,1)
         regr = LinearRegression()
@@ -83,14 +87,19 @@ class correlation(dml.Algorithm):
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
         plt.title(title, loc = 'center')
+        s = 'r = ' + str(data[0]) + '\n' + 'p = ' + str(data[1])
+        if title == 'Percent Low Income vs. Percent With College Degree':
+            plt.text(70, 50, s, fontsize = 12)
+        else:
+            plt.text(6, 65, s, fontsize = 12)
         plt.show()
     
     def corr_pval(x, y, description):
         corr_coef, p_value = scipy.stats.pearsonr(x, y)
         print(description)
-        print('The correlation coefficient is:', corr_coef)
-        print('The p value is:', p_value, '\n')
-        data = [corr_coef, p_value]
+        print('The correlation coefficient is:', round(corr_coef, 2))
+        print('The p value is:', round(p_value, 2), '\n')
+        data = [round(corr_coef, 2), round(p_value, 2)]
         return data
 
     def stat_analysis(dist_education, income_education):
@@ -101,19 +110,16 @@ class correlation(dml.Algorithm):
         ylabel = 'Percent Low Income'
         description = 'Percent Low Income vs. Percent Bachelor\'s Degree or Higher'
         result = correlation.corr_pval(x, y, description)
-        #correlation.lin_reg(x, y, xlabel, ylabel, title)
+        #correlation.lin_reg(x, y, xlabel, ylabel, title, result)
 
         title = 'Percent With College Degree vs. Distance from T-stop to School'
         x = dist_education['Distance']
         y = dist_education['Percent of Population']
-        xlabel = 'Avg Dist from T-stop to School'
+        xlabel = 'Avg Dist from T-stop to School (Miles)'
         ylabel = 'Percent in Neighborhood with \n Bachelor\'s Degree or Higher'
         description = 'Percent Bachelor\'s Degree or Higher vs. Avg Dist from T-stop to School'
         data = correlation.corr_pval(x, y, description)
-        #correlation.lin_reg(x, y, xlabel, ylabel, title)
-        result.append(data[0])
-        result.append(data[1])
-        return result
+        #correlation.lin_reg(x, y, xlabel, ylabel, title, data)
     
     @staticmethod
     def execute(trial = False):
@@ -138,14 +144,15 @@ class correlation(dml.Algorithm):
         result = correlation.process_data(education, t_stops, income, all_schools, trial)
         dist_education = result[0]
         income_education = result[1]
-        data = correlation.stat_analysis(dist_education, income_education)
-        data = pd.DataFrame(data)
-        data = json.loads(data.to_json(orient = 'records'))
+        school_stop_dist = result[2]
+        school_stop_dist = pd.DataFrame(school_stop_dist)
+        school_stop_dist = json.loads(school_stop_dist.to_json(orient = 'records'))
+        correlation.stat_analysis(dist_education, income_education)
         
         repo.dropCollection("correlation")
         repo.createCollection("correlation")
-       
-        repo['aqu1.correlation'].insert_many(data)
+         
+        repo['aqu1.correlation'].insert_many(school_stop_dist)
         
         repo.logout()
 
@@ -180,12 +187,4 @@ class correlation(dml.Algorithm):
         doc.wasDerivedFrom(stats_analysis, resource_stats_analysis, get_stats, get_stats, get_stats)
         
         repo.logout()
-'''
-# This is example code you might use for debugging this module.
-# Please remove all top-level function calls before submitting.
-correlation.execute()
-doc = correlation.provenance()
-#print(type(correlation.provenance()))
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
-'''
+        return doc

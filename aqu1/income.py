@@ -64,13 +64,4 @@ class income(dml.Algorithm):
         doc.wasDerivedFrom(income, resource_income, get_income, get_income, get_income)
         
         repo.logout()
-
         return doc  
-'''
-# This is example code you might use for debugging this module.
-# Please remove all top-level function calls before submitting.
-income.execute()
-doc = income.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
-'''
