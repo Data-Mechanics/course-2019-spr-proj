@@ -1,0 +1,233 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-71.155314,42.283204]
+      },
+      "properties": {
+        "name": "March Ter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-71.084115,42.325594]
+      },
+      "properties": {
+        "name": "Regent Pl"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-71.053773,42.329261]
+      },
+      "properties": {
+        "name": "Gordon Rd"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-71.125124,42.366145]
+      },
+      "properties": {
+        "name": "Van Brunt"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-71.122568,42.241207]
+      },
+      "properties": {
+        "name": "Crown St"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-71.108099,42.266566]
+      },
+      "properties": {
+        "name": "Alveston Ter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-71.111393,42.311398]
+      },
+      "properties": {
+        "name": "Dexter Row"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-71.063828,42.375705]
+      },
+      "properties": {
+        "name": "Atherton Ave"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-71.130348,42.284393]
+      },
+      "properties": {
+        "name": "Parkman Pl"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-71.0578,42.29757]
+      },
+      "properties": {
+        "name": "Folsom Ave"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-71.09876,42.329707]
+      },
+      "properties": {
+        "name": "Lawn Ave"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-70.996403,42.388414]
+      },
+      "properties": {
+        "name": "Winship Pl"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-71.151629,42.347404]
+      },
+      "properties": {
+        "name": "Westcott St"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-71.079033,42.29424]
+      },
+      "properties": {
+        "name": "Paul Gore Ter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-71.107238,42.319626]
+      },
+      "properties": {
+        "name": "Dell Ter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-71.119401,42.259193]
+      },
+      "properties": {
+        "name": "Butler Pl"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-71.057819,42.366988]
+      },
+      "properties": {
+        "name": "Euclid St"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-71.071119,42.288735]
+      },
+      "properties": {
+        "name": "Duncan Ter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-71.058149,42.302211]
+      },
+      "properties": {
+        "name": "Alaric Ter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-71.162238,42.276587]
+      },
+      "properties": {}
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-71.039264,42.337246]
+      },
+      "properties": {
+        "name": "Barnard Pl"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-71.021767,42.380514]
+      },
+      "properties": {
+        "name": "Swift Ter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-71.0708,42.341595]
+      },
+      "properties": {
+        "name": "Pelham Ter"
+      }
+    }
+  ]
+}
