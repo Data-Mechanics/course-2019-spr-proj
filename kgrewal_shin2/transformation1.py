@@ -1,5 +1,4 @@
 
-import json
 import dml
 import prov.model
 import datetime
@@ -30,28 +29,31 @@ class transformation1():
                 data = l['features'][i]['properties']
                 address = data['Address']
 
-                if "Bounded by" not in address:
-                    street = address.split(" ", 1)
-                    if street[0].isdigit() or len(street[0].split("-")) > 1:
-                        street = street[1]
+                try:
+                    if "Bounded by" not in address:
+                        street = address.split(" ", 1)
+                        if street[0].isdigit() or len(street[0].split("-")) > 1:
+                            street = street[1]
+                        else:
+                            street = address
                     else:
-                        street = address
-                else:
-                    street = address.split("Bounded by ")[1]
+                        street = address.split("Bounded by ")[1]
+                    landmark_streets.append(street)
 
-                landmark_streets.append(street)
+                except TypeError:
+                    continue
 
         streets_without_landmarks = []
         for x in street_names:
             full_name = x['full_name']
-            #to correct for a comma at the end of full_name
+            # to correct for a comma at the end of full_name
             full_name = full_name[:-1]
             gender = x['gender']
             zipcode = x['zipcodes']
             street_name = x['street_name']
 
             # find difference of streetnames and landmarks, while selecting only those that aren't female
-            if (full_name not in landmark_streets) and (gender != "female"):
+            if (full_name not in landmark_streets) and (gender != "female") and ("Public Alley" not in full_name):
                 streets_without_landmarks.append({"full_name": full_name, "gender": gender,
                                                   "zipcode": zipcode, "street_name": street_name})
 
@@ -113,8 +115,7 @@ class transformation1():
         return doc
 
 
-transformation1.execute()
-doc = transformation1.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
+# doc = transformation1.provenance()
+# print(doc.get_provn())
+# print(json.dumps(json.loads(doc.serialize()), indent=4))
 

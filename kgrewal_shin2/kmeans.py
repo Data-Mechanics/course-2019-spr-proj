@@ -1,4 +1,4 @@
-import json
+
 import dml
 import prov.model
 import datetime
@@ -114,7 +114,6 @@ class kmeans(dml.Algorithm):
         return doc
 
 
-kmeans.execute()
-doc = kmeans.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
+# doc = kmeans.provenance()
+# print(doc.get_provn())
+# print(json.dumps(json.loads(doc.serialize()), indent=4))

@@ -11,7 +11,7 @@ class DatasetInsertion(dml.Algorithm):
     contributor = 'kgrewal_shin2'
     reads = []
     writes = ['kgrewal_shin2.street_names', 'kgrewal_shin2.landmarks', 'kgrewal_shin2.neighborhoods',
-              'kgrewal_shin2.ubers', 'kgrewal_shin2.pub_schools', 'kgrewal_shin2.ma_zip_loc']
+              'kgrewal_shin2.ubers', 'kgrewal_shin2.pub_schools', 'kgrewal_shin2.ma_zip_loc', 'kgrewal_shin2.neigh_zip']
 
     @staticmethod
     def execute(trial=False):
@@ -76,6 +76,7 @@ class DatasetInsertion(dml.Algorithm):
         repo['kgrewal_shin2.ubers'].metadata({'complete': True})
         print(repo['kgrewal_shin2.ubers'].metadata())
 
+        # zip codes in Mass
         url = 'http://datamechanics.io/data/kgrewal_shin2/MA_zip_codes.json'
         response = urllib.request.urlopen(url).read().decode("utf-8")
         r = json.loads(response)
@@ -85,17 +86,15 @@ class DatasetInsertion(dml.Algorithm):
         repo['kgrewal_shin2.ma_zip_loc'].metadata({'complete': True})
         print(repo['kgrewal_shin2.ma_zip_loc'].metadata())
 
-        # # major roads
-        # url = 'https://drive.google.com/file/d/10a3ZoJjx2kgCRWEwjjCoTHADFV-uYV3e/view?usp=sharing'
-        # response = urllib.request.urlopen(url).read().decode("utf-8")
-        # r = json.loads(response)
-        # with open('major_roads.json') as f:
-        #     r = json.load(f)
-        # repo.dropCollection("major_roads")
-        # repo.createCollection("major_roads")
-        # repo['kgrewal_shin2.major_roads'].insert_many(r)
-        # repo['kgrewal_shin2.major_roads'].metadata({'complete': True})
-        # print(repo['kgrewal_shin2.major_roads'].metadata())
+        # neighborhoods and their zip codes
+        url = 'http://datamechanics.io/data/kgrewal_shin2/neighborhood-zipcodes.json'
+        response = urllib.request.urlopen(url).read().decode("utf-8")
+        r = json.loads(response)
+        repo.dropCollection("neigh_zip")
+        repo.createCollection("neigh_zip")
+        repo['kgrewal_shin2.neigh_zip'].insert_many(r)
+        repo['kgrewal_shin2.neigh_zip'].metadata({'complete': True})
+        print(repo['kgrewal_shin2.neigh_zip'].metadata())
 
         repo.logout()
 
@@ -215,9 +214,9 @@ class DatasetInsertion(dml.Algorithm):
 
 # This is example code you might use for debugging this module.
 # Please remove all top-level function calls before submitting.
-DatasetInsertion.execute()
-doc = DatasetInsertion.provenance()
-print(doc.get_provn())
-print(json.dumps(json.loads(doc.serialize()), indent=4))
+
+# doc = DatasetInsertion.provenance()
+# print(doc.get_provn())
+# print(json.dumps(json.loads(doc.serialize()), indent=4))
 
 ## eof

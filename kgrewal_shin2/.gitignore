@@ -4,8 +4,7 @@ __pycache__/
 
 .DS_Store
 
-*.json
-*.csv
-
 cleaning/.DS_Store
 cleaning/__pycache__/
+
+Project3/configTest.py

@@ -3,12 +3,13 @@ import dml
 import prov.model
 import datetime
 import uuid
+from math import floor
 
 
-class transformation4():
+class transformation5():
     contributor = 'kgrewal_shin2'
-    reads = ['kgrewal_shin2.streets_without_schools', 'kgrewal_shin2.streets_without_landmarks']
-    writes = ['kgrewal_shin2.unclaimed_streets']
+    reads = ['kgrewal_shin2.unclaimed_streets', 'kgrewal_shin2.neigh_zip']
+    writes = ['kgrewal_shin2.neigh_streets']
 
     @staticmethod
     def execute(trial=False):
@@ -19,43 +20,33 @@ class transformation4():
         repo = client.repo
         repo.authenticate('kgrewal_shin2', 'kgrewal_shin2')
 
-        no_schools = repo.kgrewal_shin2.streets_without_schools.find()
-        no_landmarks = repo.kgrewal_shin2.streets_without_landmarks.find()
+        unclaimed_streets = list(repo.kgrewal_shin2.unclaimed_streets.find())
+        neigh_zip = list(repo.kgrewal_shin2.neigh_zip.find())
 
-        pub_streets = []
-        for s in no_schools:
-            pub_streets.append(s['street_name'])
+        streets = []
+        for s in unclaimed_streets:
+            zip_street = s['zipcode']
 
-        free_streets = []
-        for x in no_landmarks:
-            if x['street_name'] not in pub_streets:
-                continue
-            else:
-                free_streets.append(x)
+            for n in neigh_zip:
+                if n['zipcode'] is None:
+                    continue
+                zip_neigh = "0" + str(floor(n['zipcode']))
+                neigh = n['neighborhood']
+                if zip_street == zip_neigh:
+                    entry = {'full_name': s['full_name'],
+                             'gender': s['gender'],
+                             'zipcode': s['zipcode'],
+                             'street_name': s['street_name'],
+                             'LAT': s['LAT'],
+                             'LNG': s['LNG'],
+                             'neighborhood': neigh}
+                    streets.append(entry)
 
-        street_zip = []
-        zips = list(repo.kgrewal_shin2.ma_zip_loc.find())
-
-        for x in free_streets:
-            zip = x['zipcode']
-            if not zip:
-                zip = 'None'
-            elif len(zip) > 5:
-                zip = zip[:5]
-            try:
-                info = zips[0][zip]
-                new = {'full_name': x['full_name'], 'gender': x['gender'], 'zipcode': zip, 'street_name':
-                    x['street_name'], 'LAT': info['LAT'], 'LNG': info['LNG']}
-
-                street_zip.append(new)
-            except KeyError:
-                continue
-
-        repo.dropCollection("unclaimed_streets")
-        repo.createCollection("unclaimed_streets")
-        repo['kgrewal_shin2.unclaimed_streets'].insert_many(street_zip)
-        repo['kgrewal_shin2.unclaimed_streets'].metadata({'complete': True})
-        print(repo['kgrewal_shin2.unclaimed_streets'].metadata())
+        repo.dropCollection("neigh_streets")
+        repo.createCollection("neigh_streets")
+        repo['kgrewal_shin2.neigh_streets'].insert_many(streets)
+        repo['kgrewal_shin2.neigh_streets'].metadata({'complete': True})
+        print(repo['kgrewal_shin2.neigh_streets'].metadata())
 
         repo.logout()
 
@@ -76,7 +67,7 @@ class transformation4():
         doc.add_namespace('log', 'http://datamechanics.io/log/')  # The event log.
         doc.add_namespace('bdp', 'https://data.cityofboston.gov/resource/')
 
-        this_script = doc.agent('alg:kgrewal_shin2#transformation4',
+        this_script = doc.agent('alg:kgrewal_shin2#transformation5',
                                 {prov.model.PROV_TYPE: prov.model.PROV['SoftwareAgent'], 'ont:Extension': 'py'})
         resource = doc.entity('bdp:wc8w-nujj',
                               {'prov:label': '311, Service Requests', prov.model.PROV_TYPE: 'ont:DataResource',
@@ -86,12 +77,12 @@ class transformation4():
         doc.wasAssociatedWith(get_streets, this_script)
         doc.usage(get_streets, resource, startTime, None,
                   {prov.model.PROV_TYPE: 'ont:Retrieval',
-                   'ont:Query': '?type=Unclaimed+Streets&$select=full_name,gender,zipcode,street_name, LAT, LNG'
+                   'ont:Query': '?type=Neigh+Streets&$select=full_name,gender,zipcode,street_name, LAT, LNG, neighborhood'
                    }
                   )
 
-        streets = doc.entity('dat:kgrewal_shin2#unclaimed_streets',
-                             {prov.model.PROV_LABEL: 'Unclaimed Streets', prov.model.PROV_TYPE: 'ont:DataSet'})
+        streets = doc.entity('dat:kgrewal_shin2#neigh_streets',
+                             {prov.model.PROV_LABEL: 'Neighborhoods of Streets', prov.model.PROV_TYPE: 'ont:DataSet'})
         doc.wasAttributedTo(streets, this_script)
         doc.wasGeneratedBy(streets, get_streets, endTime)
         doc.wasDerivedFrom(streets, resource, get_streets, get_streets, get_streets)
@@ -101,7 +92,6 @@ class transformation4():
         return doc
 
 
-
-# doc = transformation4.provenance()
+# doc = transformation5.provenance()
 # print(doc.get_provn())
 # print(json.dumps(json.loads(doc.serialize()), indent=4))
