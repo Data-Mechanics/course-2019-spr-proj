@@ -1,0 +1,16 @@
+.checkBoxDiv {
+  padding-left: 10px;
+}
+
+.visualDiv {
+  display: flex;
+  flex-direction: row;
+}
+
+.custom-control-label {
+  font-weight: normal;
+}
+
+.buttonStyling {
+  margin-top: 10px;
+}

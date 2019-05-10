@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon"> 
+    <link rel="stylesheet" href="/pure-min.css">
+    <link rel="stylesheet" href="/d3-styles.css">
+    <link rel="stylesheet" href="/leaflet.css">
+    <title>Project 3</title>
+    {% block head %}
+    {% endblock %}
+  </head>
+
+  <body>
+    <div style="padding: 10px;">
+      <div class="pure-g">
+        <div class="pure-u-1-12"> <!-- offset --> </div>
+        <div class="pure-u-5-6">
+          {% block body %}
+          {% endblock %}
+        </div>
+      </div>
+    </div>
+    <script src="/jquery-3.4.0.min.js"></script>    
+    <script src="/d3.min.js"></script>
+    <script src="/leaflet.js"></script>
+    <script src="/charting.js"></script> 
+  </body>
+</html>
+

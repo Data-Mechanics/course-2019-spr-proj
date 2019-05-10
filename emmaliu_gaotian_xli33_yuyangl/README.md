@@ -1,11 +1,15 @@
 # CS504 Project - Mapping Amman
 
-***README.md file has updated for Project #2. Please jump to Project #2 Part for more details.***
-
 ***This project is a part of [BU Spark!](http://www.bu.edu/spark/) project “Mapping Amman”.***
 
+***Note:***
+
+***README.md file is our final report.***
+
+***The [poster](https://github.com/feiyue33/course-2019-spr-proj/blob/master/emmaliu_gaotian_xli33_yuyangl/mapping_amman_poster.pdf) is in current folder.***
+
 ## Introduction
-Prof.Anderson of BU history department is conducting an ethnography of present-day Amman, Jordan, to determine how 22-35 year olds with university degrees, who are living in representative neighborhoods around the city are navigating the neoliberal development projects financed by the state.  In just the last two decades, Amman has doubled in size, and schooling, jobs and entertainment have been privatized. The youth population is the first generation to be fully immersed in this new city, facing its new obstacles and opportunities. 
+Prof. Anderson of BU history department is conducting an ethnography of present-day Amman, Jordan, to determine how 22-35 year olds with university degrees, who are living in representative neighborhoods around the city are navigating the neoliberal development projects financed by the state.  In just the last two decades, Amman has doubled in size, and schooling, jobs and entertainment have been privatized. The youth population is the first generation to be fully immersed in this new city, facing its new obstacles and opportunities. 
 
 2 big topics to guide the project:
 
@@ -24,8 +28,11 @@ $ pip install google-cloud-translate
 ```sh
 $ pip install vaderSentiment
 ```
+```sh
+$ pip install folium
+```
 
-## Project #1
+## Project #1: Data Retrieval, Storage, Provenance, and Transformations
 According to course syllabus, we focus on getting data sets and using them to do transformation in Project #1.
 
 - Scrape data from social media and store them in [MongoDB](https://www.mongodb.com/).
@@ -76,7 +83,7 @@ Export](https://phantombuster.com/api-store/3149/linkedin-search-export) to run 
   
   
 
-## Project #2
+## Project #2: Modeling, Optimization, and Statistical Analysis
 
 According to course syllabus, we focus on problems about data analytics in Project #2.
  
@@ -87,11 +94,13 @@ According to course syllabus, we focus on problems about data analytics in Proje
 ## Our Work in Project #2
 
 ### 1. Filtering Geo Information
+
 In order to do clustering on the place infomation, first we need to find which tweets include the place information. According to our observation, there are two information that might be useful. The first one is the "place" with a bounding box which provides coordinates. For each bounding box, we calculate the center point to represent it. The second one is the "geo" which directly provides coordinates. According our observation, there are too many overlapping center points calculated from bounding boxes, so this attribute do not provide enough useful information. Therefore, we filter tweets with "geo".
 
 ***Note: We do not merge code that using "bounding box" into our master branch. That part of code and result are in LinkedIn branch.***
  
 ### 2. Clustering by k-means++ Algorithm
+
 In Project #1, we get 5,000 tweets but the number of tweets with "geo" is not enough. To obtain more geo information for clustering, we get all tweets in last 7 days in Amman area. There are about 29,000 tweets in total and about 160 tweets include "geo". We want to use these coordinates to do clustering and find if there are some places that people usually go by solving this optimization problem. The most classic clustering algorithm is k-means. In Project #2, we implement k-means++ algorithm, which is better in initializing cluster centers. When k is set to 3, we get the result as follows.
 
 <div align=center><img src="https://github.com/feiyue33/course-2019-spr-proj/blob/master/emmaliu_gaotian_xli33_yuyangl/image/kmeans_result.jpeg" width="480" height=360"/></div>
@@ -99,22 +108,68 @@ In Project #1, we get 5,000 tweets but the number of tweets with "geo" is not en
 ***Note: If you run the code in trial mode, only about 20 coordinates will be used in clustering.***
  
 ### 3. Text Translation
+
 Since many tweets in data set are in Arabic, we need to translate Arabic to English because it is much more convenient and efficient to do sentimental analysis on English. We use [Google Cloud Translation API](https://cloud.google.com/translate/docs/apis) to do translation. For 5,000 tweets, it takes about more than 1 hour to translate. We upload the new translated data set to http://datamechanics.io/data/tweets_translated.json.
  
 ***Note: The trial mode does not include text translation. Please run the code in trial mode if you do not want to do translation.***
  
 ### 4. Sentimental Analysis
+
 After translation, we do sentimental analysis on tweets in Amman area. We randomly sample 200 tweets from translated data set. Each tweet will get a score from range [-1, 1]. The more the score close to -1, the more negative the tweet is; the more the score close to 1, the more positive the tweet is. We draw a scatter plot to show the results more intuitively.
 
 <div align=center><img src="https://github.com/feiyue33/course-2019-spr-proj/blob/master/emmaliu_gaotian_xli33_yuyangl/image/sentiment_result.jpeg" width="480" height="360"/></div>
 
 ### 5. Computation of Correlation Coefficient
+
 In this part, we use two attributes of Twitter user - the number of followers this user has (followers_count) and the number of public lists this user is a member of (listed_count). We compute the correlation coefficient and the p-value of these two attributes. According to our computation results, the correlation coefficient equals to 0.86 and the p-value is close to 0. Therefore, we can conclude that the correlation between followers_count and listed_count is very strong.
 
+## Project #3: Visualizations, Web Services, and Complete Project
+
+In Project #3, we focus on visualizations for results obtained in previous project. Our aim is to create an interactive web-based visualization that can be displayed in a standard web browser.
+
+## Our Work in Project #3
+
+In Project #3, we use Python to get the data from MongoDB, filter the data to three different groups and visualize them using Folium. We build an interactive web page that allows users to explore the geo information and sentimental analysis result obtained in previous project.
+
+### 1. Visualization for Geo Information
+
+From Project #2, we get the clustering result which show some places that people usually visit. In Project #3, we map these coordinates into [OpenStreetMap(OSM)](https://www.openstreetmap.org/#map=5/38.007/-95.844) using HeatMap from folium. The heat map could better represent the popularity of these places and we could know which places people prefer to go in Amman from the heat map.
+
+<div align=center><img src="https://github.com/feiyue33/course-2019-spr-proj/blob/master/emmaliu_gaotian_xli33_yuyangl/image/heatmap.gif" width="640" height="318"/></div>
+
+### 2. Visualization for Sentimental Analysis
+
+We also get sentimental analysis result in the previous project. In visualization, we use different makers to represent different sentiment. We use the Marker of folium, which includes the location of tweets, 'pop up' information and icon. The red marker with "thumbs-up" suggests that this tweet is positive; the blue marker with "thumbs-down" indicates that this tweet is negative; and the orange marker means that this tweet is neutral. The text of each tweet could be viewd by simply clicking the marker. 
+
+<div align=center><img src="https://github.com/feiyue33/course-2019-spr-proj/blob/master/emmaliu_gaotian_xli33_yuyangl/image/sentimental_analysis.gif" width="640" height="318"/></div>
+
+### 3. Combination and Interaction
+
+We combine two visualizations into one HTML file in order to better show the relation between these results. We add different layers that viewers could choose which results they want to check. By achieving this, we use the feature group of the folium and add related data to each layer. There are four layers: positive, negative, neutral, heat map in our final visualization web page.
+
+<div align=center><img src="https://github.com/feiyue33/course-2019-spr-proj/blob/master/emmaliu_gaotian_xli33_yuyangl/image/layer.gif" width="640" height="318"/></div>
+
+## Conclusion
+
+In the poster session, we discuss our final result with Prof. Anderson. From the heat map, we could find that people who live in West Amman go outside more often than people who live in East Amman. This is identical with the economic condition of Amman since people in West Amman is wealthier than East Amman. Also, we could see that a new shopping mall in West Amman is the place that people often visit.
+
+<div align=center><img src="https://github.com/feiyue33/course-2019-spr-proj/blob/master/emmaliu_gaotian_xli33_yuyangl/image/final_result.png" width=“738" height="400"></div>
+
+
+Since in Project #1 we set a larger radius, we also get tweets from Israel although it is not part of our aim. We could draw a conclusion that people in Israel is happier than people in Amman. Also, people in West Amman is happier than people in East Amman, which is also identical with the economic condition.
+
+<div align=center><img src="https://github.com/feiyue33/course-2019-spr-proj/blob/master/emmaliu_gaotian_xli33_yuyangl/image/final_result_sentimental.png" width=“738" height="400"></div>
+
+## Future Work
+
+The project is based on a dataset of 29,000+ tweets from near Amman area of a seven-day period. If we could continue to work on this project, we might use a premium Twitter account to get more data from this area with more tweets and longer time period. We believe we can get more useful and precise information with the larger dataset.
+
 ## Reference
+
  - https://developer.twitter.com/en/docs.html
  - https://www.json.org/
  - http://cs-people.bu.edu/lapets/504/
  - https://en.wikipedia.org/wiki/K-means%2B%2B
  - https://cloud.google.com/translate/docs/apis
  - https://github.com/cjhutto/vaderSentiment
+ - https://python-visualization.github.io/folium/
