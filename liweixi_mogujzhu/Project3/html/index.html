@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>CS591 Final Project Boston Fire Incident Visualization</title>
+  <script src="//d3js.org/d3.v3.min.js"></script>
+  <!-- jquery cause its bomb -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" crossorigin="anonymous"></script>
+  <!-- LEAFLET code -->
+  <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
+  <!-- DATA -->
+  <script src="./data/boston_fire_alarm_boxes.json"></script>
+  <script src="./data/boston_fire_department.json"></script>
+  <script src="./data/boston_fire_hydrants.json"></script>
+  <!-- CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" />
+  <link rel="stylesheet" type="text/css" href="./css/index.css" />
+
+</head>
+<body>
+  <div id="content" class="font">
+    <div>
+      <a href="/" class="button">Go to Boston Fire Facilities</a>
+      <a href="/fire_count" class="button">Go to Boston Fire HotMap</a>
+      <a href="/histogram/2017-01" class="button">Go to Boston Weather and Incident Histogram</a>
+    </div>
+    <h1>Boston Fire Facility Map</h1>
+    <br>
+    <div style="margin-top: 10px" >
+        <button id="fire_department_btn">Fire Departments</button>
+    </div>
+    <div>
+        <button id="fire_hydrants_btn">Fire Hydrants</button>
+    </div>
+    <div>
+        <button id="fire_alarm_boxes_btn">Fire Alarm Boxes</button>
+    </div>
+    <div id="map"></div>
+  </div>
+</body>
+<!-- custom LEAFLET javascript code -->
+<!--&lt;!&ndash;custom xxx javascript  code &ndash;&gt;-->
+<!--<script src="./js/xxx.js"></script>-->
+<!-- Map-->
+<script src="./js/leaflet_map.js"></script>
+
+</html>

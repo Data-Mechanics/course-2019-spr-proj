@@ -3,3 +3,5 @@ numpy>=1.16.2
 dml>=0.0.16.0
 prov>=1.5.3
 scipy>=1.2.1
+pandas>=0.24.0
+requests>=2.20.0
