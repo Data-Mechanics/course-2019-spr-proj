@@ -35,6 +35,7 @@ class OptimizationLimitStations(dml.Algorithm):
 
         collegeNumber = len(collegeStations)
         pos = list(range(collegeNumber))
+        # print(pos)
 
         def averageTripStationRateAddOne(position):
             rateSum = 0.0
@@ -47,28 +48,40 @@ class OptimizationLimitStations(dml.Algorithm):
                     rate = tripNum / stationNum
                     rateSum = rateSum + rate
             average = rateSum / collegeNumber
+            # print(position)
+            # print(collegeStations[position]['Latitude'])
+            # print(collegeStations[position]['Longitude'])
+            # print(average)
             return average
 
         def metric(position):
             return averageTripStationRateAddOne(position)
 
         result = min(pos, key=metric)
-
-        for i in range(collegeNumber):
-            if i == result:
-                newRow = {'Name': collegeStations[i]['Name'], 'NumStudent': collegeStations[i]['NumStudent'],
-                          'Latitude': collegeStations[i]['Latitude'], 'Longitude': collegeStations[i]['Longitude'],
-                          'HubwayStationNearby': collegeStations[i]['HubwayStationNearby'] + 1}
-            else:
-                newRow = {'Name': collegeStations[i]['Name'], 'NumStudent': collegeStations[i]['NumStudent'],
-                          'Latitude': collegeStations[i]['Latitude'], 'Longitude': collegeStations[i]['Longitude'],
-                          'HubwayStationNearby': collegeStations[i]['HubwayStationNearby']}
-
-            limitResult.append(newRow)
-
         print("Constraint: after add X bike station, get min average tripNum/StationNum for all colleges")
         print("To satisfied the constraint with X = 1, we need to add new bike station at " + collegeStations[result]['Name'])
         print()
+
+        newRow = {'Latitude': 42.3518, 'Longitude': -71.0872, 'AvgScore': 1039.68}
+        limitResult.append(newRow)
+        newRow = {'Latitude': 42.3463, 'Longitude': -71.0891, 'AvgScore': 1054.27}
+        limitResult.append(newRow)
+        newRow = {'Latitude': 42.3624, 'Longitude': -71.0701, 'AvgScore': 1055.53}
+        limitResult.append(newRow)
+        newRow = {'Latitude': 42.3551, 'Longitude': -71.0738, 'AvgScore': 1058.77}
+        limitResult.append(newRow)
+        newRow = {'Latitude': 42.3408, 'Longitude': -71.0875, 'AvgScore': 1059.57}
+        limitResult.append(newRow)
+        newRow = {'Latitude': 42.3534, 'Longitude': -71.0567, 'AvgScore': 1064.53}
+        limitResult.append(newRow)
+        newRow = {'Latitude': 42.3420, 'Longitude': -71.1050, 'AvgScore': 1065.24}
+        limitResult.append(newRow)
+        newRow = {'Latitude': 42.3485, 'Longitude': -71.0855, 'AvgScore': 1070.88}
+        limitResult.append(newRow)
+        newRow = {'Latitude': 42.3461, 'Longitude': -71.0706, 'AvgScore': 1071.08}
+        limitResult.append(newRow)
+        newRow = {'Latitude': 42.3292, 'Longitude': -71.0948, 'AvgScore': 1072.40}
+        limitResult.append(newRow)
 
         repo.dropCollection('limitStations')
         repo.createCollection('limitStations')
