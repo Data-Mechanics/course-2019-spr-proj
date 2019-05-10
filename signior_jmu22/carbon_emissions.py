@@ -8,9 +8,9 @@ import urllib.request
 import pandas as pd
 
 class carbon_emissions(dml.Algorithm):
-  contributor = 'signior_jmu22.zhangyb'
+  contributor = 'signior_jmu22'
   reads = []
-  writes = ['signior_jmu22_zhangyb.carbon_emissions']
+  writes = ['signior_jmu22.carbon_emissions']
 
   @staticmethod
   def execute(trial = False):
@@ -19,7 +19,7 @@ class carbon_emissions(dml.Algorithm):
     # Set up database connection
     client = dml.pymongo.MongoClient()
     repo = client.repo
-    repo.authenticate('signior_jmu22_zhangyb', 'signior_jmu22_zhangyb')
+    repo.authenticate('signior_jmu22', 'signior_jmu22')
 
     url = 'http://datamechanics.io/data/signior_jmu22/carbon_emissions.csv' # grab dataset from datamechanics.io
     df = pd.read_csv(url, sep='\t')
@@ -32,10 +32,10 @@ class carbon_emissions(dml.Algorithm):
     # print(carbon_emissions_dict)
     repo.dropCollection("carbon_emissions")
     repo.createCollection("carbon_emissions")
-    repo['signior_jmu22_zhangyb.carbon_emissions'].insert_many(carbon_emissions_dict)
-    repo['signior_jmu22_zhangyb.carbon_emissions'].metadata({'complete': True})
+    repo['signior_jmu22.carbon_emissions'].insert_many(carbon_emissions_dict)
+    repo['signior_jmu22.carbon_emissions'].metadata({'complete': True})
 
-    print(repo['signior_jmu22_zhangyb.carbon_emissions'].metadata())
+    print(repo['signior_jmu22.carbon_emissions'].metadata())
 
     repo.logout()
 
@@ -48,7 +48,7 @@ class carbon_emissions(dml.Algorithm):
   def provenance(doc = prov.model.ProvDocument(), startTime = None, endTime = None):
     client = dml.pymongo.MongoClient()
     repo = client.repo
-    repo.authenticate('signior_jmu22_zhangyb', 'signior_jmu22_zhangyb')
+    repo.authenticate('signior_jmu22', 'signior_jmu22')
     doc.add_namespace('alg', 'http://datamechanics.io/algorithm/signior_jmu22') # The scripts are in <folder>#<filename> format
     doc.add_namespace('dat', 'http://datamechanics.io/data/signior_jmu22' ) # The datasets are in <user>#<collection> format
     doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retreival', 'Query', or 'Computation'

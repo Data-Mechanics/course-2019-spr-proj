@@ -22,6 +22,22 @@ Our results for the constraint satisfaction didn't support this, as some countri
 Our conclusions for this project basically reflect how the world is naturally. In the beginning we wanted to prove that there is a significant impact from fossil fuel based powerplants on carbon emissions. Based on the results of project two, we can conclude that power plants have an effect, but not to the extent we thought initially. The reasoning behind this is there are other things that could impact carbon emissions (e.g. transportation (cars, trains, planes, etc)). 
 
 
+# project three
+Members:
+  Kevin Xia (signior@bu.edu, kevinxia787)
+  Jeffrey Mu (jmu22@bu.edu, jmu22)
+
+
+To run the application make sure Flask, Flask CORS, and  Pymongo are installed.
+Navigate to backend directory and run the following command
+  `export FLASK_APP=backend.py flask && flask run`
+Open a new terminal window and navigate to the client directory.
+First run 
+  `npm install`
+Then run
+  `npm start`
+
+Project should be running on localhost:3000
 
 Instructions:
 

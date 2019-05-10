@@ -7,9 +7,9 @@ import uuid
 import pandas as pd
 
 class ocean_surface_temp(dml.Algorithm):
-  contributor = 'signior_jmu22_zhangyb'
+  contributor = 'signior_jmu22'
   reads = []
-  writes = ['signior_jmu22_zhangyb.ocean_surface_temp']
+  writes = ['signior_jmu22.ocean_surface_temp']
 
   @staticmethod
   def execute(trial = False):
@@ -18,7 +18,7 @@ class ocean_surface_temp(dml.Algorithm):
     # Set up database connection
     client = dml.pymongo.MongoClient()
     repo = client.repo
-    repo.authenticate('signior_jmu22_zhangyb', 'signior_jmu22_zhangyb')
+    repo.authenticate('signior_jmu22', 'signior_jmu22')
 
     url = 'http://datamechanics.io/data/signior_jmu22/sea_surface_temp_anomaly.csv'
     df = pd.read_csv(url)
@@ -29,10 +29,10 @@ class ocean_surface_temp(dml.Algorithm):
     # print(ocean_temp_dict)
     repo.dropCollection("ocean_surface_temp")
     repo.createCollection("ocean_surface_temp")
-    repo['signior_jmu22_zhangyb.ocean_surface_temp'].insert_many(ocean_temp_dict)
-    repo['signior_jmu22_zhangyb.ocean_surface_temp'].metadata({'complete': True})
+    repo['signior_jmu22.ocean_surface_temp'].insert_many(ocean_temp_dict)
+    repo['signior_jmu22.ocean_surface_temp'].metadata({'complete': True})
 
-    print(repo['signior_jmu22_zhangyb.ocean_surface_temp'].metadata())
+    print(repo['signior_jmu22.ocean_surface_temp'].metadata())
 
     repo.logout()
 
@@ -45,7 +45,7 @@ class ocean_surface_temp(dml.Algorithm):
   def provenance(doc = prov.model.ProvDocument(), startTime = None, endTime = None):
     client = dml.pymongo.MongoClient()
     repo = client.repo
-    repo.authenticate('signior_jmu22_zhangyb', 'signior_jmu22_zhangyb')
+    repo.authenticate('signior_jmu22', 'signior_jmu22')
     doc.add_namespace('alg', 'http://datamechanics.io/algorithm/signior_jmu22') # The scripts are in <folder>#<filename> format
     doc.add_namespace('dat', 'http://datamechanics.io/data/signior_jmu22' ) # The datasets are in <user>#<collection> format
     doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retreival', 'Query', or 'Computation'

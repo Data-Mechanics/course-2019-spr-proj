@@ -22,9 +22,9 @@ def running_mean(x, N):
   return (cumsum[N:] - cumsum[:-N]) / float(N)
 
 class constraint_satisfaction(dml.Algorithm):
-  contributor = 'signior_jmu22_zhangyb'
-  reads = ['signior_jmu22_zhangyb.power_plants_established_date_by_country', 'signior_jmu22_zhangyb.carbon_emissions', 'signior_jmu22_zhangyb.population']
-  writes = ['signior_jmu22_zhangyb.countries_change_in_carbon_after_year']
+  contributor = 'signior_jmu22'
+  reads = ['signior_jmu22.power_plants_established_date_by_country', 'signior_jmu22.carbon_emissions', 'signior_jmu22.population']
+  writes = ['signior_jmu22.countries_change_in_carbon_after_year']
 
   @staticmethod
   def execute(trial = False):
@@ -33,13 +33,13 @@ class constraint_satisfaction(dml.Algorithm):
     # Set up database connection
     client = dml.pymongo.MongoClient()
     repo = client.repo
-    repo.authenticate('signior_jmu22_zhangyb', 'signior_jmu22_zhangyb')
+    repo.authenticate('signior_jmu22', 'signior_jmu22')
 
-    population = list(repo.signior_jmu22_zhangyb.population.find())
+    population = list(repo.signior_jmu22.population.find())
 
-    power_plants_by_country_year = list(repo.signior_jmu22_zhangyb.power_plants_established_date_by_country.find())
+    power_plants_by_country_year = list(repo.signior_jmu22.power_plants_established_date_by_country.find())
 
-    carbon_emissions_by_country_year = list(repo.signior_jmu22_zhangyb.carbon_emissions.find())
+    carbon_emissions_by_country_year = list(repo.signior_jmu22.carbon_emissions.find())
 
     df_power_plants = pd.DataFrame(power_plants_by_country_year)
     df_carbon_emissions = pd.DataFrame(carbon_emissions_by_country_year)
@@ -121,10 +121,10 @@ class constraint_satisfaction(dml.Algorithm):
     
     repo.dropCollection("countries_change_in_carbon_after_year")
     repo.createCollection("countries_change_in_carbon_after_year")
-    repo['signior_jmu22_zhangyb.countries_change_in_carbon_after_year'].insert_many(resulting_dataset)
-    repo['signior_jmu22_zhangyb.countries_change_in_carbon_after_year'].metadata({'complete': True})
+    repo['signior_jmu22.countries_change_in_carbon_after_year'].insert_many(resulting_dataset)
+    repo['signior_jmu22.countries_change_in_carbon_after_year'].metadata({'complete': True})
         
-    print(repo['signior_jmu22_zhangyb.countries_change_in_carbon_after_year'].metadata())
+    print(repo['signior_jmu22.countries_change_in_carbon_after_year'].metadata())
 
     repo.logout()
 
@@ -139,24 +139,24 @@ class constraint_satisfaction(dml.Algorithm):
     doc.add_namespace('ont', 'http://datamechanics.io/ontology#')
     doc.add_namespace('log', 'http://datamechanics.io/log/')
 
-    this_script = doc.agent('alg:signior_jmu22_zhangyb#constraint_satisfaction', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extention':'py'})
-    resource_carbon_emissions = doc.entity('dat:signior_jmu22_zhangyb#carbon_emissions', {prov.model.PROV_LABEL: 'Yearly carbon emissions data', prov.model.PROV_TYPE:'ont:DataSet'})
+    this_script = doc.agent('alg:signior_jmu22#constraint_satisfaction', {prov.model.PROV_TYPE:prov.model.PROV['SoftwareAgent'], 'ont:Extension':'py'})
+    resource_carbon_emissions = doc.entity('dat:signior_jmu22#carbon_emissions', {prov.model.PROV_LABEL: 'Yearly carbon emissions data', prov.model.PROV_TYPE:'ont:DataSet'})
     get_carbon_emissions= doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime) 
     doc.wasAssociatedWith(get_carbon_emissions, this_script)
     doc.usage(get_carbon_emissions, resource_carbon_emissions, startTime, None, {prov.model.PROV_TYPE:'ont:Retrieval'})
 
-    resource_population = doc.entity('dat:signior_jmu22_zhangyb#population', {prov.model.PROV_LABEL: 'population data', prov.model.PROV_TYPE:'ont:DataSet'})
+    resource_population = doc.entity('dat:signior_jmu22#population', {prov.model.PROV_LABEL: 'population data', prov.model.PROV_TYPE:'ont:DataSet'})
     get_resource_population = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
     doc.wasAssociatedWith(get_resource_population, this_script)
     doc.usage(get_resource_population, resource_population, startTime, None, {prov.model.PROV_TYPE:'ont:Retrieval'})
 
-    resource_power_plant = doc.entity('dat:signior_jmu22_zhangyb#power_plant', {prov.model.PROV_LABEL: 'carbon emissions data', prov.model.PROV_TYPE:'ont:DataSet'})
+    resource_power_plant = doc.entity('dat:signior_jmu22#power_plant', {prov.model.PROV_LABEL: 'carbon emissions data', prov.model.PROV_TYPE:'ont:DataSet'})
     get_power_plant = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
     doc.wasAssociatedWith(get_power_plant, this_script)
     doc.usage(get_power_plant, resource_power_plant, startTime, None, {prov.model.PROV_TYPE:'ont:Retrieval'})
 
     get_carbon_change = doc.activity('log:uuid' + str(uuid.uuid4()), startTime, endTime)
-    carbon_change = doc.entity('dat:signior_jmu22_zhangyb#constraint_satisfaction', {prov.model.PROV_LABEL: 'Change in metric tons of CO2 before and after a powerplant is established', prov.model.PROV_TYPE: 'ont:DataSet'})
+    carbon_change = doc.entity('dat:signior_jmu22#constraint_satisfaction', {prov.model.PROV_LABEL: 'Change in metric tons of CO2 before and after a powerplant is established', prov.model.PROV_TYPE: 'ont:DataSet'})
 
     doc.wasAttributedTo(carbon_change, this_script)
     doc.wasGeneratedBy(carbon_change, get_carbon_change, endTime)

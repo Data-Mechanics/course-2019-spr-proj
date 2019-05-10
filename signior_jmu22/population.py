@@ -8,9 +8,9 @@ import urllib.request
 import pandas as pd
 
 class population(dml.Algorithm):
-  contributor = 'signior_jmu22.zhangyb'
+  contributor = 'signior_jmu22'
   reads = []
-  writes = ['signior_jmu22_zhangyb.population']
+  writes = ['signior_jmu22.population']
 
   @staticmethod
   def execute(trial = False):
@@ -19,7 +19,7 @@ class population(dml.Algorithm):
     # Set up database connection
     client = dml.pymongo.MongoClient()
     repo = client.repo
-    repo.authenticate('signior_jmu22_zhangyb', 'signior_jmu22_zhangyb')
+    repo.authenticate('signior_jmu22', 'signior_jmu22')
 
     url = 'http://datamechanics.io/data/signior_jmu22/yearly_population.csv' # grab dataset from datamechanics.io
     df = pd.read_csv(url, sep='\t')
@@ -31,10 +31,10 @@ class population(dml.Algorithm):
     population_dict = new_df.to_dict(orient="records")
     repo.dropCollection("population")
     repo.createCollection("population")
-    repo['signior_jmu22_zhangyb.population'].insert_many(population_dict)
-    repo['signior_jmu22_zhangyb.population'].metadata({'complete': True})
+    repo['signior_jmu22.population'].insert_many(population_dict)
+    repo['signior_jmu22.population'].metadata({'complete': True})
 
-    print(repo['signior_jmu22_zhangyb.population'].metadata())
+    print(repo['signior_jmu22.population'].metadata())
 
     repo.logout()
 
@@ -46,7 +46,7 @@ class population(dml.Algorithm):
   def provenance(doc = prov.model.ProvDocument(), startTime = None, endTime = None):
     client = dml.pymongo.MongoClient()
     repo = client.repo
-    repo.authenticate('signior_jmu22_zhangyb', 'signior_jmu22_zhangyb')
+    repo.authenticate('signior_jmu22', 'signior_jmu22')
     doc.add_namespace('alg', 'http://datamechanics.io/algorithm/signior_jmu22') # The scripts are in <folder>#<filename> format
     doc.add_namespace('dat', 'http://datamechanics.io/data/signior_jmu22' ) # The datasets are in <user>#<collection> format
     doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retreival', 'Query', or 'Computation'

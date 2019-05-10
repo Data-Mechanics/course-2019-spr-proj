@@ -14,9 +14,9 @@ from matplotlib.backends.backend_pdf import PdfPages
 
 
 class linear_regression(dml.Algorithm):
-  contributor = 'signior_jmu22_zhangyb'
-  reads = ['signior_jmu22_zhangyb.countries_change_in_carbon_after_year']
-  writes = ['signior_jmu22_zhangyb.linear_regression']
+  contributor = 'signior_jmu22'
+  reads = ['signior_jmu22.countries_change_in_carbon_after_year']
+  writes = ['signior_jmu22.linear_regression']
 
   @staticmethod
   def execute(trial = False):
@@ -25,9 +25,9 @@ class linear_regression(dml.Algorithm):
     # Set up database connection
     client = dml.pymongo.MongoClient()
     repo = client.repo
-    repo.authenticate('signior_jmu22_zhangyb', 'signior_jmu22_zhangyb')
+    repo.authenticate('signior_jmu22', 'signior_jmu22')
     
-    temp = list(repo.signior_jmu22_zhangyb.countries_change_in_carbon_after_year.find())
+    temp = list(repo.signior_jmu22.countries_change_in_carbon_after_year.find())
     df = pd.DataFrame(temp)
     results = df.to_dict(orient = "records")
     #print(results)
@@ -108,9 +108,9 @@ class linear_regression(dml.Algorithm):
 
     repo.dropCollection("linear_regression")
     repo.createCollection("linear_regression")
-    repo['signior_jmu22_zhangyb.linear_regression'].insert_many(finallist)
-    repo['signior_jmu22_zhangyb.linear_regression'].metadata({'complete': True})
-    print(repo['signior_jmu22_zhangyb.carbon_land_sea'].metadata())
+    repo['signior_jmu22.linear_regression'].insert_many(finallist)
+    repo['signior_jmu22.linear_regression'].metadata({'complete': True})
+    print(repo['signior_jmu22.carbon_land_sea'].metadata())
     repo.logout()
     endTime = datetime.datetime.now()
     return {"start": startTime, "end": endTime}
@@ -121,7 +121,7 @@ class linear_regression(dml.Algorithm):
   def provenance(doc = prov.model.ProvDocument(), startTime = None, endTime = None):
     client = dml.pymongo.MongoClient()
     repo = client.repo
-    repo.authenticate('signior_jmu22_zhangyb', 'signior_jmu22_zhangyb')
+    repo.authenticate('signior_jmu22', 'signior_jmu22')
     doc.add_namespace('alg', 'http://datamechanics.io/algorithm/signior_jmu22') # The scripts are in <folder>#<filename> format
     doc.add_namespace('dat', 'http://datamechanics.io/data/signior_jmu22' ) # The datasets are in <user>#<collection> format
     doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retreival', 'Query', or 'Computation'

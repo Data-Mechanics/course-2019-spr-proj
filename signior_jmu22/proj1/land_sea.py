@@ -16,9 +16,9 @@ import pandas as pd
 
 
 class land_sea(dml.Algorithm):
-  contributor = 'signior_jmu22_zhangyb'
-  reads = ['signior_jmu22_zhangyb.land_surface_temp', 'signior_jmu22_zhangyb.ocean_surface_temp']
-  writes = ['signior_jmu22_zhangyb.land_sea']
+  contributor = 'signior_jmu22'
+  reads = ['signior_jmu22.land_surface_temp', 'signior_jmu22.ocean_surface_temp']
+  writes = ['signior_jmu22.land_sea']
   
   @staticmethod
   def execute(trial = False):
@@ -26,15 +26,15 @@ class land_sea(dml.Algorithm):
       
       client = dml.pymongo.MongoClient()
       repo = client.repo
-      repo.authenticate('signior_jmu22_zhangyb', 'signior_jmu22_zhangyb')
+      repo.authenticate('signior_jmu22', 'signior_jmu22')
       
       
       #creates list of dictionary object
-      land_surface_temp = list(repo.signior_jmu22_zhangyb.land_surface_temp.find())
+      land_surface_temp = list(repo.signior_jmu22.land_surface_temp.find())
 
     
       #print(land_surface_temp)
-      ocean_surface_temp = list(repo.signior_jmu22_zhangyb.ocean_surface_temp.find())
+      ocean_surface_temp = list(repo.signior_jmu22.ocean_surface_temp.find())
       
       #formats the year in land_surface_Temp
       for i in land_surface_temp:
@@ -81,10 +81,10 @@ class land_sea(dml.Algorithm):
        # below block adds the dataset to the repo collection
       repo.dropCollection("land_sea")
       repo.createCollection("land_sea")
-      repo['signior_jmu22_zhangyb.land_sea'].insert_many(finalList)
-      repo['signior_jmu22_zhangyb.land_sea'].metadata({'complete': True})
+      repo['signior_jmu22.land_sea'].insert_many(finalList)
+      repo['signior_jmu22.land_sea'].metadata({'complete': True})
 
-      print(repo['signior_jmu22_zhangyb.land_sea'].metadata())
+      print(repo['signior_jmu22.land_sea'].metadata())
 
       repo.logout()
 
@@ -99,7 +99,7 @@ class land_sea(dml.Algorithm):
   def provenance(doc = prov.model.ProvDocument(), startTime = None, endTime = None):
     client = dml.pymongo.MongoClient()
     repo = client.repo
-    repo.authenticate('signior_jmu22_zhangyb', 'signior_jmu22_zhangyb')
+    repo.authenticate('signior_jmu22', 'signior_jmu22')
     doc.add_namespace('alg', 'http://datamechanics.io/algorithm/signior_jmu22') # The scripts are in <folder>#<filename> format
     doc.add_namespace('dat', 'http://datamechanics.io/data/signior_jmu22' ) # The datasets are in <user>#<collection> format
     doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retreival', 'Query', or 'Computation'

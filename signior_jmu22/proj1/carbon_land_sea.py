@@ -16,9 +16,9 @@ import pandas as pd
 
 
 class carbon_land_sea(dml.Algorithm):
-  contributor = 'signior_jmu22_zhangyb'
-  reads = ['signior_jmu22_zhangyb.carbon_emissions', 'signior_jmu22_zhangyb.land_sea']
-  writes = ['signior_jmu22_zhangyb.carbon_land_sea']
+  contributor = 'signior_jmu22'
+  reads = ['signior_jmu22.carbon_emissions', 'signior_jmu22.land_sea']
+  writes = ['signior_jmu22.carbon_land_sea']
   
   @staticmethod
   def execute(trial = False):
@@ -26,18 +26,18 @@ class carbon_land_sea(dml.Algorithm):
       
       client = dml.pymongo.MongoClient()
       repo = client.repo
-      repo.authenticate('signior_jmu22_zhangyb', 'signior_jmu22_zhangyb')
+      repo.authenticate('signior_jmu22', 'signior_jmu22')
       
       
       #creates list of dictionary object
-      temp = list(repo.signior_jmu22_zhangyb.carbon_emissions.find())
+      temp = list(repo.signior_jmu22.carbon_emissions.find())
       df = pd.DataFrame(temp)
       df.fillna(0,inplace=True)
       #print(df.to_dict(orient ="records"))
       carbon_emissions = df.to_dict(orient = "records")
       #print(carbon_emissions)
      
-      land_sea = list(repo.signior_jmu22_zhangyb.land_sea.find())
+      land_sea = list(repo.signior_jmu22.land_sea.find())
       #project the years column first
       years = [*range(1960,2015)]
 
@@ -82,9 +82,9 @@ class carbon_land_sea(dml.Algorithm):
       
       repo.dropCollection("carbon_land_sea")
       repo.createCollection("carbon_land_sea")
-      repo['signior_jmu22_zhangyb.carbon_land_sea'].insert_many(land_sea_carbon_select)
-      repo['signior_jmu22_zhangyb.carbon_land_sea'].metadata({'complete': True})
-      print(repo['signior_jmu22_zhangyb.carbon_land_sea'].metadata())
+      repo['signior_jmu22.carbon_land_sea'].insert_many(land_sea_carbon_select)
+      repo['signior_jmu22.carbon_land_sea'].metadata({'complete': True})
+      print(repo['signior_jmu22.carbon_land_sea'].metadata())
       repo.logout()
       endTime = datetime.datetime.now()
       return {"start": startTime, "end": endTime}
@@ -95,7 +95,7 @@ class carbon_land_sea(dml.Algorithm):
   def provenance(doc = prov.model.ProvDocument(), startTime = None, endTime = None):
     client = dml.pymongo.MongoClient()
     repo = client.repo
-    repo.authenticate('signior_jmu22_zhangyb', 'signior_jmu22_zhangyb')
+    repo.authenticate('signior_jmu22', 'signior_jmu22')
     doc.add_namespace('alg', 'http://datamechanics.io/algorithm/signior_jmu22') # The scripts are in <folder>#<filename> format
     doc.add_namespace('dat', 'http://datamechanics.io/data/signior_jmu22' ) # The datasets are in <user>#<collection> format
     doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retreival', 'Query', or 'Computation'

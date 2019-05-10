@@ -53,9 +53,9 @@ def get_country_year(row):
   return (row.get('country_long'), int(row.get('commissioning_year')))
 
 class fossil_fuel_plants(dml.Algorithm):
-  contributor = 'signior_jmu22_zhangyb'
-  reads = ['signior_jmu22_zhangyb.power_plants']
-  writes = ['signior_jmu22_zhangyb.power_plants_established_date_by_country']
+  contributor = 'signior_jmu22'
+  reads = ['signior_jmu22.power_plants']
+  writes = ['signior_jmu22.power_plants_established_date_by_country']
 
   @staticmethod
   def execute(trial = False):
@@ -63,9 +63,9 @@ class fossil_fuel_plants(dml.Algorithm):
 
     client = dml.pymongo.MongoClient()
     repo = client.repo
-    repo.authenticate('signior_jmu22_zhangyb', 'signior_jmu22_zhangyb')
+    repo.authenticate('signior_jmu22', 'signior_jmu22')
 
-    power_plants = list(repo.signior_jmu22_zhangyb.power_plants.find())
+    power_plants = list(repo.signior_jmu22.power_plants.find())
 
     # init pandas dataframe
     df = pd.DataFrame(power_plants)
@@ -100,10 +100,10 @@ class fossil_fuel_plants(dml.Algorithm):
      # below block adds the dataset to the repo collection
     repo.dropCollection("power_plants_established_date_by_country")
     repo.createCollection("power_plants_established_date_by_country")
-    repo['signior_jmu22_zhangyb.power_plants_established_date_by_country'].insert_many(final_ds)
-    repo['signior_jmu22_zhangyb.power_plants_established_date_by_country'].metadata({'complete': True})
+    repo['signior_jmu22.power_plants_established_date_by_country'].insert_many(final_ds)
+    repo['signior_jmu22.power_plants_established_date_by_country'].metadata({'complete': True})
 
-    print(repo['signior_jmu22_zhangyb.power_plants_established_date_by_country'].metadata())
+    print(repo['signior_jmu22.power_plants_established_date_by_country'].metadata())
 
     repo.logout()
 
@@ -113,7 +113,7 @@ class fossil_fuel_plants(dml.Algorithm):
   def provenance(doc = prov.model.ProvDocument(), startTime = None, endTime = None):
     client = dml.pymongo.MongoClient()
     repo = client.repo
-    repo.authenticate('signior_jmu22_zhangyb', 'signior_jmu22_zhangyb')
+    repo.authenticate('signior_jmu22', 'signior_jmu22')
     doc.add_namespace('alg', 'http://datamechanics.io/algorithm/signior_jmu22') # The scripts are in <folder>#<filename> format
     doc.add_namespace('dat', 'http://datamechanics.io/data/signior_jmu22' ) # The datasets are in <user>#<collection> format
     doc.add_namespace('ont', 'http://datamechanics.io/ontology#') # 'Extension', 'DataResource', 'DataSet', 'Retreival', 'Query', or 'Computation'
