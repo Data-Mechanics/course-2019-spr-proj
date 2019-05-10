@@ -1,4 +1,4 @@
-# Taking Gender Equity to the Streets
+# Taking Gender Equity to the Streets(https://github.com/mmao95/course-2019-spr-proj/tree/master/mmao95_dongyihe_weijiang_zhukk)
 > Maoxuan Zhu, Dongyi He, Wei Jiang, Kaikang Zhu
 
 This is a Spark! project. Representation is one of MOWA's priority areas. We recognize that male names and pronouns are often the default and given Boston's long parochial history, we want to make sure our City represents its current demographics (52% women). That said, we'd also like to know if there are streets that are good candidates for re-naming (repetitive, etc.).
