@@ -63,7 +63,15 @@ class getData(dml.Algorithm):
         # neighborhoods we don't want because of lack of open spaces/parcels
         # also some neighborhoods it woul make no sense to put and additional
         # park into
-        unwanted_neighborhoods = ["Leather District", "Longwood", "Harbor Islands", "West End"]
+        unwanted_neighborhoods = []
+        if not trial:
+            unwanted_neighborhoods = ["Leather District", "Longwood", "Harbor Islands", "West End", "Bay Village",
+                                  "Chinatown", "Downtown", "East Boston", "North End"]
+        else:
+            for neighborhood in neighborhoods["features"]:
+                if neighborhood["properties"]["Name"] != "Allston":
+                    unwanted_neighborhoods.append(neighborhood["properties"]["Name"])
+
         wanted_neighborhoods = []
         for neighborhood in neighborhoods["features"]:
             if neighborhood["properties"]["Name"] not in unwanted_neighborhoods:
@@ -78,6 +86,7 @@ class getData(dml.Algorithm):
 
         # Parcels with their assessment value and type
         All_Assessments = []
+        r = 9 if not trial else 1
         for i in range(9):
             # need to iterate because we api request only brings max 32000 parcels
             # 20000 is a good number so we don't pull in more than maximum getting duplicates

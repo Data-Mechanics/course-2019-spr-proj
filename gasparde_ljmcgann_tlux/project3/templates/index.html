@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+          integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+          integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+          crossorigin=""/>
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+            integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+            crossorigin=""></script>
+    <!-- D3 import-->
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <link rel="stylesheet" href="../static/index.css">
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <title>CS504 Project 3</title>
+</head>
+<body>
+<div class="intro">
+
+    <h1>Welcome to our New Park Optimizer</h1>
+    <p class="h4">
+        To use this tool first click on a neighborhood. Then the K-Means input box will be highlighted. Enter the number
+        of
+        parks you would want to place in that neighborhood (from 1 to 5). Then use the slider to apply weights ranging
+        from 0 to 100 where 0 is weighting fully on Distance and 100 is weighting fully on Health, then press submit.
+        The location where our algorithm has determined would be best to place these park according to weighted K-Means algorithm
+        will be shown on the map as markers. Click on a marker to get that location's statistics.
+    </p>
+</div>
+<div class="container-fluid">
+    <div class="jumbotron map jumbotron-fluid">
+        <div class="row align-items-start">
+
+            <div class="col-9">
+                <div id="map"></div>
+                <div class="text-center" id="neighborhood">
+                    {% if kmeans is defined and kmeans %}
+                        <div class="card-group">
+                            <div class="card">
+                                Kmeans: {{ num }}
+                            </div>
+                            <div class="card">
+                                Neighborhood: {{ name }}
+                            </div>
+                            <div class="card">
+                                Weight: {{ weight }}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-3">
+                <form class="form-group" id="myFormId" method="post">
+                    <div class="form-group">
+                        <label for="num_kmeans">KMeans:</label>
+                        <input type="number" class="form-control" id="num_kmeans" name="kmeans" step="1" min="1" max="5"
+                               value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="neighborhood_form">Neighborhood:</label>
+                        <input type="text" class="form-control" id="neighborhood_form"
+                               name="neighborhood" value="">
+                    </div>
+                    <div class="input-group input-group-sm  mb-3" id="slidecontainer">
+                        <div class="input-group-prepend border-0"><span class="input-group-text  border-0"
+                                                                        id="basic-addon1">Distance</span></div>
+                        <input type="range" class="custom-range form-control border-0" min="0" max="100" value="50"
+                               class="slider"
+                               id="myRange" name="weight">
+                        <div class="input-group-append border-0"><span class="input-group-text  border-0"
+                                                                       id="basic-addon1">Health</span></div>
+                    </div>
+                    <div class="text-center">
+                        <input class="btn btn-primary " type="submit" value="Submit">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<div class = "about">
+<h1>About</h1>
+    <p class="h4">
+        In this project, we aim to try to find the best places to add
+        new parks in each of the neighborhoods in Boston based on various health statistics as well as access to open
+        spaces.
+        In completing this project we have only presented one of the ways we believe that parks can be placed in Boston
+        Neighborhoods. We built a framework which can be extended given the data-sets and metrics prioritized for these
+        decisions.
+    </p>
+</div>
+</body>
+<script type="application/javascript">
+    {% if neighborhoods is defined and neighborhoods %}
+        let neighborhoods = {{ neighborhoods|tojson }};
+    {% endif %}
+
+    {% if assessments is defined and assessments %}
+        let assessments = {{ assessments|tojson }};
+    {% endif %}
+
+    {% if censusshape is defined and censusshape %}
+        let censusshape =  {{ censusshape|tojson }};
+    {% endif %}
+    {% if name is defined and name %}
+        let name = "{{ name }}";
+    {% else %}
+        let name = null;
+    {% endif %}
+
+    {% if kmeans is defined and kmeans %}
+        let kmeans =  {{ kmeans|tojson}};
+    {% else %}
+        let kmeans = null;
+    {% endif %}
+</script>
+<script type="application/javascript" src="../static/index.js"></script>
+</html>
