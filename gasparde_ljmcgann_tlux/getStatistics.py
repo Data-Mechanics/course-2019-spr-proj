@@ -29,12 +29,12 @@ class getStatistics(dml.Algorithm):
             data = list(parcels.find({"Neighborhood": name}))
             if len(data) > 0:
                 # these are the three health statistics
-                for category in ["obesity", "asthma", "low_phys"]:
+                for category in ["obesity", "asthma", "low_phys", "health_score"]:
                     x = []
                     y = []
                     for i in range(len(data)):
                         y.append(float(data[i][category]))
-                        x.append(float(data[i]["distance_score"]))
+                        x.append(float(data[i]["min_distance_km"]))
                     # find r values and their p-value for the correlation
                     # between distance scores and a health catagory
                     corr = pearsonr(x, y)
@@ -47,7 +47,8 @@ class getStatistics(dml.Algorithm):
                          "statistic": "mean", "value": m})
                     repo[getStatistics.contributor + ".Statistics"].insert_one(
                         {"Neighborhood": name, "variable": category,
-                         "statistic": "std_dev", "val": stdev(y, m)})
+                         "statistic": "std_dev", "value": stdev(y, m)})
+
 
         # compute mean and std_dev of distance scores
         for i in range(len(neighborhoods)):
