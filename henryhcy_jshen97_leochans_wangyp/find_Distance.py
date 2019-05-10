@@ -83,12 +83,13 @@ class find_Distance(dml.Algorithm):
             closest_cvs = dict()
             closest_cvs['cvs'] = [i[1],i[2]]
             cvsRel[i[0]] = closest_cvs
+            
         
         temp1 = project(cvsWal,lambda t1:(t1[0]['id'], t1[1]['id'],geodesic((t1[0]['location'][0],t1[0]['location'][1]), (t1[1]['location'][0],t1[1]['location'][1])).miles))
         temp2 = aggregate(temp1,min)
         temp3 = select(product(temp1,temp2), lambda t: t[0][2] == t[1][1] and t[0][0] == t[1][0])
         cvsWal_min_dis = project(temp3,lambda t: t[0])
-
+        
         for i in cvsWal_min_dis:
             cvsRel[i[0]]['walgreen'] = [i[1],i[2]]
         

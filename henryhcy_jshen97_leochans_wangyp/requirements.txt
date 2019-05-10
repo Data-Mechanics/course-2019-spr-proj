@@ -1,0 +1,16 @@
+dml
+json
+flask
+flask-migrate
+flask-sqlalchemy
+flask-wtf
+folium
+geopy
+numpy
+pandas
+prov
+pprint
+scipy
+uuid
+wtforms
+z3-solver

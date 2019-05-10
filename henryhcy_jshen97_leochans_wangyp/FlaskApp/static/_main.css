@@ -1,0 +1,50 @@
+
+ul.intro {
+    list-style-type: none;
+    margin: 0 auto;
+    padding: 0;
+    overflow: hidden;
+    background-color: #E71D36;
+    width: 100%;
+
+  }
+  li.intro {
+    float: left;
+     
+  }
+  li a.intro {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+  /* Change the link color to #111 (black) on hover */
+  li a:hover.intro {
+    background-color: #EFFFE9;
+    color: black
+  }
+  main {
+    margin: 0 auto;
+    width: 66.66667%;
+  }
+  p {
+    margin-bottom: 1.5rem;
+  }
+  .message {
+    background-color: #FDC68A;
+    border-left: .75rem solid #F26C4F;
+    padding: .75rem 1.5rem;
+    font-size:2.0rem;}
+  
+  .note{
+    background-color: #FDC68A;
+    border-left: .75rem solid #F26C4F;
+    padding: .75rem 1.5rem;
+    font-size: .85rem;
+    background-color: #7BCDC8;
+    border-color: #00A99D;
+  }
+
+  
+  
