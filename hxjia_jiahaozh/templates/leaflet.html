@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script>L_PREFER_CANVAS=false; L_NO_TOUCH=false; L_DISABLE_3D=false;</script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.4.0/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.4.0/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://rawcdn.githack.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css"/>
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+
+    <meta name="viewport" content="width=device-width,
+        initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <style>#map_d7c0b88c8b46436cbf1e49b8a206b4e4 {
+        position: relative;
+        width: 70.0%;
+        height: 100.0%;
+        left: 0.0%;
+        top: 0.0%;
+        }
+    </style>
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+
+
+
+
+<body style = "background:url(https://www.r-graph-gallery.com/wp-content/uploads/2017/12/168_read_shapefile.png)">
+  <div class="folium-map" id="map_d7c0b88c8b46436cbf1e49b8a206b4e4" style="float:left;"></div>
+  <div style="float:right;position: relative;top:100px;right:50px;"></div>>
+
+<h3><font face="Helvetica" color="#4282637">House Recommendation</font></h3>
+
+
+<form class="form-inline" method="POST" action="/test">
+    <div class="form-group">
+        <div class="input-group">
+                <select name='selected_price' style="width:130px;height:30px;float:left" class="selectpicker form-control">
+                    <option>Select Price </option>
+                    <option value="1" >$ 0~100</option>
+                    <option value="2" >$$ 100~200</option>
+                    <option value="3" >$$$ 200~300</option>
+                    <option value="4" >$$$$ 400+</option>
+                </select>
+        
+                <select name='selected_score' style="width:190px;height:30px;float: right" class="selectpicker form-control">
+                    <option>Select Review Score </option>
+                    <option value="1" >! 85-</option>
+                    <option value="2" >!! 85~90</option>
+                    <option value="3" >!!! 90~95</option>
+                    <option value="4" >!!!! 95~100</option>
+                </select>
+  </div>
+    <button type="submit" class="btn btn-default">Go</button>
+  </div>
+</form>
+
+
+
+<script type="text/javascript">
+        var bounds = null;
+
+
+    var map_d7c0b88c8b46436cbf1e49b8a206b4e4 = L.map(
+        'map_d7c0b88c8b46436cbf1e49b8a206b4e4', {
+        center: [42.35866, -71.05674],
+        zoom: 13,
+        maxBounds: bounds,
+        layers: [],
+        worldCopyJump: false,
+        crs: L.CRS.EPSG3857,
+        zoomControl: true,
+        });
+
+
+
+    var tile_layer_348ea3aef0c4416db4a002cd6480df1c = L.tileLayer(
+        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        {
+        "attribution": null,
+        "detectRetina": false,
+        "maxNativeZoom": 18,
+        "maxZoom": 18,
+        "minZoom": 0,
+        "noWrap": false,
+        "opacity": 1,
+        "subdomains": "abc",
+        "tms": false
+}).addTo(map_d7c0b88c8b46436cbf1e49b8a206b4e4);
+
+
+var lat = {{lat}};
+var long = {{long}};
+
+for (var i=0; i < lat.length; i++){
+
+ var circle_marker= L.circleMarker(
+                [lat[i], long[i]],
+                {
+  "bubblingMouseEvents": true,
+  "color": "red",
+  "dashArray": null,
+  "dashOffset": null,
+  "fill": false,
+  "fillColor": "red",
+  "fillOpacity": 0.2,
+  "fillRule": "evenodd",
+  "lineCap": "round",
+  "lineJoin": "round",
+  "opacity": 1.0,
+  "radius": 1,
+  "stroke": true,
+  "weight": 3
+}
+                )
+                .addTo(map_d7c0b88c8b46436cbf1e49b8a206b4e4);
+}
+</script>
+
+<li><a href='/'>Home</a></li>
+
+
+</body>
