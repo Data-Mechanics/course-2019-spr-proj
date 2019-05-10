@@ -86,8 +86,11 @@ class train(dml.Algorithm):
 		f.write("Linear Regression Coefficient:" + str(reg.coef_[0]) + " " + str(reg.coef_[1]) + " " + str(reg.coef_[2]) + " " + str(reg.coef_[3]) + "\n")
 		f.write("Linear Regression Intercept:" + str(reg.intercept_) + "\n")
 			
+		result = [{"publicSchool": reg.coef_[0], "privateSchool": reg.coef_[1], "police": reg.coef_[2], "hospital": reg.coef_[3], "intercept": reg.intercept_}]
 
-		
+		repo.dropCollection('ruipang_zhou482.result')
+		repo.createCollection('ruipang_zhou482.result')
+		repo['ruipang_zhou482.result'].insert_many(result)
 		
 		repo.logout()
 
