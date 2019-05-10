@@ -1,10 +1,6 @@
-## Overview of Spring 2019 Project for CS504 Data Mechanics. Please click on poster.pdf for a complete visual outline of the project
+## Overview of Spring 2019 Project for CS504 Data Mechanics. Please click on poster.pdf for a complete visual outline of the project or report.pdf for a summary of the project 
 
 ## Question: How does proximity of T-stops to public schools and colleges affect education attainment? How does education attainment affect poverty across different communities in Boston? How can the city of Boston optimize T-stops to provide residents with better access to education?
-
-## Project Description: 
-
-Boston is home to many groups of people of different socioeconomic statuses. We are interested in how different factors such as proximity of T-stops to schools affect education attainment as well as how education attainment affect poverty throughout neighborhoods in Boston. Currently, the city has train routes set up to serve the different neighborhoods. We are interested in how the placement of these routes are currently serving the populations of Boston to get to schools and how they can be optimized to aid in access to education. We have sourced data from ArcGIS Hub on the location of T-stops. We also have data from the Boston Data Portal on education attainment for people ages 25+ throughout the different neighborhoods of Boston. Lastly, Boston Open Data has provided data regarding information on vulnerable populations in Boston as well as the locations of all public schools and colleges within the city. 
 
 ## Datasets
 
@@ -39,3 +35,5 @@ http://maps-massgis.opendata.arcgis.com/datasets/a9e4d01cbfae407fbf5afe67c5382fd
 
 2.  The correlation between the average distance from a T-stop in Boston to a school and the percent of people with a bachelor's degree or higher was about -0.48 and the p-value was about 0.04. This showed that there is a moderate relationship between these two variables and that the results are statistically significant since p < 0.05. Based on the correlation and p-value generated from the correlation script, the next step was to optimize T-stops throughout Boston to provide easier access for students to get to school. The K-means algorithm was chosen to be used to optimized T-stops because it will return the means of the closest cluster of stops to each of the schools. The optimization was done by first calculating the mean latitude and longitude of all the schools in each of the 18 neighborhoods that has schools. These are the initial centroids in the K-means algorithm that was used to fit all of the 119 T-stops. The resulting 18 centroids (list of coordinates) from the K-means algorithm are the optimized T-stops that are the closest to the mean locations of schools in each of the 18 neighborhoods.  
 
+## Visualization
+An interactive web map was created with Python Flask and the JavaScript Leaflet library to showcase the 18 optimized T-stops from the K-means algorithm. Data is retrieved from a MongoDB database for the Flask web application with a RESTful web API. Each neighborhood is color coded with a specific shade of green representing the percent of people who have a bachelor’s degree or higher. In the actual web map, users are able to float over neighborhoods in Boston to get more information on the average distance from a T-stop to a school, percent of people with a bachelor’s degree or higher, and the percent of people who are low income.
