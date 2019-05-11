@@ -4,7 +4,7 @@ import dml
 import prov.model
 import datetime
 import uuid
-from maximega_tcorc.helper_functions.within_polygon import point_inside_polygon
+from maximega_tcorc_goferbat.helper_functions.within_polygon import point_inside_polygon
 #from helper_functions.within_polygon import point_inside_polygon
 
 class merge_stations_nta(dml.Algorithm):
