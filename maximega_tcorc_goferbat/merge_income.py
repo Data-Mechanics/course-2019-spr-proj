@@ -42,6 +42,7 @@ class merge_income(dml.Algorithm):
 				'stations': neighborhood['stations'], 
 				'population': neighborhood['population'],
 				'position' : neighborhood['position'],
+				'geom' : neighborhood['the_geom'],
 				'income': avg_income
 				})
 
