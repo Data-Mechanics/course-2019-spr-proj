@@ -11,6 +11,7 @@ import mapdata as md
 import csv
 from random import shuffle
 from math import sqrt
+import gmplot
 
 class example(dml.Algorithm):
     contributor = 'ido_jconstan_jeansolo_suitcase'
@@ -134,6 +135,79 @@ class example(dml.Algorithm):
         repo['ido_jconstan_jeansolo_suitcase.StopsLatLng'].metadata({'complete':True})
         print(repo['ido_jconstan_jeansolo_suitcase.StopsLatLng'].metadata())
 
+        # DATA SET 9 [StopsLatLng]
+        # Bus Stops Latitude and Longitude
+        # r9 = {'lat', 'long, 'og'}
+        url = 'http://datamechanics.io/data/ido_jconstan_jeansolo_suitcase/StopsLatLng.json'
+        response = urllib.request.urlopen(url).read().decode("utf-8")
+        r9 = json.loads(response)
+
+        #DATA SET 10 [k-means_0]
+        url = 'http://datamechanics.io/data/ido_jconstan_jeansolo_suitcase/k_means_school_0.json'
+        response = urllib.request.urlopen(url).read().decode("utf-8")
+        r10 = json.loads(response)
+        s = json.dumps(r10, sort_keys=True, indent=2)
+        repo.dropCollection("k_means_0")
+        repo.createCollection("k_means_0")
+        repo['ido_jconstan_jeansolo_suitcase.k_means_0'].insert_many(r)
+        repo['ido_jconstan_jeansolo_suitcase.k_means_0'].metadata({'complete':True})
+        print(repo['ido_jconstan_jeansolo_suitcase.k_means_0'].metadata())
+
+        #DATA SET 11 [k-means_1]
+        url = 'http://datamechanics.io/data/ido_jconstan_jeansolo_suitcase/k_means_school_1.json'
+        response = urllib.request.urlopen(url).read().decode("utf-8")
+        r11 = json.loads(response)
+        s = json.dumps(r11, sort_keys=True, indent=2)
+        repo.dropCollection("k_means_1")
+        repo.createCollection("k_means_1")
+        repo['ido_jconstan_jeansolo_suitcase.k_means_1'].insert_many(r)
+        repo['ido_jconstan_jeansolo_suitcase.k_means_1'].metadata({'complete':True})
+        print(repo['ido_jconstan_jeansolo_suitcase.k_means_1'].metadata())
+
+        #DATA SET 12 [k-means_2]
+        url = 'http://datamechanics.io/data/ido_jconstan_jeansolo_suitcase/k_means_school_2.json'
+        response = urllib.request.urlopen(url).read().decode("utf-8")
+        r12 = json.loads(response)
+        s = json.dumps(r12, sort_keys=True, indent=2)
+        repo.dropCollection("k_means_2")
+        repo.createCollection("k_means_2")
+        repo['ido_jconstan_jeansolo_suitcase.k_means_2'].insert_many(r)
+        repo['ido_jconstan_jeansolo_suitcase.k_means_2'].metadata({'complete':True})
+        print(repo['ido_jconstan_jeansolo_suitcase.k_means_2'].metadata())
+
+        #DATA SET 13 [k-means_3]
+        url = 'http://datamechanics.io/data/ido_jconstan_jeansolo_suitcase/k_means_school_3.json'
+        response = urllib.request.urlopen(url).read().decode("utf-8")
+        r13 = json.loads(response)
+        s = json.dumps(r13, sort_keys=True, indent=2)
+        repo.dropCollection("k_means_3")
+        repo.createCollection("k_means_3")
+        repo['ido_jconstan_jeansolo_suitcase.k_means_3'].insert_many(r)
+        repo['ido_jconstan_jeansolo_suitcase.k_means_3'].metadata({'complete':True})
+        print(repo['ido_jconstan_jeansolo_suitcase.k_means_3'].metadata())
+
+        #DATA SET 14 [k-means_4]
+        url = 'http://datamechanics.io/data/ido_jconstan_jeansolo_suitcase/k_means_school_4.json'
+        response = urllib.request.urlopen(url).read().decode("utf-8")
+        r14 = json.loads(response)
+        s = json.dumps(r14, sort_keys=True, indent=2)
+        repo.dropCollection("k_means_4")
+        repo.createCollection("k_means_4")
+        repo['ido_jconstan_jeansolo_suitcase.k_means_4'].insert_many(r)
+        repo['ido_jconstan_jeansolo_suitcase.k_means_4'].metadata({'complete':True})
+        print(repo['ido_jconstan_jeansolo_suitcase.k_means_4'].metadata())
+
+        #DATA SET 15 [k-means_5]
+        url = 'http://datamechanics.io/data/ido_jconstan_jeansolo_suitcase/k_means_school_5.json'
+        response = urllib.request.urlopen(url).read().decode("utf-8")
+        r15 = json.loads(response)
+        s = json.dumps(r15, sort_keys=True, indent=2)
+        repo.dropCollection("k_means_5")
+        repo.createCollection("k_means_5")
+        repo['ido_jconstan_jeansolo_suitcase.k_means_5'].insert_many(r)
+        repo['ido_jconstan_jeansolo_suitcase.k_means_5'].metadata({'complete':True})
+        print(repo['ido_jconstan_jeansolo_suitcase.k_means_5'].metadata())
+
         ################################################################################################
         # Data manipulation 
         ################################################################################################
@@ -187,14 +261,7 @@ class example(dml.Algorithm):
         url = 'http://datamechanics.io/data/ido_jconstan_jeansolo_suitcase/HomesLatLng.json'
         response = urllib.request.urlopen(url).read().decode("utf-8")
         r8 = json.loads(response)
-
-
-        # DATA SET 9 [StopsLatLng]
-        # Bus Stops Latitude and Longitude
-        # r9 = {'lat', 'long, 'og'}
-        url = 'http://datamechanics.io/data/ido_jconstan_jeansolo_suitcase/StopsLatLng.json'
-        response = urllib.request.urlopen(url).read().decode("utf-8")
-        r9 = json.loads(response)
+        
 
         # ('Address', 'NumChildren') ; number of children at each house 
         t1 = project(r7, lambda t: (t[r7Addy], 1) ) # list of addresses
@@ -212,6 +279,7 @@ class example(dml.Algorithm):
         t7 = project(t5, lambda t: (t[0], t[1], t[2], 'Y') )
         t8 = select(t7, lambda t: (t[0] not in t6 ) )
 
+        '''
         # make tuples for agreements for household value under 400k and do take the bus
         catU_Y = select(t8, lambda t: (t[2] < 400000))
         #print('CATU_Y', catU_Y)
@@ -223,6 +291,7 @@ class example(dml.Algorithm):
         #print('CATO_Y', catO_Y)
         proj_catO_Y = project(catO_Y,lambda t:(1,1))
         print('Over_Yes', proj_catO_Y)
+        '''
 
         # cat2 = select(t8, lambda t: (t[2] >= 500000 and t[2] < 600000))
         # #print('CAT2', cat2)
@@ -263,6 +332,8 @@ class example(dml.Algorithm):
         # ('Address', 'School Name', 'Assessed Total', 'N') ; students who do not take the bus
         t9 = project(t5, lambda t: (t[0], t[1], t[2], 'N') )
         t10 = select(t9, lambda t: (t[0] in t6) )
+        
+        '''
 
         # make tuples for agreements for household value under 400k and don't take the bus
         catU_N = select(t10, lambda t: (t[2] < 400000))
@@ -282,6 +353,7 @@ class example(dml.Algorithm):
         # calculate proportion agreement
         result = proportionAgreement(final_proj)
         print('RESULT', result)
+        '''
 
         # cat11 = select(t10, lambda t: (t[2] < 500000))
         # #print('CAT11', cat11)
@@ -353,6 +425,202 @@ class example(dml.Algorithm):
         t17 = project(r8, lambda t: (t['lat'], t['long']))
         # ('lat', 'lng', 'og') of stops r9
         t18 = project(r9, lambda t: (t['lat'], t['long']))
+
+        k0 = project(r10, lambda t: (t['new_stop']))
+        k1 = project(r11, lambda t: (t['new_stop']))
+        k2 = project(r12, lambda t: (t['new_stop']))
+        k3 = project(r13, lambda t: (t['new_stop']))
+        k4 = project(r14, lambda t: (t['new_stop']))
+        k5 = project(r15, lambda t: (t['new_stop']))
+
+
+        # '(42.55555, 42.5555)'
+        temp = 0
+        for i in k0:
+            list_x = []
+            list_y = []
+            
+            #for j in range(len(i)):
+            j=0
+            if i[j] == '(':
+                j+=1
+                list_x.append(i[j])
+                j+=1
+
+            while i[j] != ',':
+                list_x.append(i[j])
+                j+=1
+
+            if i[j] == ',':
+                j+=2
+
+            while i[j] != ')':
+                list_y.append(i[j])
+                j+=1
+            str_x = "".join(list_x)
+            str_y = "".join(list_y)
+            float_x = float(str_x)
+            float_y = float(str_y)
+            i = (float_x, float_y)
+
+            k0[temp] = i
+            temp += 1
+
+
+        temp = 0
+        for i in k1:
+            list_x = []
+            list_y = []
+
+            #for j in range(len(i)):
+            j=0
+            if i[j] == '(':
+                j+=1
+                list_x.append(i[j])
+                j+=1
+
+            while i[j] != ',':
+                list_x.append(i[j])
+                j+=1
+
+            if i[j] == ',':
+                j+=2
+
+            while i[j] != ')':
+                list_y.append(i[j])
+                j+=1
+            str_x = "".join(list_x)
+            str_y = "".join(list_y)
+            float_x = float(str_x)
+            float_y = float(str_y)
+            i = (float_x, float_y)
+
+            k1[temp] = i
+            temp += 1
+
+        temp = 0
+        for i in k2:
+            list_x = []
+            list_y = []
+            
+            #for j in range(len(i)):
+            j=0
+            if i[j] == '(':
+                j+=1
+                list_x.append(i[j])
+                j+=1
+
+            while i[j] != ',':
+                list_x.append(i[j])
+                j+=1
+
+            if i[j] == ',':
+                j+=2
+
+            while i[j] != ')':
+                list_y.append(i[j])
+                j+=1
+            str_x = "".join(list_x)
+            str_y = "".join(list_y)
+            float_x = float(str_x)
+            float_y = float(str_y)
+            i = (float_x, float_y)
+
+            k2[temp] = i
+            temp += 1
+
+        temp = 0
+        for i in k3:
+            list_x = []
+            list_y = []
+            
+            #for j in range(len(i)):
+            j=0
+            if i[j] == '(':
+                j+=1
+                list_x.append(i[j])
+                j+=1
+
+            while i[j] != ',':
+                list_x.append(i[j])
+                j+=1
+
+            if i[j] == ',':
+                j+=2
+
+            while i[j] != ')':
+                list_y.append(i[j])
+                j+=1
+            str_x = "".join(list_x)
+            str_y = "".join(list_y)
+            float_x = float(str_x)
+            float_y = float(str_y)
+            i = (float_x, float_y)
+
+            k3[temp] = i
+            temp += 1
+
+        temp = 0
+        for i in k4:
+            list_x = []
+            list_y = []
+            
+            #for j in range(len(i)):
+            j=0
+            if i[j] == '(':
+                j+=1
+                list_x.append(i[j])
+                j+=1
+
+            while i[j] != ',':
+                list_x.append(i[j])
+                j+=1
+
+            if i[j] == ',':
+                j+=2
+
+            while i[j] != ')':
+                list_y.append(i[j])
+                j+=1
+            str_x = "".join(list_x)
+            str_y = "".join(list_y)
+            float_x = float(str_x)
+            float_y = float(str_y)
+            i = (float_x, float_y)
+
+            k4[temp] = i
+            temp += 1
+
+        temp = 0
+        for i in k5:
+            list_x = []
+            list_y = []
+            
+            #for j in range(len(i)):
+            j=0
+            if i[j] == '(':
+                j+=1
+                list_x.append(i[j])
+                j+=1 
+
+            while i[j] != ',':
+                list_x.append(i[j])
+                j+=1
+
+            if i[j] == ',':
+                j+=2
+
+            while i[j] != ')':
+                list_y.append(i[j])
+                j+=1
+            str_x = "".join(list_x)
+            str_y = "".join(list_y)
+            float_x = float(str_x)
+            float_y = float(str_y)
+            i = (float_x, float_y)
+
+            k5[temp] = i
+            temp += 1
         
         #separate student addresses by school attended - these will be the points in k-means
         POINTS_OG = []
@@ -400,7 +668,7 @@ class example(dml.Algorithm):
                 elif not tswitch:
                     tswitch = True
         tswitch = False
-        '''
+        
         temp = t17
 
         POINTS_NEW = []  
@@ -431,7 +699,7 @@ class example(dml.Algorithm):
         STOPS_OG.append(tBESStops)
         STOPS_OG.append(tBHESStops)
         
-        '''
+        
         temp = []
         ogHolder = ""
         with open('StopsLatLng.csv', mode='w') as csv_file:
@@ -475,7 +743,6 @@ class example(dml.Algorithm):
                     temp.append(tuple([float(lat), float(lng)]))
                 elif not tswitch:
                     tswitch = True
-        '''
         
         temp = t18
         #make a new structure, & eliminate elements that are not floats (where the geocode api failed to convert)
@@ -503,107 +770,194 @@ class example(dml.Algorithm):
 
 
 
-        # read new stops from csv
-        NEW_STOPS = []
-        strName = ''
-        count = 0
-        limit = 230080
-        for i in range(5):
-            strName = 'k_means_school_' + str(i) + '.csv'
-            NEW_STOPS.append([])
-            with open(strName, mode='r') as csv_file:
-                csv_reader = csv.reader(csv_file, delimiter=',')
-                for row in csv_reader:
-                    count += 1
-                    if row: 
-                        stop = row
-                        #print("i: ", i)
-                        NEW_STOPS[i].append(row)
+        # # read new stops from csv
+        # NEW_STOPS = []
+        # strName = ''
+        # count = 0
+        # limit = 230080
+        # for i in range(5):
+            # strName = 'k_means_school_' + str(i) + '.csv'
+            # NEW_STOPS.append([])
+            # with open(strName, mode='r') as csv_file:
+                # csv_reader = csv.reader(csv_file, delimiter=',')
+                # for row in csv_reader:
+                    # count += 1
+                    # if row: 
+                        # stop = row
+                        # #print("i: ", i)
+                        # NEW_STOPS[i].append(row)
                     
-                    if count >= limit:
-                        break
+                    # if count >= limit:
+                        # break
             
 
-        # parse points
-        for x in range(len(NEW_STOPS)):
-            #for i in range(len(NEW_STOPS[x])):
-            NEW_STOPS[x] = pointParser(NEW_STOPS[x])
+        # # parse points
+        # for x in range(len(NEW_STOPS)):
+            # #for i in range(len(NEW_STOPS[x])):
+            # NEW_STOPS[x] = pointParser(NEW_STOPS[x])
         
-        NEW_STOPS.pop(0)
+        # NEW_STOPS.pop(0)
 
 
-        print("Before loop")
-        for x in range(len(STOPS_NEW)):
-            print("STOPS_NEW[",x,"]")
-            strFileName = 'k_means_school_' + str(x) + '.csv'
-            MEANS = []
-            POINTSC = []
-            OLD = []
+        # print("Before loop")
+        # for x in range(len(STOPS_NEW)):
+            # print("STOPS_NEW[",x,"]")
+            # strFileName = 'k_means_school_' + str(x) + '.csv'
+            # MEANS = []
+            # POINTSC = []
+            # OLD = []
             
             
-            for i in range(len(STOPS_NEW[x])):
-                MEANS.append(STOPS_NEW[x][i])
-            for i in range(len(POINTS_NEW[x])):
-                POINTSC.append(POINTS_NEW[x][i])
+            # for i in range(len(STOPS_NEW[x])):
+                # MEANS.append(STOPS_NEW[x][i])
+            # for i in range(len(POINTS_NEW[x])):
+                # POINTSC.append(POINTS_NEW[x][i])
 
-            M_OLD = MEANS # old bus stops
-            print('OLD MEANS',M_OLD)
-            P = POINTSC # student addresses
-            MPD_OLD = [(m, p, dist(m,p)) for (m, p) in product(M_OLD, P)]
-            PDs_OLD = [(p, dist(m,p)) for (m, p, d) in MPD_OLD]
-            PD_OLD = aggregate(PDs_OLD, min)
-            MP_OLD = [(d) for ((m,p,d), (p2,d2)) in product(MPD_OLD, PD_OLD) if p==p2 and d==d2]
-            count_OLD = 0
-            for d in MP_OLD:
-                count_OLD += d 
-            average_OLD = count_OLD/len(POINTSC)
-            print('old avg', average_OLD)
+            # M_OLD = MEANS # old bus stops
+            # print('OLD MEANS',M_OLD)
+            # P = POINTSC # student addresses
+            # MPD_OLD = [(m, p, dist(m,p)) for (m, p) in product(M_OLD, P)]
+            # PDs_OLD = [(p, dist(m,p)) for (m, p, d) in MPD_OLD]
+            # PD_OLD = aggregate(PDs_OLD, min)
+            # MP_OLD = [(d) for ((m,p,d), (p2,d2)) in product(MPD_OLD, PD_OLD) if p==p2 and d==d2]
+            # count_OLD = 0
+            # for d in MP_OLD:
+                # count_OLD += d 
+            # average_OLD = count_OLD/len(POINTSC)
+            # print('old avg', average_OLD)
 
-            MEANS = []
-            for i in range(len(NEW_STOPS[x])):
-                MEANS.append(NEW_STOPS[x][i])
-            M_NEW = MEANS # new bus stops
-            print('NEW MEANS',M_NEW)
-            MPD_NEW = [(m, p, dist(m,p)) for (m, p) in product(M_NEW, P)]
-            PDs_NEW = [(p, dist(m,p)) for (m, p, d) in MPD_NEW]
-            PD_NEW = aggregate(PDs_NEW, min)
-            MP_NEW = [(d) for ((m,p,d), (p2,d2)) in product(MPD_NEW, PD_NEW) if p==p2 and d==d2]
-            count_NEW = 0
-            for d in MP_NEW:
-                count_NEW += d 
-            average_NEW = count_NEW/len(POINTSC)
-            print('new avg', average_NEW)
+            # MEANS = []
+            # for i in range(len(NEW_STOPS[x])):
+                # MEANS.append(NEW_STOPS[x][i])
+            # M_NEW = MEANS # new bus stops
+            # print('NEW MEANS',M_NEW)
+            # MPD_NEW = [(m, p, dist(m,p)) for (m, p) in product(M_NEW, P)]
+            # PDs_NEW = [(p, dist(m,p)) for (m, p, d) in MPD_NEW]
+            # PD_NEW = aggregate(PDs_NEW, min)
+            # MP_NEW = [(d) for ((m,p,d), (p2,d2)) in product(MPD_NEW, PD_NEW) if p==p2 and d==d2]
+            # count_NEW = 0
+            # for d in MP_NEW:
+                # count_NEW += d 
+            # average_NEW = count_NEW/len(POINTSC)
+            # print('new avg', average_NEW)
 
             
-            with open(strFileName, mode='w') as csv_file:
-                fieldnames = ['new_stop']
-                writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-                writer.writeheader()
+            # with open(strFileName, mode='w') as csv_file:
+                # fieldnames = ['new_stop']
+                # writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+                # writer.writeheader()
 
-                while sorted(OLD) != sorted(MEANS):
-                    print("iteration")
+                # while sorted(OLD) != sorted(MEANS):
+                    # print("iteration")
                     
-                    OLD = MEANS
+                    # OLD = MEANS
                     
-                    MPD = [(m, p, dist(m,p)) for (m, p) in product(MEANS, POINTSC)]
-                    PDs = [(p, d) for (m, p, d) in MPD]
+                    # MPD = [(m, p, dist(m,p)) for (m, p) in product(MEANS, POINTSC)]
+                    # PDs = [(p, d) for (m, p, d) in MPD]
                     
-                    PD = aggregate(PDs, min)
-                    MP = [(m, p) for ((m,p,d), (p2,d2)) in product(MPD, PD) if p==p2 and d==d2]
+                    # PD = aggregate(PDs, min)
+                    # MP = [(m, p) for ((m,p,d), (p2,d2)) in product(MPD, PD) if p==p2 and d==d2]
                     
-                    MT = aggregate(MP, plus)
+                    # MT = aggregate(MP, plus)
                     
-                    M1 = [(m, 1) for (m, _) in MP]
-                    MC = aggregate(M1, sum)
+                    # M1 = [(m, 1) for (m, _) in MP]
+                    # MC = aggregate(M1, sum)
                     
-                    MEANS = [scale(t,c) for ((m,t),(m2,c)) in product(MT, MC) if m == m2]
+                    # MEANS = [scale(t,c) for ((m,t),(m2,c)) in product(MT, MC) if m == m2]
 
-                # write MEANS to file
-                for i in MEANS:
-                    writer.writerow({'new_stop': i})
+                # # write MEANS to file
+                # for i in MEANS:
+                    # writer.writerow({'new_stop': i})
 
                #print("\n\nOLD = MEANS WOOHOO\n\n")
         
+        '''
+                  
+                  
+        #parse r9 and plot the points on a map
+        latitude_list = [] 
+        longitude_list = [] 
+        
+        for (x,y) in t18:
+            latitude_list.append(x)
+            longitude_list.append(y)
+        
+          
+        gmapBefore = gmplot.GoogleMapPlotter(42.283772, 
+                                        -71.347290, 13) 
+          
+        # scatter points on the google map 
+        gmapBefore.scatter( latitude_list, longitude_list, '# 0000FF', 
+                                      size = 40, marker = False ) 
+          
+        # Draw a line in 
+        # between given coordinates 
+          
+        #gmapBefore.draw( "D:\\_Documents\\cs504\\Project2\\course-2019-spr-proj\\mapBefore.html" ) 
+
+
+        latitude_list_k0 = []
+        longitude_list_k0 = []
+        for (x,y) in k0:
+            latitude_list_k0.append(x)
+            longitude_list_k0.append(y)
+
+        latitude_list_k1 = []
+        longitude_list_k1 = []
+        for (x,y) in k1:
+            latitude_list_k1.append(x)
+            longitude_list_k1.append(y)
+
+        latitude_list_k2 = []
+        longitude_list_k2 = []
+        for (x,y) in k2:
+            latitude_list_k2.append(x)
+            longitude_list_k2.append(y)
+
+        latitude_list_k3 = []
+        longitude_list_k3 = []
+        for (x,y) in k3:
+            latitude_list_k3.append(x)
+            longitude_list_k3.append(y)
+
+        latitude_list_k4 = []
+        longitude_list_k4 = []
+        for (x,y) in k4:
+            latitude_list_k4.append(x)
+            longitude_list_k4.append(y)
+
+        latitude_list_k5 = []
+        longitude_list_k5 = []
+        for (x,y) in k5:
+            latitude_list_k5.append(x)
+            longitude_list_k5.append(y)
+
+
+        gmapAfter = gmplot.GoogleMapPlotter(42.283772, 
+                                        -71.347290, 13) 
+        
+        after_size = 40
+
+        # scatter points on the google map 
+        gmapAfter.scatter( latitude_list_k0, longitude_list_k0, '# FF0000', 
+                                      size = after_size, marker = False ) 
+        # scatter points on the google map 
+        gmapAfter.scatter( latitude_list_k1, longitude_list_k1, '# FF0000', 
+                                      size = after_size, marker = False ) 
+        # scatter points on the google map 
+        gmapAfter.scatter( latitude_list_k2, longitude_list_k2, '# FF0000', 
+                                      size = after_size, marker = False ) 
+        # scatter points on the google map 
+        gmapAfter.scatter( latitude_list_k3, longitude_list_k3, '# FF0000', 
+                                      size = after_size, marker = False ) 
+        # scatter points on the google map 
+        gmapAfter.scatter( latitude_list_k4, longitude_list_k4, '# FF0000', 
+                                      size = after_size, marker = False ) 
+        # scatter points on the google map 
+        gmapAfter.scatter( latitude_list_k5, longitude_list_k5, '# FF0000', 
+                                      size = after_size, marker = False ) 
+
+        #gmapAfter.draw( "D:\\_Documents\\cs504\\Project2\\course-2019-spr-proj\\mapAfter.html" ) 
         
         repo.logout()
         endTime = datetime.datetime.now()
@@ -618,7 +972,6 @@ class example(dml.Algorithm):
             document describing that invocation event.
             '''
 
-        # Set up the database connection.
         client = dml.pymongo.MongoClient()
         repo = client.repo
         repo.authenticate('ido_jconstan_jeansolo_suitcase', 'ido_jconstan_jeansolo_suitcase')
@@ -647,6 +1000,14 @@ class example(dml.Algorithm):
         resource_StopsLatLng = doc.entity('dat:StopsLatLng', {'prov:label':'Stops Latitude and Longitude', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
 
 
+        resource_k_means_0 = doc.entity('dat:k_means_school_0', {'prov:label':'k-means_0', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        resource_k_means_1 = doc.entity('dat:k_means_school_1', {'prov:label':'k-means_1', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        resource_k_means_2 = doc.entity('dat:k_means_school_2', {'prov:label':'k-means_2', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        resource_k_means_3 = doc.entity('dat:k_means_school_3', {'prov:label':'k-means_3', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        resource_k_means_4 = doc.entity('dat:k_means_school_4', {'prov:label':'k-means_4', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+        resource_k_means_5 = doc.entity('dat:k_means_school_5', {'prov:label':'k-means_5', prov.model.PROV_TYPE:'ont:DataResource', 'ont:Extension':'json'})
+
+
         get_registered_students = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         get_property_data = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         get_gas_emissions = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
@@ -656,6 +1017,15 @@ class example(dml.Algorithm):
         get_student_address = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         get_HomesLatLng = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
         get_StopsLatLng = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+
+        get_k_means_0 = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        get_k_means_1 = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        get_k_means_2 = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        get_k_means_3 = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        get_k_means_4 = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+        get_k_means_5 = doc.activity('log:uuid'+str(uuid.uuid4()), startTime, endTime)
+
+
 
         doc.wasAssociatedWith(get_registered_students, this_script)
         doc.wasAssociatedWith(get_property_data, this_script)
@@ -667,6 +1037,13 @@ class example(dml.Algorithm):
         doc.wasAssociatedWith(get_student_address, this_script)
         doc.wasAssociatedWith(get_HomesLatLng, this_script)
         doc.wasAssociatedWith(get_StopsLatLng, this_script)
+
+        doc.wasAssociatedWith(get_k_means_0, this_script)
+        doc.wasAssociatedWith(get_k_means_1, this_script)
+        doc.wasAssociatedWith(get_k_means_2, this_script)
+        doc.wasAssociatedWith(get_k_means_3, this_script)
+        doc.wasAssociatedWith(get_k_means_4, this_script)
+        doc.wasAssociatedWith(get_k_means_5, this_script)
 
         doc.usage(get_registered_students, resource_registeredStudents, startTime, None,
                   {prov.model.PROV_TYPE:'ont:Retrieval',
@@ -701,6 +1078,31 @@ class example(dml.Algorithm):
                   }
                   )
         doc.usage(get_StopsLatLng, resource_StopsLatLng, startTime, None,
+                  {prov.model.PROV_TYPE:'ont:Retrieval',
+                  }
+                  )
+
+        doc.usage(get_k_means_0, resource_k_means_0, startTime, None,
+                  {prov.model.PROV_TYPE:'ont:Retrieval',
+                  }
+                  )
+        doc.usage(get_k_means_1, resource_k_means_1, startTime, None,
+                  {prov.model.PROV_TYPE:'ont:Retrieval',
+                  }
+                  )
+        doc.usage(get_k_means_2, resource_k_means_2, startTime, None,
+                  {prov.model.PROV_TYPE:'ont:Retrieval',
+                  }
+                  )
+        doc.usage(get_k_means_3, resource_k_means_3, startTime, None,
+                  {prov.model.PROV_TYPE:'ont:Retrieval',
+                  }
+                  )
+        doc.usage(get_k_means_4, resource_k_means_4, startTime, None,
+                  {prov.model.PROV_TYPE:'ont:Retrieval',
+                  }
+                  )
+        doc.usage(get_k_means_5, resource_k_means_5, startTime, None,
                   {prov.model.PROV_TYPE:'ont:Retrieval',
                   }
                   )
@@ -753,7 +1155,37 @@ class example(dml.Algorithm):
         Stops_Lat_Lng = doc.entity('dat:ido_jconstan_jeansolo_suitcase#StopsLatLng', {prov.model.PROV_LABEL:'Stops Latitude and Longitude', prov.model.PROV_TYPE:'ont:DataSet'})
         doc.wasAttributedTo(Stops_Lat_Lng, this_script)
         doc.wasGeneratedBy(Stops_Lat_Lng, get_StopsLatLng, endTime)
-        doc.wasDerivedFrom(Stops_Lat_Lng, resource_StopsLatLng, get_Stops_Lat_Lng, get_Stops_Lat_Lng, get_Stops_Lat_Lng)
+        doc.wasDerivedFrom(Stops_Lat_Lng, resource_StopsLatLng, get_StopsLatLng, get_StopsLatLng, get_StopsLatLng)
+
+        k_means_0 = doc.entity('dat:ido_jconstan_jeansolo_suitcase#k-means_0', {prov.model.PROV_LABEL:'k-means stop 0', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(k_means_0, this_script)
+        doc.wasGeneratedBy(k_means_0, get_k_means_0, endTime)
+        doc.wasDerivedFrom(k_means_0, resource_k_means_0, get_k_means_0, get_k_means_0, get_k_means_0)
+
+        k_means_1 = doc.entity('dat:ido_jconstan_jeansolo_suitcase#k-means_1', {prov.model.PROV_LABEL:'k-means stop 1', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(k_means_1, this_script)
+        doc.wasGeneratedBy(k_means_1, get_k_means_1, endTime)
+        doc.wasDerivedFrom(k_means_1, resource_k_means_1, get_k_means_1, get_k_means_1, get_k_means_1)
+
+        k_means_2 = doc.entity('dat:ido_jconstan_jeansolo_suitcase#k-means_2', {prov.model.PROV_LABEL:'k-means stop 2', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(k_means_2, this_script)
+        doc.wasGeneratedBy(k_means_2, get_k_means_2, endTime)
+        doc.wasDerivedFrom(k_means_2, resource_k_means_2, get_k_means_2, get_k_means_2, get_k_means_2)
+
+        k_means_3 = doc.entity('dat:ido_jconstan_jeansolo_suitcase#k-means_3', {prov.model.PROV_LABEL:'k-means stop 3', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(k_means_3, this_script)
+        doc.wasGeneratedBy(k_means_3, get_k_means_3, endTime)
+        doc.wasDerivedFrom(k_means_3, resource_k_means_3, get_k_means_3, get_k_means_3, get_k_means_3)
+
+        k_means_4 = doc.entity('dat:ido_jconstan_jeansolo_suitcase#k-means_4', {prov.model.PROV_LABEL:'k-means stop 4', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(k_means_4, this_script)
+        doc.wasGeneratedBy(k_means_4, get_k_means_4, endTime)
+        doc.wasDerivedFrom(k_means_4, resource_k_means_4, get_k_means_4, get_k_means_4, get_k_means_4)
+
+        k_means_5 = doc.entity('dat:ido_jconstan_jeansolo_suitcase#k-means_5', {prov.model.PROV_LABEL:'k-means stop 5', prov.model.PROV_TYPE:'ont:DataSet'})
+        doc.wasAttributedTo(k_means_5, this_script)
+        doc.wasGeneratedBy(k_means_5, get_k_means_5, endTime)
+        doc.wasDerivedFrom(k_means_5, resource_k_means_5, get_k_means_5, get_k_means_5, get_k_means_5)
 
 
         repo.logout()

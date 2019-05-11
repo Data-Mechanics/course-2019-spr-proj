@@ -53,6 +53,14 @@ def toLatLong(stop_addr):
     gmaps = googlemaps.Client(key=my_key)
     latlong = gmaps.geocode(stop_addr)
     return latlong
+    
+    
+#def toAddress(lat,lon):
+#    urlString = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+',' + lon+ '&key=' + my_key
+#    r = requests.get(urlString) 
+#    res = r.json()
+#    addr = res['rows'][0]['elements'][0]['duration']['value']
+#    return addr 
 
 
 def distance(home_addr, work_addr):
