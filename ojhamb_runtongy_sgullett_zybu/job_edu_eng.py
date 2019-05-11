@@ -46,7 +46,7 @@ class job_edu_eng(dml.Algorithm):
             data_list.append((job_index, edu_index, eng_index))
             i += 1
 
-        print(data_list)
+#        print(data_list)
 
         job = [jobs for (jobs, edus, engs) in data_list]
         edu = [edus for (jobs, edus, engs) in data_list]
