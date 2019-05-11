@@ -7,7 +7,8 @@ import uuid
 class JobAnalysis(dml.Algorithm):
     contributor = 'ojhamb_runtongy_sgullett_zybu'
     reads = ['ojhamb_runtongy_sgullett_zybu.linkedin']
-    writes = ['ojhamb_runtongy_sgullett_zybu.JobAnalysis']
+    writes = ['ojhamb_runtongy_sgullett_zybu.JobAnalysis', 'ojhamb_runtongy_sgullett_zybu.JobAnalysis2',
+              'ojhamb_runtongy_sgullett_zybu.JobAnalysis3']
 
     @staticmethod
     def execute(trial=False):
@@ -20,31 +21,37 @@ class JobAnalysis(dml.Algorithm):
         repo.authenticate('ojhamb_runtongy_sgullett_zybu', 'ojhamb_runtongy_sgullett_zybu')
 
         repo.dropCollection("JobAnalysis")
+        repo.dropCollection("JobAnalysis2")
+        repo.dropCollection("JobAnalysis3")
         repo.createCollection("JobAnalysis")
+        repo.createCollection("JobAnalysis2")
+        repo.createCollection("JobAnalysis3")
 
         # Do selection to get only the data related to people who are currently working
         employed = [x for x in repo.ojhamb_runtongy_sgullett_zybu.linkedin.find()
                     if x["Organization End 1"] == "PRESENT"]
+        '''
+                titles = "Developer", "Engineer"
+                engineers = []
 
-        titles = "Developer", "Engineer"
-        engineers = []
-
-        # Select only data related to Engineers/Developers
-        for ppl in employed:
-            if any(title in ppl["Title"] for title in titles):
-                engineers.append(ppl)
-            elif any(title in ppl["Organization Title 1"] for title in titles):
-                engineers.append(ppl)
-            elif any(title in ppl["Organization Title 2"] for title in titles):
-                engineers.append(ppl)
-            elif any(title in ppl["Organization Title 3"] for title in titles):
-                engineers.append(ppl)
-
+                # Select only data related to Engineers/Developers
+                for ppl in employed:
+                    if any(title in ppl["Title"] for title in titles):
+                        engineers.append(ppl)
+                    elif any(title in ppl["Organization Title 1"] for title in titles):
+                        engineers.append(ppl)
+                    elif any(title in ppl["Organization Title 2"] for title in titles):
+                        engineers.append(ppl)
+                    elif any(title in ppl["Organization Title 3"] for title in titles):
+                        engineers.append(ppl)
+        '''
         # get the skill list
         skills = {}
+        universities = {}
+        degrees = {"Bachelor" : 0, "Master" : 0, "Phd" : 0, "Other" : 0}
 
-        for engineer in engineers:
-            skill_str = engineer["Skills"]
+        for ppl in employed:
+            skill_str = ppl["Skills"]
             i = 0
             j = 0
             switch = 0
@@ -61,18 +68,52 @@ class JobAnalysis(dml.Algorithm):
                     j = i + 2
                 i += 1
 
-        print(skills);
+        for ppl in employed:
+            uni_str = ppl["Education 1"]
+            if uni_str in universities:
+                universities[uni_str] += 1
+            else:
+                universities[uni_str] = 1
+
+        degree1 = "Bachelor", "BSC", "B.Sc", "BS"
+        degree2 = "Master", "MS"
+        degree3 = "Phd", "Doctor"
+        for ppl in employed:
+            degree_str = ppl["Education Degree 1"]
+            if type(degree_str) == str and any(degree in degree_str for degree in degree1):
+                degrees["Bachelor"] += 1
+            elif type(degree_str) == str and any(degree in degree_str for degree in degree2):
+                degrees["Master"] += 1
+            elif type(degree_str) == str and any(degree in degree_str for degree in degree3):
+                degrees["Phd"] += 1
+            else:
+                degrees["Other"] += 1
+
+#        print(skills);
 
         # get the most necessary skill
-        nes_skills = sorted(skills, key=skills.get, reverse=True)[:3]
+        nes_skills = sorted(skills, key=skills.get, reverse=True)[:10]
+        top_uni = sorted(universities, key=universities.get, reverse=True)[:5]
 
         skill_list = []
+        uni_list = []
+        degree_list = []
 
         for x in nes_skills:
             skill_list.append({x:skills[x]})
 
+        for x in top_uni:
+            uni_list.append({x:universities[x]})
+
+        degree_list.append(degrees)
+
+
         repo['ojhamb_runtongy_sgullett_zybu.JobAnalysis'].insert_many(skill_list)
+        repo['ojhamb_runtongy_sgullett_zybu.JobAnalysis2'].insert_many(uni_list)
+        repo['ojhamb_runtongy_sgullett_zybu.JobAnalysis3'].insert_many(degree_list)
         repo['ojhamb_runtongy_sgullett_zybu.JobAnalysis'].metadata({'complete': True})
+        repo['ojhamb_runtongy_sgullett_zybu.JobAnalysis2'].metadata({'complete': True})
+        repo['ojhamb_runtongy_sgullett_zybu.JobAnalysis3'].metadata({'complete': True})
 #        print(repo['ojhamb_runtongy_sgullett_zybu.JobAnalysis'].metadata())
 
         repo.logout()

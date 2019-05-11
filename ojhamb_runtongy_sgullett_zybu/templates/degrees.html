@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LinkedIn Degrees</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/emn178/chartjs-plugin-labels/src/chartjs-plugin-labels.js"></script>
+</head>
+<body>
+    <div class="wrapper">
+      <h1>Amman Employees' degrees</h1>
+
+        <canvas id="myChart" width="1200" height="600"></canvas>
+    </div>
+    <script>
+        var getData = $.get('/getdegrees');
+        var ctx = document.getElementById("myChart").getContext('2d');
+
+        getData.done(function(results) {
+            var keys = [];
+            var values = [];
+            for (i = 0; i < results.length; i++) {
+                keys.push(Object.keys(results[i]));
+                values.push(results[i][Object.keys(results[i])]);
+            }
+            var ctx = document.getElementById("myChart").getContext('2d');
+            var chart = new Chart(document.getElementById("myChart"), {
+                type: 'pie',
+                data: {
+                    labels: keys,
+                    datasets: [
+                        {
+                            label: "Numbers",
+                            backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
+                            data: values
+                        }
+                    ]
+                },
+                options: {
+                    legend: {display: false},
+                    title: {
+                        display: true,
+                        text: 'Percentage of each degree'
+                    },
+                    plugins:{
+                        labels:
+                            {
+                                render: 'percentage',
+                                fontColor: '#000',
+                                fontSize: 20
+                            }
+                    }
+                }
+            });
+        })
+
+    </script>
+    <br/>
+    <div style="text-align: center;">
+        <a href="/">
+            <button>Back to Welcome Page</button>
+        </a>
+    </div>
+</body>
+</html>

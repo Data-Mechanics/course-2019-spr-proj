@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Insert Data</title>
+</head>
+<body>
+<h1>Insert New LinkedIn Data!</h1>
+<h2>Please fill data in the form below:</h2>
+<form method="POST" action="/linkedin">
+    <label>Name:<input type="text" name="client-name" required></label>
+    <br>
+    <label>Education Institute:<input type="text" name="client-uni" required></label>
+    <br>
+    <label>Educational Degree:<input type="text" name="client-degree" required></label>
+    <br>
+    <label>Company:<input type="text" name="client-comp" required></label>
+    <br>
+    <label>Title:<input type="text" name="client-title" required></label>
+    <br>
+    <label>English Ability(0 represents no, 1 represents yes, 2 represents unknown):<input type="number" name="client-eng" required></label>
+    <br>
+    <label>Skills:<input type="text" name="client-skill" required></label>
+    <br>
+    <input type="submit" value="Submit">
+</form>
+    <br/>
+    <div style="text-align: center;">
+        <a href="/">
+            <button>Back to Welcome Page</button>
+        </a>
+    </div>
+</body>
+</html>
